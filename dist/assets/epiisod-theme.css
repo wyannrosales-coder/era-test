@@ -1,0 +1,163 @@
+/* EPIISOD design system layer — palette and type from the EPIISOD Design System
+   (tokens/colors.css, tokens/fonts.css). Loaded after the Webflow stylesheet so the
+   site's own variables resolve to EPIISOD values; markup, layout and the cloud and
+   bougainvillea animations are untouched. */
+:root,
+html body {
+  /* base-0: page / light text  ->  Prime Pearl */
+  --_global-colors---base-0--0: #f4f2f000;
+  --_global-colors---base-0--5: #f4f2f00d;
+  --_global-colors---base-0--10: #f4f2f01a;
+  --_global-colors---base-0--30: #f4f2f04d;
+  --_global-colors---base-0--60: #f4f2f099;
+  --_global-colors---base-0--100: #f4f2f0;
+  /* base-1000: ink  ->  Dark Chocolate */
+  --_global-colors---base-1000--0: #24120c00;
+  --_global-colors---base-1000--5: #24120c0d;
+  --_global-colors---base-1000--10: #24120c1a;
+  --_global-colors---base-1000--30: #24120c4d;
+  --_global-colors---base-1000--60: #24120c99;
+  --_global-colors---base-1000--100: #24120c;
+  /* brand surfaces */
+  --_global-colors---brand-500--velvet-plum: #391d13;  /* dark surface  -> Royal Chocolate */
+  --_global-colors---brand-500--powder-sky: #d0a77f;   /* brand surface -> Saf Sand */
+  --_global-colors---brand-500--blush-bloom: #d7c5a9;  /* accent        -> Golden Sand */
+
+  /* type: Playfair Display for titles, Albert Sans for everything else */
+  --_fonts---font-display: "Playfair Display", ui-serif, Georgia, "Times New Roman", serif;
+  --_fonts---font-body: "Albert Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --_fonts---font-accent: "Playfair Display", ui-serif, Georgia, serif;
+}
+
+/* Playfair Display sets wider than the condensed face this layout was drawn for,
+   so the display sizes are scaled to keep the same line breaks and column widths. */
+.h1, .h2, .h3, .h4 { font-size: calc(var(--_fonts---h1--size) * .64); letter-spacing: .005em; font-weight: 400; }
+.h1 { font-size: calc(var(--_fonts---h1--size) * .64); line-height: 100%; }
+.h2 { font-size: calc(var(--_fonts---h2--size) * .64); line-height: 100%; }
+.h3 { font-size: calc(var(--_fonts---h3--size) * .66); line-height: 105%; }
+.h4 { font-size: calc(var(--_fonts---h4--size) * .7); line-height: 110%; }
+.h5 { font-size: calc(var(--_fonts---h5--size) * .72); letter-spacing: .01em; }
+.h6 { font-size: calc(var(--_fonts---h6--size) * .6); letter-spacing: .06em; font-weight: 500; }
+.a1 { font-size: calc(var(--_fonts---a1--size) * .72); font-style: italic; }
+.a2 { font-size: calc(var(--_fonts---a2--size) * .72); font-style: italic; }
+.c1 { font-size: calc(var(--_fonts---c1--size) * .8); }
+
+.cookies_card_title .a1 { font-size: calc(var(--_fonts---a1--size) * .42); }
+
+/* "Macquarie / Park / NSW" is longer than the original three words */
+.loc-intro-s_title .h1 { font-size: calc(var(--_fonts---h1--size) * .44); }
+
+/* Nearby directory (content from epiisod.com/en-au, Location section) */
+.ep-nearby { background: var(--_colors---other--bg); }
+.ep-nearby_w { padding: 9em var(--_special-units---offset-l, 3em); display: flex; flex-direction: column; align-items: center; text-align: center; }
+.ep-nearby_title { margin: .6em 0 .5em; max-width: 14em; }
+.ep-nearby_lead { max-width: 34em; opacity: .75; }
+.ep-nearby_glance { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2em; width: 100%; max-width: 70em; margin: 4em 0 5em; padding: 2.4em 0; border-top: 1px solid var(--_colors---base-1000--line); border-bottom: 1px solid var(--_colors---base-1000--line); }
+.ep-nearby_glance_item .h5 { margin-bottom: .6em; }
+.ep-nearby_grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4em 3em; width: 100%; max-width: 80em; text-align: left; }
+.ep-nearby_cat_t { padding-bottom: 1em; margin: 0 0 1.2em; border-bottom: 1px solid var(--_colors---base-1000--line); }
+.ep-nearby_list { list-style: none; margin: 0; padding: 0; display: grid; gap: .9em; }
+.ep-nearby_list .p1 { margin: 0; }
+.ep-nearby_note { margin-top: 5em; opacity: .6; }
+@media (max-width: 991px) {
+  .ep-nearby_w { padding: 6em 1.5em; }
+  .ep-nearby_glance { grid-template-columns: 1fr; }
+  .ep-nearby_grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 479px) { .ep-nearby_grid { grid-template-columns: 1fr; } }
+
+/* Contact map: live map of the property in place of the Estepona street illustration */
+.ep-map { display: block; width: 100%; aspect-ratio: 1440 / 760; border: 0; filter: grayscale(1) sepia(.35) contrast(.95); }
+.ep-nearby_title { font-size: calc(var(--_fonts---h1--size) * .42); }
+.ep-nearby_glance_item .h5 { text-transform: uppercase; }
+
+/* ---- Tablet and phone type fitting (Playfair is wider than the original face) ---- */
+.h3, .h4, .h5 { line-height: 1.14; }
+.h2 { line-height: 1.05; }
+@media (max-width: 991px) {
+  .h1 { font-size: min(calc(var(--_fonts---h1--size) * .6), 15vw); }
+  .h2 { font-size: min(calc(var(--_fonts---h2--size) * .52), 11vw); }
+  .h3 { font-size: min(calc(var(--_fonts---h3--size) * .56), 8vw); }
+  .h4 { font-size: min(calc(var(--_fonts---h4--size) * .55), 6.4vw); }
+  .h5 { line-height: 1.2; }
+  .a1 { font-size: calc(var(--_fonts---a1--size) * .5); }
+  .a2 { font-size: calc(var(--_fonts---a2--size) * .46); }
+  .loc-intro-s_title .h1 { font-size: min(calc(var(--_fonts---h1--size) * .4), 9.4vw); }
+  .cookies_card_title .a1 { font-size: calc(var(--_fonts---a1--size) * .38); }
+}
+@media (max-width: 479px) {
+  .h1 { font-size: min(calc(var(--_fonts---h1--size) * .6), 14.5vw); }
+  .h2 { font-size: min(calc(var(--_fonts---h2--size) * .5), 9.6vw); }
+  .h3 { font-size: min(calc(var(--_fonts---h3--size) * .55), 8vw); }
+  .h4 { font-size: min(calc(var(--_fonts---h4--size) * .52), 6.2vw); }
+  .h5 { font-size: min(calc(var(--_fonts---h5--size) * .72), 4.9vw); }
+  .a2 { font-size: calc(var(--_fonts---a2--size) * .4); }
+}
+
+@media (max-width: 767px) {
+  .hero-s_logo .h1 { font-size: min(calc(var(--_fonts---h1--size) * .7), 16.4vw); }
+  .hero-s_logo .a2 { font-size: calc(var(--_fonts---a2--size) * .5); }
+  .c1 { letter-spacing: .36em; }
+  h3:has(> .loc-path-s_title_line) { font-size: 5.9vw; }
+}
+@media (max-width: 991px) { .c1 { letter-spacing: .34em; } }
+@media (max-width: 767px) { html body h3.h3:has(> .loc-path-s_title_line) { font-size: 5.8vw !important; } }
+@media (max-width: 767px) { html body .h3:has(> .loc-path-s_title_line) { font-size: 5.8vw !important; } }
+.header-nav_list .h6 .split-line + .split-line { margin-left: .35em; }
+
+/* location band: keep the fade at the top shallow so the blue sky of the aerial stays visible */
+.loc-w_over-grad { height: calc(var(--_special-units---1-cell-v, 80px) * 1.5); }
+
+/* ---- Resi-Life fan of polaroids ---- */
+.ep-carousel { width: 100%; padding: 1em 0 0; color: var(--_colors---base-1000--primary); }
+.ep-fan { --w: clamp(210px, 20vw, 290px); --gx: calc(var(--w) * .9); --gy: calc(var(--w) * .05); --rot: 8.5deg;
+  position: relative; height: calc(var(--w) * 1.95 + 90px); margin: 0 auto; max-width: 100%; overflow: visible; touch-action: pan-y; cursor: grab; outline-offset: 4px; user-select: none; -webkit-user-select: none; }
+.ep-fan.is-drag { cursor: grabbing; }
+.ep-fan_card { --off: 0; position: absolute; left: 50%; top: calc(var(--w) * .16 + 30px); width: var(--w); margin: 0; padding: calc(var(--w) * .05) calc(var(--w) * .05) 0; background: #fcfbf9; border: 1px solid var(--_colors---base-1000--line);
+  box-shadow: 0 16px 36px rgba(36,18,12,.15), 0 2px 3px rgba(36,18,12,.05);
+  transform-origin: 50% 85%;
+  transform: translateX(-50%) translateX(calc(var(--off) * var(--gx))) translateY(calc(var(--off) * var(--off) * var(--gy))) translateY(var(--rise, 0px)) rotate(calc(var(--off) * var(--rot))) scale(max(.84, calc(1.14 - var(--abs, 0) * .2)));
+  transition: transform 900ms cubic-bezier(.22,.9,.2,1), opacity 500ms ease;
+  will-change: transform; backface-visibility: hidden; cursor: pointer; }
+.ep-fan.is-drag .ep-fan_card, .ep-fan_card.is-jump { transition: none; }
+.ep-fan_card[data-off="0"] { cursor: default; }
+.ep-fan_img { aspect-ratio: 4 / 5; overflow: hidden; background: var(--_colors---base-1000--bg); }
+.ep-fan_img img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; -webkit-user-drag: none; }
+.ep-fan_card figcaption { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .35em; min-height: calc(var(--w) * .21); padding: .9em .5em 1em; text-align: center; }
+.ep-fan_cap { font-family: "Playfair Display", ui-serif, Georgia, serif; font-size: calc(var(--w) * .066); line-height: 1.15; color: var(--ep-choc-700, #24120c); }
+.ep-fan_sub { font-family: "Albert Sans", sans-serif; font-size: calc(var(--w) * .033); font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #896d42; }
+
+.ep-carousel_pag { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 2.2em auto 0; }
+.ep-carousel_btn { appearance: none; flex: none; width: 46px; height: 46px; display: grid; place-items: center; border: 1px solid var(--_colors---base-1000--primary); border-radius: 50%; background: transparent; color: var(--_colors---base-1000--primary); cursor: pointer; padding: 0; transition: background-color 180ms cubic-bezier(.4,0,.2,1), color 180ms cubic-bezier(.4,0,.2,1), transform 180ms; }
+.ep-carousel_btn:hover { background: var(--_colors---base-1000--primary); color: var(--_colors---base-0--primary); }
+.ep-carousel_btn:active { transform: scale(.94); }
+.ep-carousel_bar { position: relative; flex: none; width: 300px; max-width: 46vw; height: 1px; background: var(--_colors---base-1000--line); }
+.ep-carousel_fill { position: absolute; left: 0; top: -.5px; height: 2px; width: 100%; background: var(--_colors---base-1000--primary); transform-origin: 0 50%; transform: scaleX(.2); transition: transform 700ms cubic-bezier(.22,.9,.2,1); }
+.ep-carousel_count { margin: 1.2em 0 0; text-align: center; opacity: .6; }
+@media (max-width: 991px) { .ep-fan { --w: clamp(190px, 32vw, 270px); --gx: calc(var(--w) * .7); --rot: 9deg; height: calc(var(--w) * 1.74); } }
+@media (max-width: 767px) { .ep-fan { --w: 60vw; --gx: calc(var(--w) * .66); --rot: 10deg; --gy: calc(var(--w) * .06); height: calc(var(--w) * 1.8); } .ep-carousel_btn { width: 42px; height: 42px; } .ep-carousel_pag { gap: 14px; } .ep-carousel_bar { width: 200px; } }
+@media (prefers-reduced-motion: reduce) { .ep-fan_card, .ep-carousel_fill { transition: none; } }
+
+/* entrance: cards rise into the fan one at a time, centre card first */
+.ep-fan.is-pre .ep-fan_card { --rise: 120px; opacity: 0; }
+.ep-fan.is-intro .ep-fan_card { transition: transform 1100ms cubic-bezier(.2,.9,.2,1) var(--d, 0ms), opacity 700ms ease var(--d, 0ms); }
+@media (max-width: 991px) { .ep-fan { height: calc(var(--w) * 1.74 + 90px); } }
+@media (max-width: 767px) { .ep-fan { height: calc(var(--w) * 1.8 + 90px); } }
+@media (prefers-reduced-motion: reduce) { .ep-fan.is-pre .ep-fan_card { --rise: 0px; opacity: 1; } }
+
+/* the card in focus is larger and in full colour; the rest sit back, less vivid */
+.ep-fan_img img { --sat: max(.32, calc(1 - var(--abs, 0) * .6)); --br: max(.84, calc(1 - var(--abs, 0) * .07)); filter: saturate(var(--sat)) brightness(var(--br)); transition: filter 900ms cubic-bezier(.22,.9,.2,1); }
+.ep-fan_card { --abs: 0; }
+.ep-fan.is-drag .ep-fan_img img { transition: none; }
+.ep-fan_card.is-far { opacity: 0 !important; pointer-events: none; }
+@media (max-width: 991px) { .ep-fan { height: calc(var(--w) * 1.95 + 90px); } }
+@media (max-width: 767px) { .ep-fan { height: calc(var(--w) * 2 + 90px); --gx: calc(var(--w) * .72); } }
+
+/* Resi-Life: the photo in the brown frame sits bottom-left, 100px in from the left and bottom,
+   at about twice its old width (capped so it never runs past the frame). */
+.interior-s_l_img-w { container-type: inline-size; padding: 0 0 100px 100px; align-items: flex-start; justify-content: flex-end; }
+.interior-s_l_img-w .interior-s_l_img { width: min(calc(2 * (100cqw + 100px - 2 * var(--136px, 136px))), 100cqw); }
+@media (max-width: 767px) {
+  .interior-s_l_img-w { padding: 0 0 56px 56px; }
+  .interior-s_l_img-w .interior-s_l_img { width: min(calc(2 * (100cqw + 56px - 2 * var(--80px, 80px))), 100cqw); }
+}

@@ -1,0 +1,146 @@
+/* EPIISOD scroll flythrough — first fold.
+   Ported from the "EPIISOD Flythrough Hero" design. Colours and type are the EPIISOD
+   Design System tokens; offsets follow the site's own header / scroll-bar gutters so
+   the fixed logo, menu and progress bar sit cleanly over the footage. */
+.ep-fly {
+  --ep-choc-700: #24120c;
+  --ep-choc-600: #391d13;
+  --ep-pearl: #f4f2f0;
+  --ep-silver: #dcd7d3;
+  --ep-sand: #d0a77f;
+  --ep-bronze-300: #e9dfd0;
+  --ep-bronze-400: #d7c5a9;
+  --ep-bronze-700: #896d42;
+  --fly-gutter-l: calc(var(--_special-units---offset-l, 48px) + var(--_special-units---1-cell-h, 56px) + var(--_special-units---grid-gap, 16px) * 2);
+  --fly-gutter-r: var(--_special-units---offset-r, 48px);
+  position: relative;
+  height: 500vh;
+  height: 500dvh;
+  background: var(--ep-choc-700);
+  color: var(--ep-pearl);
+  font-family: "Albert Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+.ep-fly_pin { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; background: var(--ep-choc-700); }
+.ep-fly_stage { position: absolute; inset: 0; opacity: 0; will-change: opacity, transform; }
+.ep-fly_stage:first-child { opacity: 1; }
+.ep-fly_poster { position: absolute; inset: 0; background-size: cover; background-position: center; background-color: var(--ep-choc-700); }
+.ep-fly_video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; }
+.ep-fly_scrim {
+  position: absolute; inset: -1px; pointer-events: none;
+  background:
+    radial-gradient(135% 100% at 50% 38%, rgba(36,18,12,0) 0%, rgba(36,18,12,0) 42%, rgba(36,18,12,.16) 66%, rgba(36,18,12,.44) 85%, rgba(36,18,12,.66) 100%),
+    linear-gradient(180deg, rgba(36,18,12,.58) 0%, rgba(36,18,12,.16) 18%, rgba(36,18,12,0) 34%, rgba(36,18,12,0) 46%, rgba(36,18,12,.22) 64%, rgba(36,18,12,.62) 84%, rgba(36,18,12,.9) 100%),
+    linear-gradient(74deg, rgba(36,18,12,.5) 0%, rgba(36,18,12,.24) 26%, rgba(36,18,12,.05) 48%, rgba(36,18,12,0) 62%);
+}
+
+.ep-fly_intro {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 0 var(--fly-gutter-r) 0 var(--fly-gutter-l); pointer-events: none; will-change: opacity, transform;
+}
+.ep-fly_eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--ep-sand); margin: 0 0 22px; text-shadow: 0 1px 16px rgba(36,18,12,.9); }
+.ep-fly_title { font-family: "Playfair Display", ui-serif, Georgia, serif; font-weight: 400; font-size: clamp(40px, 6.6vw, 104px); line-height: 1.06; letter-spacing: .02em; margin: 0; color: #fff; max-width: 16ch; text-wrap: balance; text-shadow: 0 2px 40px rgba(36,18,12,.72), 0 1px 4px rgba(36,18,12,.5); }
+.ep-fly_title span { text-transform: uppercase; }
+.ep-fly_hint { margin: 32px 0 0; font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--ep-silver); text-shadow: 0 1px 12px rgba(36,18,12,.9); }
+.ep-fly_line { width: 1px; height: 54px; margin-top: 16px; background: linear-gradient(180deg, rgba(208,167,127,.9), rgba(208,167,127,0)); }
+
+.ep-fly_caps { position: absolute; left: var(--fly-gutter-l); right: var(--fly-gutter-r); bottom: calc(clamp(44px, 7vh, 92px) + env(safe-area-inset-bottom)); pointer-events: none; }
+.ep-fly_cap { position: absolute; bottom: 0; left: 0; max-width: 36ch; opacity: 0; transform: translateY(16px); will-change: opacity, transform; }
+.ep-fly_cap_eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--ep-sand); margin: 0 0 14px; text-shadow: 0 1px 14px rgba(36,18,12,.95); }
+.ep-fly_cap_title { font-family: "Playfair Display", ui-serif, Georgia, serif; font-weight: 400; font-size: clamp(28px, 3.6vw, 52px); line-height: 1.08; margin: 0 0 16px; color: #fff; text-shadow: 0 2px 32px rgba(36,18,12,.8), 0 1px 3px rgba(36,18,12,.55); }
+.ep-fly_cap_body { font-size: 17px; line-height: 29px; font-weight: 300; color: var(--ep-pearl); margin: 0 0 20px; text-shadow: 0 1px 18px rgba(36,18,12,.95); text-wrap: pretty; }
+.ep-fly_tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.ep-fly_tags span { font-size: 11px; font-weight: 600; letter-spacing: .08em; padding: 8px 13px; border: 1px solid rgba(233,223,208,.55); background: rgba(36,18,12,.42); color: #fff; }
+
+.ep-fly_cta { position: absolute; right: var(--fly-gutter-r); bottom: calc(clamp(44px, 7vh, 92px) + env(safe-area-inset-bottom)); display: flex; gap: 12px; opacity: 0; pointer-events: none; will-change: opacity; }
+.ep-fly_btn { display: inline-flex; align-items: center; justify-content: center; padding: 20px 28px; font-family: "Albert Sans", sans-serif; font-weight: 600; font-size: 16px; line-height: 26px; text-transform: capitalize; text-decoration: none; border: 1px solid var(--ep-sand); border-radius: 0; cursor: pointer; transition: background-color 150ms cubic-bezier(.4,0,.2,1), color 150ms cubic-bezier(.4,0,.2,1), border-color 150ms; }
+.ep-fly_btn--fill { background: var(--ep-sand); color: var(--ep-choc-600); }
+.ep-fly_btn--outline { background: transparent; color: var(--ep-bronze-300); border-color: var(--ep-bronze-400); }
+.ep-fly_btn:hover { background: var(--ep-choc-600); color: var(--ep-bronze-300); border-color: var(--ep-choc-600); }
+
+.ep-fly_rail { position: absolute; right: clamp(14px, 3vw, 44px); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
+.ep-fly_railbtn { appearance: none; border: 0; background: transparent; padding: 0; display: flex; align-items: center; gap: 10px; cursor: pointer; font: inherit; }
+.ep-fly_raillabel { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ep-sand); opacity: 0; transform: translateX(6px); transition: opacity 220ms, transform 220ms; }
+.ep-fly_tick { display: block; width: 1px; height: 34px; background: rgba(233,223,208,.3); transition: height 240ms, background 240ms; }
+
+.ep-fly_progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(233,223,208,.16); }
+.ep-fly_bar { height: 100%; width: 0; background: var(--ep-sand); }
+.ep-fly_boot { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(36,18,12,.86); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--ep-bronze-700); transition: opacity 400ms; }
+
+/* tablet: keep the copy clear of the left progress bar */
+@media (max-width: 991px) {
+  .ep-fly { --fly-gutter-l: 28px; --fly-gutter-r: 28px; }
+  .ep-fly_rail { right: 14px; }
+}
+/* phone: one full-bleed image, copy in the lower third on a deep chocolate scrim */
+@media (max-width: 767px) {
+  .ep-fly { --fly-gutter-l: 22px; --fly-gutter-r: 22px; }
+  .ep-fly_scrim { background: linear-gradient(180deg, rgba(36,18,12,.72) 0%, rgba(36,18,12,.2) 18%, rgba(36,18,12,0) 38%, rgba(36,18,12,.46) 62%, rgba(36,18,12,.86) 82%, rgba(36,18,12,.97) 100%); }
+  .ep-fly_intro { top: auto; bottom: calc(112px + env(safe-area-inset-bottom)); height: auto; padding: 0 22px; align-items: flex-start; justify-content: flex-end; text-align: left; }
+  .ep-fly_eyebrow { margin-bottom: 14px; font-size: 11px; }
+  .ep-fly_title { font-size: 38px; line-height: 1.04; max-width: none; }
+  .ep-fly_hint { margin-top: 18px; }
+  .ep-fly_line { margin-top: 14px; height: 34px; }
+  .ep-fly_rail { display: none; }
+  .ep-fly_caps { top: auto; bottom: calc(112px + env(safe-area-inset-bottom)); }
+  .ep-fly_cap { max-width: none; }
+  .ep-fly_cap_title { font-size: 31px; line-height: 1.06; margin-bottom: 12px; }
+  .ep-fly_cap_eyebrow { margin-bottom: 11px; }
+  .ep-fly_cap_body { font-size: 15px; line-height: 24px; margin-bottom: 14px; }
+  .ep-fly_tags { flex-wrap: nowrap; overflow: hidden; }
+  .ep-fly_tags span { padding: 6px 10px; white-space: nowrap; }
+  .ep-fly_cta { left: 22px; right: 22px; bottom: calc(20px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ep-fly_btn { padding: 16px 10px; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ep-fly { height: auto; }
+  .ep-fly_pin { position: relative; }
+  .ep-fly_video { display: none; }
+  .ep-fly_stage:not(:first-child) { display: none; }
+  .ep-fly_cap, .ep-fly_cta { opacity: 1; position: static; transform: none; pointer-events: auto; }
+}
+
+.ep-fly_title, .ep-fly_cap_title { text-transform: none; }
+.ep-fly_title span { text-transform: uppercase; }
+.ep-fly h1, .ep-fly h2, .ep-fly p { letter-spacing: normal; }
+.ep-fly_title { letter-spacing: .02em; }
+
+/* ---- one long pinned scroll: 4 scenes (scrub + hold + dissolve), then the arch rises over it ---- */
+.ep-fly { height: calc(var(--_special-units---100vh, 100vh) * 8 + 50rem); }
+.ep-fly_pin { height: var(--_special-units---100vh, 100vh); }
+
+/* ---- hotspots ---- */
+.ep-fly_pins { position: absolute; inset: 0; pointer-events: none; opacity: 0; z-index: 3; }
+.ep-fly_pt { position: absolute; width: 0; height: 0; }
+.ep-fly_pt_btn { position: absolute; left: -22px; top: -22px; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.9); border-radius: 50%; background: rgba(36,18,12,.28); padding: 0; cursor: pointer; display: grid; place-items: center; pointer-events: none; transition: background-color 180ms, transform 180ms, border-color 180ms; }
+.ep-fly_pins.is-on .ep-fly_pt_btn { pointer-events: auto; }
+.ep-fly_pt_dot { width: 9px; height: 9px; border-radius: 50%; background: #fff; transition: background-color 180ms, transform 180ms; }
+.ep-fly_pt_pulse { position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(255,255,255,.7); animation: epFlyPulse 2.6s ease-out infinite; pointer-events: none; }
+.ep-fly_pt_pulse--2 { animation-delay: 1.3s; }
+@keyframes epFlyPulse { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(1.9); opacity: 0; } }
+.ep-fly_pt_btn:hover, .ep-fly_pt.is-open .ep-fly_pt_btn, .ep-fly_pt_btn:focus-visible { background: rgba(208,167,127,.9); border-color: var(--ep-sand); transform: scale(1.08); outline: none; }
+.ep-fly_pt_btn:hover .ep-fly_pt_dot, .ep-fly_pt.is-open .ep-fly_pt_dot { background: var(--ep-choc-700); }
+
+.ep-fly_tip { position: absolute; left: 0; bottom: 34px; width: min(264px, calc(100vw - 28px)); transform: translateX(calc(-50% + var(--tip-shift, 0px))) translateY(6px); padding: 20px 22px 22px; background: var(--ep-pearl); color: var(--ep-choc-700); border: 1px solid var(--ep-bronze-400); border-radius: 0; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 160ms cubic-bezier(.4,0,.2,1), transform 160ms cubic-bezier(.4,0,.2,1), visibility 0s linear 160ms; text-align: left; }
+.ep-fly_pt.is-below .ep-fly_tip { bottom: auto; top: 34px; transform: translateX(calc(-50% + var(--tip-shift, 0px))) translateY(-6px); }
+.ep-fly_pt.is-open .ep-fly_tip { opacity: 1; visibility: visible; transform: translateX(calc(-50% + var(--tip-shift, 0px))) translateY(0); transition-delay: 0s; }
+.ep-fly_pt.is-open { z-index: 5; }
+.ep-fly_tip_eyebrow { margin: 0 0 8px; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--ep-bronze-700); }
+.ep-fly_tip_title { margin: 0 0 8px; font-family: "Playfair Display", ui-serif, Georgia, serif; font-weight: 400; font-size: 22px; line-height: 1.15; text-transform: none; letter-spacing: 0; color: var(--ep-choc-700); }
+.ep-fly_tip_body { margin: 0; font-size: 14px; line-height: 22px; font-weight: 400; color: var(--ep-choc-600); text-shadow: none; letter-spacing: 0; }
+@media (max-width: 767px) {
+  .ep-fly_pt_btn { width: 40px; height: 40px; left: -20px; top: -20px; }
+  .ep-fly_tip { padding: 16px 18px 18px; }
+  .ep-fly_tip_title { font-size: 19px; }
+}
+@media (prefers-reduced-motion: reduce) { .ep-fly_pins { display: none; } }
+
+/* centre the intro block: the title sits on the exact centre of the screen, eyebrow above and hint below it */
+.ep-fly_intro { display: grid; grid-template-rows: 1fr auto 1fr; justify-items: center; padding: 0 max(var(--fly-gutter-l), var(--fly-gutter-r)); }
+.ep-fly_eyebrow { align-self: end; margin-bottom: 22px; }
+.ep-fly_hint { align-self: start; }
+.ep-fly_line { display: none; }
+@media (max-width: 767px) {
+  .ep-fly_intro { top: auto; bottom: calc(112px + env(safe-area-inset-bottom)); display: flex; padding: 0 22px; }
+  .ep-fly_eyebrow, .ep-fly_hint { align-self: auto; }
+  .ep-fly_line { display: block; }
+}
