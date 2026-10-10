@@ -1,0 +1,27 @@
+/* The story panel: looping ivy video as the background (no overlay), dark chocolate type. */
+.ep-story_bg { position: absolute; inset: 0 0 0 calc(var(--_special-units---offset-l, 44px) * -1); z-index: 0; overflow: hidden; background: #ececec; }
+.ep-story_bg video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.loc-info-w .loc-info-s { position: relative; z-index: 1; }
+.loc-info-w .loc-info-s .l1,
+.loc-info-w .loc-info-s .h4,
+.loc-info-w .loc-info-s .p1,
+.loc-info-w .loc-info-s .logo,
+.loc-info-w .loc-info-s .logo_symbol { color: #24120c !important; }
+@media (prefers-reduced-motion: reduce) { .ep-story_bg video { display: none; } .ep-story_bg { background: center / cover url(/assets/story/ivy-poster.jpg); } }
+
+/* desktop: the text block sits in the lower third of the panel */
+@media (min-width: 992px) {
+  .loc-info-w .loc-info-s_t { flex: 4.6 1 0; }
+  .loc-info-w .info-s_desc { padding-top: 26px; }
+  .loc-info-w .loc-info-s_b { flex: 1 1 0; }
+}
+
+/* the panels after the video take on the video's own backdrop (a soft vertical gradient sampled from the footage's edge),
+   across the full width of the screen, so there is no seam where the video ends and no pale strip at the page edge */
+.loc-scroll-area_screen { isolation: isolate; }
+.loc-scroll-area_screen::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  top: 0; bottom: 0; left: -120px; right: -120px;
+  background: linear-gradient(180deg, #dedfdc 0%, #e4e5e2 8%, #eaeae8 18%, #ececec 30%, #ececec 60%, #eaeaea 75%, #e4e5e2 90%, #e8e8e6 100%);
+}
+@media (max-width: 991px) { .loc-scroll-area_screen::before { background: #ececec; } }

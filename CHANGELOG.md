@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.0
+
+- Story panel: looping ivy video background (no sound, no overlay) replaces the pink flowers, dark chocolate type set in the lower part of the panel, and the panels after it share the video's own backdrop so there is no seam or edge strip.
+- Progress pill follows the bar's colours and hides when idle; chevrons rotate when a section scrolls sideways; preloader percentage counter.
+
 ## 2.1.0
 
 - Hero flythrough: video scrubs freely with scroll and snaps forward to the end of each clip; no dead scroll between the last clip and the video section; hero lower-right buttons removed.
