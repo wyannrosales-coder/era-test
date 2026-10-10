@@ -138,6 +138,32 @@
     }, { passive: true });
     mobileState();
 
+    // the progress pill only shows while the page is moving
+    if (bar) {
+      var idleT = 0, py = window.pageYOffset;
+      window.addEventListener('scroll', function () {
+        if (Math.abs(window.pageYOffset - py) < 1) return;
+        py = window.pageYOffset;
+        bar.classList.add('is-scrolling');
+        clearTimeout(idleT);
+        idleT = setTimeout(function () { bar.classList.remove('is-scrolling'); }, 1200);
+      }, { passive: true });
+      var thumb = bar.querySelector('[data-s-bar-thumb]');
+      if (thumb) {
+        thumb.addEventListener('pointerdown', function () { bar.classList.add('is-drag'); });
+        window.addEventListener('pointerup', function () { bar.classList.remove('is-drag'); });
+      }
+    }
+
+    // side by side while a horizontally scrolling section is on screen
+    var hAreas = [].slice.call(document.querySelectorAll('[data-scroll-horizontal]'));
+    function horizontal() {
+      var vh = window.innerHeight, on = hAreas.some(function (a) { var r = a.getBoundingClientRect(); return r.top <= vh * 0.5 && r.bottom >= vh * 0.5; });
+      btns.classList.toggle('is-h', on);
+    }
+    window.addEventListener('scroll', horizontal, { passive: true });
+    horizontal();
+
     function place() {
       // evenly spaced so every stop is easy to hit (the thumb still shows true progress)
       stops.forEach(function (s, i) { ticks[i].style.top = (stops.length > 1 ? i / (stops.length - 1) * 100 : 0) + '%'; });

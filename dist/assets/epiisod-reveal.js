@@ -55,14 +55,17 @@
     var side = (vw - w) / 2;
     var top = lerp(vh * 0.16, 0, o0);
     var bot = vh * 0.22 * e;
+    // entry: the arch comes in higher, rising ahead of the section and closing the gap smoothly as the section arrives
+    var lift = 0.66 * (0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, p1))) * Math.max(0, rect.top);   // only ever shrinks as the section arrives, so the arch never moves back down
     var r = (w / 2) * (1 - Math.pow(o0, 3));
     var rb = (w / 2) * e;
-    var fs0 = vw < 768 ? 26 : 30, fs1 = Math.max(40, Math.min(vw * 0.056, 88));
+    var fs0 = vw < 768 ? 26 : 30, fs1 = vw < 768 ? 38 : Math.max(36, Math.min(vw * 0.042, 66));
     var s = sec.style;
     s.setProperty('--rv-side', side + 'px');
     s.setProperty('--rv-top', top + 'px');
-    s.setProperty('--rv-bot', bot + 'px');
-    s.setProperty('--rv-ty', (-EXIT * vh * q).toFixed(1) + 'px');
+    s.setProperty('--rv-bot', (vh * 0.5 - lift + bot).toFixed(1) + 'px');
+    s.setProperty('--rv-h', (vh + lift).toFixed(1) + 'px');
+    s.setProperty('--rv-ty', (-EXIT * vh * q - lift).toFixed(1) + 'px');
     s.setProperty('--rv-dim', (clamp(p1 * 1.6) * 0.85 * (1 - clamp(q * 8))).toFixed(3));
     s.setProperty('--rv-r', r + 'px');
     s.setProperty('--rv-rbx', rb.toFixed(1) + 'px');
@@ -72,6 +75,12 @@
     // copy appears once the video is full-bleed, rides the video as it narrows, and fades late
     var c = clamp((p1 - 0.78) / 0.22);
     s.setProperty('--rv-copy', c.toFixed(3));
+    // text arrives once the video is ~70% open, line by line
+    var ct = clamp((p1 - 0.7) / 0.3), seg = function (a, b) { return ease(clamp((ct - a) / (b - a))).toFixed(3); };
+    s.setProperty('--rv-t1', seg(0, 0.5));
+    s.setProperty('--rv-t2', seg(0.2, 0.7));
+    s.setProperty('--rv-t3', seg(0.4, 0.9));
+    s.setProperty('--rv-t4', seg(0.55, 1));
     s.setProperty('--rv-ttl', (1 - clamp((q - 0.5) / 0.4)).toFixed(3));
     sec.classList.toggle('is-open', c > 0.9 && e < 0.1);
     // only decode video while the section is on screen

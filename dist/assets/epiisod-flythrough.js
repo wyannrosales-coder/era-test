@@ -10,11 +10,11 @@
   var touch = window.matchMedia('(pointer: coarse)').matches;
   var PRE = 0.07;        // share of each clip reserved as dissolve pre-roll
   var CAP_START = 0.44;  // where each scene's caption takes over
-  var XF = 0.16;         // dissolve band at the tail of each scene
+  var XF = 0.22;         // dissolve band at the tail of each scene
   var LINGER = 0.3;
-  var W = 1.5;           // scroll length of each scene, in viewport heights
-  var SCRUB = 0.6;       // share of a scene spent scrubbing; the rest holds on the last frame
-  var PIN_IN = 0.52, PIN_OUT = 0.88;
+  var W = 1.2;           // scroll length of each scene, in viewport heights
+  var SCRUB = 0.78;      // share of a scene spent scrubbing; the rest holds on the last frame
+  var PIN_IN = 0.62, PIN_OUT = 0.80;
 
   var stages = [].slice.call(root.querySelectorAll('[data-fly-stage]'));
   var bar = root.querySelector('[data-fly-bar]');
@@ -132,7 +132,7 @@
     if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight * 2) return;
     var p = span > 0 ? -rect.top / span : 0;
     p = p < 0 ? 0 : p > 1 ? 1 : p;
-    smoothed += (p - smoothed) * 0.1;
+    smoothed += (p - smoothed) * 0.22;
     var sp = smoothed;
 
     if (bar) bar.style.width = (sp * 100).toFixed(2) + '%';
@@ -262,13 +262,54 @@
       if (tk && !tk.__active) { tk.style.height = '34px'; tk.style.background = 'rgba(233,223,208,.3)'; }
     });
     btn.addEventListener('click', function () {
-      var target = (i + 0.74) / N;
+      var target = (i + SCRUB) / N;
       var span = N * W * window.innerHeight;
       var top = root.getBoundingClientRect().top + window.pageYOffset + target * span;
       window.scrollTo({ top: top, behavior: 'smooth' });
     });
   });
 
+
+  // ---- forward snap -------------------------------------------------------------
+  // The video scrubs freely with the scroll. When scrolling comes to rest in the last part of a clip, glide FORWARD to its
+  // end (last frame, caption and pins). Resting between two clips (mid-dissolve) completes the dissolve. It never moves
+  // backward, never acts while a finger is down, and never touches the way out of the last clip into the video section.
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var RANGE = 0.20;                                 // share of a clip's scrub in which the snap is offered
+    var timer = 0, touching = false, lastY = window.pageYOffset, dir = 0, snapping = false, snapEnd = 0;
+    function rootTop() { return root.getBoundingClientRect().top + window.pageYOffset; }
+    function span() { return N * W * window.innerHeight; }
+    function lenisOn() { var L = window.__lenis; return L && !L.isStopped ? L : null; }
+    function snapTo(pos, ms) {
+      var y = rootTop() + (pos / N) * span();
+      if (y <= window.pageYOffset + 6) return;        // forward only, and not for a few pixels
+      snapping = true; snapEnd = performance.now() + ms + 200;
+      var L = lenisOn();
+      if (L && L.scrollTo) L.scrollTo(y, { duration: ms / 1000, force: true, easing: function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; } });
+      else window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+    function settle() {
+      if (touching || dir <= 0) return;
+      var pos = ((window.pageYOffset - rootTop()) / span()) * N;
+      if (pos <= 0.01 || pos >= N) return;
+      var i = Math.min(N - 1, Math.floor(pos)), f = pos - i;
+      if (f >= SCRUB * (1 - RANGE) && f < SCRUB) { snapTo(i + SCRUB, 1300); return; }   // near the end of the clip
+      if (f >= SCRUB && i < N - 1) snapTo(i + 1 + 0.02, 1300);                             // mid-dissolve: finish it
+    }
+    window.addEventListener('scroll', function () {
+      var y = window.pageYOffset;
+      if (Math.abs(y - lastY) > 1) dir = y > lastY ? 1 : -1;
+      lastY = y;
+      if (snapping) { if (performance.now() < snapEnd) { clearTimeout(timer); return; } snapping = false; }
+      clearTimeout(timer);
+      timer = setTimeout(settle, 170);
+    }, { passive: true });
+    window.addEventListener('touchstart', function () { touching = true; clearTimeout(timer); snapping = false; }, { passive: true });
+    window.addEventListener('touchend', function () { touching = false; clearTimeout(timer); timer = setTimeout(settle, 220); }, { passive: true });
+    window.addEventListener('touchcancel', function () { touching = false; }, { passive: true });
+    window.addEventListener('wheel', function () { snapping = false; }, { passive: true });   // a new scroll takes over from a snap
+  })();
 
   // ---- hotspots -------------------------------------------------------------
   // Pin coordinates are fractions of the 16:9 video frame, so they stay on the

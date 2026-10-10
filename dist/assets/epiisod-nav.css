@@ -1,12 +1,15 @@
 /* Section navigation: previous / next buttons beside "Scroll", and hover thumbnails on the progress bar. */
 .ep-nav_btns {
   position: fixed;
-  left: var(--_special-units---offset-l, 44px);
-  bottom: 14px;
+  right: var(--_special-units---offset-r, 44px);
+  bottom: 18px;
+  width: 76px; height: 76px;
   z-index: 1201;
-  display: flex;
-  gap: 8px;
 }
+/* stacked by default (previous above next); side by side while a section scrolls horizontally */
+.ep-nav_btns .ep-nav_btn { position: absolute; right: 0; bottom: 0; transition: transform .55s cubic-bezier(.2,.7,.2,1), opacity .2s, background-color .2s; }
+.ep-nav_btns [data-nav="prev"] { transform: translate(0, -42px); }
+.ep-nav_btns.is-h [data-nav="prev"] { transform: translate(-42px, 0); }
 .ep-nav_btn {
   width: 34px; height: 34px;
   display: grid; place-items: center;
@@ -112,3 +115,32 @@
   @keyframes ep-sheet { from { opacity: 0; transform: translateY(24px); } }
 }
 @media (prefers-reduced-motion: reduce) { .ep-mnav { transition: none; } .ep-msheet { animation: none; } .ep-msheet li span { transition: none; } }
+
+/* progress number: a pill to the left of the bar that wears the bar's own colours (light bar: light pill with dark text,
+   dark bar: dark pill with light text) and only shows while scrolling, or when the bar is hovered */
+@media (min-width: 992px) {
+  [data-s-bar] [data-s-bar-thumb] {
+    width: auto; min-width: 50px; height: 26px; padding: 0 11px;
+    display: flex; flex-direction: row; align-items: center; justify-content: center;
+    background: var(--_colors---base-1000--primary);
+    border: 1px solid var(--_colors---base-1000--primary);
+    border-radius: 999px;
+    color: var(--_colors---base-0--primary);
+    transform: translate(calc(-50% - 14px), -50%);
+    opacity: 0; pointer-events: none;
+    transition: opacity .45s cubic-bezier(.2,.7,.2,1), background-color var(--dur-s, .3s), border-color var(--dur-s, .3s), color var(--dur-s, .3s);
+  }
+  [data-s-bar].is-scrolling [data-s-bar-thumb], [data-s-bar]:hover [data-s-bar-thumb], [data-s-bar].is-drag [data-s-bar-thumb] { opacity: 1; pointer-events: auto; }
+  [data-s-bar] [data-s-bar-thumb]::after {
+    content: ""; position: absolute; left: 100%; top: 50%; width: 14px; height: 1px; background: var(--_colors---base-1000--primary);
+  }
+  [data-s-bar] [data-s-bar-label] { color: inherit; font-size: 11px; line-height: 1; letter-spacing: .12em; text-align: center; }
+  [data-s-bar] [data-s-bar-label]::after { content: "%"; margin-left: 1px; font-size: 8px; letter-spacing: 0; opacity: .7; vertical-align: 1px; }
+  /* the line runs straight through now that the pill sits beside it */
+  [data-s-bar] [data-s-bar-fill] { clip-path: rect(0% 100% var(--progress) 0%) !important; }
+  [data-s-bar] [data-s-bar-track] { clip-path: rect(var(--progress) 100% 100% 0%) !important; }
+}
+
+/* chevrons: point left / right while the pair sits side by side */
+.ep-nav_btn svg { transition: transform .55s cubic-bezier(.2,.7,.2,1); }
+.ep-nav_btns.is-h .ep-nav_btn svg { transform: rotate(-90deg); }

@@ -105,7 +105,9 @@
 .ep-fly_title { letter-spacing: .02em; }
 
 /* ---- one long pinned scroll: 4 scenes (scrub + hold + dissolve), then the arch rises over it ---- */
-.ep-fly { height: calc(var(--_special-units---100vh, 100vh) * 8 + 50rem); }
+/* scenes run (N * W) screens; the video arch starts rising right after the last pin view, so the section is only as
+   long as the scenes up to that point plus the screen the arch rises over: (3 + .78) * 1.2 + 2 screens */
+.ep-fly { height: calc(var(--_special-units---100vh, 100vh) * 6.54); }
 .ep-fly_pin { height: var(--_special-units---100vh, 100vh); }
 
 /* ---- hotspots ---- */

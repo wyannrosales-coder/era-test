@@ -161,3 +161,22 @@ html body {
   .interior-s_l_img-w { padding: 0 0 56px 56px; }
   .interior-s_l_img-w .interior-s_l_img { width: min(calc(2 * (100cqw + 56px - 2 * var(--80px, 80px))), 100cqw); }
 }
+
+/* Resi-Life carousel: navigation tucked about 40px below the polaroids (the fan box has spare height for the arc and shadows) */
+.ep-fan { margin-bottom: calc(var(--w) * -.26 - 80px); }
+.ep-carousel_pag { position: relative; z-index: 2; }
+
+/* preloader: percentage beside the loading line */
+.ep-preload_pct {
+  display: flex; align-items: baseline; justify-content: center; gap: 4px;
+  margin: 0 0 22px;
+  font-family: "Playfair Display", ui-serif, Georgia, serif;
+  color: var(--_colors---base-1000--primary, #f4f2f0);
+  font-variant-numeric: tabular-nums lining-nums;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
+}
+.ep-preload_pct.is-on { opacity: 1; transform: none; }
+.ep-preload_pct.is-done { opacity: 0; transition-duration: .3s; }
+.ep-preload_n { font-size: clamp(44px, 5.4vw, 84px); line-height: 1; letter-spacing: -.01em; min-width: 2.1ch; text-align: right; }
+.ep-preload_u { font-size: clamp(16px, 1.6vw, 24px); color: #d0a77f; }
