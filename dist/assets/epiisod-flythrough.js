@@ -148,6 +148,7 @@
       acc -= 1;
     }
     var segRaw = Math.min(1, Math.max(0, acc));
+    railBtns.forEach(function (b, k) { var fv = Math.min(1, Math.max(0, sp * N - k)); if (b.__f !== fv.toFixed(3)) { b.style.setProperty('--f', fv.toFixed(3)); b.__f = fv.toFixed(3); } });
     var seg = ease(Math.min(1, segRaw / SCRUB), LINGER);
 
     if (segRaw > 0.15 && items[idx + 1]) load(idx + 1);
@@ -237,6 +238,7 @@
       var on = i === idx;
       if (tk.__on !== on) {
         tk.__active = on;
+        if (tk.parentNode) tk.parentNode.classList.toggle('is-on', on);
         tk.style.height = on ? '58px' : '34px';
         tk.style.width = on ? '2px' : '1px';
         tk.style.background = on ? '#d0a77f' : 'rgba(233,223,208,.3)';

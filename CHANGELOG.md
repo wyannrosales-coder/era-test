@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.0
+
+- Rooms: a magazine. Desktop is a book whose pages turn on click (chevron cursor with Next / Back); phones and tablets show the cover, then a full-screen flipbook that folds across the middle of the screen, one page per room with a photo carousel. Content from epiisod.com.
+- Location: aerial video scrubs on a canvas, hotspots, a zoomed-out view on phones, and the closing words "At the heart of Macquarie Park" over the building.
+- Smart room: the Design section is now a smart room. The photo zooms out to the full width while a phone with the room app (door, four lights, aircon with temperature and fan pages) lets you switch the lights in the photograph, with chimes and spoken confirmations, a door that relocks itself, and a volume control. On phones the picture zooms out beneath a bottom sheet of tiled controls.
+- App section: the phone travels from the smart room to the app section; six app screens animate (bottom sheets rise, cards lift out of the phone) with tabs on desktop and swipe plus dots on phones.
+- Amenities slider rebuilt from new photographs (gym, sauna, ice bath, yoga studio, rooftop pool) with a readability overlay.
+- Navigation: Notion-style line nav on the right (desktop), hero segments on the bottom bar, updated phone menu.
+- One page: View rooms glides to the rooms section; Book a tour and Contact are blank for now.
+- Removed the previous site credits (console banner, footer credit logo and animation code) and HTML comments.
+
 ## 2.2.0
 
 - Story panel: looping ivy video background (no sound, no overlay) replaces the pink flowers, dark chocolate type set in the lower part of the panel, and the panels after it share the video's own backdrop so there is no seam or edge strip.

@@ -146,3 +146,38 @@
   .ep-fly_eyebrow, .ep-fly_hint { align-self: auto; }
   .ep-fly_line { display: block; }
 }
+
+/* ---- hero: the four segments live along the bottom progress bar, with their names above ---- */
+.ep-fly_rail { position: absolute; left: var(--fly-gutter-l); right: var(--fly-gutter-r); top: auto; bottom: 14px; transform: none; display: flex; flex-direction: row; align-items: flex-end; justify-content: stretch; gap: 10px; z-index: 6; }
+.ep-fly_railbtn { flex: 1 1 0; display: flex; flex-direction: column; align-items: stretch; gap: 9px; padding: 8px 0 6px; cursor: pointer; }
+.ep-fly_raillabel { order: 0; opacity: .72 !important; transform: none !important; font-size: 11px; font-weight: 600; letter-spacing: .18em; color: #fff !important; text-align: left; text-shadow: 0 1px 14px rgba(20,10,6,.85); transition: opacity .25s, color .25s; }
+.ep-fly_railbtn.is-on .ep-fly_raillabel, .ep-fly_railbtn:hover .ep-fly_raillabel { opacity: 1 !important; }
+.ep-fly_railbtn.is-on .ep-fly_raillabel { color: var(--ep-sand) !important; }
+.ep-fly_tick { order: 1; width: 100% !important; height: 2px !important; background: rgba(255,255,255,.34) !important; transition: background-color .3s, transform .3s; transform-origin: 50% 100%; }
+.ep-fly_railbtn.is-on .ep-fly_tick { background: var(--ep-sand) !important; transform: scaleY(1.6); }
+.ep-fly_railbtn:hover .ep-fly_tick { background: rgba(255,255,255,.8) !important; }
+.ep-fly_railbtn.is-on:hover .ep-fly_tick { background: var(--ep-sand) !important; }
+.ep-fly_progress { height: 3px; background: rgba(233,223,208,.18); z-index: 5; }
+@media (max-width: 767px) { .ep-fly_rail { display: none; } }
+
+/* ---- hero: stronger, easier to read copy ---- */
+.ep-fly_scrim { background:
+    radial-gradient(135% 100% at 50% 38%, rgba(36,18,12,0) 0%, rgba(36,18,12,0) 42%, rgba(36,18,12,.2) 66%, rgba(36,18,12,.5) 85%, rgba(36,18,12,.7) 100%),
+    linear-gradient(180deg, rgba(36,18,12,.62) 0%, rgba(36,18,12,.18) 18%, rgba(36,18,12,0) 32%, rgba(36,18,12,0) 42%, rgba(36,18,12,.34) 60%, rgba(36,18,12,.74) 82%, rgba(36,18,12,.94) 100%),
+    linear-gradient(74deg, rgba(36,18,12,.66) 0%, rgba(36,18,12,.4) 28%, rgba(36,18,12,.1) 50%, rgba(36,18,12,0) 64%); }
+.ep-fly_eyebrow { color: #f0d2ae; font-weight: 700; text-shadow: 0 1px 4px rgba(20,10,6,.95), 0 2px 22px rgba(20,10,6,.95); }
+.ep-fly_title { text-shadow: 0 2px 6px rgba(20,10,6,.55), 0 4px 44px rgba(20,10,6,.85); }
+.ep-fly_hint { color: #fff; font-weight: 700; text-shadow: 0 1px 4px rgba(20,10,6,.95), 0 2px 18px rgba(20,10,6,.95); }
+.ep-fly_cap_eyebrow { color: #f0d2ae; font-weight: 700; text-shadow: 0 1px 4px rgba(20,10,6,.95), 0 2px 18px rgba(20,10,6,.95); }
+.ep-fly_cap_title { text-shadow: 0 2px 6px rgba(20,10,6,.6), 0 4px 40px rgba(20,10,6,.9); }
+.ep-fly_cap_body { color: #fff; font-weight: 400; text-shadow: 0 1px 4px rgba(20,10,6,.9), 0 2px 22px rgba(20,10,6,.95); }
+.ep-fly_tags span { background: rgba(20,10,6,.62); border-color: rgba(255,255,255,.6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.ep-fly_caps { bottom: calc(clamp(64px, 9.5vh, 112px) + env(safe-area-inset-bottom)); }
+.ep-fly_caps::before { content: ""; position: absolute; left: calc(var(--fly-gutter-l) * -1); bottom: calc(clamp(64px, 9.5vh, 112px) * -1); width: 64vw; height: 78vh; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 62% 70% at 24% 82%, rgba(20,10,6,.62), rgba(20,10,6,.3) 55%, rgba(20,10,6,0) 100%); }
+
+.ep-fly_progress { display: none; }
+.ep-fly_tick { position: relative; overflow: hidden; }
+.ep-fly_tick::after { content: ""; position: absolute; inset: 0; background: var(--ep-sand); transform: scaleX(var(--f, 0)); transform-origin: 0 50%; }
+.ep-fly_railbtn.is-on .ep-fly_tick { background: rgba(255,255,255,.34) !important; transform: scaleY(1.7); }
+.ep-fly_railbtn:hover .ep-fly_tick, .ep-fly_railbtn.is-on:hover .ep-fly_tick { background: rgba(255,255,255,.5) !important; }
+.ep-fly_rail { bottom: 20px; }

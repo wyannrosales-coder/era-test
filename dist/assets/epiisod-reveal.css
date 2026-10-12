@@ -130,7 +130,7 @@
 /* the rooms section is pinned while the Life beyond the classroom arch rises over it: the wrapper is the section's
    height plus one screen (set in JS), and the arch is pulled up by that screen */
 .ep-rooms-pin { position: relative; }
-.ep-rooms-pin > .section { position: sticky; top: 0; }
+.ep-rooms-pin > .section { position: sticky; top: 0; min-height: var(--_special-units---100vh, 100vh); }   /* fills the screen, so no page colour shows beneath it while pinned */
 .interior-w { margin-top: calc(var(--_special-units---100vh, 100vh) * -1); }
 @media (prefers-reduced-motion: reduce) { .interior-w { margin-top: 0; } .ep-rooms-pin > .section { position: relative; } }
 
@@ -160,3 +160,12 @@
 
 /* one-line headline on wider screens so the block stays in the lower third and the middle of the video is clear */
 @media (min-width: 768px) { .ep-rv_title br { display: none; } .ep-rv_accent { margin-top: .3em; } .ep-rv_sub { margin-top: 1.1em; } .ep-rv_cta { margin-top: 1.2em; } }
+
+/* the pink flowers sit flush in the bottom-left corner of the pinned "This is where your story begins" screen */
+.ep-rooms-pin > .section { display: flex; flex-direction: column; }
+.ep-rooms-pin > .section > .container { flex: 1; display: flex; flex-direction: column; }
+.ep-rooms-pin .apart-info-w { flex: 1; position: relative; display: flex; flex-direction: column; justify-content: center; }
+.ep-rooms-pin .flower.apart-info { left: calc(var(--_special-units---offset-l, 44px) * -1); bottom: 0; top: auto; right: auto; }
+/* the content spaces itself to fit exactly one screen: the big spacers give way before the section grows past the window */
+.ep-rooms-pin .apart-info-s { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.ep-rooms-pin .apart-info-s > .u-160 { flex: 1 1 0; height: auto; min-height: 20px; }
