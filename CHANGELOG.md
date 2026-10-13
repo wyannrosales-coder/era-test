@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.3.2
+
+- Hero with Reduce Motion on (iPhone/Mac accessibility): a title screen, then the four scenes as full-screen stills, each with its own caption. Previously every caption piled up over the title on one screen.
+
 ## 3.3.1
 
 - Wellness amenities: tabs work again on iPhone/iPad (a startup step treated the flower stills as videos and stopped the rest of startup).

@@ -190,3 +190,24 @@
   .ep-fly_intro { bottom: calc(150px + env(safe-area-inset-bottom)); }
   .ep-fly_cta { bottom: calc(112px + env(safe-area-inset-bottom)); }
 }
+
+/* Reduce Motion (iPhone/Mac accessibility setting): no scrubbing, no pinning. An opening screen carries the title, then
+   the four scenes follow as calm full-screen stills, each with its own caption. (The script stays idle.) */
+@media (prefers-reduced-motion: reduce) {
+  .ep-fly { height: auto !important; }
+  .ep-fly_pin { position: relative; height: auto !important; overflow: visible; padding-top: 100vh; padding-top: 100svh; }
+  .ep-fly_stage, .ep-fly_stage:not(:first-child) { display: block; position: relative; inset: auto; height: 100vh; height: 100svh; opacity: 1 !important; transform: none !important; filter: none !important; }
+  .ep-fly_stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,10,6,.3) 0%, rgba(20,10,6,0) 28%, rgba(20,10,6,.15) 45%, rgba(20,10,6,.85) 100%); pointer-events: none; }
+  .ep-fly_poster { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 1 !important; }
+  .ep-fly_caps::before { display: none; }
+  .ep-fly_tags { flex-wrap: wrap; overflow: visible; }
+  .ep-fly_video, .ep-fly_scrim, .ep-fly_pins, .ep-fly_rail, .ep-fly_progress, .ep-fly_boot, .ep-fly_cta, .ep-fly_line { display: none !important; }
+  .ep-fly_intro { position: absolute; top: 0; left: 0; right: 0; height: 100vh; height: 100svh; opacity: 1 !important; transform: none !important; z-index: 2;
+    background: linear-gradient(rgba(20,10,6,.55), rgba(20,10,6,.7)), url(/assets/flythrough/poster1.jpg) center / cover no-repeat; }
+  .ep-fly_caps { position: absolute; top: 0; bottom: 0; left: clamp(20px, 6vw, 96px); right: clamp(20px, 6vw, 96px); pointer-events: none; z-index: 2; }
+  .ep-fly_cap { position: absolute; left: 0; right: 0; bottom: auto; width: auto; max-width: 560px; opacity: 1 !important; transform: translateY(-100%) !important; pointer-events: auto; }
+  .ep-fly_cap[data-fly-cap="0"] { top: calc(200svh - 48px); }   /* each caption sits at the foot of its own scene */
+  .ep-fly_cap[data-fly-cap="1"] { top: calc(300svh - 48px); }
+  .ep-fly_cap[data-fly-cap="2"] { top: calc(400svh - 48px); }
+  .ep-fly_cap[data-fly-cap="3"] { top: calc(500svh - 48px); }
+}
