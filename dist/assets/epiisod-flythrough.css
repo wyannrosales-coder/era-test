@@ -107,7 +107,7 @@
 /* ---- one long pinned scroll: 4 scenes (scrub + hold + dissolve), then the arch rises over it ---- */
 /* scenes run (N * W) screens; the video arch starts rising right after the last pin view, so the section is only as
    long as the scenes up to that point plus the screen the arch rises over: (3 + .78) * 1.2 + 2 screens */
-.ep-fly { height: calc(var(--_special-units---100vh, 100vh) * 6.54); }
+.ep-fly { height: calc(var(--_special-units---100vh, 100vh) * 6.8); }
 .ep-fly_pin { height: var(--_special-units---100vh, 100vh); }
 
 /* ---- hotspots ---- */
@@ -181,3 +181,12 @@
 .ep-fly_railbtn.is-on .ep-fly_tick { background: rgba(255,255,255,.34) !important; transform: scaleY(1.7); }
 .ep-fly_railbtn:hover .ep-fly_tick, .ep-fly_railbtn.is-on:hover .ep-fly_tick { background: rgba(255,255,255,.5) !important; }
 .ep-fly_rail { bottom: 20px; }
+
+/* phones: a longer rest on the rooftop before the next section, and the segment bar sits above the section pill */
+@media (max-width: 767px) {
+  .ep-fly_rail { display: flex; left: 22px; right: 22px; bottom: calc(70px + env(safe-area-inset-bottom)); gap: 8px; }
+  .ep-fly_raillabel { font-size: 9.5px; letter-spacing: .1em; }
+  .ep-fly_caps { bottom: calc(150px + env(safe-area-inset-bottom)); }
+  .ep-fly_intro { bottom: calc(150px + env(safe-area-inset-bottom)); }
+  .ep-fly_cta { bottom: calc(112px + env(safe-area-inset-bottom)); }
+}

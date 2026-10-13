@@ -102,7 +102,7 @@
     var v = it.video;
     if (v.seeking) { it.pending = t; return; }
     if (!it.painted) paint(it);
-    if (Math.abs(v.currentTime - t) < 0.012) return;
+    if (Math.abs(v.currentTime - t) < (touch ? 0.03 : 0.012)) return;
     it.pending = null;
     try {
       v.currentTime = t;
@@ -132,7 +132,7 @@
     if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight * 2) return;
     var p = span > 0 ? -rect.top / span : 0;
     p = p < 0 ? 0 : p > 1 ? 1 : p;
-    smoothed += (p - smoothed) * 0.22;
+    smoothed += (p - smoothed) * (touch ? 0.32 : 0.22);
     var sp = smoothed;
 
     if (bar) bar.style.width = (sp * 100).toFixed(2) + '%';
@@ -157,7 +157,7 @@
     // a long eased dissolve with a matched push and a peak of blur hides the cut
     var seam = segRaw > 1 - XF && !!items[idx + 1];
     var f = seam ? smoothstep((segRaw - (1 - XF)) / XF) : 0;
-    var blur = seam ? 2.6 * Math.sin(Math.PI * f) : 0;
+    var blur = seam && !touch ? 2.6 * Math.sin(Math.PI * f) : 0;
 
     items.forEach(function (it, i) {
       var op = 0;

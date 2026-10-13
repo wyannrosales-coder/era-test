@@ -78,7 +78,7 @@
     sheet.innerHTML = '<div class="ep-msheet_top"><span>Sections</span><button type="button" data-m="close" aria-label="Close">' +
       '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 3l10 10M13 3L3 13"/></svg></button></div><ol>' +
       stops.map(function (s, i) {
-        return '<li><button type="button" data-go="' + i + '"><em>' + pad(i + 1) + '</em><span>' + s.label + '</span></button></li>';
+        return '<li style="--k:' + i + '"><button type="button" data-go="' + i + '"><em>' + pad(i + 1) + '</em><span>' + s.label + '</span></button></li>';
       }).join('') + '</ol>';
     document.body.appendChild(pill);
     document.body.appendChild(sheet);
@@ -150,7 +150,7 @@
     }).join('') + '</ul>';
     document.body.appendChild(rn);
     var rItems = [].slice.call(rn.querySelectorAll('li'));
-    rn.addEventListener('click', function (e) { var b = e.target.closest('[data-go]'); if (b) go(+b.getAttribute('data-go'), dstops); });
+    rn.addEventListener('click', function (e) { if (mobileOn()) return; var b = e.target.closest('[data-go]'); if (b) go(+b.getAttribute('data-go'), dstops); });
     // what is behind the nav decides whether it is drawn light or dark: read the real colour under it
     function under() {
       var x = window.innerWidth - 70, y = window.innerHeight / 2;
@@ -176,6 +176,74 @@
       var c = current(dstops);
       rItems.forEach(function (li, i) { li.classList.toggle('is-on', i === c); li.classList.toggle('is-past', i < c); });
     }
+    // ---- phones: press the line and an arch of names opens beside the thumb; slide along it and let go to jump ----
+    var arch = document.createElement('div');
+    arch.className = 'ep-rnav_arch';
+    arch.innerHTML = dstops.map(function (x, i) { return '<button type="button" tabindex="-1" data-arch="' + i + '">' + x.label + '</button>'; }).join('');
+    rn.appendChild(arch);
+    var veil = document.createElement('div'); veil.className = 'ep-rnav_veil'; veil.setAttribute('aria-hidden', 'true'); document.body.appendChild(veil);
+    var archBtns = [].slice.call(arch.querySelectorAll('[data-arch]')), hot = -1, dg = null, sticky = false, STEP = 54;
+    // the fan: the chosen name is large and sits at the middle; the others curve away above and below it
+    function fan(h) {
+      archBtns.forEach(function (b, k) {
+        var d = k - h, ad = Math.abs(d);
+        b.style.setProperty('--dy', ((k - (archBtns.length - 1) / 2) * STEP).toFixed(1) + 'px');
+        b.style.setProperty('--sh', (d * d * 2.6).toFixed(1) + 'px');
+        b.style.setProperty('--rot', (d * 4.5).toFixed(1) + 'deg');
+        b.style.setProperty('--sc', (d === 0 ? 1.32 : Math.max(.62, 1 - ad * .1)).toFixed(3));
+        b.style.setProperty('--op', (d === 0 ? 1 : Math.max(.22, .7 - ad * .14)).toFixed(2));
+        b.classList.toggle('is-hot', d === 0);
+      });
+    }
+    function idxAt(y, cy) { return Math.max(0, Math.min(archBtns.length - 1, Math.round((y - cy) / STEP + (archBtns.length - 1) / 2))); }
+    function setHot(i) { if (i === hot) return; hot = i; if (i >= 0) { fan(i); if (navigator.vibrate) { try { navigator.vibrate(8); } catch (err) {} } } }
+    function closeArch() { rn.classList.remove('is-arch', 'is-sticky'); veil.classList.remove('is-on'); sticky = false; hot = -1; }
+    function mobileOn() { return window.matchMedia('(max-width: 991px)').matches; }
+    rn.addEventListener('pointerdown', function (e) {
+      if (!mobileOn()) return;
+      var rb = rn.getBoundingClientRect(), c = idxAt(e.clientY, rb.top + rb.height / 2);
+      dg = { y: e.clientY, t: performance.now(), moved: false, id: e.pointerId, cy: rb.top + rb.height / 2 };
+      fan(c); hot = c; rn.classList.add('is-arch'); veil.classList.add('is-on');
+      try { rn.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    rn.addEventListener('pointermove', function (e) {
+      if (!dg || !mobileOn()) return;
+      if (Math.abs(e.clientY - dg.y) > 6) dg.moved = true;
+      setHot(idxAt(e.clientY, dg.cy));
+    });
+    function endArch(e) {
+      if (!dg) return;
+      var d = dg; dg = null;
+      var held = performance.now() - d.t > 280;
+      if (d.moved || held) { var h = hot; closeArch(); if (h >= 0) go(h, dstops); return; }
+      var lab = e.target && e.target.closest && e.target.closest('[data-arch]');
+      if (lab && sticky) { var k = +lab.getAttribute('data-arch'); closeArch(); go(k, dstops); return; }
+      if (sticky) { closeArch(); return; }
+      sticky = true; rn.classList.add('is-sticky');
+    }
+    // desktop: hover the line to open the fan, move the mouse up and down to choose, click to go
+    var hv = null;
+    function dOpen(e) {
+      if (mobileOn() || hv) return;
+      var b = rn.getBoundingClientRect(), cy = b.top + b.height / 2, c = idxAt(e.clientY, cy);
+      hv = { cy: cy };
+      fan(c); hot = c; rn.classList.add('is-arch'); veil.classList.add('is-on');
+    }
+    function dClose() { hv = null; closeArch(); }
+    rn.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') dOpen(e); });
+    window.addEventListener('pointermove', function (e) {
+      if (!hv || mobileOn()) return;
+      if (e.clientX < window.innerWidth - 300) { dClose(); return; }
+      setHot(idxAt(e.clientY, hv.cy));
+    });
+    window.addEventListener('click', function (e) {
+      if (!hv || mobileOn()) return;
+      var h = hot; dClose(); if (h >= 0) go(h, dstops);
+    }, true);
+    rn.addEventListener('pointerup', endArch);
+    rn.addEventListener('pointercancel', function () { dg = null; closeArch(); });
+    document.addEventListener('pointerdown', function (e) { if (sticky && !rn.contains(e.target)) closeArch(); });
+
     // lines near the pointer stretch a little, like a ruler
     rn.addEventListener('pointermove', function (e) {
       rItems.forEach(function (li) {
@@ -190,7 +258,6 @@
       var p = Math.min(1, Math.max(0, window.pageYOffset / maxScroll()));
       fillEl.style.transform = 'scaleY(' + p.toFixed(4) + ')';
       pctEl.textContent = Math.round(p * 100) + '%';
-      pctEl.style.top = (p * 100).toFixed(2) + '%';
       if (Math.abs(window.pageYOffset - pY) > 1) { pY = window.pageYOffset; rn.classList.add('is-moving'); clearTimeout(pIdle); pIdle = setTimeout(function () { rn.classList.remove('is-moving'); }, 1100); }
     }
     window.addEventListener('scroll', prog, { passive: true });

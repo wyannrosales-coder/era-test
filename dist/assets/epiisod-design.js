@@ -46,14 +46,15 @@
   // ---- the phone ----
   var phone = blk.querySelector('[data-ep-phone]');
   var ICON = {
-    desk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 20h6M9 20v-6l5-8 3 2-3 8-5 4"/><path d="M13 5l3.5 2.2"/></svg>',
-    main: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
-    accent: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3"/></svg>',
-    kitchen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h16l-2 5H6zM12 13v3M9 19h6M7 4h10"/></svg>',
-    air: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v18M4.5 7.5l15 9M19.5 7.5l-15 9M9.5 4.5 12 7l2.5-2.5M9.5 19.5 12 17l2.5 2.5"/></svg>',
-    door: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 21V4h12v17M4 21h16"/><circle cx="14.5" cy="12.5" r=".6" fill="currentColor"/></svg>'
+    bulb: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a6.5 6.5 0 0 0-3.7 11.8c.5.4.7.9.7 1.5V17h6v-1.2c0-.6.2-1.1.7-1.5A6.5 6.5 0 0 0 12 2.5zM9.5 19h5v1.2a1.8 1.8 0 0 1-1.8 1.8h-1.4a1.8 1.8 0 0 1-1.8-1.8z"/></svg>',
+    power: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3.5v8M7 6.8a7.5 7.5 0 1 0 10 0"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 18 21H6a1.5 1.5 0 0 1-1.5-1.5v-8A1.5 1.5 0 0 1 6 10zm2 0h6V8a3 3 0 0 0-6 0z"/></svg>',
+    unlock: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10h1a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 18 21H6a1.5 1.5 0 0 1-1.5-1.5v-8A1.5 1.5 0 0 1 6 10h8V8a3 3 0 0 0-5.8-1l-1.9-.7A5 5 0 0 1 16 8z"/></svg>',
+    snow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.5v19M4.2 7l15.6 10M19.8 7 4.2 17M9.5 4.5 12 7l2.5-2.5M9.5 19.5 12 17l2.5 2.5"/></svg>',
+    chev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+    back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>'
   };
-  var ROWS = [['door', 'Main Door', 'Smart access'], ['desk', 'Desk Lights', 'Under-cabinet'], ['main', 'Main Light', 'Ceiling'], ['accent', 'Accent Light', 'Shelf and bedside'], ['kitchen', 'Kitchen Light', 'Hood and counter'], ['air', 'Aircon', '22°C · Auto']];
+  var NAMES = { desk: 'Desk Lights', main: 'Main Light', accent: 'Accent Light', kitchen: 'Kitchen Light' };
   var state = { door: false, desk: true, main: true, accent: true, kitchen: true, air: true };
   var count = phone && phone.querySelector('[data-app-count]');
   // ---- sound: a soft chime and a spoken confirmation ----
@@ -88,84 +89,118 @@
       } catch (err) {}
     }, delay || 0);
   }
-  var lockT = 0, cdT = 0, doorEnd = 0;
+  var air = { t: 22, fan: 'Auto', mode: 'Cool' };
+  var lockT = 0, cdT = 0, doorEnd = 0, knob = null, slideEl = null;
+  function knobMax() { var cs = getComputedStyle(slideEl); return Math.max(0, slideEl.clientWidth - knob.offsetWidth - 2 * parseFloat(cs.paddingLeft)); }
+  function knobTo(x, anim) { knob.style.transition = anim ? 'transform .45s cubic-bezier(.2,.8,.2,1)' : 'none'; knob.style.transform = 'translateX(' + x.toFixed(1) + 'px)'; }
   function cd() {
     var left = Math.max(0, doorEnd - Date.now());
-    var tile = phone && phone.querySelector('[data-tile="door"]');
-    if (!tile) return;
-    var n = Math.ceil(left / 1000);
-    var sub = tile.querySelector('[data-sub="door"]');
-    if (state.door) sub.textContent = 'Unlocked \u00b7 locks in ' + n + 's';
-    tile.style.setProperty('--cd', (left / 3000).toFixed(3));
-    tile.querySelector('[data-cd]').textContent = state.door ? n : '';
-    if (!state.door || left <= 0) { clearInterval(cdT); tile.classList.remove('is-cd'); }
+    if (!slideEl) return;
+    var n = Math.ceil(left / 1000), st = phone.querySelector('[data-door-status]');
+    if (state.door) st.textContent = 'Unlocked · locks in ' + n + 's';
+    slideEl.style.setProperty('--cd', (left / 3000).toFixed(3));
+    if (!state.door || left <= 0) clearInterval(cdT);
   }
   function door(open, auto) {
     clearTimeout(lockT); clearInterval(cdT);
     state.door = open; paint();
     chime(open);
     say(open ? 'Door unlocked' : 'Door locked', 380);
-    var tile = phone && phone.querySelector('[data-tile="door"]');
-    if (open) {
-      doorEnd = Date.now() + 3000;
-      if (tile) tile.classList.add('is-cd');
-      cd(); cdT = setInterval(cd, 100);
-      lockT = setTimeout(function () { door(false, true); }, 3000);
-    } else if (tile) { tile.classList.remove('is-cd'); tile.style.setProperty('--cd', 0); }
+    if (slideEl) {
+      slideEl.classList.toggle('is-open', open);
+      knobTo(open ? knobMax() : 0, true);
+      if (open) { doorEnd = Date.now() + 3000; cd(); cdT = setInterval(cd, 100); lockT = setTimeout(function () { door(false, true); }, 3000); }
+      else slideEl.style.setProperty('--cd', 0);
+    }
   }
   function airSay(txt) { say(txt, 120); }
-  var air = { t: 22, fan: 'Auto' };
+  var AIRS = { Auto: 2.6, Low: 3.4, Mid: 2.4, High: 1.5 }, MODES = ['Heat', 'Cool', 'Dry', 'Fan'], FANS = ['Auto', 'Low', 'Mid', 'High'];
+  var RING = 377;
   function paint() {
     var key = 0; Object.keys(BIT).forEach(function (k) { if (state[k]) key |= BIT[k]; });
     Object.keys(frames).forEach(function (k) { frames[k].classList.toggle('is-on', +k === key); });
     airEl.classList.toggle('is-off', !state.air);
     var n = Object.keys(state).filter(function (k) { return k === 'door' ? !state.door : state[k]; }).length;
-    if (count) count.textContent = n + ' of 6 active';
+    if (count) count.textContent = n;
     if (phone) {
-      [].forEach.call(phone.querySelectorAll('[data-sw]'), function (b) { var k = b.getAttribute('data-sw'); var on = k === 'door' ? !state.door : !!state[k]; b.setAttribute('aria-checked', on ? 'true' : 'false'); b.classList.toggle('is-on', on); });
-      var ds = phone.querySelector('[data-sub="door"]'); if (ds && !state.door) ds.textContent = 'Locked'; if (ds && state.door && ds.textContent.indexOf('Unlocked') !== 0) ds.textContent = 'Unlocked';
-      var as = phone.querySelector('[data-sub="air"]'); if (as) as.textContent = state.air ? air.t + '°C · Fan ' + air.fan : 'Off';
-      var pt = phone.querySelector('[data-air-temp]'); if (pt) { pt.textContent = air.t; phone.querySelector('[data-air-page]').classList.toggle('is-off', !state.air); }
-      [].forEach.call(phone.querySelectorAll('[data-fan]'), function (f) { f.classList.toggle('is-on', f.getAttribute('data-fan') === air.fan); });
-      var spd = { Low: 3.4, Med: 2.4, High: 1.5, Auto: 2.6 }[air.fan]; lights.style.setProperty('--air-s', spd + 's');
+      Object.keys(NAMES).forEach(function (k) {
+        var t = phone.querySelector('[data-tile="' + k + '"]'); if (!t) return;
+        t.classList.toggle('is-on', !!state[k]);
+        t.querySelector('[data-st]').textContent = state[k] ? 'On' : 'Off';
+        t.querySelector('[data-sw]').setAttribute('aria-pressed', state[k] ? 'true' : 'false');
+      });
+      var ac = phone.querySelector('[data-tile="air"]');
+      ac.classList.toggle('is-on', !!state.air);
+      ac.querySelector('[data-st]').textContent = state.air ? air.t + '°C · ' + air.mode + ' · ' + air.fan : 'Off';
+      [].forEach.call(phone.querySelectorAll('[data-sw="air"]'), function (b) { b.setAttribute('aria-pressed', state.air ? 'true' : 'false'); });
+      var pg = phone.querySelector('[data-air-page]');
+      pg.classList.toggle('is-off', !state.air);
+      pg.querySelector('[data-air-temp]').textContent = air.t;
+      pg.querySelector('[data-air-mode]').textContent = state.air ? air.mode : 'Off';
+      pg.querySelector('[data-ring]').style.strokeDashoffset = (RING * (1 - (air.t - 16) / 14)).toFixed(1);
+      [].forEach.call(pg.querySelectorAll('[data-mode]'), function (c) { c.classList.toggle('is-on', c.getAttribute('data-mode') === air.mode); });
+      [].forEach.call(pg.querySelectorAll('[data-fan]'), function (c) { c.classList.toggle('is-on', c.getAttribute('data-fan') === air.fan); });
+      lights.style.setProperty('--air-s', AIRS[air.fan] + 's');
+      var ds = phone.querySelector('[data-door-status]'); if (ds && !state.door) ds.textContent = 'Locked';
     }
   }
   if (phone) {
-    var list = phone.querySelector('[data-app-list]');
-    var T = function (k, nm, sub, cls) { return '<div class="ep-tile ' + cls + '" data-tile="' + k + '"><span class="ep-app_ico">' + ICON[k] + '</span>' + (k === 'door' ? '<span class="ep-cd" data-cd></span>' : '') + '<span class="ep-app_nm"><b>' + nm + '</b><small' + (sub ? ' data-sub="' + k + '"' : '') + '>' + (sub || '') + '</small></span><button type="button" class="ep-sw" role="switch" aria-checked="false" aria-label="' + nm + '" data-sw="' + k + '"><i></i></button></div>'; };
-    list.innerHTML = T('door', 'Main Door', 'Locked', 'is-wide') +
-      '<div class="ep-app_grid">' + T('desk', 'Desk Lights', 'Under-cabinet', 'is-sq') + T('main', 'Main Light', 'Ceiling spot', 'is-sq') + T('accent', 'Accent Light', 'Shelf and bedside', 'is-sq') + T('kitchen', 'Kitchen Light', 'Hood and counter', 'is-sq') + '</div>' +
-      T('air', 'Aircon', '22°C', 'is-wide is-air');
-    // the aircon page slides in over the list
-    var page = document.createElement('div');
-    page.className = 'ep-app_page'; page.setAttribute('data-air-page', '');
-    page.innerHTML = '<div class="ep-app_phead"><button type="button" class="ep-app_back" data-air-back aria-label="Back">\u2039</button><div><b>Aircon</b><small>Living space</small></div><button type="button" class="ep-sw" role="switch" aria-checked="true" aria-label="Aircon power" data-sw="air"><i></i></button></div>' +
-      '<div class="ep-app_dial"><button type="button" data-temp="-1" aria-label="Cooler">\u2212</button><div><b data-air-temp>22</b><span>\u00b0C</span></div><button type="button" data-temp="1" aria-label="Warmer">+</button></div>' +
-      '<p class="ep-app_lbl">Fan speed</p><div class="ep-app_fans">' + ['Low', 'Med', 'High', 'Auto'].map(function (f) { return '<button type="button" data-fan="' + f + '">' + f + '</button>'; }).join('') + '</div>' +
-      '<p class="ep-app_hint">Set the temperature and fan speed</p>';
-    phone.querySelector('.ep-phone_screen').appendChild(page);
     var scr = phone.querySelector('.ep-phone_screen');
+    scr.innerHTML = '<div class="sm_in">' +
+      '<h3 class="sm_title">Your smart room</h3>' +
+      '<div class="sm_panel"><div><span>Smart panel</span><b>EPIISOD</b></div><div class="sm_cnt"><b data-app-count>6</b><span>active</span></div></div>' +
+      '<div class="sm_door"><div class="sm_row"><div><b>Main door</b><small data-door-status>Locked</small></div></div>' +
+        '<div class="sm_slide" data-slide><i class="sm_fill"></i><button type="button" class="sm_knob" aria-label="Slide to unlock the door">' + ICON.lock + '</button><span class="sm_chev">&gt;&gt;</span><span class="sm_end">' + ICON.unlock + '</span></div></div>' +
+      '<p class="sm_lab">Lightings</p>' +
+      '<div class="sm_grid">' + Object.keys(NAMES).map(function (k) {
+        return '<div class="sm_tile is-on" data-tile="' + k + '"><div class="sm_top"><span class="sm_ico">' + ICON.bulb + '</span><button type="button" class="sm_pw" data-sw="' + k + '" aria-label="' + NAMES[k] + ' power" aria-pressed="true">' + ICON.power + '</button></div><b>' + NAMES[k] + '</b><small data-st>On</small></div>';
+      }).join('') + '</div>' +
+      '<div class="sm_tile sm_air is-on" data-tile="air"><span class="sm_ico">' + ICON.snow + '</span><div class="sm_nm"><b>Air conditioner</b><small data-st>22°C · Cool · Auto</small></div><span class="sm_go">' + ICON.chev + '</span><button type="button" class="sm_pw" data-sw="air" aria-label="Aircon power" aria-pressed="true">' + ICON.power + '</button></div></div>';
+    var page = document.createElement('div');
+    page.className = 'ep-app_page sm_page'; page.setAttribute('data-air-page', '');
+    page.innerHTML =
+      '<div class="sm_ph"><button type="button" class="sm_back" data-air-back aria-label="Back">' + ICON.back + '</button><div><b>Air conditioner</b><small data-air-mode>Cool</small></div><button type="button" class="sm_pw" data-sw="air" aria-label="Aircon power" aria-pressed="true">' + ICON.power + '</button></div>' +
+      '<div class="sm_dial"><svg viewBox="0 0 200 200" aria-hidden="true"><circle class="sm_trk" cx="100" cy="100" r="80"/><circle class="sm_arc" data-ring cx="100" cy="100" r="80"/></svg><div class="sm_val"><b data-air-temp>22</b><span>°C</span></div><div class="sm_pm"><button type="button" data-temp="-1" aria-label="Cooler">−</button><button type="button" data-temp="1" aria-label="Warmer">+</button></div></div>' +
+      '<div class="sm_chips">' + MODES.map(function (m) { return '<button type="button" data-mode="' + m + '">' + m + '</button>'; }).join('') + '</div>' +
+      '<div class="sm_chips">' + FANS.map(function (f) { return '<button type="button" data-fan="' + f + '">' + f + '</button>'; }).join('') + '</div>';
+    scr.appendChild(page);
+    count = scr.querySelector('[data-app-count]');
+    slideEl = scr.querySelector('[data-slide]'); knob = slideEl.querySelector('.sm_knob');
     function openAir(on) { scr.classList.toggle('is-air', on); }
     phone.addEventListener('click', function (e) {
       var sw = e.target.closest('[data-sw]');
-      if (sw) { var k = sw.getAttribute('data-sw'); if (k === 'door') door(!state.door); else { state[k] = !state[k]; paint(); if (k === 'air') { chime(state.air); airSay(state.air ? 'Aircon on. ' + air.t + ' degrees. Fan speed ' + air.fan : 'Aircon off'); } } return; }
+      if (sw) { var k = sw.getAttribute('data-sw'); state[k] = !state[k]; paint(); if (k === 'air') { chime(state.air); airSay(state.air ? 'Aircon on. ' + air.mode + ' mode. ' + air.t + ' degrees. Fan speed ' + air.fan : 'Aircon off'); } return; }
       if (e.target.closest('[data-air-back]')) { openAir(false); return; }
       var t = e.target.closest('[data-temp]');
       if (t) { air.t = Math.max(16, Math.min(30, air.t + (+t.getAttribute('data-temp')))); state.air = true; paint(); airSay('Temperature ' + air.t + ' degrees'); return; }
+      var m = e.target.closest('[data-mode]');
+      if (m) { air.mode = m.getAttribute('data-mode'); state.air = true; paint(); airSay('Mode ' + air.mode); return; }
       var f = e.target.closest('[data-fan]');
       if (f) { air.fan = f.getAttribute('data-fan'); state.air = true; paint(); airSay('Fan speed ' + air.fan); return; }
       var tile = e.target.closest('[data-tile]');
       if (!tile) return;
       var k2 = tile.getAttribute('data-tile');
-      if (k2 === 'air') openAir(true); else if (k2 === 'door') door(!state.door); else { state[k2] = !state[k2]; paint(); }
+      if (k2 === 'air') openAir(true); else { state[k2] = !state[k2]; paint(); }
     });
-    var all = phone.querySelector('[data-app-all]');
-    if (all) all.addEventListener('click', function () {
-      var ks = ['desk', 'main', 'accent', 'kitchen', 'air'];
-      var any = ks.some(function (k) { return state[k]; });
-      ks.forEach(function (k) { state[k] = !any; }); paint();
+    // slide the knob across the bar to unlock; let go early and it springs back
+    var sd = null;
+    knob.addEventListener('pointerdown', function (e) {
+      if (state.door || e.button > 0) return;
+      sd = { x: e.clientX, max: knobMax() };
+      try { knob.setPointerCapture(e.pointerId); } catch (err) {}
+      e.stopPropagation();
     });
+    knob.addEventListener('pointermove', function (e) { if (!sd) return; knobTo(Math.max(0, Math.min(sd.max, e.clientX - sd.x)), false); });
+    function endSlide(e) {
+      if (!sd) return;
+      var x = Math.max(0, Math.min(sd.max, e.clientX - sd.x)), full = x > sd.max * 0.8; sd = null;
+      if (full) door(true); else knobTo(0, true);
+    }
+    knob.addEventListener('pointerup', endSlide); knob.addEventListener('pointercancel', function () { sd = null; knobTo(0, true); });
+    knob.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && !state.door) { e.preventDefault(); door(true); } });
+    window.addEventListener('resize', function () { if (state.door) knobTo(knobMax(), false); });
   }
+  if (phone) { var dh = document.createElement('span'); dh.className = 'ep-phone_drag'; dh.setAttribute('aria-hidden', 'true'); dh.innerHTML = '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8 1v14M1 8h14M8 1 6 3M8 1l2 2M8 15l-2-2M8 15l2-2M1 8l2-2M1 8l2 2M15 8l-2-2M15 8l-2 2"/></svg>Drag the phone to move it'; phone.appendChild(dh); }
   paint();
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting) loadFrames(); }, { rootMargin: '120% 0px' }).observe(blk); else loadFrames();
 
@@ -174,7 +209,7 @@
   if (phone) {
     var moved = false;
     phone.addEventListener('pointerdown', function (e) {
-      if (e.button > 0 || !mq.matches) return;
+      if (e.button > 0 || !mq.matches || e.target.closest('.sm_knob')) return;
       drag = { x: e.clientX, y: e.clientY, ox: ox, oy: oy, id: e.pointerId, on: false };
       moved = false;
     });
@@ -184,7 +219,7 @@
       var mx = e.clientX - drag.x, my = e.clientY - drag.y;
       if (!drag.on) {
         if (Math.hypot(mx, my) < 7) return;
-        drag.on = true; moved = true; phone.classList.add('is-drag');
+        drag.on = true; moved = true; phone.classList.add('is-drag', 'was-dragged');
         try { phone.setPointerCapture(drag.id); } catch (err) {}
       }
       var vw = document.documentElement.clientWidth, vh = window.innerHeight;

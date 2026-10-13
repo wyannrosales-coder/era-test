@@ -79,7 +79,7 @@
     height: var(--arch-h); aspect-ratio: auto; max-height: none;
     -webkit-mask-image: linear-gradient(180deg, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, #000 86%, transparent 100%);
   }
-  .loc-info-w .ep-story_bg video { left: -40%; right: auto; width: 170.7%; height: 100%; object-fit: fill; }
+  .loc-info-w .ep-story_bg video { left: -36.5%; right: auto; width: 170.7%; height: 100%; object-fit: fill; }
   .loc-info-w .loc-info-s { padding-top: calc(var(--arch-h) * 0.5); }
   .loc-info-w .loc-info-s_c .l1, .loc-info-w .loc-info-s_c .h4, .loc-info-w .info-s_desc .p1 { text-shadow: 0 0 10px rgba(244,242,240,.95), 0 0 22px rgba(244,242,240,.9), 0 0 36px rgba(244,242,240,.8); }
   .loc-info-w .loc-info-s_c .h4 { font-size: clamp(19px, 5.4vw, 26px); line-height: 1.14; }
@@ -317,3 +317,157 @@ section.clip:has(.loc-scroll-area) { background: linear-gradient(180deg, rgba(25
 .amen-slide_b { z-index: 3; }
 .amen-slide_title .l1, .amen-slide_desc .h5 { text-shadow: 0 1px 22px rgba(20,10,6,.6); }
 .ep-blurfill { position: absolute; inset: -6%; z-index: 0; background: center / cover no-repeat #24120c; filter: blur(34px) brightness(.78) saturate(1.1); opacity: 0; pointer-events: none; }
+
+/* ---- phones ---- */
+@media (max-width: 991px) {
+  .header-logo { display: none !important; }
+  .interior-s_r_btn { display: none !important; }
+  /* the path panel is white edge to edge, easing in from the grey above */
+  .loc-path-w { position: relative; background: #fff; box-shadow: 0 0 0 100vmax #fff; clip-path: inset(0 -100vmax); }
+  .loc-path-w::before { content: ""; position: absolute; left: 0; right: 0; top: -140px; height: 140px; background: linear-gradient(180deg, rgba(236,236,236,0), #fff); pointer-events: none; }
+  .ep-nearby_top { background: #fff; }
+}
+
+
+/* phones: amenity names stacked at the foot of the screen, the words on top */
+@media (max-width: 991px) {
+  .amen-slide_b { position: absolute !important; top: 92px !important; bottom: auto !important; left: 0; right: 0; }
+  .amm-s_cms_tabs-w { position: absolute !important; top: auto !important; bottom: calc(86px + env(safe-area-inset-bottom)) !important; left: 0 !important; right: 0 !important; }
+  .amm-s_cms_tabs-w .grid { display: block; padding: 0 22px; }
+  .amen-tabs-cms_list { display: flex !important; flex-flow: column nowrap !important; gap: 4px; }
+  .amen-tab .h5 { font-size: 15px !important; letter-spacing: .14em; text-transform: uppercase; }
+  .interior-s_imgs + .u-272 { height: 24px !important; }
+  .ep-mag_cur { display: none !important; }
+}
+.ep-mag_cur { display: none; }
+@media (min-width: 992px) { .ep-mag_cur { display: flex; } }
+
+.ep-phone_drag { position: absolute; left: 50%; top: calc(100% + 12px); transform: translateX(-50%); display: flex; align-items: center; gap: 7px; white-space: nowrap; padding: 6px 12px; border-radius: 99px; background: rgba(20, 10, 6, .5); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: rgba(244, 242, 240, .85); font: 500 10px/1 "Albert Sans", sans-serif; letter-spacing: .14em; text-transform: uppercase; pointer-events: none; transition: opacity .5s; animation: ep-nudge 3.2s ease-in-out 1.2s 2; }
+.ep-phone.was-dragged .ep-phone_drag { opacity: 0; }
+@keyframes ep-nudge { 0%, 100% { transform: translateX(-50%); } 25% { transform: translateX(calc(-50% - 6px)); } 75% { transform: translateX(calc(-50% + 6px)); } }
+@media (max-width: 991px) { .ep-phone_drag { display: none; } }
+@media (prefers-reduced-motion: reduce) { .ep-phone_drag { animation: none; } }
+
+/* ---- room app, third design: cream screen, serif type, dark smart panel, slide-to-unlock door, round power buttons ---- */
+.ep-phone_screen { container-type: inline-size; background: #f6ede2 !important; color: #2c1d14; padding: 0 !important; display: block !important; font-family: var(--_fonts---body, "Albert Sans", sans-serif); }
+.ep-phone_screen b, .ep-phone_screen h3 { font-family: var(--_fonts---heading, "Playfair Display", serif); font-weight: 400; }
+.sm_title { margin: 0; font-size: 7cqw; line-height: 1.05; }
+.sm_panel { display: flex; justify-content: space-between; align-items: center; padding: 3.4cqw 5cqw; border-radius: 5.5cqw; background: #34241a; color: #f6ede2; }
+.sm_panel span { display: block; font-size: 2.3cqw; letter-spacing: .26em; text-transform: uppercase; color: #cdb592; }
+.sm_panel b { display: block; margin-top: .8cqw; font-size: 6cqw; line-height: 1; }
+.sm_cnt { text-align: right; }
+.sm_cnt b { font-size: 8cqw; }
+.sm_cnt span { letter-spacing: .14em; text-transform: none; }
+.sm_door { padding: 3.4cqw 4cqw 3.6cqw; border-radius: 5cqw; background: #fffaf3; }
+.sm_door b { display: block; font-size: 4.6cqw; line-height: 1.1; }
+.sm_door small, .sm_tile small, .sm_ph small { display: block; margin-top: .8cqw; font-size: 3cqw; font-weight: 500; opacity: .8; letter-spacing: .02em; }
+.sm_slide { position: relative; display: flex; align-items: center; margin-top: 2.8cqw; padding: 1.2cqw; height: 11cqw; border-radius: 99px; background: #f3e6d3; overflow: hidden; touch-action: none; }
+.sm_fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; background: rgba(44, 29, 20, .14); transform-origin: 0 50%; transform: scaleX(0); pointer-events: none; }
+.sm_slide.is-open .sm_fill { transform: scaleX(var(--cd, 1)); transition: transform .1s linear; }
+.sm_knob { position: relative; z-index: 2; flex: none; display: grid; place-items: center; width: 8.6cqw; height: 8.6cqw; padding: 0; border: 0; border-radius: 50%; background: #2c1d14; color: #fffaf3; cursor: grab; touch-action: none; }
+.sm_knob svg, .sm_end svg { width: 4.4cqw; height: 4.4cqw; }
+.sm_chev { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -52%); font-size: 4cqw; letter-spacing: .12em; color: rgba(44, 29, 20, .4); animation: sm-nudge 1.8s ease-in-out infinite; pointer-events: none; }
+.sm_slide.is-open .sm_chev { opacity: 0; animation: none; }
+.sm_end { position: absolute; right: 1.2cqw; top: 1.2cqw; z-index: 1; display: grid; place-items: center; width: 8.6cqw; height: 8.6cqw; border-radius: 50%; background: #fffaf3; color: #2c1d14; }
+@keyframes sm-nudge { 0%, 100% { transform: translate(-50%, -52%); opacity: .35; } 50% { transform: translate(-30%, -52%); opacity: .9; } }
+.sm_lab { margin: .6cqw 0 -.4cqw; font-size: 2.6cqw; letter-spacing: .24em; text-transform: uppercase; color: #9a8873; }
+.sm_grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.8cqw; }
+.sm_tile { position: relative; padding: 3.2cqw; border-radius: 5cqw; background: #fffaf3; cursor: pointer; }
+.sm_tile b { display: block; margin-top: 2.6cqw; font-size: 4.2cqw; line-height: 1.12; }
+.sm_top { display: flex; justify-content: space-between; align-items: flex-start; }
+.sm_ico { display: grid; place-items: center; width: 9.6cqw; height: 9.6cqw; border-radius: 2.8cqw; background: #2c1d14; color: #fffaf3; flex: none; }
+.sm_ico svg { width: 5.2cqw; height: 5.2cqw; }
+.sm_pw { display: grid; place-items: center; width: 7cqw; height: 7cqw; padding: 0; border: 0; border-radius: 50%; background: #e6d9c6; color: #8b7a66; cursor: pointer; flex: none; transition: background-color .3s, color .3s; }
+.sm_pw svg { width: 3.6cqw; height: 3.6cqw; }
+.sm_tile.is-on .sm_pw, .sm_page:not(.is-off) .sm_pw { background: #2c1d14; color: #fffaf3; }
+.sm_tile:not(.is-on) .sm_ico { background: #6d5c4b; }
+.sm_air { display: flex; align-items: center; gap: 3cqw; padding: 3cqw 3.4cqw; }
+.sm_air .sm_nm { flex: 1; min-width: 0; }
+.sm_air b { margin: 0; font-size: 4.2cqw; }
+.sm_go { width: 4cqw; height: 4cqw; opacity: .5; flex: none; }
+.sm_go svg { width: 100%; height: 100%; }
+/* aircon page */
+.sm_page { padding: 9cqw 5cqw 5cqw !important; gap: 3cqw; background: #f6ede2 !important; }
+.sm_ph { display: flex; align-items: center; gap: 3cqw; }
+.sm_ph > div { flex: 1; }
+.sm_ph b { font-size: 5cqw; line-height: 1.1; }
+.sm_ph small { text-transform: uppercase; letter-spacing: .18em; font-size: 2.5cqw; }
+.sm_back { display: grid; place-items: center; width: 8cqw; height: 8cqw; padding: 0; border: 0; border-radius: 50%; background: #fffaf3; color: #2c1d14; cursor: pointer; }
+.sm_back svg { width: 4cqw; height: 4cqw; }
+.sm_dial { position: relative; width: 62cqw; margin: 0 auto; aspect-ratio: 1; }
+.sm_dial svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(135deg); }
+.sm_trk, .sm_arc { fill: none; stroke-width: 13; stroke-linecap: round; stroke-dasharray: 377 503; }
+.sm_trk { stroke: #fffaf3; stroke-dashoffset: 0; }
+.sm_arc { stroke: #2c1d14; stroke-dashoffset: 190; transition: stroke-dashoffset .5s cubic-bezier(.2, .8, .2, 1); }
+.sm_val { position: absolute; left: 0; right: 0; top: 29%; text-align: center; }
+.sm_val b { font-size: 16cqw; line-height: 1; }
+.sm_val span { font-size: 5cqw; vertical-align: top; margin-left: .6cqw; font-family: var(--_fonts---heading, "Playfair Display", serif); }
+.sm_pm { position: absolute; left: 0; right: 0; bottom: 8%; display: flex; justify-content: center; gap: 4cqw; }
+.sm_pm button { width: 9cqw; height: 9cqw; padding: 0; border: 0; border-radius: 50%; background: #fffaf3; color: #2c1d14; font-size: 5.4cqw; line-height: 1; cursor: pointer; }
+.sm_chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2cqw; }
+.sm_chips button { padding: 3cqw 0; border: 0; border-radius: 99px; background: #fffaf3; color: #2c1d14; font: 600 3cqw/1 var(--_fonts---body, "Albert Sans", sans-serif); cursor: pointer; transition: background-color .25s, color .25s; }
+.sm_chips button.is-on { background: #2c1d14; color: #fffaf3; }
+.sm_page.is-off .sm_dial, .sm_page.is-off .sm_chips { opacity: .38; }
+@media (max-width: 991px) { .ep-msm_sheet { background: #f6ede2; } .ep-msm .ep-phone_screen { padding: 4cqw 5cqw 3cqw !important; } .ep-msm .sm_title { font-size: 6.4cqw; } .ep-msm .ep-phone_body { padding: 0; } }
+
+.sm_in { display: flex; flex-direction: column; gap: 2.6cqw; height: 100%; box-sizing: border-box; padding: 10cqw 5cqw 5cqw; }
+.ep-msm .sm_in { padding: 4cqw 5cqw 3cqw; }
+.ep-msm .ep-phone_screen { padding: 0 !important; }
+.ep-phone_screen .ep-app_page { z-index: 10; } .ep-phone_screen .sm_in { position: relative; z-index: 0; }
+
+/* desktop: the tiles share the free height so the screen is filled, not floating */
+@media (min-width: 992px) {
+  .sm_in { gap: 3cqw; padding: 11cqw 5cqw 5.5cqw; }
+  .sm_grid { flex: 1 1 0; min-height: 0; grid-template-rows: 1fr 1fr; }
+  .sm_tile:not(.sm_air) { display: flex; flex-direction: column; justify-content: space-between; padding: 3.6cqw; }
+  .sm_tile:not(.sm_air) b { margin-top: 0; font-size: 4.4cqw; }
+  .sm_ico { width: 10.4cqw; height: 10.4cqw; }
+  .sm_pw { width: 7.6cqw; height: 7.6cqw; }
+  .sm_panel { padding: 4cqw 5cqw; }
+  .sm_door { padding: 4cqw 4.4cqw 4.2cqw; }
+  .sm_air { padding: 3.6cqw 4cqw; }
+}
+/* phones: tighter, no section label, a smaller title, more room for the aircon card */
+@media (max-width: 991px) {
+  .ep-msm .sm_lab { display: none; }
+  .ep-msm .sm_in { gap: 2cqw; padding: 3cqw 5cqw calc(3cqw + env(safe-area-inset-bottom)); }
+  .ep-msm .sm_title { font-size: 5.4cqw; }
+  .ep-msm .sm_panel { padding: 2.6cqw 4.4cqw; border-radius: 4.6cqw; }
+  .ep-msm .sm_panel b { font-size: 5cqw; margin-top: .4cqw; }
+  .ep-msm .sm_cnt b { font-size: 6.4cqw; }
+  .ep-msm .sm_panel span { font-size: 2cqw; }
+  .ep-msm .sm_door { padding: 2.8cqw 3.6cqw 3cqw; border-radius: 4.6cqw; }
+  .ep-msm .sm_door b { font-size: 4cqw; }
+  .ep-msm .sm_door small, .ep-msm .sm_tile small { font-size: 2.6cqw; margin-top: .4cqw; }
+  .ep-msm .sm_slide { height: 9.6cqw; margin-top: 2cqw; }
+  .ep-msm .sm_knob, .ep-msm .sm_end { width: 7.4cqw; height: 7.4cqw; }
+  .ep-msm .sm_grid { gap: 2cqw; }
+  .ep-msm .sm_tile { padding: 2.6cqw; border-radius: 4.6cqw; }
+  .ep-msm .sm_ico { width: 8cqw; height: 8cqw; border-radius: 2.4cqw; }
+  .ep-msm .sm_ico svg { width: 4.4cqw; height: 4.4cqw; }
+  .ep-msm .sm_pw { width: 6.2cqw; height: 6.2cqw; }
+  .ep-msm .sm_tile b { margin-top: 2cqw; font-size: 3.8cqw; }
+  .ep-msm .sm_air { padding: 2.6cqw 3cqw; }
+  .ep-msm .sm_air b { font-size: 3.8cqw; margin: 0; }
+}
+
+/* aircon page: header pinned to the top, the dial and chips centred as one group; nothing shrinks or overlaps */
+.sm_page { justify-content: center !important; padding-top: 18cqw !important; }
+.sm_page > * { flex: none; }
+.sm_ph { position: absolute; left: 5cqw; right: 5cqw; top: 10cqw; }
+.sm_dial { margin-bottom: 1cqw; }
+@media (max-width: 991px) {
+  .ep-msm .sm_page { padding: 14cqw 5cqw 4cqw !important; gap: 2.4cqw; }
+  .ep-msm .sm_ph { top: 4cqw; }
+  .ep-msm .sm_ph b { font-size: 4.4cqw; }
+  .ep-msm .sm_dial { width: 46cqw; }
+  .ep-msm .sm_val b { font-size: 12cqw; }
+  .ep-msm .sm_val span { font-size: 4cqw; }
+  .ep-msm .sm_pm button { width: 8cqw; height: 8cqw; font-size: 4.8cqw; }
+  .ep-msm .sm_chips button { padding: 2.6cqw 0; font-size: 2.8cqw; }
+}
+/* aircon dial: the number is centred in the ring itself (no percentages), the − / + sit in the opening below it */
+.sm_val { top: 0 !important; bottom: 0 !important; display: flex; align-items: center; justify-content: center; padding-bottom: 7%; }
+.sm_val b { line-height: 1; }
+.sm_val span { align-self: flex-start; margin-top: 30%; }
+.sm_pm { bottom: 2% !important; }

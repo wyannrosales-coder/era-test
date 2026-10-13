@@ -116,6 +116,14 @@
     if (next === cur) place(0, true); else show(next);
   }
   screen.addEventListener('pointerup', endDrag); screen.addEventListener('pointercancel', endDrag);
+  // the words under the phone swipe through the screens too
+  var td = null;
+  mt.addEventListener('pointerdown', function (e) { td = { x: e.clientX, y: e.clientY }; });
+  mt.addEventListener('pointerup', function (e) {
+    if (!td) return; var dx = e.clientX - td.x, dy = e.clientY - td.y; td = null;
+    if (Math.abs(dx) > 36 && Math.abs(dx) > Math.abs(dy) * 1.2) show(Math.max(0, Math.min(N - 1, cur + (dx < 0 ? 1 : -1))));
+  });
+  mt.addEventListener('pointercancel', function () { td = null; });
   screen.addEventListener('dragstart', function (e) { e.preventDefault(); });
   window.addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;

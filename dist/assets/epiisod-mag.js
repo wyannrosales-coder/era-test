@@ -50,7 +50,7 @@
   });
 
   function pad(n) { return ('0' + n).slice(-2); }
-  function ph(r, n, st, cls) { return '<figure class="mg-ph ' + (cls || '') + '" style="' + st + '"><img src="' + IMG + r.img + '-' + n + '.webp" alt="' + r.full + '" draggable="false" loading="lazy"></figure>'; }
+  function ph(r, n, st, cls) { return '<figure class="mg-ph ' + (cls || '') + '" style="' + st + '"><img src="' + IMG + r.img + '-' + n + '.webp" alt="' + r.full + '" draggable="false"></figure>'; }
   function fo(no, side, cls) { return '<div class="mg-fo ' + side + ' ' + (cls || '') + '"><span>' + pad(no) + '</span><span>EPIISOD · Rooms</span></div>'; }
   function lk(r) { return '<a class="mg-lk" href="' + r.url + '" target="_blank" rel="noopener" draggable="false">Explore room <i>→</i></a>'; }
   function pr(r, sz) { return '<div class="mg-pr"><small>From</small><b class="hd" style="font-size:' + (sz || 6) + 'cqw">AU$' + r.price + '</b><small>' + r.unit + '</small></div>'; }
@@ -188,6 +188,10 @@
     book.appendChild(leaf);
     leaves.push({ el: leaf, front: leaf.querySelector('[data-face="f"]'), back: leaf.querySelector('[data-face="b"]'), t: -1 });
   }
+  var head = document.createElement('div');
+  head.className = 'ep-mag_head';
+  head.innerHTML = '<span class="ep-mag_eb">The residence edit</span><h2>Flip through the rooms</h2><p>Eight ways to live well. Click the page to turn it.</p>';
+  stage.appendChild(head);
   pin.appendChild(stage);
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { stage.classList.toggle('is-in', e.intersectionRatio > 0.35); }); }, { threshold: [0, 0.2, 0.35, 0.5] }).observe(sec);
 
@@ -223,10 +227,11 @@
     var turned = 0, peak = 0;
     leaves.forEach(function (lf, k) {
       var t = k < TURNS ? ease(clamp(cs - k)) : 0;
+      if (t < 0.002) t = 0; else if (t > 0.998) t = 1;
       if (t >= 0.5) turned++;
       var s = Math.sin(Math.PI * t);
       if (s > peak) peak = s;
-      if (Math.abs(t - lf.t) > 0.0004) {
+      if (t !== lf.t) {
         lf.t = t;
         lf.el.style.transform = 'translateZ(' + (s * 36).toFixed(1) + 'px) rotateY(' + (-180 * t).toFixed(2) + 'deg)';
         lf.el.style.zIndex = (t > 0 && t < 1) ? 100 : t >= 0.5 ? 10 + k : 10 + N - k;
@@ -248,6 +253,7 @@
       });
       ticks.forEach(function (t, i) { t.classList.toggle('is-on', i + 1 === cur); });
       idx.classList.toggle('is-cover', cur === 0);
+      stage.classList.toggle('is-cover', cur === 0);
     }
   }
   function setInert(el, on) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); }
@@ -300,7 +306,7 @@
   mobCover.className = 'ep-mcover';
   pin.appendChild(mobCover);
 
-  function mph(r, n, cls, st) { return '<figure class="mp-ph ' + (cls || '') + '"' + (st ? ' style="' + st + '"' : '') + '><img src="' + IMG + r.img + '-' + n + '.webp" alt="' + r.full + '" draggable="false" loading="lazy"></figure>'; }
+  function mph(r, n, cls, st) { return '<figure class="mp-ph ' + (cls || '') + '"' + (st ? ' style="' + st + '"' : '') + '><img src="' + IMG + r.img + '-' + n + '.webp" alt="' + r.full + '" draggable="false"></figure>'; }
   function mlk(r) { return '<a class="mp-lk" href="' + r.url + '" target="_blank" rel="noopener" draggable="false">Explore room <i>→</i></a>'; }
   function mpr(r) { return '<div class="mp-pr"><small>From</small><b class="hd">AU$' + r.price + '</b><small>' + r.unit + '</small></div>'; }
   function msp(a, b) { return '<div class="mp-sp"><b class="hd">' + a + '</b><small>' + b + '</small></div>'; }
@@ -373,8 +379,8 @@
     fbK = k;
     slots.top.replaceChildren(half(k, 'top'));
     slots.ff.replaceChildren(half(k, 'bot'));
-    slots.fbk.replaceChildren(half(nx, 'top'));
-    slots.bot.replaceChildren(half(nx, 'bot'));
+    slots.fbk.replaceChildren(nx === k ? half(nx, 'top').cloneNode(true) : half(nx, 'top'));
+    slots.bot.replaceChildren(nx === k ? half(nx, 'bot').cloneNode(true) : half(nx, 'bot'));
     [].forEach.call(fb.querySelectorAll('.fb-hf'), function (h) { h.removeAttribute('inert'); });
     slots.bot.firstChild.setAttribute('inert', ''); slots.fbk.firstChild.setAttribute('inert', '');
   }

@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.1.0
+
+- Room app restyled: cream screen, serif type, dark smart panel, slide-to-unlock door with a 3 second auto-lock, round power buttons, and an aircon page with a ring dial, Heat / Cool / Dry / Fan modes and Auto / Low / Mid / High fan speeds.
+- Navigation: line nav on the right shows a fan of section names on hover (desktop) or press and slide (phones); thick progress line with a small percentage; the hero segments sit on the bottom bar.
+- Corner pieces (emblem, header links, Scroll label, chevrons) read the real colour behind them.
+- Hero holds a quarter of a screen after the rooftop before the next section starts; phones use native scrolling and a lighter scrub.
+- Magazine: page-turn fix when going back, an invitation heading and a circular Next / Back cursor.
+- Phones: swipeable app copy, amenities names stacked at the foot, cover with blurred backdrop, and several layout fixes.
+
 ## 3.0.0
 
 - Rooms: a magazine. Desktop is a book whose pages turn on click (chevron cursor with Next / Back); phones and tablets show the cover, then a full-screen flipbook that folds across the middle of the screen, one page per room with a photo carousel. Content from epiisod.com.

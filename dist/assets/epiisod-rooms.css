@@ -257,3 +257,23 @@
   .fb-fbk { transform: rotateX(180deg); }
 }
 @media (prefers-reduced-motion: reduce) { .ep-mag_cur svg { transition: none; } }
+
+/* phones: the cover fills the screen; its own photograph, enlarged and blurred, fills whatever the card does not cover */
+@media (max-width: 991px) {
+  .ep-rooms_pin { position: relative; overflow: hidden; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: 56px 0; box-sizing: border-box; background: #24120c; }
+  .ep-rooms_pin::before { content: ""; position: absolute; inset: -8%; background: url(/assets/rooms/mag/aspecte-1.webp) center / cover no-repeat; filter: blur(30px) brightness(.55) saturate(1.1); transform: scale(1.1); }
+  .ep-mcover { position: relative; width: 100%; }
+  .ep-mcover_card { box-shadow: 0 30px 70px rgba(0, 0, 0, .5); }
+}
+
+@media (min-width: 992px) {
+  .ep-mag_head { position: absolute; top: 3.2vh; left: 0; right: 0; z-index: 6; text-align: center; color: #24120c; pointer-events: none; opacity: 0; transform: translateY(-14px); transition: opacity .6s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+  .ep-mag.is-in.is-cover .ep-mag_head { opacity: 1; transform: none; transition-delay: .5s; }
+  .ep-mag_eb { display: block; font: 600 11px/1 "Albert Sans", sans-serif; letter-spacing: .26em; text-transform: uppercase; color: #a98462; margin-bottom: 8px; }
+  .ep-mag_head h2 { margin: 0; font: 400 clamp(26px, 2.8vw, 44px)/1.05 "Playfair Display", serif; }
+  .ep-mag_head p { margin: 8px 0 0; font: 400 13px/1.4 "Albert Sans", sans-serif; opacity: .7; }
+  .ep-mag_cur { margin: -44px 0 0 -44px; width: 88px; height: 88px; justify-content: center; gap: 5px; border-radius: 50%; background: rgba(20, 10, 6, .82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: #f4f2f0; mix-blend-mode: normal; box-shadow: 0 8px 26px rgba(20, 10, 6, .35); }
+  .ep-mag_cur svg { width: 14px; height: 24px; }
+  .ep-mag_cur span { font-size: 9px; letter-spacing: .2em; }
+  .ep-mag_cur.is-on { opacity: 1; }
+}

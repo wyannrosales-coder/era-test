@@ -121,3 +121,11 @@
 }
 @media (max-width: 991px) { .ep-ap_mtxt { width: 100%; max-width: 36ch; } .ep-ap_mt { text-wrap: balance; } }
 @media (max-width: 991px) { .ep-ap_mtxt { font-size: 16px; width: 100%; max-width: 320px; } }
+
+@media (max-width: 991px) {
+  .ep-ap_side { text-align: center; align-items: center; }
+  .ep-ap_h { text-wrap: balance; text-align: center; max-width: 16ch; margin-left: auto; margin-right: auto; font-size: clamp(24px, 7vw, 32px); line-height: 1.08; }
+  .ep-ap_eye { text-align: center; }
+  .ep-ap_note { text-align: center; }
+  .ep-ap_mtxt { touch-action: pan-y; }
+}
