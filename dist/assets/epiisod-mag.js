@@ -304,6 +304,8 @@
   // ====================== phones and tablets: cover + full-screen flipbook ======================
   var mobCover = document.createElement('div');
   mobCover.className = 'ep-mcover';
+  mobCover.setAttribute('role', 'button'); mobCover.setAttribute('tabindex', '0'); mobCover.setAttribute('aria-label', 'Open the rooms magazine');
+  mobCover.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fbOpen(1); } });
   pin.appendChild(mobCover);
 
   function mph(r, n, cls, st) { return '<figure class="mp-ph ' + (cls || '') + '"' + (st ? ' style="' + st + '"' : '') + '><img src="' + IMG + r.img + '-' + n + '.webp" alt="' + r.full + '" draggable="false"></figure>'; }
@@ -343,7 +345,7 @@
   R.forEach(function (r) { MP.push(mRoom(r)); });
   var MN = MP.length, MT = ['Rooms'].concat(R.map(function (r) { return r.full; }));
   var cv = mCover(true);
-  mobCover.innerHTML = '<div class="ep-mcover_card"><div class="mp ' + cv[0] + '">' + cv[1] + '</div></div>';
+  mobCover.innerHTML = '<div class="ep-mcover_head"><span>The residence edit</span><h2>Flip through the rooms</h2><p>Eight ways to live well. Tap the cover to open it.</p></div><div class="ep-mcover_card"><div class="mp ' + cv[0] + '">' + cv[1] + '</div></div><span class="ep-mcover_tap"><i></i>Tap to open</span>';
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { mobCover.classList.toggle('is-in', e.intersectionRatio > 0.3); }); }, { threshold: [0, 0.15, 0.3, 0.5] }).observe(mobCover);
 
   var fb = null, fbn = 0, fbRaf = 0, fbDrag = null, fbBusy = false, fbPool = {}, slots = {}, fbT = 0, fbK = 0, fbOpener = null;
@@ -353,6 +355,8 @@
     fb.innerHTML = '<div class="ep-fb_bar"><button type="button" class="ep-fb_x" aria-label="Close rooms">×</button><span class="ep-fb_t"></span><span class="ep-fb_ct"></span></div>' +
       '<div class="ep-fb_stage"><div class="fb-s fb-top"></div><div class="fb-s fb-bot"></div><div class="fb-cast"></div>' +
       '<div class="fb-flap"><div class="fb-face fb-ff"></div><div class="fb-face fb-fbk"></div></div></div>';
+    var hn = document.createElement('div'); hn.className = 'ep-fb_hint'; hn.setAttribute('aria-hidden', 'true'); hn.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l5-5 5 5"/></svg><span>Swipe up to turn the page</span>';
+    fb.querySelector('.ep-fb_stage').appendChild(hn);
     document.body.appendChild(fb);
     slots = { top: fb.querySelector('.fb-top'), bot: fb.querySelector('.fb-bot'), ff: fb.querySelector('.fb-ff'), fbk: fb.querySelector('.fb-fbk') };
     fb.querySelector('.ep-fb_x').addEventListener('click', fbClose);
@@ -393,8 +397,11 @@
     fb.querySelector('.fb-cast').style.opacity = (s * 0.7).toFixed(3);
     fb.querySelector('.fb-flap').style.zIndex = t > 0 && t < 1 ? 5 : 3;
   }
+  var fbUsed = false;
   function fbShow(n) {
     fbn = Math.max(0, Math.min(MN - 1, n));
+    if (fbn > 1) fbUsed = true;
+    fb.classList.toggle('is-used', fbUsed);
     fbLayers(fbn);
     fbSet(0);
     fb.querySelector('.ep-fb_ct').textContent = pad(fbn + 1) + ' / ' + pad(MN);
@@ -441,7 +448,7 @@
       }
       var dir = dy < 0 ? 1 : -1;
       if ((dir === 1 && fbn >= MN - 1) || (dir === -1 && fbn <= 0)) return;
-      fbDrag.dir = dir;
+      fbDrag.dir = dir; fbUsed = true; fb.classList.add('is-used');
       if (dir === 1) { fbLayers(fbn); } else { fbLayers(fbn - 1); }
     }
     var span = fbDrag.h * 0.6, t = fbDrag.dir === 1 ? clamp(-dy / span) : clamp(1 - dy / span);
@@ -488,7 +495,7 @@
     if (window.__lenis && window.__lenis.start) window.__lenis.start();
     if (fbOpener && fbOpener.focus) fbOpener.focus({ preventScroll: true });
   }
-  mobCover.addEventListener('click', function (e) { if (e.target.closest('[data-fb-open]')) fbOpen(1); });
+  mobCover.addEventListener('click', function (e) { if (e.target.closest('[data-fb-open], .ep-mcover_card')) fbOpen(1); });
   window.addEventListener('keydown', function (e) {
     if (!fb || !fb.classList.contains('is-on')) return;
     if (e.key === 'Escape') fbClose();

@@ -257,3 +257,11 @@
 }
 .header-logo *, .header-nav *, .s-down *, .ep-nav_btns * { transition: none !important; }
 .header-logo, .header-nav, .s-down, .ep-nav_btns { transition: none !important; }
+@media (max-width: 991px) {
+  .ep-rnav { padding-right: 18px; }
+  .ep-rnav .ep-rnav_track, .ep-rnav .ep-rnav_fill { display: block; position: absolute; right: 9px; top: 14px; bottom: 14px; width: 1px; background: currentColor; opacity: .35; pointer-events: none; }
+  .ep-rnav .ep-rnav_fill { width: 3px; right: 8px; border-radius: 2px; opacity: 1; transform: scaleY(0); transform-origin: 50% 0; }
+  .ep-rnav .ep-rnav_pct { display: block; position: absolute; top: -12px; right: 3px; padding: 0; background: none; color: currentColor; font: 600 9px/1 "Albert Sans", sans-serif; letter-spacing: .08em; opacity: 0; pointer-events: none; transition: opacity .4s; }
+  .ep-rnav.is-moving .ep-rnav_pct { opacity: 1; }
+  .ep-rnav.is-arch .ep-rnav_pct, .ep-rnav.is-arch .ep-rnav_track, .ep-rnav.is-arch .ep-rnav_fill { opacity: 0; }
+}

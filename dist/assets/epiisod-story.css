@@ -471,3 +471,4 @@ section.clip:has(.loc-scroll-area) { background: linear-gradient(180deg, rgba(25
 .sm_val b { line-height: 1; }
 .sm_val span { align-self: flex-start; margin-top: 30%; }
 .sm_pm { bottom: 2% !important; }
+.ep-pre_script { text-transform: uppercase; font-style: normal; letter-spacing: .06em; font-size: 21vw; transform: rotate(-24deg); overflow: visible; }

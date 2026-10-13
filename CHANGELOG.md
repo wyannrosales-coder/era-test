@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.2.0
+
+- Magazine: phone cover opens the flipbook on tap with an enticing header, swipe hint on a gradient, smoother shadows, and a 40px+ gap under the desktop header.
+- Navigation: progress line and percentage on phones too; corner pieces follow the colour behind them.
+- Room app: aircon dial number centred; tighter layout on desktop and phones.
+- Preloader: diagonal capital EPIISOD lettering.
+
 ## 3.1.0
 
 - Room app restyled: cream screen, serif type, dark smart panel, slide-to-unlock door with a 3 second auto-lock, round power buttons, and an aircon page with a ring dial, Heat / Cool / Dry / Fan modes and Auto / Low / Mid / High fan speeds.
