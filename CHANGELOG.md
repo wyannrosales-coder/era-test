@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.1
+
+- Wellness amenities: tabs work again on iPhone/iPad (a startup step treated the flower stills as videos and stopped the rest of startup).
+- Startup steps now run independently and log `[init] … failed` in the console instead of silently stopping the rest.
+
 ## 3.3.0
 
 - Load: hero clips load progressively (clip 1 first, then on first scroll or idle); arch reveal video and location poster load when near; large photos converted to WebP and lazy-loaded; unused Lottie library removed. First 6 s on desktop: 20 MB → 12.4 MB.
