@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.3.0
+
+- Load: hero clips load progressively (clip 1 first, then on first scroll or idle); arch reveal video and location poster load when near; large photos converted to WebP and lazy-loaded; unused Lottie library removed. First 6 s on desktop: 20 MB → 12.4 MB.
+- iPhone/iPad: bougainvillea flowers show a transparent still with a gentle sway instead of 8–10 MB HEVC videos.
+- Scroll: one shared scroll/frame scheduler for all scroll-driven sections (off-screen sections sleep); hero loop sleeps when far away; nav colour check throttled; frosted-glass blurs drop while scrolling; static blurs pre-rendered.
+- Smooth scroll: continuous damping instead of a fixed-duration tween restarted on every wheel tick. Compare with `?feel=b` (longer glide) or `?feel=old` (previous).
+- Nearby locations: aerial frames pre-decoded off the main thread, full soft cross-fade between frames, ~150ms eased glide.
+- Hero: medium scroll ease (~140ms desktop, ~80ms touch).
+- Safety mode: below ~45 fps for a second the page drops frosted glass, flower videos, the aerial cross-fade and the hero dissolve blur, and restores them once the device keeps up (`?lite=1` forces it on, `?lite=0` disables it).
+- Rooms magazine: shadow sits under the closed cover only (no dark patch on the left).
+- Nearby locations (phones): poster no longer shows through the faded edges of the zoomed-out aerial view.
+- Hero segment buttons: a visible fly-through (~1.6s to 3.6s on a gentle sine curve) with clips on the way preloaded; phones use the same curve.
+- Earlier in this round: keyframe-dense hero clips, smoother hero scrub, eased hero segment buttons.
+
 ## 3.2.0
 
 - Magazine: phone cover opens the flipbook on tap with an enticing header, swipe hint on a gradient, smoother shadows, and a 40px+ gap under the desktop header.

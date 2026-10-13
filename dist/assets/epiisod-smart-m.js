@@ -64,7 +64,7 @@
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting) S.load(); }, { rootMargin: '150% 0px' }).observe(wrap); else S.load();
   function tick() { if (!raf) raf = requestAnimationFrame(update); }
   function sync() { if (mq.matches) enter(); else leave(); }
-  window.addEventListener('scroll', tick, { passive: true });
+  window.__epFrame.on(update, wrap);
   window.addEventListener('resize', function () { if (inMobile) measure(); });
   if (mq.addEventListener) mq.addEventListener('change', sync);
   sync();

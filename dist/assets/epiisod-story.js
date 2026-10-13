@@ -28,7 +28,6 @@
     scr.style.setProperty('--ep-fade', v.toFixed(3));
   }
   function tick() { if (!raf) raf = requestAnimationFrame(update); }
-  window.addEventListener('scroll', tick, { passive: true });
-  window.addEventListener('resize', tick);
+  window.__epFrame.on(update, area);
   update();
 })();

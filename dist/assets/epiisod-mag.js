@@ -392,8 +392,9 @@
     fbT = t;
     fb.querySelector('.fb-flap').style.transform = 'rotateX(' + (180 * t).toFixed(2) + 'deg)';
     var s = Math.sin(Math.PI * t);
-    slots.ff.firstChild.querySelector('.fb-sh').style.opacity = (t < 0.5 ? t * 2 * 0.6 : 0).toFixed(3);
-    slots.fbk.firstChild.querySelector('.fb-sh').style.opacity = (t > 0.5 ? (1 - t) * 2 * 0.6 : 0).toFixed(3);
+    var s1 = slots.ff.firstChild && slots.ff.firstChild.querySelector('.fb-sh'), s2 = slots.fbk.firstChild && slots.fbk.firstChild.querySelector('.fb-sh');
+    if (s1) s1.style.opacity = (t < 0.5 ? t * 2 * 0.6 : 0).toFixed(3);
+    if (s2) s2.style.opacity = (t > 0.5 ? (1 - t) * 2 * 0.6 : 0).toFixed(3);
     fb.querySelector('.fb-cast').style.opacity = (s * 0.7).toFixed(3);
     fb.querySelector('.fb-flap').style.zIndex = t > 0 && t < 1 ? 5 : 3;
   }

@@ -30,7 +30,13 @@
     var stops = build(['hero', 'well', 'nearby', 'rooms', 'life', 'smart', 'app', 'end']);
 
     function top(el) { return el.getBoundingClientRect().top + window.pageYOffset; }
-    function target(s) { var el = s.find ? s.find() : s.el; return Math.max(0, Math.round(s.at ? s.at() : (el ? top(el) : 0))); }
+    function target(s) {
+      var now = performance.now();
+      if (s.__t != null && now - s.__ts < 450) return s.__t;
+      var el = s.find ? s.find() : s.el;
+      s.__t = Math.max(0, Math.round(s.at ? s.at() : (el ? top(el) : 0))); s.__ts = now;
+      return s.__t;
+    }
     function maxScroll() { return Math.max(1, document.documentElement.scrollHeight - window.innerHeight); }
 
     function go(i, list) {
@@ -107,25 +113,25 @@
       if (c !== lastIdx) { lastIdx = c; nameEl.textContent = stops[c].label; numEl.textContent = pad(c + 1); }
       progEl.style.transform = 'scaleX(' + Math.min(1, window.pageYOffset / maxScroll()).toFixed(4) + ')';
     }
-    window.addEventListener('scroll', function () {
+    window.__epFrame.on(function () {
       mobileState();
       if (Math.abs(window.pageYOffset - lastY) > 3 && sheet.hidden) pill.classList.add('is-away');
       lastY = window.pageYOffset;
       clearTimeout(idleT);
       idleT = setTimeout(function () { pill.classList.remove('is-away'); }, 700);
-    }, { passive: true });
+    });
     mobileState();
 
     // the progress pill only shows while the page is moving
     if (bar) {
       var idleT = 0, py = window.pageYOffset;
-      window.addEventListener('scroll', function () {
+      window.__epFrame.on(function () {
         if (Math.abs(window.pageYOffset - py) < 1) return;
         py = window.pageYOffset;
         bar.classList.add('is-scrolling');
         clearTimeout(idleT);
         idleT = setTimeout(function () { bar.classList.remove('is-scrolling'); }, 1200);
-      }, { passive: true });
+      });
       var thumb = bar.querySelector('[data-s-bar-thumb]');
       if (thumb) {
         thumb.addEventListener('pointerdown', function () { bar.classList.add('is-drag'); });
@@ -139,8 +145,7 @@
       var vh = window.innerHeight, on = hAreas.some(function (a) { var r = a.getBoundingClientRect(); return r.top <= vh * 0.5 && r.bottom >= vh * 0.5; });
       btns.classList.toggle('is-h', on);
     }
-    window.addEventListener('scroll', horizontal, { passive: true });
-    horizontal();
+    window.__epFrame.on(horizontal);
 
     // ---- desktop: a column of fine lines on the right; hover opens it into a list of names ----
     var rn = document.createElement('nav');
@@ -196,7 +201,7 @@
       });
     }
     function idxAt(y, cy) { return Math.max(0, Math.min(archBtns.length - 1, Math.round((y - cy) / STEP + (archBtns.length - 1) / 2))); }
-    function setHot(i) { if (i === hot) return; hot = i; if (i >= 0) { fan(i); if (navigator.vibrate) { try { navigator.vibrate(8); } catch (err) {} } } }
+    function setHot(i) { if (i === hot) return; hot = i; if (i >= 0) { fan(i); if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive && matchMedia('(pointer: coarse)').matches) { try { navigator.vibrate(8); } catch (err) {} } } }
     function closeArch() { rn.classList.remove('is-arch', 'is-sticky'); veil.classList.remove('is-on'); sticky = false; hot = -1; }
     function mobileOn() { return window.matchMedia('(max-width: 991px)').matches; }
     rn.addEventListener('pointerdown', function (e) {
@@ -260,9 +265,10 @@
       pctEl.textContent = Math.round(p * 100) + '%';
       if (Math.abs(window.pageYOffset - pY) > 1) { pY = window.pageYOffset; rn.classList.add('is-moving'); clearTimeout(pIdle); pIdle = setTimeout(function () { rn.classList.remove('is-moving'); }, 1100); }
     }
-    window.addEventListener('scroll', prog, { passive: true });
-    prog();
-    window.addEventListener('scroll', lines, { passive: true });
+    window.__epFrame.on(prog);
+    // the colour check under the lines costs a layout, so it runs at most every ~120ms
+    var lT = 0, lTm = 0;
+    window.__epFrame.on(function () { var t = performance.now(); clearTimeout(lTm); if (t - lT > 120) { lT = t; lines(); } else lTm = setTimeout(function () { lT = performance.now(); lines(); }, 130); });
     window.addEventListener('resize', lines);
     window.addEventListener('load', lines);
     var n = 0, iv = setInterval(function () { lines(); if (++n > 20) clearInterval(iv); }, 1000);

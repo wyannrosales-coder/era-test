@@ -52,12 +52,20 @@
     });
     applying = false;
   }
-  function tick() { if (!busy) { busy = true; requestAnimationFrame(apply); } }
-  window.addEventListener('scroll', tick, { passive: true });
+  var lastRun = 0, tm = 0;
+  function tick() {
+    if (busy) return;
+    var now = performance.now(), wait = Math.max(0, 140 - (now - lastRun));
+    busy = true;
+    clearTimeout(tm);
+    tm = setTimeout(function () { lastRun = performance.now(); requestAnimationFrame(apply); }, wait);
+  }
+  window.__epFrame.on(tick);
   window.addEventListener('resize', tick);
   window.addEventListener('load', tick);
   // the page's own theming also edits these classes: put ours back straight away
   var mo = new MutationObserver(function () { if (!applying) tick(); });
   setTimeout(function () { find(); els.forEach(function (e) { mo.observe(e, { attributes: true, attributeFilter: ['class'] }); }); tick(); }, 600);
-  setInterval(tick, 400);
+  // a safety net while the page settles (late fonts, images), then scrolling alone drives it
+  var nT = 0, ivT = setInterval(function () { tick(); if (++nT > 12) clearInterval(ivT); }, 1200);
 })();

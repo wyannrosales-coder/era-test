@@ -9,7 +9,7 @@
   fly.innerHTML = '<div class="ep-trv_in"><div class="ep-trv_a"></div><div class="ep-trv_b"></div></div>';
   document.body.appendChild(fly);
   var inn = fly.firstChild, A = inn.querySelector('.ep-trv_a'), B = inn.querySelector('.ep-trv_b');
-  B.style.backgroundImage = 'url(/assets/app/f1_full.jpg)';
+  B.style.backgroundImage = 'url(/assets/app/f1_full.webp)';
   var active = false, cloneW = 266, cloneH = 520, on = false;
   function clamp(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function ease(t) { return t * t * (3 - 2 * t); }
@@ -40,6 +40,10 @@
     A.style.cssText = 'width:' + cloneW + 'px;height:' + cloneH + 'px;transform:scale(' + sc.toFixed(4) + ');transform-origin:0 0;opacity:' + (1 - ease(clamp((p - 0.45) / 0.35))).toFixed(3);
     B.style.opacity = ease(clamp((p - 0.35) / 0.4)).toFixed(3);
   }
-  function loop() { try { update(); } catch (err) { window.__flyErr = String(err && err.stack || err); } requestAnimationFrame(loop); }
-  requestAnimationFrame(loop);
+  var qd = false, calm = 0;
+  function run() { qd = false; try { update(); } catch (err) { window.__flyErr = String(err && err.stack || err); } if (calm > 0) { calm--; qd = true; requestAnimationFrame(run); } }
+  function kick() { calm = 4; if (!qd) { qd = true; requestAnimationFrame(run); } }
+  window.__epFrame.on(kick, app);
+  window.addEventListener('resize', kick);
+  kick();
 })();

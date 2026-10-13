@@ -40,7 +40,7 @@
   }
 
   if (reduce) return;
-  window.addEventListener('scroll', tick, { passive: true });
+  window.__epFrame.on(update, sec);
   window.addEventListener('resize', measure);
   window.addEventListener('load', measure);
   var n = 0, iv = setInterval(function () { measure(); if (++n > 12) clearInterval(iv); }, 500);

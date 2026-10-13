@@ -94,7 +94,7 @@
   function tick() { if (!raf) raf = requestAnimationFrame(update); }
 
   if (reduce) { if (video) { video.removeAttribute('loop'); video.pause(); } return; }
-  window.addEventListener('scroll', tick, { passive: true });
+  window.__epFrame.on(update, sec);
   window.addEventListener('resize', measure);
   window.addEventListener('load', measure);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);

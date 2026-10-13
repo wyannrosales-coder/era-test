@@ -16,7 +16,7 @@
   // gap is filled with the room's own colours instead of a flat colour
   var fill = document.createElement('div');
   fill.className = 'ep-blurfill'; fill.setAttribute('aria-hidden', 'true');
-  fill.style.backgroundImage = 'url(' + img.getAttribute('src') + ')';
+  fill.style.backgroundImage = 'url(' + img.getAttribute('src').replace(/\.webp$/, '-blur.webp') + ')';
   box.insertBefore(fill, box.firstChild);
 
   // ---- the lights: 16 photographs, one for every combination of the four room lights ----
@@ -29,7 +29,7 @@
   Object.keys(FILE).forEach(function (k) {
     var f = document.createElement('img');
     f.className = 'ep-lt'; f.alt = ''; f.decoding = 'async'; f.draggable = false;
-    f.setAttribute('data-src', '/assets/design/lights/p' + FILE[k] + '.jpg');
+    f.setAttribute('data-src', '/assets/design/lights/p' + FILE[k] + '.webp');
     if (+k === 15) f.classList.add('is-on');
     lights.appendChild(f); frames[k] = f;
   });
@@ -267,13 +267,16 @@
     var p = ease(clamp(-r.top / 640));
     var ar = (img.naturalWidth || 2000) / (img.naturalHeight || 1116);
     var w0 = Math.max(r.width, r.height * ar);        // at rest: covering the whole block
-    var w = lerp(w0, r.width, p), h = w / ar;         // zooms out until it spans the full width
+    var h0 = w0 / ar, w = lerp(w0, r.width, p), h = w / ar;         // zooms out until it spans the full width
     var cy = lerp(r.height / 2, vh / 2 - r.top, p);   // and settles in the middle of the screen
     on = true;
     box.style.background = ''; fill.style.opacity = Math.min(1, p * 6).toFixed(3);
-    var geo = { position: 'absolute', maxWidth: 'none', left: (r.width / 2).toFixed(1) + 'px', top: cy.toFixed(1) + 'px', width: w.toFixed(1) + 'px', height: h.toFixed(1) + 'px', transform: 'translate(-50%,-50%)' };
+    // the picture keeps one fixed size and is scaled and moved with transforms (composited on the GPU), instead of being
+    // re-laid-out every frame
+    var k = w / w0, ty = cy - h0 / 2;
+    var geo = { position: 'absolute', maxWidth: 'none', left: '50%', top: '0px', width: w0.toFixed(1) + 'px', height: h0.toFixed(1) + 'px', transform: 'translate(-50%,' + ty.toFixed(1) + 'px) scale(' + k.toFixed(4) + ')' };
     var s = img.style; s.objectFit = 'cover';
-    Object.keys(geo).forEach(function (k) { s[k] = geo[k]; lights.style[k] = geo[k]; });
+    Object.keys(geo).forEach(function (kk) { if (s[kk] !== geo[kk]) s[kk] = geo[kk]; if (lights.style[kk] !== geo[kk]) lights.style[kk] = geo[kk]; });
     lights.style.display = '';
     // the phone rises in once the whole picture is on screen
     if (phone) {

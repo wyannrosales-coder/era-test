@@ -316,7 +316,7 @@ section.clip:has(.loc-scroll-area) { background: linear-gradient(180deg, rgba(25
 .amen-slide_img::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(180deg, rgba(20,10,6,.45) 0%, rgba(20,10,6,.12) 28%, rgba(20,10,6,.18) 50%, rgba(20,10,6,.78) 100%); }
 .amen-slide_b { z-index: 3; }
 .amen-slide_title .l1, .amen-slide_desc .h5 { text-shadow: 0 1px 22px rgba(20,10,6,.6); }
-.ep-blurfill { position: absolute; inset: -6%; z-index: 0; background: center / cover no-repeat #24120c; filter: blur(34px) brightness(.78) saturate(1.1); opacity: 0; pointer-events: none; }
+.ep-blurfill { position: absolute; inset: -6%; z-index: 0; background: center / cover no-repeat #24120c; /* pre-blurred image, no live filter */ opacity: 0; pointer-events: none; }
 
 /* ---- phones ---- */
 @media (max-width: 991px) {
@@ -472,3 +472,18 @@ section.clip:has(.loc-scroll-area) { background: linear-gradient(180deg, rgba(25
 .sm_val span { align-self: flex-start; margin-top: 30%; }
 .sm_pm { bottom: 2% !important; }
 .ep-pre_script { text-transform: uppercase; font-style: normal; letter-spacing: .06em; font-size: 21vw; transform: rotate(-24deg); overflow: visible; }
+
+/* while the page is moving, frosted glass falls back to its translucent colour (a live blur is repainted every frame) */
+html.is-scrolling .ep-msheet, html.is-scrolling .ep-fly_tags span, html.is-scrolling .ep-disclaimer, html.is-scrolling .ep-vol, html.is-scrolling .ep-phone_drag, html.is-scrolling .ep-rnav::before, html.is-scrolling .ep-rnav_veil, html.is-scrolling .ep-mnav, html.is-scrolling .ep-mag_cur, html.is-scrolling .ep-fb_hint { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+/* phones: no frosted-glass blur (it is repainted every frame while scrolling); the translucent colours carry it */
+@media (max-width: 991px) {
+  .ep-msheet, .ep-fly_tags span, .ep-disclaimer, .ep-vol, .ep-phone_drag, .ep-rnav::before, .ep-rnav_veil, .ep-mnav { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .ep-msheet { background: rgba(20, 10, 6, .94) !important; }
+  .ep-disclaimer { background: rgba(20, 10, 6, .82) !important; }
+  .ep-fly_tags span { background: rgba(20, 10, 6, .72) !important; }
+}
+@media (prefers-reduced-motion: reduce) { .ep-blurfill { display: none; } }
+
+/* safety mode (epiisod-frame.js): a slow device drops the frosted glass and small blurs */
+html.ep-lite * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+html.ep-lite .ep-air i { filter: none; }

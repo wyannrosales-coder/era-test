@@ -50,6 +50,8 @@
     if (!it || it.loaded || it.loading) return Promise.resolve();
     it.loading = true;
     var src = it.video.getAttribute('data-src');
+    // phones get a lighter version of the same clip
+    if (touch || window.innerWidth < 768) src = src.replace(/\.mp4$/, '-m.mp4');
     return fetch(src)
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
       .then(function (b) {
@@ -132,7 +134,9 @@
     if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight * 2) return;
     var p = span > 0 ? -rect.top / span : 0;
     p = p < 0 ? 0 : p > 1 ? 1 : p;
-    smoothed += (p - smoothed) * (touch ? 0.32 : 0.22);
+    var nowT = performance.now(), dtT = Math.min(0.08, Math.max(0.004, (nowT - (tick.__t || nowT)) / 1000)); tick.__t = nowT;
+    smoothed += (p - smoothed) * (1 - Math.exp(-dtT / (touch ? 0.08 : 0.14)));   // medium ease: silky, still attached to the hand
+    if (Math.abs(p - smoothed) < 0.00002) smoothed = p;
     var sp = smoothed;
 
     if (bar) bar.style.width = (sp * 100).toFixed(2) + '%';
@@ -151,13 +155,14 @@
     railBtns.forEach(function (b, k) { var fv = Math.min(1, Math.max(0, sp * N - k)); if (b.__f !== fv.toFixed(3)) { b.style.setProperty('--f', fv.toFixed(3)); b.__f = fv.toFixed(3); } });
     var seg = ease(Math.min(1, segRaw / SCRUB), LINGER);
 
-    if (segRaw > 0.15 && items[idx + 1]) load(idx + 1);
-    if (items[idx + 2]) load(idx + 2);
+    // progressive: the next clip once this one is under way, the one after from its midpoint
+    if (segRaw > 0.02 && items[idx + 1]) load(idx + 1);
+    if (segRaw > 0.5 && items[idx + 2]) load(idx + 2);
 
     // a long eased dissolve with a matched push and a peak of blur hides the cut
     var seam = segRaw > 1 - XF && !!items[idx + 1];
     var f = seam ? smoothstep((segRaw - (1 - XF)) / XF) : 0;
-    var blur = seam && !touch ? 2.6 * Math.sin(Math.PI * f) : 0;
+    var blur = seam && !touch && !window.__epLite ? 2.6 * Math.sin(Math.PI * f) : 0;
 
     items.forEach(function (it, i) {
       var op = 0;
@@ -167,7 +172,8 @@
       if (it.stage.__op !== op.toFixed(2)) { it.stage.style.opacity = op.toFixed(3); it.stage.__op = op.toFixed(2); }
 
       var sc = 1;
-      if (seam && i === idx) sc = 1 + 0.038 * f;
+      if (i === idx) sc = 1 + 0.03 * seg;      // a slow push-in: continuous motion between the footage's own 24 frames
+      if (seam && i === idx) sc = (1 + 0.03 * seg) * (1 + 0.038 * f);
       else if (seam && i === idx + 1) sc = 1.048 - 0.048 * f;
       var fx = (op > 0 ? 'blur(' + blur.toFixed(2) + 'px)' : 'none') + '|' + sc.toFixed(4);
       if (it.stage.__fx !== fx) {
@@ -264,10 +270,31 @@
       if (tk && !tk.__active) { tk.style.height = '34px'; tk.style.background = 'rgba(233,223,208,.3)'; }
     });
     btn.addEventListener('click', function () {
-      var target = (i + SCRUB) / N;
+      var target = (i + SCRUB - 0.012) / N;   // just short of the dissolve, so the forward snap leaves it alone
       var span = N * W * window.innerHeight;
-      var top = root.getBoundingClientRect().top + window.pageYOffset + target * span;
-      window.scrollTo({ top: top, behavior: 'smooth' });
+      var r0 = root.getBoundingClientRect().top + window.pageYOffset;
+      var top = r0 + target * span, from = window.pageYOffset;
+      // a visible fly-through: every clip on the way is loaded, and the trip takes ~1.6s for the next segment up to ~3.6s
+      // for the far end, on a gentle sine curve (its top speed is only ~1.6x the average, so the middle doesn't flash by)
+      var here = Math.max(0, Math.min(N - 1, Math.floor(((from - r0) / span) * N)));
+      for (var k = Math.min(here, i); k <= Math.max(here, i); k++) load(k);
+      var segs = Math.abs(top - from) / span * N;
+      var dur = Math.min(3.6, Math.max(1.4, 1.0 + segs * 0.85));
+      var sine = function (t) { return 0.5 - 0.5 * Math.cos(Math.PI * t); };
+      var Ln = window.__lenis;
+      if (Ln && Ln.scrollTo && !touch) { Ln.scrollTo(top, { duration: dur, easing: sine, force: true }); return; }
+      // phones scroll natively: run the same curve frame by frame, and let a touch take over at any moment
+      var t0 = performance.now(), stop = false;
+      function cancel() { stop = true; }
+      window.addEventListener('touchstart', cancel, { passive: true, once: true });
+      window.addEventListener('wheel', cancel, { passive: true, once: true });
+      (function step(now) {
+        if (stop) return;
+        var u = Math.min(1, (now - t0) / (dur * 1000));
+        window.scrollTo({ top: from + (top - from) * sine(u), behavior: 'instant' });
+        if (u < 1) requestAnimationFrame(step);
+        else { window.removeEventListener('touchstart', cancel); window.removeEventListener('wheel', cancel); }
+      })(t0);
     });
   });
 
@@ -376,14 +403,27 @@
   placePins();
   window.addEventListener('resize', function () { placePins(); closeTips(); }, { passive: true });
 
-  // load the first two eagerly; the rest as the camera approaches
-  load(0).then(hideBoot);
-  load(1);
+  // only the opening clip loads up front; the second follows on the first scroll or once the page is idle, the rest as
+  // the camera approaches
+  function next() { load(1); window.removeEventListener('wheel', next); window.removeEventListener('touchstart', next); window.removeEventListener('keydown', next); }
+  load(0).then(function () {
+    hideBoot();
+    window.addEventListener('wheel', next, { passive: true });
+    window.addEventListener('touchstart', next, { passive: true });
+    window.addEventListener('keydown', next);
+    if (window.requestIdleCallback) requestIdleCallback(next, { timeout: 3000 }); else setTimeout(next, 2000);
+  });
   setTimeout(hideBoot, 7000);
   window.addEventListener('touchstart', primeAll, { passive: true, once: true });
 
-  var raf;
-  (function loop() { tick(); raf = requestAnimationFrame(loop); })();
+  // runs every frame while the hero is within a screen of the viewport, and sleeps the rest of the time
+  var raf = 0, near = true;
+  function loop() { tick(); raf = near ? requestAnimationFrame(loop) : 0; }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) {
+    near = es[0].isIntersecting;
+    if (near && !raf) raf = requestAnimationFrame(loop);
+  }, { rootMargin: '100% 0px 100% 0px' }).observe(root);
+  loop();
   window.addEventListener('pagehide', function () {
     cancelAnimationFrame(raf);
     items.forEach(function (it) { if (it.objectUrl) URL.revokeObjectURL(it.objectUrl); });

@@ -146,7 +146,7 @@
 .ep-rise { opacity: 0; transform: translateY(72px) scale(.97); transition: opacity .9s cubic-bezier(.2,.7,.2,1) var(--rise-d, 0s), transform 1.1s cubic-bezier(.2,.7,.2,1) var(--rise-d, 0s); will-change: opacity, transform; }
 .ep-rise.is-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .ep-rise { opacity: 1; transform: none; transition: none; } }
-.section.arch { will-change: clip-path; }
+.section.arch { }
 
 /* the zoomed video must not widen the page on narrow screens */
 .ep-rv_win { overflow: clip; }
@@ -169,3 +169,8 @@
 /* the content spaces itself to fit exactly one screen: the big spacers give way before the section grows past the window */
 .ep-rooms-pin .apart-info-s { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .ep-rooms-pin .apart-info-s > .u-160 { flex: 1 1 0; height: auto; min-height: 20px; }
+
+/* iPhone flower stills (see epiisod-perf.js): a slow sway in place of the video */
+.ep-still { transform-origin: 50% 0; animation: ep-sway 9s ease-in-out infinite alternate; will-change: transform; }
+@keyframes ep-sway { from { transform: rotate(-1.4deg) translateY(0); } to { transform: rotate(1.4deg) translateY(1.2%); } }
+@media (prefers-reduced-motion: reduce) { .ep-still { animation: none; } }

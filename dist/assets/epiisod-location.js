@@ -53,18 +53,29 @@
     return [lerp(a[i][0], a[i + 1][0], u), lerp(a[i][1], a[i + 1][1], u)];
   }
 
-  // load the frames in order, a few at a time; whatever has arrived is what gets drawn
-  (function load() {
+  // load the frames in order, a few at a time, but only once the section is within a couple of screens (the hero and the
+  // page above get the bandwidth first); whatever has arrived is what gets drawn
+  var started = false;
+  function startLoad() {
+    if (!lastKey && !ready.some(Boolean)) canvas.classList.add('is-poster');
+    if (started) return; started = true;
     if (reduce) { fetchOne(0); return; }
     var next = 0, active = 0, MAX = 6;
     function pump() {
       while (active < MAX && next < FRAMES) { (function (i) { active++; fetchOne(i, function () { active--; pump(); }); })(next++); }
     }
     pump();
-  })();
+  }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { if (es[0].isIntersecting) startLoad(); }, { rootMargin: '250% 0px 100% 0px' }).observe(sec); else startLoad();
   function fetchOne(i, done) {
     var im = new Image();
-    im.onload = function () { imgs[i] = im; ready[i] = true; lastKey = ''; tick(); if (done) done(); };
+    // decode off the main thread before the frame is ever drawn, so showing it for the first time costs nothing
+    function keep(src) { imgs[i] = src; ready[i] = true; lastKey = ''; tick(); if (done) done(); }
+    im.onload = function () {
+      if (window.createImageBitmap) createImageBitmap(im).then(keep, function () { keep(im); });
+      else if (im.decode) im.decode().then(function () { keep(im); }, function () { keep(im); });
+      else keep(im);
+    };
     im.onerror = function () { if (done) done(); };
     im.src = DIR + 'f' + pad(i) + '.webp';
   }
@@ -97,8 +108,12 @@
     ctx.clearRect(0, 0, cw, ch);
     ctx.globalAlpha = 1;
     ctx.drawImage(im, x, y, w, h);
-    // mostly the nearest frame, with only a short cross-fade between two, so there is no ghosting
-    var ba = smooth((u - 0.3) / 0.4);
+    // the poster is only a stand-in until the first frame: behind the faded edges of the zoomed-out phone view it would
+    // show through as a second, mismatched picture
+    if (canvas.classList.contains('is-poster')) canvas.classList.remove('is-poster');
+    // a full soft cross-fade between neighbouring frames, so the footage flows instead of stepping (the lite mode keeps
+    // only the nearest frame)
+    var ba = window.__epLite ? (u < 0.5 ? 0 : 1) : u;
     if (b !== a && ba > 0.01) { ctx.globalAlpha = ba; ctx.drawImage(imgs[b], x, y, w, h); ctx.globalAlpha = 1; }
     // zoomed out: the picture's top and bottom edges melt into the backdrop colours
     if (L.zo > 0.001 && (y > 0 || y + h < ch)) {
@@ -126,8 +141,10 @@
     var skyH = sky ? sky.offsetHeight : 0;
     var span = Math.max(1, rect.height - skyH - vh);
     var p = clamp(-(rect.top + skyH) / span);
-    sp += (p - sp) * 0.3;
-    if (Math.abs(p - sp) > 0.0005) raf = requestAnimationFrame(update); else sp = p;
+    // an eased glide (~150ms, the same at any refresh rate) toward the scroll position
+    var now = performance.now(), dt = Math.min(0.1, Math.max(0.004, (now - (update.__t || now)) / 1000)); update.__t = now;
+    sp += (p - sp) * (1 - Math.exp(-dt / 0.15));
+    if (Math.abs(p - sp) > 0.0003) raf = requestAnimationFrame(update); else { sp = p; update.__t = 0; }
     var t = timeAt(sp);
     if (!reduce) draw(t); else draw(0.2);
 
@@ -179,7 +196,7 @@
   pin.addEventListener('click', function () { setOpen(null); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(null); });
 
-  window.addEventListener('scroll', tick, { passive: true });
+  window.__epFrame.on(tick, sec);
   window.addEventListener('resize', measure);
   window.addEventListener('load', measure);
   // the picture is sized from the pin, which can still be settling when the script first runs (fonts, images above it),

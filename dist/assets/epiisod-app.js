@@ -21,12 +21,12 @@
   // over it or a card that lifts out of the phone
   var A = '/assets/app/';
   var CONF = [
-    { base: 'f1_full.jpg', sheet: { src: 's1.webp', top: 728 } },
-    { base: 'f2_full.jpg', pop: { x: 20 / 375, y: 478 / 812, w: 335 / 375, h: 110 / 812, k: 1.5, dx: 0 } },
+    { base: 'f1_full.webp', sheet: { src: 's1.webp', top: 728 } },
+    { base: 'f2_full.webp', pop: { x: 20 / 375, y: 478 / 812, w: 335 / 375, h: 110 / 812, k: 1.5, dx: 0 } },
     { base: 's3.webp', pop: { x: 0.523, y: 0.662, w: 0.43, h: 0.212, k: 1.5, dx: 0.07 } },
-    { base: 'f4_full.jpg', sheet: { src: 's4.webp', top: 418 } },
+    { base: 'f4_full.webp', sheet: { src: 's4.webp', top: 418 } },
     { base: 's5.webp', pop: { x: 0.043, y: 0.572, w: 0.915, h: 0.188, k: 1.22, dx: 0 } },
-    { base: 'f6_base.jpg', dimmed: true, sheet: { src: 's6.webp', top: 766 } }
+    { base: 'f6_base.webp', dimmed: true, sheet: { src: 's6.webp', top: 766 } }
   ];
   track.innerHTML = F.map(function (f, i) {
     var c = CONF[i];

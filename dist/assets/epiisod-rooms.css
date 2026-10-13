@@ -261,7 +261,7 @@
 /* phones: the cover fills the screen; its own photograph, enlarged and blurred, fills whatever the card does not cover */
 @media (max-width: 991px) {
   .ep-rooms_pin { position: relative; overflow: hidden; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: 56px 0; box-sizing: border-box; background: #24120c; }
-  .ep-rooms_pin::before { content: ""; position: absolute; inset: -8%; background: url(/assets/rooms/mag/aspecte-1.webp) center / cover no-repeat; filter: blur(30px) brightness(.55) saturate(1.1); transform: scale(1.1); }
+  .ep-rooms_pin::before { content: ""; position: absolute; inset: -8%; background: url(/assets/rooms/mag/aspecte-1-blur.webp) center / cover no-repeat; }
   .ep-mcover { position: relative; width: 100%; }
   .ep-mcover_card { box-shadow: 0 30px 70px rgba(0, 0, 0, .5); }
 }
@@ -332,5 +332,5 @@
 }
 @media (min-width: 992px) {
   .ep-mag_pg { box-shadow: 0 2px 5px rgba(36,18,12,.08); }
-  .ep-mag_book::before { content: ""; position: absolute; z-index: -1; left: -7%; right: -7%; top: 8%; bottom: -9%; pointer-events: none; background: radial-gradient(ellipse 56% 52% at 50% 52%, rgba(36,18,12,.4) 0%, rgba(36,18,12,.3) 25%, rgba(36,18,12,.2) 45%, rgba(36,18,12,.1) 62%, rgba(36,18,12,.025) 78%, rgba(36,18,12,0) 100%); filter: blur(14px); }
+  .ep-mag_book::before { content: ""; position: absolute; z-index: -1; /* sits under the cover alone while closed (--c = 1), the whole spread once open */ left: calc(-7% + var(--c, 0) * 53.5%); right: -7%; top: 8%; bottom: -9%; pointer-events: none; background: radial-gradient(ellipse 56% 52% at 50% 52%, rgba(36,18,12,.4) 0%, rgba(36,18,12,.3) 25%, rgba(36,18,12,.2) 45%, rgba(36,18,12,.1) 62%, rgba(36,18,12,.025) 78%, rgba(36,18,12,0) 100%); filter: blur(14px); }
 }
