@@ -219,3 +219,10 @@
   .ep-rmc_dot.is-on { width: 24px; background: var(--ep-sand, #d0a77f); }
   .ep-rmc_count { flex: none; min-width: 58px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: .2em; }
 }
+/* Reduce Motion carousel: each scene uses its clip's final frame (the moment its caption holds on), not the opening frame */
+@media (prefers-reduced-motion: reduce) {
+  .ep-fly_stage[data-fly-stage="0"] .ep-fly_poster { background-image: url(/assets/flythrough/still1.webp) !important; }
+  .ep-fly_stage[data-fly-stage="1"] .ep-fly_poster { background-image: url(/assets/flythrough/still2.webp) !important; }
+  .ep-fly_stage[data-fly-stage="2"] .ep-fly_poster { background-image: url(/assets/flythrough/still3.webp) !important; }
+  .ep-fly_stage[data-fly-stage="3"] .ep-fly_poster { background-image: url(/assets/flythrough/still4.webp) !important; }
+}

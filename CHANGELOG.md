@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.4.1
+
+- Reduce Motion carousel: each scene uses its clip's final frame (courtyard garden, rooftop pool) instead of the opening frame.
+- Light-only colour scheme declared, so Chrome/Samsung automatic dark mode no longer inverts the white sections.
+- Phones held sideways see the site instead of the old "Rotate your phone" cover.
+
 ## 3.4.0
 
 - Reduce Motion hero: a one-screen carousel (title slide + four scenes) with swipe, arrows, arrow keys, dots and a 01 / 05 counter; short crossfade, no autoplay.

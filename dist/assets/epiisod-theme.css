@@ -180,3 +180,6 @@ html body {
 .ep-preload_pct.is-done { opacity: 0; transition-duration: .3s; }
 .ep-preload_n { font-size: clamp(44px, 5.4vw, 84px); line-height: 1; letter-spacing: -.01em; min-width: 2.1ch; text-align: right; }
 .ep-preload_u { font-size: clamp(16px, 1.6vw, 24px); color: #d0a77f; }
+
+/* the design is light-only: stop browsers' automatic dark mode (Chrome/Samsung "auto dark") from inverting it */
+:root { color-scheme: only light; }
