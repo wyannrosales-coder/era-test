@@ -111,3 +111,16 @@ section#nearby { background: #ffffff !important; }
 .ep-loc_end.is-in .ep-loc_end_i { opacity: 1; transform: none; transition-delay: calc(.2s + var(--i, 0) * .16s); }
 .ep-loc_end.is-in .ep-loc_end_rule.ep-loc_end_i { transform: scaleY(1); }
 @media (prefers-reduced-motion: reduce) { .ep-loc_end_i { opacity: 1; transform: none; transition: none; } }
+
+/* Reduce Motion: one still aerial frame with the four labelled dots (tap for the cards), then the closing words on white */
+@media (prefers-reduced-motion: reduce) {
+  .ep-loc.is-rm { height: auto; }
+  .ep-loc.is-rm .ep-loc_pin { position: relative; height: 100vh; height: 100svh; }
+  .ep-loc.is-rm .ep-loc_text { display: none; }
+  .ep-loc.is-rm .ep-loc_pins { opacity: 1; }
+  .ep-loc.is-rm .ep-loc_pins .ep-loc_dot, .ep-loc.is-rm .ep-loc_pins .ep-loc_label { pointer-events: auto; }
+  .ep-loc.is-rm .ep-loc_end { position: relative; inset: auto; opacity: 1; pointer-events: auto; background: #fff; color: var(--ep-choc); padding: clamp(96px, 18vh, 180px) 24px; transition: none; }
+  .ep-loc.is-rm .ep-loc_end_h, .ep-loc.is-rm .ep-loc_end_addr { text-shadow: none; }
+  .ep-loc.is-rm .ep-loc_end_rule { background: var(--ep-choc); }
+  .ep-loc.is-rm .ep-loc_end_logo { color: var(--ep-choc); }
+}

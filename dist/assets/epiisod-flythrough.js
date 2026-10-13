@@ -43,7 +43,58 @@
     boot.style.opacity = '0';
     setTimeout(function () { boot.style.display = 'none'; }, 420);
   }
-  if (reduced) { hideBoot(); return; }
+  if (reduced) { hideBoot(); rmCarousel(); return; }
+
+  // Reduce Motion: a one-screen carousel instead of the scroll flythrough. Slide 0 is the title over the lobby, slides 1-4
+  // the four scenes with their captions. Swipe, arrows, arrow keys or dots; a short crossfade (CSS), never autoplay.
+  function rmCarousel() {
+    var pin = root.querySelector('.ep-fly_pin'), total = N + 1, k = 0;
+    var arrow = function (d) { return '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="' + (d < 0 ? 'M10 3 5 8l5 5' : 'M6 3l5 5-5 5') + '" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; };
+    var names = ['Welcome'].concat(caps.map(function (c) { var t = c.querySelector('.ep-fly_cap_title'); return t ? t.textContent : ''; }));
+    var nav = document.createElement('div');
+    nav.className = 'ep-rmc';
+    nav.innerHTML = '<button type="button" class="ep-rmc_btn" data-rmc="-1" aria-label="Previous scene">' + arrow(-1) + '</button>' +
+      '<div class="ep-rmc_dots">' + names.map(function (n, i) { return '<button type="button" class="ep-rmc_dot" data-rmc-go="' + i + '" aria-label="' + n + '"></button>'; }).join('') + '</div>' +
+      '<span class="ep-rmc_count" aria-live="polite"></span>' +
+      '<button type="button" class="ep-rmc_btn" data-rmc="1" aria-label="Next scene">' + arrow(1) + '</button>';
+    pin.appendChild(nav);
+    var dots = [].slice.call(nav.querySelectorAll('.ep-rmc_dot')), count = nav.querySelector('.ep-rmc_count');
+    var hint = root.querySelector('.ep-fly_hint');
+    if (hint) hint.textContent = touch ? 'Swipe to explore' : 'Use the arrows to explore';
+    root.setAttribute('aria-roledescription', 'carousel');
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+    function show(n) {
+      k = (n + total) % total;
+      stages.forEach(function (s, i) { s.classList.toggle('is-cur', i === Math.max(0, k - 1)); });
+      caps.forEach(function (c, i) { c.classList.toggle('is-cur', i === k - 1); c.setAttribute('aria-hidden', i === k - 1 ? 'false' : 'true'); });
+      if (intro) intro.classList.toggle('is-cur', k === 0);
+      dots.forEach(function (d, i) { d.classList.toggle('is-on', i === k); d.setAttribute('aria-current', i === k ? 'true' : 'false'); });
+      count.textContent = pad(k + 1) + ' / ' + pad(total);
+    }
+    nav.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-rmc]'), d = e.target.closest('[data-rmc-go]');
+      if (b) show(k + +b.getAttribute('data-rmc'));
+      else if (d) show(+d.getAttribute('data-rmc-go'));
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      var r = root.getBoundingClientRect();
+      if (r.bottom < window.innerHeight * 0.4 || r.top > window.innerHeight * 0.6) return;   // only while the hero is on screen
+      var tag = (document.activeElement && document.activeElement.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      show(k + (e.key === 'ArrowRight' ? 1 : -1));
+    });
+    // swipe: a mostly horizontal drag of 40px or more turns the slide; vertical drags keep scrolling the page
+    var sx = 0, sy = 0, down = false;
+    pin.addEventListener('pointerdown', function (e) { if (e.target.closest('.ep-rmc')) return; down = true; sx = e.clientX; sy = e.clientY; });
+    pin.addEventListener('pointerup', function (e) {
+      if (!down) return; down = false;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) show(k + (dx < 0 ? 1 : -1));
+    });
+    pin.addEventListener('pointercancel', function () { down = false; });
+    show(0);
+  }
 
   function load(idx) {
     var it = items[idx];

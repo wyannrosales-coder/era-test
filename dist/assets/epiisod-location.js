@@ -13,6 +13,8 @@
   var pts = [].slice.call(sec.querySelectorAll('[data-loc-pt]'));
   var endBox = sec.querySelector('[data-loc-end]');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reduce Motion: the map is a still with its labelled dots, and the closing words follow as their own white section
+  if (reduce) { sec.classList.add('is-rm'); if (endBox) { sec.appendChild(endBox); endBox.classList.add('is-in'); } }
   var FRAME = 16 / 9;
   var FRAMES = 96, DUR = 6.0, DIR = '/assets/location/frames/';
   var KT = [0.2, 0.8, 1.4];
@@ -59,7 +61,7 @@
   function startLoad() {
     if (!lastKey && !ready.some(Boolean)) canvas.classList.add('is-poster');
     if (started) return; started = true;
-    if (reduce) { fetchOne(0); return; }
+    if (reduce) { fetchOne(19); return; }      // Reduce Motion: one still of the aerial drift (t = 0.8), dots on top
     var next = 0, active = 0, MAX = 6;
     function pump() {
       while (active < MAX && next < FRAMES) { (function (i) { active++; fetchOne(i, function () { active--; pump(); }); })(next++); }
@@ -145,8 +147,8 @@
     var now = performance.now(), dt = Math.min(0.1, Math.max(0.004, (now - (update.__t || now)) / 1000)); update.__t = now;
     sp += (p - sp) * (1 - Math.exp(-dt / 0.15));
     if (Math.abs(p - sp) > 0.0003) raf = requestAnimationFrame(update); else { sp = p; update.__t = 0; }
-    var t = timeAt(sp);
-    if (!reduce) draw(t); else draw(0.2);
+    var t = reduce ? 0.8 : timeAt(sp);
+    draw(t);
 
     // text is there on arrival and gives way to the dive
     var to = 1 - smooth((sp - 0.66) / 0.1);
@@ -154,10 +156,10 @@
     text.style.transform = 'translateY(' + ((1 - to) * 24).toFixed(1) + 'px)';
 
     // the closing words arrive as the building fills the frame
-    if (endBox) { if (sp > 0.9) endBox.classList.add('is-in'); else if (sp < 0.84) endBox.classList.remove('is-in'); }
+    if (endBox && !reduce) { if (sp > 0.9) endBox.classList.add('is-in'); else if (sp < 0.84) endBox.classList.remove('is-in'); }
 
     // hotspots: only through the middle ~40% of the section
-    var o = smooth((sp - 0.26) / 0.06) * (1 - smooth((sp - 0.66) / 0.06));
+    var o = reduce ? 1 : smooth((sp - 0.26) / 0.06) * (1 - smooth((sp - 0.66) / 0.06));
     layer.style.opacity = o.toFixed(3);
     var on = o > 0.5;
     layer.classList.toggle('is-on', on);

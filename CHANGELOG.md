@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.4.0
+
+- Reduce Motion hero: a one-screen carousel (title slide + four scenes) with swipe, arrows, arrow keys, dots and a 01 / 05 counter; short crossfade, no autoplay.
+- Reduce Motion location: a still aerial frame with the four labelled dots (tap for cards), followed by a white section with the emblem, "At the heart of Macquarie Park" and the address.
+
 ## 3.3.2
 
 - Hero with Reduce Motion on (iPhone/Mac accessibility): a title screen, then the four scenes as full-screen stills, each with its own caption. Previously every caption piled up over the title on one screen.
