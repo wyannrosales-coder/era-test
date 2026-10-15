@@ -153,21 +153,17 @@
   // the cover: a classic interiors-magazine front (full-bleed photograph, big serif masthead, a few large cover lines),
   // every word sized and shaded so it reads over the picture
   function cover() {
-    var line = function (i, eb, txt, big) { return '<li class="cv-rv' + (big ? ' is-lead' : '') + '" style="--i:' + i + '"><b>' + eb + '</b><em class="hd">' + txt + '</em></li>'; };
     return ['t-choc cvx', '<figure class="mg-ph cvx-ph" style="inset:0"><img src="' + IMG + 'emp-3.webp" alt="A warm oak desk nook with a vase of dried flowers" draggable="false"></figure>' +
       '<div class="cvx-shade"></div>' +
-      '<div class="cvx-top cv-rv" style="--i:0"><span>EPIISOD · Macquarie Park</span><span>Vol. 01 · 2027</span></div>' +
+      '<div class="cvx-top cv-rv" style="--i:0"><span>EPIISOD · Macquarie Park</span><span>Vol. 01</span></div>' +
       '<h2 class="hd cvx-mast cv-rv" style="--i:1">Rooms</h2>' +
       '<p class="hd cvx-sub cv-rv" style="--i:2">The Residence Edit</p>' +
-      '<ul class="cvx-lines">' +
-        line(3, 'Signature Studio', 'The cornerstone<br>of the collection', true) +
-        line(4, 'Quad &amp; Quint', 'Shared living, four or<br>five ensuite bedrooms') +
-        line(5, 'Empowered Studio', 'Live independently,<br>without limitation') +
-      '</ul>' +
-      '<div class="cvx-foot cv-rv" style="--i:6"><p class="hd">Eight ways<br><i>to live well.</i></p>' +
-        '<div class="cvx-price"><small>From</small><b class="hd">AU$615</b><small>per week</small></div></div>' +
-      '<div class="cvx-open cv-rv" style="--i:7">Open the magazine <i>→</i></div>'];
+      '<div class="cvx-feat cv-rv" style="--i:3"><span class="cvx-kick">Studios &amp; shared living</span>' +
+        '<p class="hd">Eight ways<br><i>to live well.</i></p></div>' +
+      '<div class="cvx-tag cv-rv" style="--i:4"><small>From</small><b class="hd">AU$615</b><small>per week</small></div>' +
+      '<div class="cvx-open cv-rv" style="--i:5">Open the magazine <i>→</i></div>'];
   }
+
 
   // ---- build the book ----
   var leaves = [];            // { el, front, back }

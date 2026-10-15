@@ -383,3 +383,17 @@
 /* small (phone) covers: the top line stays on one line */
 .cvx-top { white-space: nowrap; gap: 3cqw; }
 @container (max-width: 420px) { .cvx-top { font-size: max(8.5px, 2.4cqw); letter-spacing: .18em; } .cvx-open { font-size: max(9.5px, 2.6cqw); letter-spacing: .2em; } }
+
+/* cover, simplified: masthead, one headline, a sand price tag (design-system colours and type) */
+.cvx-shade { background: linear-gradient(180deg, rgba(18,9,5,.66) 0%, rgba(18,9,5,.22) 30%, rgba(18,9,5,0) 46%, rgba(18,9,5,.08) 58%, rgba(18,9,5,.7) 80%, rgba(18,9,5,.92) 100%) !important; }
+.cvx-sub { top: 38cqw; font-size: max(15px, 4cqw); }
+.cvx-feat { position: absolute; left: 7cqw; right: 40cqw; bottom: 17cqw; color: #f6f1ea; text-shadow: 0 .3cqw 2cqw rgba(18,9,5,.6); }
+.cvx-kick { display: block; margin-bottom: 2.4cqw; font: 700 var(--fs-s, 11.5px)/1.4 var(--_fonts---body, "Albert Sans", sans-serif); letter-spacing: .2em; text-transform: uppercase; color: #e3cfae; }
+.cvx-feat p { margin: 0; font-size: max(26px, 8.4cqw); line-height: .98; letter-spacing: -.01em; }
+.cvx-feat p i { color: #e3cfae; }
+.cvx-tag { position: absolute; right: 7cqw; bottom: 17cqw; display: flex; flex-direction: column; align-items: center; gap: 1cqw; padding: 3.2cqw 4.4cqw 3.4cqw;
+  background: #d0a77f; color: #24120c; box-shadow: 0 1.6cqw 4cqw rgba(18,9,5,.35); }
+.cvx-tag small { font: 700 max(9.5px, 1.8cqw)/1 var(--_fonts---body, "Albert Sans", sans-serif); letter-spacing: .22em; text-transform: uppercase; }
+.cvx-tag b { font-size: max(26px, 8.2cqw); line-height: 1; color: #24120c; }
+.cvx-open { bottom: 6cqw; color: rgba(246,241,234,.85); }
+.cvx-lines, .cvx-foot, .cvx-price { display: none !important; }

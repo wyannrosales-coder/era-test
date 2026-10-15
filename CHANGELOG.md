@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.12.0
+
+- "Where your story begins" now uses the EPIISOD facade photograph (copper-finned tower with the sign), with the words placed for each screen:
+  - Landscape (desktop, laptops, landscape tablets and phones): the picture fills the screen, framed so the tower sits to the right, and the heading, paragraph and View rooms button sit in a column on the left over the sky and neighbouring building, with a soft shade behind them. Very short screens drop the paragraph so the rest fits.
+  - Portrait (phones, portrait tablets): the tower fills the top of the screen and fades into the chocolate backdrop, with the words and button beneath, so nothing is written over the building.
+  - The picture is no longer parallaxed or over-cropped, and the words stay clear of the footer that rises over the end of the section.
+- Live well: the video's dark overlay now fades slowly through the hand-off onto the ring (and back in on the way up).
+- Phones: the smart room's dark gradient no longer slides up with the words (it covers the foot of the photo); the location aerial gets the drifting clouds in its sky.
+- Rooms magazine cover simplified: masthead, one headline ("Eight ways to live well."), "Studios & shared living", and the price on a sand tag.
+
 ## 3.11.0
 
 - Smart room invitation, rebuilt: while the app is on screen the room darkens softly around it, a large "Try it - Tap a light and watch the room" card sits beside the phone (above the controls sheet on phones) and a ghost finger taps Desk Lights (the light in the photo really goes off and on). It repeats every few seconds until the visitor touches the app, hides when the section scrolls away and returns when you come back, and has an X to dismiss it.

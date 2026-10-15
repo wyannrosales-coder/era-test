@@ -153,3 +153,6 @@ section#nearby { background: #ffffff !important; }
 
 /* a label above its dot, reading to the right (the university label on phones) */
 .ep-loc_pt.is-over .ep-loc_label { left: -12px; right: auto; top: auto; bottom: 16px; transform: none; }
+
+/* portrait phones: a copy of the drifting clouds over the sky of the zoomed-out aerial (epiisod-location.js) */
+.ep-loc_pclouds { top: 0 !important; z-index: 2; height: 30vh; opacity: 0; -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%); mask-image: linear-gradient(180deg, #000 60%, transparent 100%); }

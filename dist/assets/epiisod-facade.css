@@ -1,0 +1,67 @@
+/* "Where your story begins": the EPIISOD facade photograph, with the words placed for the screen.
+   - Landscape screens (desktop, laptops, landscape tablets and phones): the picture fills the screen and the words sit in
+     a column on the left, over the sky and the neighbouring building, so the copper-finned tower and its sign stay clear.
+   - Portrait screens (phones, portrait tablets): the picture takes the top of the screen, cropped to the tower, fading into
+     the chocolate backdrop, and the words sit below it, so nothing is written over the building.
+   The picture is no longer parallaxed: it is sized to the screen so the sign is always in view. */
+.ep-facade { --fc-pearl: #f6f1ea; --fc-sand: #e3cfae; --foot: calc(var(--_special-units---offset-l, 16px) + var(--_special-units---1-cell-v, 60px) * 2 + var(--_special-units---grid-gap, 16px)); background: #24120c; color: var(--fc-pearl); }
+/* the footer is pulled up over the end of this section by --foot (its own margin); the words keep clear of that */
+.ep-facade .cta-w { padding-bottom: var(--foot); }
+.ep-facade .w_bg .img-w { height: 100%; }
+.ep-facade .w_bg .img-w, .ep-facade .w_bg img { transform: none !important; translate: none !important; }
+.ep-facade .w_bg img { width: 100%; height: 100%; object-fit: cover; object-position: 20% 38%; display: block; }   /* landscape: the tower is pushed right, clear of the words */
+.ep-facade .w_bg .img-over-grad { display: none; }
+.ep-facade .cta-s { aspect-ratio: auto; color: var(--fc-pearl); }
+.ep-facade .cta-s_desc .l1, .ep-facade .cta-s_title .h1, .ep-facade .cta-s_title .c1 { color: var(--fc-pearl); }
+.ep-facade .cta-s_title .c1 { color: var(--fc-sand); }
+.ep-facade .cta-s > .u-48, .ep-facade .cta-s > .u-272 { display: none; }
+/* the heading, hashtag, paragraph and button are laid out as one stack, in that order */
+.ep-facade .cta-s > .grid, .ep-facade .cta-s_title, .ep-facade .cta-s_desc { display: contents; }
+.ep-facade .cta-s_title > .h1 { order: 1; }
+.ep-facade .cta-s_title > .u-32 { order: 2; }
+.ep-facade .cta-s_title > .c1 { order: 3; }
+.ep-facade .cta-s_desc > .l1 { order: 5; margin-top: clamp(14px, 2.6vh, 28px); }
+.ep-facade .cta-s_title > .u-160 { order: 6; }
+.ep-facade .cta-s_title_btn { order: 7; display: flex; flex-direction: column; }
+.ep-facade .cta-s_title .u-160 { height: clamp(18px, 3.2vh, 40px); }
+.ep-facade .cta-s_title .u-32 { height: clamp(8px, 1.4vh, 18px); }
+
+/* ---- landscape: the words in a left column ---- */
+@media (min-aspect-ratio: 101/100) {
+  .ep-facade .w_bg { bottom: var(--foot); }   /* the picture covers only what is seen above the footer, so the tower is framed for the screen */
+  .ep-facade .cta-s { height: max(100svh, 360px); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; padding: 0 0 0 clamp(8px, 3vw, 56px); width: 38vw; box-sizing: border-box; gap: 0; }
+  .ep-facade .a-center { text-align: left; }
+  .ep-facade .cta-s_title .h1 { font-size: clamp(28px, min(4.6vw, 9vh), 84px); line-height: .98; }   /* "STORY BEGINS" is about 7em wide: it stays inside the left third */
+  .ep-facade .cta-s_title .c1 { margin-top: .4em; }
+  .ep-facade .cta-s_desc .l1 { max-width: 34ch; line-height: 1.6; font-size: clamp(11px, .8vw + 3px, 15px); }
+  .ep-facade .cta-s_title_btn { align-items: flex-start; }
+  .ep-facade .btn-circle { width: clamp(88px, 15vh, 180px); height: clamp(88px, 15vh, 180px); }
+  /* a soft shade on the left, where the words are */
+  .ep-facade .w_bg .img-w::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgba(18,9,5,.58) 0%, rgba(18,9,5,.42) 24%, rgba(18,9,5,.1) 42%, rgba(18,9,5,0) 54%); }
+}
+/* very short landscape screens (phones on their side): the paragraph steps out so the rest fits */
+@media (min-aspect-ratio: 101/100) and (max-height: 520px) { .ep-facade .cta-s_desc > .l1 { display: none; } }
+
+/* ---- portrait: the picture on top, the words beneath ---- */
+@media (max-aspect-ratio: 100/101) {
+  .ep-facade .cta-w { display: flex; flex-direction: column; }
+  .ep-facade .w_bg { position: relative; inset: auto; order: -1; margin: 0 calc(var(--_special-units---offset-r, 16px) * -1) 0 calc(var(--_special-units---offset-l, 16px) * -1);
+    height: min(60svh, 112vw); -webkit-mask-image: linear-gradient(180deg, #000 74%, transparent 100%); mask-image: linear-gradient(180deg, #000 74%, transparent 100%); }
+  .ep-facade .w_bg img { object-position: 66% 40%; }
+  .ep-facade .cta-s { height: auto; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 22px calc(56px + env(safe-area-inset-bottom)); margin-top: clamp(-56px, -6svh, -20px); }
+  .ep-facade .a-center { text-align: center; }
+  .ep-facade .cta-s_title .h1 { font-size: clamp(34px, 10.5vw, 72px); line-height: .98; }
+  .ep-facade .cta-s_desc .l1 { max-width: 36ch; margin-inline: auto; line-height: 1.6; }
+  .ep-facade .cta-s_title_btn { align-items: center; }
+  .ep-facade .btn-circle { width: clamp(124px, 30vw, 170px); height: clamp(124px, 30vw, 170px); }
+}
+
+/* the button: a visible ring on the dark picture, and its label stays on one line */
+.ep-facade .btn-circle_bg { color: #f6f1ea; }
+.ep-facade .btn-circle_bg circle:last-child { stroke: rgba(246, 241, 234, .35); }
+/* the label box is as wide as the ring needs, so "VIEW ROOMS" sits on its own two lines inside it */
+.ep-facade .btn-circle_label, .ep-facade .nav-item, .ep-facade .nav-item_label, .ep-facade .nav-item_label_text { width: 84px; }
+.ep-facade .nav-item_label_text .l1 { font-size: 12px; letter-spacing: .14em; color: #f6f1ea; text-align: center; line-height: 1.5; }
+.ep-facade .nav-item_label_text .l1 { word-spacing: 100vw; }   /* one word per line: VIEW / ROOMS */
+.ep-facade .cta-s_title .c1 { font-size: clamp(10px, min(1.1vw + 3px, 2.4vh), 15px); letter-spacing: .3em; white-space: nowrap; }

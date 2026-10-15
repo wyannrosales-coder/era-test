@@ -22,7 +22,7 @@
   var chev = function (d) { return '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="' + (d < 0 ? 'M10 3 5 8l5 5' : 'M6 3l5 5-5 5') + '" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; };
   var stage = document.createElement('div');
   stage.className = 'ep-ring';
-  stage.innerHTML = '<div class="ep-ring_bg"></div><canvas class="ep-ring_cv" aria-hidden="true"></canvas>' +
+  stage.innerHTML = '<div class="ep-ring_bg"></div><canvas class="ep-ring_cv" aria-hidden="true"></canvas><div class="ep-ring_scrim" aria-hidden="true"></div>' +
     '<div class="ep-ring_side"><p class="ep-ring_kicker">Wellness amenities</p><div class="ep-ring_copy"></div>' +
     '<div class="ep-ring_nav"><button type="button" class="ep-ring_btn" data-go="-1" aria-label="Previous amenity">' + chev(-1) + '</button>' +
     '<span class="ep-ring_count" aria-live="polite"></span>' +
@@ -36,7 +36,7 @@
     [].forEach.call(words.querySelectorAll('a, button'), function (n) { n.setAttribute('tabindex', '-1'); n.style.pointerEvents = 'none'; });
     stage.insertBefore(words, stage.querySelector('.ep-ring_side'));
   }
-  var cv = stage.querySelector('canvas'), bgEl = stage.querySelector('.ep-ring_bg'), side = stage.querySelector('.ep-ring_side');
+  var cv = stage.querySelector('canvas'), bgEl = stage.querySelector('.ep-ring_bg'), side = stage.querySelector('.ep-ring_side'), scrimEl = stage.querySelector('.ep-ring_scrim');
   var copyEl = stage.querySelector('.ep-ring_copy'), countEl = stage.querySelector('.ep-ring_count');
   copyEl.innerHTML = PANELS.map(function (p, i) {
     return '<div class="ep-ring_t" data-i="' + i + '"><h3 class="ep-ring_h">' + p.h + '</h3><p class="ep-ring_p">' + p.p + '</p></div>';
@@ -255,6 +255,9 @@
     // full-screen video and dissolves into it), and only lets go once that has finished
     stage.style.opacity = (TOUCH ? sm(clamp(tA.v / 0.03)) : sm(clamp(pr / 0.06))).toFixed(3);
     bgEl.style.opacity = sm(clamp((t - 0.1) / 0.5)).toFixed(3);           // the backdrop whitens as the video pulls back
+    // the full-screen video's dark overlay stays on it as it starts to shrink and fades away slowly through the hand-off
+    // (and back in, slowly, on the way up), so the picture never jumps brighter or darker
+    if (scrimEl) scrimEl.style.opacity = (1 - sm(clamp(t / 0.55))).toFixed(3);
     if (words) words.style.opacity = (TOUCH ? 1 - sm(clamp(tA.v / 0.25)) : 1 - sm(clamp(t / 0.3))).toFixed(3);
     side.style.setProperty('--in', sm(clamp((t - 0.72) / 0.28)).toFixed(3));
     var A = camClose(asp), B = camRest(asp);

@@ -511,3 +511,11 @@ html.ep-lite .ep-air i { filter: none; }
   .loc-info-w .loc-info-s_b > .grid { margin-top: 0; }
   .loc-info-w .loc-info-s_c .u-96, .loc-info-w .loc-info-s_c .u-160 { display: none; }
 }
+
+/* phones: the dark gradient behind the smart room words reaches past the bottom of the screen, so it still covers the foot
+   of the photograph while the words slide up as they fade */
+@media (max-width: 991px) {
+  .ep-msm_txt { background: none; }
+  .ep-msm_txt::before { content: ""; position: absolute; left: 0; right: 0; top: 0; bottom: -120px; z-index: -1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(20,10,6,0), rgba(20,10,6,.7) 50%, rgba(20,10,6,.9)); }
+}

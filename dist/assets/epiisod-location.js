@@ -6,6 +6,14 @@
   if (!sec) return;
   var pin = sec.querySelector('[data-loc-pin]');
   var sky = sec.querySelector('[data-loc-sky]');
+  var pinClouds = null;
+  (function () {
+    var src = sec.querySelector('.ep-loc_clouds'), pinEl = sec.querySelector('.ep-loc_pin');
+    if (!src || !pinEl || !(window.innerWidth < 768 && window.innerHeight > window.innerWidth)) return;
+    pinClouds = src.cloneNode(true); pinClouds.className = 'ep-loc_clouds ep-loc_pclouds'; pinClouds.setAttribute('aria-hidden', 'true');
+    var cv = pinEl.querySelector('[data-loc-canvas]');
+    if (cv && cv.nextSibling) pinEl.insertBefore(pinClouds, cv.nextSibling); else pinEl.appendChild(pinClouds);
+  })();
   var canvas = sec.querySelector('[data-loc-canvas]');
   var ctx = canvas.getContext('2d');
   var text = sec.querySelector('[data-loc-text]');
@@ -172,6 +180,13 @@
 
     var tt = Math.min(KT[2], Math.max(KT[0], t));
     var LY = layout(t), dw = LY.dw, dh = LY.dh;
+    // portrait phones: the zoomed-out aerial leaves a tall sky above the picture; the drifting clouds fill it, and leave
+    // as the camera dives in
+    if (pinClouds) {
+      var skyTop = Math.max(0, LY.y + dh * 0.12);
+      pinClouds.style.height = Math.round(skyTop + 40) + 'px';
+      pinClouds.style.opacity = (LY.zo * (skyTop > 60 ? 1 : 0)).toFixed(3);
+    }
     pts.forEach(function (pt) {
       var k = pt.getAttribute('data-loc-pt'), xy = posAt(k, tt);
       var x = LY.x + xy[0] * dw, y = LY.y + xy[1] * dh;

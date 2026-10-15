@@ -64,3 +64,6 @@ html.ep-in-ring .ep-nav_btns { opacity: 0 !important; pointer-events: none !impo
   .ep-ring_h { font-size: clamp(28px, 3.4vw, 46px); }
   .ep-ring_p { font-size: 15px; }
 }
+
+/* the Live well video's dark overlay, carried onto the ring stage and faded through the hand-off (epiisod-ring.js) */
+.ep-ring_scrim { position: absolute; inset: 0; pointer-events: none; opacity: 1; background: linear-gradient(180deg, rgba(36,18,12,.45) 0%, rgba(36,18,12,.32) 45%, rgba(36,18,12,.6) 100%); }
