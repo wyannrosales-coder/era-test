@@ -60,7 +60,7 @@
   // ---- sound: a soft chime and a spoken confirmation ----
   var actx = null, voice = null, vol = 0.8, muted = false;
   function chime(up) {
-    if (muted || vol <= 0) return;
+    if (muted || vol <= 0 || window.__epDemoQuiet) return;           // the self-playing demo stays silent
     try {
       actx = actx || new (window.AudioContext || window.webkitAudioContext)();
       if (actx.state === 'suspended') actx.resume();
@@ -77,7 +77,7 @@
   }
   var speakT = 0;
   function say(txt, delay) {
-    if (!('speechSynthesis' in window) || muted || vol <= 0) return;
+    if (!('speechSynthesis' in window) || muted || vol <= 0 || window.__epDemoQuiet) return;
     clearTimeout(speakT);
     speakT = setTimeout(function () {
       try {
@@ -266,9 +266,12 @@
     var r = box.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = window.innerHeight;
     var p = ease(clamp(-r.top / 640));
     var ar = (img.naturalWidth || 2000) / (img.naturalHeight || 1116);
-    var w0 = Math.max(r.width, r.height * ar);        // at rest: covering the whole block
-    var h0 = w0 / ar, w = lerp(w0, r.width, p), h = w / ar;         // zooms out until it spans the full width
-    var cy = lerp(r.height / 2, vh / 2 - r.top, p);   // and settles in the middle of the screen
+    // sizes come from the block's own (unscaled) layout box: during the intro the block is drawn scaled down, and its
+    // on-screen size would leave the picture short of the bottom of the block
+    var bw = box.offsetWidth || r.width, bh = box.offsetHeight || r.height;
+    var w0 = Math.max(bw, bh * ar);                   // at rest: covering the whole block
+    var h0 = w0 / ar, w = lerp(w0, bw, p), h = w / ar;               // zooms out until it spans the full width
+    var cy = lerp(bh / 2, vh / 2 - r.top, p);         // and settles in the middle of the screen
     on = true;
     box.style.background = ''; fill.style.opacity = Math.min(1, p * 6).toFixed(3);
     // the picture keeps one fixed size and is scaled and moved with transforms (composited on the GPU), instead of being

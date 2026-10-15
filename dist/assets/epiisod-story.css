@@ -487,3 +487,27 @@ html.is-scrolling .ep-msheet, html.is-scrolling .ep-fly_tags span, html.is-scrol
 /* safety mode (epiisod-frame.js): a slow device drops the frosted glass and small blurs */
 html.ep-lite * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
 html.ep-lite .ep-air i { filter: none; }
+
+/* desktop and landscape tablets: the ivy video always fills the screen, with no bands. On screens squarer than the 16:9
+   footage it is fitted to the full height, then drawn up to 15% narrower than its true width and centred, so the steel
+   arch and its posts stay in view while the sides are only lightly cropped; on wider screens it simply covers. The
+   backdrop also reaches the right-hand edge of the screen. */
+@media (min-width: 992px) {
+  .loc-info-w .ep-story_bg { right: calc(var(--_special-units---offset-r, 44px) * -1); background: #ececec; }
+  .loc-info-w .ep-story_bg video { left: 50%; right: auto; width: max(100%, 151vh); height: 100%; transform: translateX(-50%); object-fit: fill; }
+}
+@media (min-width: 992px) and (min-aspect-ratio: 16/9) {
+  .loc-info-w .ep-story_bg video { left: 0; width: 100%; transform: none; object-fit: cover; }
+}
+
+/* desktop: the words sit higher, in the open space under the inner arch, clear of the foot of the posts */
+@media (min-width: 992px) {
+  .loc-info-w .loc-info-s_t, .loc-info-w .loc-info-s_t[class] { flex: 3.4 1 0 !important; }
+  .loc-info-w .loc-info-s_b { flex: 2.4 1 0 !important; }
+}
+@media (min-width: 992px) {
+  /* the paragraph, stats and link follow straight on under the heading as one block */
+  .loc-info-w .loc-info-s_b { display: flex; flex-direction: column; justify-content: flex-start; }
+  .loc-info-w .loc-info-s_b > .grid { margin-top: 0; }
+  .loc-info-w .loc-info-s_c .u-96, .loc-info-w .loc-info-s_c .u-160 { display: none; }
+}

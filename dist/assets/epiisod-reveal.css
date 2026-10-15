@@ -182,3 +182,9 @@
 .ep-rv--touch .ep-rv_copy { height: 100%; }
 .ep-rv--touch.rv-idle .ep-rv_win, .ep-rv--touch.rv-covered .ep-rv_win { visibility: hidden; }
 .ep-rv--touch.rv-ringing .ep-rv_copy { visibility: hidden; }
+
+/* portrait tablets: the flowers stay in the corner, below the words, instead of growing up through them */
+@media (min-width: 600px) and (max-width: 1099px) and (orientation: portrait) {
+  .ep-rooms-pin .flower.apart-info { width: 34vw !important; max-width: 340px; height: auto !important; }
+  .ep-rooms-pin .info-s_lead { position: relative; z-index: 2; }
+}

@@ -108,6 +108,7 @@
     var z = norm([e[0] - c[0], e[1] - c[1], e[2] - c[2]]), x = norm(cross([0, 1, 0], z)), y = cross(z, x);
     return [x[0], y[0], z[0], 0, x[1], y[1], z[1], 0, x[2], y[2], z[2], 0, -dot(x, e), -dot(y, e), -dot(z, e), 1];
   }
+  function shift(p, sx) { if (sx) p[8] -= sx; return p; }            // lens shift: moves the picture sideways by sx (in screen halves)
   function rotY(a) { var c = Math.cos(a), s = Math.sin(a); return [c, 0, -s, 0, 0, 1, 0, 0, s, 0, c, 0, 0, 0, 0, 1]; }
   function rotX(a) { var c = Math.cos(a), s = Math.sin(a); return [1, 0, 0, 0, 0, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1]; }
   function mul(a, b) { var o = new Array(16); for (var i = 0; i < 4; i++) for (var j = 0; j < 4; j++) { var s = 0; for (var k = 0; k < 4; k++) s += a[k * 4 + j] * b[i * 4 + k]; o[i * 4 + j] = s; } return o; }
@@ -129,6 +130,10 @@
   function camRest(asp) {
     // phones: far enough back that the neighbouring panels curve in at both edges, so it reads as a ring
     if (asp < 0.9) return { e: [0, -0.28, 3.25], c: [0, -0.12, 0], fov: 0.9 };
+    // in-between sizes (small laptops, landscape tablets): the text has its own column on the left (about a third of
+    // the screen), so the ring is framed in the space to its right, its centre at three quarters across, the far right
+    // edge running off the screen as on desktop. sx shifts the picture sideways without turning the camera.
+    if (vw < 1400) { var Z = 1.12 / (0.76 * asp * Math.tan(0.25)); return { e: [0, 0.04, Z], c: [0, 0, 0], fov: 0.5, sx: 0.5 }; }
     return { e: [-0.5, 0.04, 3.7], c: [-0.5, 0, 0], fov: 0.5 };
   }
 
@@ -253,7 +258,7 @@
     if (words) words.style.opacity = (TOUCH ? 1 - sm(clamp(tA.v / 0.25)) : 1 - sm(clamp(t / 0.3))).toFixed(3);
     side.style.setProperty('--in', sm(clamp((t - 0.72) / 0.28)).toFixed(3));
     var A = camClose(asp), B = camRest(asp);
-    var cam = { e: lerp3(A.e, B.e, t), c: lerp3(A.c, B.c, t), fov: lerp(A.fov, B.fov, t) };
+    var cam = { e: lerp3(A.e, B.e, t), c: lerp3(A.c, B.c, t), fov: lerp(A.fov, B.fov, t), sx: lerp(A.sx || 0, B.sx || 0, t) };
     if (tw) {
       var u = clamp((now - tw.t0) / tw.dur), e3 = 1 - Math.pow(1 - u, 3);       // eases out, so a flick coasts to rest
       ang = lerp(tw.from, tw.to, e3); if (u >= 1) { ang = tw.to; tw = null; }
@@ -268,7 +273,7 @@
     tilt.p += (pitchT - tilt.p) * kf; tilt.l += (leanT - tilt.l) * kf;
     var t3 = sm(clamp((t - 0.8) / 0.2));                                            // no tilt while the video is still arriving
     var ce = [cam.e[0] + gx * 0.2 * t3, cam.e[1] - gy * 0.12 * t3, cam.e[2]];                  // parallax: the camera drifts with the phone
-    gl.uniformMatrix4fv(U.m, false, new Float32Array(mul(mul(mul(persp(cam.fov, asp, 0.05, 30), look(ce, cam.c)), rotX(tilt.p * t3)), rotY(ang + tilt.l * t3))));
+    gl.uniformMatrix4fv(U.m, false, new Float32Array(mul(mul(mul(shift(persp(cam.fov, asp, 0.05, 30), cam.sx), look(ce, cam.c)), rotX(tilt.p * t3)), rotY(ang + tilt.l * t3))));
     // the reveal's video rides on the front panel while it shrinks, then gives way to that panel's own picture
     var mixFront = TOUCH ? 1 - sm(clamp((tA.v - 0.6) / 0.38)) : 1 - sm(clamp((t - 0.3) / 0.68));                       // a long, slow cross-dissolve between the video and the panel
     if (mixFront > 0 && revealVideo && revealVideo.readyState >= 2) {

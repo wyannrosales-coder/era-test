@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.10.0
+
+- Rooms magazine: new classic-masthead cover (warm desk-nook photograph, large ROOMS masthead, three readable cover lines, price line) on desktop, tablets and phones alike. Desktop: the heading sits just above the closed cover, and the open book grows to about 86% of the screen height. Fixed the phone/tablet magazine not appearing.
+- Smart room: the app demos itself once when it arrives (a notification inside the app, tap ripples on Desk Lights and Main Light dimming the photo, then "Your turn"), silently, stopping as soon as the visitor touches it; after two of their own taps a "Welcome home" note offers Book a tour. Desktop and phones/tablets.
+- Smart room intro (two photo panels): the photo now fills both panels at every desktop size (no grey band at the bottom on small laptops).
+- In-between sizes (about 768-1400px): the wellness ring text has its own column and the ring is framed beside it; "Flexible stays" no longer slides onto its heading and the flowers stay in the corner on portrait tablets.
+- Story (ivy arch): the video always fills the screen with no bands or off-colour gaps, and the words sit higher, together, under the inner arch.
+- Location: the sky band matches the aerial footage's blues with a short feather (no seam, nothing covering the tower); the four location points are already on the map when the aerial lands, alongside the address.
+
 ## 3.9.0
 
 - Live well: the full-screen video now holds for only about a quarter of a screen (long enough to read the words) before the shrink onto the ring starts, in both directions and on all devices; the ring stays pinned a quarter of a screen after it settles. Previously about 0.75 (phones) to 1 (desktop) screen of scrolling did nothing.

@@ -148,16 +148,25 @@
     }
   ];
 
+  // cover lines for the phone and tablet cover (the desktop cover sets its own below)
   var CV_LINES = [['01', 'Quad & Quint', 'Shared apartments with four or five ensuite bedrooms'], ['03', 'Signature Studio', 'The cornerstone of the collection'], ['07', 'Empowered Studio', 'Live independently, without limitation']];
+  // the cover: a classic interiors-magazine front (full-bleed photograph, big serif masthead, a few large cover lines),
+  // every word sized and shaded so it reads over the picture
   function cover() {
-    var lines = CV_LINES.map(function (l, i) { return '<li class="cv-rv" style="--i:' + (i + 4) + '"><span>' + l[0] + '</span><b class="eb">' + l[1] + '</b><em class="hd">' + l[2] + '</em></li>'; }).join('');
-    return ['t-choc', ph(R[5], 1, 'inset:0') + '<div class="cv-grad"></div>' +
-      '<div class="cv-mast"><span class="cv-by eb cv-rv" style="--i:0">EPIISOD · Macquarie Park</span><h2 class="hd cv-title cv-rv" style="--i:1">Rooms</h2></div>' +
-      '<div class="cv-issue cv-rv" style="--i:2"><i></i><span>The Residence Edit · Vol. 01 · AY 2027</span><i></i></div>' +
-      '<div class="cv-badge cv-rv" style="--i:3"><small>From</small><b class="hd">AU$615</b><small>per week</small></div>' +
-      '<ul class="cv-lines">' + lines + '</ul>' +
-      '<div class="cv-feature cv-rv" style="--i:7"><p class="hd">Eight ways to live well.</p><span class="eb">Click to turn the page →</span></div>' +
-      '<div class="cv-bar cv-rv" style="--i:8"></div><div class="cv-code cv-rv" style="--i:8">EPI-MQP-2027</div>'];
+    var line = function (i, eb, txt, big) { return '<li class="cv-rv' + (big ? ' is-lead' : '') + '" style="--i:' + i + '"><b>' + eb + '</b><em class="hd">' + txt + '</em></li>'; };
+    return ['t-choc cvx', '<figure class="mg-ph cvx-ph" style="inset:0"><img src="' + IMG + 'emp-3.webp" alt="A warm oak desk nook with a vase of dried flowers" draggable="false"></figure>' +
+      '<div class="cvx-shade"></div>' +
+      '<div class="cvx-top cv-rv" style="--i:0"><span>EPIISOD · Macquarie Park</span><span>Vol. 01 · 2027</span></div>' +
+      '<h2 class="hd cvx-mast cv-rv" style="--i:1">Rooms</h2>' +
+      '<p class="hd cvx-sub cv-rv" style="--i:2">The Residence Edit</p>' +
+      '<ul class="cvx-lines">' +
+        line(3, 'Signature Studio', 'The cornerstone<br>of the collection', true) +
+        line(4, 'Quad &amp; Quint', 'Shared living, four or<br>five ensuite bedrooms') +
+        line(5, 'Empowered Studio', 'Live independently,<br>without limitation') +
+      '</ul>' +
+      '<div class="cvx-foot cv-rv" style="--i:6"><p class="hd">Eight ways<br><i>to live well.</i></p>' +
+        '<div class="cvx-price"><small>From</small><b class="hd">AU$615</b><small>per week</small></div></div>' +
+      '<div class="cvx-open cv-rv" style="--i:7">Open the magazine <i>→</i></div>'];
   }
 
   // ---- build the book ----
@@ -193,6 +202,25 @@
   head.innerHTML = '<span class="ep-mag_eb">The residence edit</span><h2>Flip through the rooms</h2><p>Eight ways to live well. Click the page to turn it.</p>';
   stage.appendChild(head);
   pin.appendChild(stage);
+  // desktop sizing: closed, the heading sits just above the cover; opened, the book grows to nearly the full height of
+  // the screen (as wide as fits) and centres itself, then shrinks back as it closes (book CSS reads --S and --dy, eased
+  // by --c, which render() sets from the page turn)
+  function sizeBook() {
+    if (!window.matchMedia('(min-width: 992px)').matches) return;
+    var top = 0, el = book;
+    while (el && el !== stage) { top += el.offsetTop; el = el.offsetParent; }
+    if (el !== stage) return;
+    var vh = stage.clientHeight, vw = stage.clientWidth, ph = book.offsetHeight, w2 = book.offsetWidth;
+    var S = Math.max(1, Math.min(0.86 * vh / ph, 0.94 * vw / w2));
+    var dy = 0.47 * vh - (top + ph / 2);
+    book.style.setProperty('--S', S.toFixed(4));
+    book.style.setProperty('--dy', dy.toFixed(1) + 'px');
+    head.style.top = Math.max(12, top - head.offsetHeight - 22) + 'px';
+  }
+  sizeBook();
+  window.addEventListener('resize', sizeBook);
+  window.addEventListener('load', sizeBook);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeBook);
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { stage.classList.toggle('is-in', e.intersectionRatio > 0.35); }); }, { threshold: [0, 0.2, 0.35, 0.5] }).observe(sec);
 
   var ticks = R.map(function (r, i) {
@@ -343,16 +371,12 @@
       default: return msp('1–9', 'levels');
     }
   }
+  // phones and tablets use the same cover as desktop; only the prompt at the foot changes
   function mCover(withBtn) {
-    var lines = CV_LINES.map(function (l, i) { return '<li class="cv-rv" style="--i:' + (i + 4) + '"><span>' + l[0] + '</span><b class="mp-eb">' + l[1] + '</b><em class="hd">' + l[2] + '</em></li>'; }).join('');
-    return ['t-choc', mph(R[5], 1, 'mp-bleed') + '<div class="mc-grad"></div><div class="mp-pad mc-pad">' +
-      '<span class="mp-eb cv-rv" style="--i:0">EPIISOD · Macquarie Park</span><h2 class="hd mc-title cv-rv" style="--i:1">Rooms</h2>' +
-      '<div class="mc-issue cv-rv" style="--i:2"><i></i><span>The Residence Edit · Vol. 01 · AY 2027</span><i></i></div>' +
-      '<div class="mc-badge cv-rv" style="--i:3"><small>From</small><b class="hd">AU$615</b><small>per week</small></div>' +
-      '<ul class="mc-lines">' + lines + '</ul>' +
-      '<div class="mc-foot cv-rv" style="--i:7"><p class="hd">Eight ways to live well.</p>' +
-      (withBtn ? '<button type="button" class="mp-btn" data-fb-open>View rooms <i>→</i></button>' : '<span class="mp-eb mp-hint">Swipe up to turn the page ↑</span>') + '</div></div>'];
+    var c = cover()[1].replace('Open the magazine <i>→</i>', withBtn ? 'Tap to open the magazine <i>→</i>' : 'Swipe up to turn the page <i>↑</i>');
+    return ['t-choc cvx', c];
   }
+
   // one page per room: a photo carousel in the top half, the room's details in the bottom half (the fold runs between them)
   function mRoom(r) {
     var tone = ['t-pearl', 't-sand', 't-choc'][r.i % 3];

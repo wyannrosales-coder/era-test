@@ -56,3 +56,11 @@ html.ep-in-ring .ep-nav_btns { opacity: 0 !important; pointer-events: none !impo
 
 /* phones: while the section is still rising into place, the ring stage is fixed to the screen (see epiisod-ring.js) */
 .ep-ring.is-held { position: fixed; }
+
+/* in-between sizes (768-1399px wide, landscape): the text keeps its own column, about a third of the screen; the ring is
+   framed to its right (epiisod-ring.js) */
+@media (min-width: 768px) and (max-width: 1399px) and (min-aspect-ratio: 9/10) {
+  .ep-ring_side { left: clamp(24px, 4.5vw, 64px); width: calc(33vw - clamp(24px, 4.5vw, 64px)); }
+  .ep-ring_h { font-size: clamp(28px, 3.4vw, 46px); }
+  .ep-ring_p { font-size: 15px; }
+}

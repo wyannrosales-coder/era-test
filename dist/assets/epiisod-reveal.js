@@ -59,6 +59,9 @@
       lead.style.transform = '';
       var r = lead.getBoundingClientRect(), sr = s.getBoundingClientRect();
       var d = (sr.top + Math.min(s.offsetHeight, window.innerHeight) / 2) - (r.top + r.height / 2);
+      // never slide up onto the heading above it (squarer screens such as portrait tablets)
+      var ttl = s.querySelector('.s_title, .l1');
+      if (ttl && d < 0) { var tb = ttl.getBoundingClientRect().bottom; if (tb < r.top) d = Math.max(d, tb + 28 - r.top); }
       lead.style.transform = 'translateY(' + Math.round(d) + 'px)';
     }
     var HOLD = reduce ? 0 : 0.45;

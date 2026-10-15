@@ -139,3 +139,14 @@ section#nearby { background: #ffffff !important; }
 /* a label that fits neither side of its dot sits centred underneath it */
 .ep-loc_pt.is-under .ep-loc_label { left: 0; right: auto; top: 20px; transform: translateX(-50%); }
 .ep-loc_pt[data-loc-pt="home"].is-under .ep-loc_label { top: 30px; }
+
+/* the sky band takes the aerial footage's own sky blues (paler at the top of the frame) and feathers down over the top of
+   the video, so the two meet with no line */
+.ep-loc_sky { z-index: 2; overflow: visible;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #ffffff 6%, rgba(255,255,255,.92) 20%, rgba(255,255,255,.6) 44%, rgba(255,255,255,.2) 74%, rgba(255,255,255,0) 100%),
+    linear-gradient(90deg, #7bb0e1 0%, #82b6e6 25%, #8cbeed 50%, #8ebfee 70%, #9ac9f4 100%); }
+.ep-loc_sky::after { content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 1px); height: 5vh; pointer-events: none;
+  background: linear-gradient(90deg, #7bb0e1 0%, #82b6e6 25%, #8cbeed 50%, #8ebfee 70%, #9ac9f4 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.75) 30%, rgba(0,0,0,.3) 65%, transparent 100%);
+  mask-image: linear-gradient(180deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.35) 45%, transparent 100%); }

@@ -161,8 +161,10 @@
     // the closing words arrive as the building fills the frame
     if (endBox && !reduce) { if (sp > 0.9) endBox.classList.add('is-in'); else if (sp < 0.84) endBox.classList.remove('is-in'); }
 
-    // hotspots: only through the middle ~40% of the section
-    var o = reduce ? 1 : smooth((sp - 0.26) / 0.06) * (1 - smooth((sp - 0.66) / 0.06));
+    // hotspots: already there as the aerial settles at the top of the screen (they fade in over the last quarter screen
+    // of its arrival), alongside the address, and leave with it before the dive
+    var arrive = clamp(1 - (rect.top + skyH) / (vh * 0.25));
+    var o = reduce ? 1 : smooth(arrive) * (1 - smooth((sp - 0.66) / 0.06));
     layer.style.opacity = o.toFixed(3);
     var on = o > 0.5;
     layer.classList.toggle('is-on', on);
