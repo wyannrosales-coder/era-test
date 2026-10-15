@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.6.0
+
+- Wellness ring: after "Live well, study better" fills the screen, scrolling on shrinks that video onto the front panel of a 3D ring of the wellness amenities (Fitness Gym, Sauna, Ice Bath, Yoga Studio, Rooftop Pool & Terrace) on a white background. It replaces the old amenities slider.
+  - Drag the ring with a mouse or finger; it follows the pointer, coasts and settles on the nearest panel. Dragging also tilts it in 3D (pitch and lean), and it leans towards the pointer on hover. A ring-shaped "Drag" cursor on desktop.
+  - Back / next chevrons (and arrow keys); page scrolling carries on past the section. Amenity text on the left; the lower-right page chevrons stay hidden here.
+  - Inactive panels fall into shadow so the active one stands out. Photos use a slow Ken Burns drift until videos are supplied (set `video` on a panel).
+  - Scrolling back up dissolves the front panel slowly back into the original video, with the "Live well, study better" words returning.
+- Cursor over the first magazine page already reads "View rooms" (3.5.0); this release also adds the ring entry in the section nav ("Wellness amenities").
+
 ## 3.5.0
 
 - Hero redesign: one pinned screen; the flythrough plays between spaces (forward or in reverse) instead of scroll-scrubbing.

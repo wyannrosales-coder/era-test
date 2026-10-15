@@ -6,7 +6,12 @@
   var headerEls = document.querySelectorAll('.header-logo[data-theme], .header-nav[data-theme], .s-bar-w[data-theme]');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var HOLD = 0.33, EXIT = 0.8;               // stuck phase, in viewport heights: hold, then the exit
-  var LEN_VH = HOLD + EXIT;
+  // with the video ring (epiisod-ring.js) the full-screen video does not shrink away: it becomes one panel of the ring,
+  // which turns through the other moments while the section stays pinned for RING more screens
+  var RING = sec.hasAttribute('data-ep-ring') && !reduce ? 1.15 : 0;
+  if (RING) EXIT = 0.0001;
+  var LEN_VH = HOLD + (RING || EXIT);
+  window.__epRv = { sec: sec, hold: HOLD, ring: RING };
   var vw = 0, vh = 0, len = 0, raf = 0, playing = false, theme = '';
 
   function clamp(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
@@ -55,7 +60,7 @@
     // arrives until it covers the corners, holds full screen, then shrinks back into a circle as it is pushed up and out
     var p1 = clamp((1 - rect.top / vh) * 2.4);                 // fully open once ~60% of a screen has been scrolled
     var y = -rect.top;
-    var q = clamp((y - (len - EXIT * vh)) / (EXIT * vh));      // the exit
+    var q = RING ? 0 : clamp((y - (len - EXIT * vh)) / (EXIT * vh));      // the exit
     var e = ease(q);
     var full = Math.sqrt(vw * vw + vh * vh) / 2 + 2;           // radius that covers every corner
     var r0 = Math.min(vw / 6, vh * 0.22);                     // the starting circle: about a third of the width across

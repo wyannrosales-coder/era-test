@@ -17,7 +17,7 @@
     // the six places on the desktop line nav, then the same plus the app and the footer on phones
     var S = {
       hero:   { label: 'Hero',                 find: function () { return fly; }, at: function () { return 0; } },
-      well:   { label: 'Wellness amenities',   find: amen, at: revealEnd },
+      well:   { label: 'Wellness amenities',   find: function () { return document.querySelector('#reveal[data-ep-ring]') || amen(); }, at: revealEnd },
       nearby: { label: 'Nearby locations',     find: function () { return q('#location'); } },
       rooms:  { label: 'The rooms',            find: function () { return q('#rooms'); } },
       life:   { label: 'Life beyond',          find: function () { return q('section.section.arch'); } },
