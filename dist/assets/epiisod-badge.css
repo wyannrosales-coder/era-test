@@ -1,0 +1,69 @@
+/* Footer with the resident pass (epiisod-badge.js). Desktop and landscape: details on the left, the pass hanging on the right.
+   Portrait (phones, portrait tablets): the pass first, the details beneath. Only applies once the script has built the stage
+   (it adds .ep-footer), so the footer is unchanged if the script can't run. */
+.ep-footer { --bd-pearl: #f6f1ea; --bd-sand: #d0a77f; --bd-sand-2: #e3cfae; }
+.ep-badge { position: relative; min-height: 0; z-index: 2; }
+.ep-badge_cv { position: absolute; left: 0; top: 0; z-index: 3; display: block; pointer-events: none; -webkit-tap-highlight-color: transparent; }
+.ep-footer .footer-s { position: relative; }
+.ep-badge_still { position: absolute; left: 50%; top: 50%; width: min(300px, 64%); transform: translate(-50%, -50%); border-radius: 22px; box-shadow: 0 30px 60px rgba(8, 4, 2, .5); }
+.ep-badge_hint { position: absolute; left: 0; right: 0; bottom: clamp(18px, 4vh, 40px); margin: 0; text-align: center; pointer-events: none; color: rgba(246, 241, 234, .6);
+  font: 600 10.5px/1 "Albert Sans", sans-serif; letter-spacing: .22em; text-transform: uppercase; }
+.ep-badge_hint i { display: inline-block; width: 18px; height: 1px; margin: 0 12px 3px 0; background: var(--bd-sand); vertical-align: middle; }
+
+.ep-badge_form { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; max-width: 420px; margin: 0 0 clamp(22px, 4vh, 40px); }
+.ep-badge_eb { font: 700 10.5px/1 "Albert Sans", sans-serif; letter-spacing: .24em; text-transform: uppercase; color: var(--bd-sand); }
+.ep-badge_h { font: 400 clamp(26px, 2.6vw, 38px)/1.08 "Playfair Display", serif; color: var(--bd-pearl); }
+.ep-badge_in { width: 100%; box-sizing: border-box; padding: 12px 2px 12px; border: 0; border-bottom: 1px solid rgba(208, 167, 127, .6); background: transparent; color: var(--bd-pearl);
+  font: 400 22px/1.2 "Playfair Display", serif; outline: none; border-radius: 0; transition: border-color .2s; }
+.ep-badge_in::placeholder { color: rgba(246, 241, 234, .38); font-style: italic; }
+.ep-badge_in:focus { border-bottom-color: var(--bd-sand-2); }
+.ep-badge_note { font: 400 13px/1.5 "Albert Sans", sans-serif; color: rgba(246, 241, 234, .65); }
+.ep-badge_book { display: inline-flex; align-items: center; gap: 10px; margin-top: 4px; padding: 13px 22px; border-radius: 99px; background: var(--bd-sand); color: #24120c; text-decoration: none;
+  font: 700 11px/1 "Albert Sans", sans-serif; letter-spacing: .16em; text-transform: uppercase; transition: background .2s, transform .2s; }
+.ep-badge_book i { font-style: normal; }
+.ep-badge_book:hover, .ep-badge_book:focus-visible { background: var(--bd-sand-2); outline: none; transform: translateY(-1px); }
+
+/* ---- landscape: two columns ---- */
+@media (min-aspect-ratio: 101/100) {
+  .ep-footer .footer-s { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); grid-template-rows: 1fr auto 1fr; min-height: 600px; }
+  .ep-footer .footer-s_t { display: none; }
+  .ep-footer .footer-s_c { grid-column: 1; grid-row: 2; align-self: center; padding-left: clamp(8px, 3vw, 56px); }
+  .ep-footer .footer-s_b { grid-column: 1; grid-row: 3; padding-left: clamp(8px, 3vw, 56px); justify-content: flex-end; }
+  .ep-footer .ep-badge { grid-column: 2; grid-row: 1 / span 3; }
+  .ep-footer .footer-s_c .grid, .ep-footer .footer-s_b .grid { display: block; }
+  .ep-footer .footer-s_contact, .ep-footer .footer-s_address, .ep-footer .footer-s_info { grid-area: auto; margin: 0; padding: 0; align-items: flex-start; }
+  .ep-footer .footer-s .a-center { text-align: left; }
+  .ep-footer .footer-s_contact .h2 { font-size: clamp(24px, 2.6vw, 40px); }
+  .ep-footer .footer-s_contact .u-48 { height: 22px; }
+  .ep-footer .footer-s_address { margin-top: 6px; }
+}
+
+/* ---- portrait: the pass on top ---- */
+@media (max-aspect-ratio: 100/101) {
+  .ep-footer .footer-s { display: flex; flex-direction: column; height: auto; }
+  .ep-footer .footer-s_t { display: none; }
+  .ep-footer .ep-badge { order: -1; height: min(80svh, 640px); margin: 0 calc(var(--_special-units---offset-r, 16px) * -1) 0 calc(var(--_special-units---offset-l, 16px) * -1); }
+  .ep-footer .footer-s_c { padding: 8px 22px 0; }
+  .ep-footer .footer-s_b { padding: 28px 22px calc(36px + env(safe-area-inset-bottom)); }
+  .ep-footer .footer-s_c .grid, .ep-footer .footer-s_b .grid { display: block; }
+  .ep-footer .footer-s_contact, .ep-footer .footer-s_address, .ep-footer .footer-s_info { grid-area: auto; margin: 0; padding: 0; }
+  .ep-footer .ep-badge_form { max-width: none; }
+  .ep-footer .footer-s .a-center { text-align: left; }
+  .ep-footer .footer-s_contact .h2 { font-size: clamp(24px, 7vw, 34px); }
+  .ep-footer .footer-s_address { margin-top: 8px; }
+  .ep-footer .footer-s_b .footer-s_info { align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { .ep-badge_book { transition: none; } }
+
+/* left-aligned details, no rotated "To top" link (the page's own chevrons do that job) */
+.ep-footer .footer-s_s-top { display: none; }
+.ep-footer .footer-s_contact { display: flex; flex-direction: column; align-items: flex-start; }
+.ep-footer .footer-s_contact .s_logo, .ep-footer .footer-s_contact .contact-cms, .ep-footer .footer-s_address .loc-cms, .ep-footer .footer-s_address .loc-cms_list_item { margin-left: 0; margin-right: 0; text-align: left; align-items: flex-start; }
+.ep-footer .footer-s_contact .contact-cms_list, .ep-footer .footer-s_contact .contact-cms_list_item { justify-content: flex-start; text-align: left; }
+.ep-footer .footer-s_contact .h2, .ep-footer .footer-s_address .l1 { text-align: left; }
+.ep-footer .logo_symbol { margin: 0; }
+.ep-footer .footer-s_contact .s_logo { margin-bottom: 18px; }
+.ep-footer .footer-s_contact .s_logo + .u-32 { display: none; }
+/* the footer's own fade-in (a scroll-linked opacity on the whole column) would dim the pass: the footer is simply there */
+.ep-footer .footer-s { opacity: 1 !important; transform: none !important; scale: none !important; }   /* the page's scroll-linked zoom of this column (from 75%) would resize and shift the pass */
+.ep-badge_still ~ .ep-badge_hint { display: none; }

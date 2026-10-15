@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.13.0
+
+- Footer: the resident pass. An EPIISOD access card hangs from a sand lanyard at the top of the footer; drag it and it swings, tilts and can be flicked into a spin; tap or click it to flip it. The front is a chocolate pass with the emblem and "Welcome home, <your name>" (type a name in the form beside it and it prints on the pass; remembered on that device only); the back is pearl with "Your room is waiting", Book a tour and View rooms buttons on the card itself.
+- Built without libraries: a small verlet physics world (rope plus a rigid card that can swing, pitch and spin) drawn with raw WebGL (lanyard ribbon, card edge, card with a soft sheen); phones use the same renderer (capped pixel density, runs only while the footer is on screen) and the lanyard also sways with the phone's tilt where allowed. Reduced motion or no WebGL: a still pass.
+- The pass is never cut off: its canvas spans the full screen width (and the whole footer on landscape screens) rather than its column, it is kept inside that area however hard it is dragged or flicked, and the footer's scroll-linked zoom that resized the column is switched off.
+- Footer layout: details (emblem, name form, phone, address, legal) left-aligned beside the pass on desktop and landscape; on phones and portrait tablets the pass comes first with the details beneath. The footer's scroll-linked fade no longer dims the pass.
+
 ## 3.12.0
 
 - "Where your story begins" now uses the EPIISOD facade photograph (copper-finned tower with the sign), with the words placed for each screen:
