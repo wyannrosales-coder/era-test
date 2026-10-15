@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.8.0
+
+Phones and tablets (desktop unchanged):
+
+- "Live well" circle plays as a smooth 1.3 s animation once you scroll into it (rising from the bottom and growing to full screen), and in reverse when you scroll back up, so a fast flick can no longer make it pop open or shut.
+- The video window is pinned by the browser itself instead of by script: no dark band or lag behind the finger, including when the address bar shows or hides.
+- The shrink onto the wellness ring plays as a 1.3 s animation too (reversing on the way back); the full-screen video stops drawing once the ring covers it.
+- Ring framing on phones: camera pulled back so the side panels curve in at both edges and it reads as a ring.
+- Gyro only runs while the circle or ring is near the screen, and only restyles that section (it used to restyle the whole page every frame).
+- The address bar showing or hiding no longer re-measures sections, so the page below doesn't jump.
+
 ## 3.7.0
 
 - Gyro 3D on phones: tilting the phone tips and shifts the wellness ring (pitch, lean and camera parallax), and the "Live well" circle drifts with it while small. Android works with no prompt; iPhone shows a small "Tilt your phone in 3D · Enable" pill (Apple's permission prompt) near the circle.

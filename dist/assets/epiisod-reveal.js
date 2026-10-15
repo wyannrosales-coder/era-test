@@ -13,10 +13,30 @@
   var LEN_VH = HOLD + (RING || EXIT);
   window.__epRv = { sec: sec, hold: HOLD, ring: RING };
   var vw = 0, vh = 0, len = 0, raf = 0, playing = false, theme = '';
+  // Phones and tablets: a flick can travel a whole screen in a fraction of a second, so tying the circle to the scroll
+  // made it pop open in a frame. There, crossing a point plays the circle as a timed animation (and scrolling back up
+  // plays it in reverse), and the video window is fixed to the screen by the browser instead of being held by script.
+  var TOUCH = matchMedia('(hover: none) and (pointer: coarse)').matches && !reduce;
+  var OPEN_MS = 1300, CLOSE_MS = 950;
+  var anim = { v: 0, from: 0, to: 0, t0: 0, ms: 1, on: false }, tgt = 0, animRaf = 0, lastW = 0;
+  if (TOUCH) sec.classList.add('ep-rv--touch');
+  function animStep() {
+    animRaf = 0;
+    update();
+    if (anim.on) animRaf = requestAnimationFrame(animStep);
+  }
+  function animTo(to) {
+    if (to === anim.to && (anim.on || anim.v === to)) return;
+    anim.from = anim.v; anim.to = to; anim.t0 = performance.now();
+    anim.ms = (to ? OPEN_MS : CLOSE_MS) * Math.max(0.35, Math.abs(to - anim.v));
+    anim.on = true;
+    if (!animRaf) animRaf = requestAnimationFrame(animStep);
+  }
 
   function clamp(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
   function lerp(a, b, t) { return a + (b - a) * t; }
+  function soft(t) { return t * t * (3 - 2 * t); }
 
   var roomsPin = document.querySelector('[data-ep-rooms-pin]');
   function measureRooms() {
@@ -36,6 +56,10 @@
   }
 
   function measure() {
+    // on phones the address bar showing / hiding resizes the window: only a real change of width re-measures, so the
+    // page below doesn't jump mid-scroll
+    if (TOUCH && lastW && document.documentElement.clientWidth === lastW) { update(); return; }
+    lastW = document.documentElement.clientWidth;
     measureRooms();
     vw = document.documentElement.clientWidth;
     vh = window.innerHeight;
@@ -56,9 +80,23 @@
   function update() {
     raf = 0;
     var rect = sec.getBoundingClientRect();
+    if (TOUCH) vh = window.innerHeight;
     // the video is seen through a perfect circle that sits in the middle of the screen: it grows evenly as the section
     // arrives until it covers the corners, holds full screen, then shrinks back into a circle as it is pushed up and out
-    var p1 = clamp((1 - rect.top / vh) * 3.4);   // fully open after ~30% of a screen of scrolling                 // fully open once ~60% of a screen has been scrolled
+    var p1 = clamp((1 - rect.top / vh) * 3.4);   // fully open after ~30% of a screen of scrolling
+    if (TOUCH) {
+      // open once the section has risen a fifth of the way; close again only when it is back below a tenth (no flicker)
+      if (rect.top < vh * 0.8) tgt = 1; else if (rect.top > vh * 0.9) tgt = 0;
+      animTo(tgt);
+      if (anim.on) {
+        var u = clamp((performance.now() - anim.t0) / anim.ms);
+        anim.v = lerp(anim.from, anim.to, u);                   // linear here: the shaping below eases it once, not twice
+        if (u >= 1) anim.on = false;
+      }
+      p1 = anim.v;
+      // nothing to draw (closed, or the ring has covered it, or the section has gone): let the browser skip it entirely
+      sec.classList.toggle('rv-idle', p1 <= 0.001 || rect.bottom < vh * 0.25);
+    }
     var y = -rect.top;
     var q = RING ? 0 : clamp((y - (len - EXIT * vh)) / (EXIT * vh));      // the exit
     var e = ease(q);
@@ -66,8 +104,9 @@
     var r0 = Math.min(vw / 6, vh * 0.22);                     // the starting circle: about a third of the width across
     // the circle is born just below the bottom edge of the screen and climbs with the scroll as it grows, reaching the middle
     // (already most of the way to full size) at about 60% of the way in, and filling the screen by the end
-    var rise = ease(clamp(p1 / 0.6));
-    var rIn = lerp(r0 * 0.55, full, ease(p1));
+    var EZ = TOUCH ? soft : ease;                             // timed on phones: a gentler curve with no sudden middle
+    var rise = EZ(clamp(p1 / 0.6));
+    var rIn = lerp(r0 * 0.55, full, EZ(p1));
     var cyIn = lerp(vh + r0 * 0.95, vh / 2, rise);
     var r = lerp(rIn, r0, e);
     var o = clamp((r - r0) / (full - r0));                     // 0 small circle .. 1 full screen
@@ -81,7 +120,7 @@
     s.setProperty('--rv-gk', (1 - o).toFixed(3));                 // the gyro drift fades out as the circle fills the screen
     s.setProperty('--rv-cy', cy.toFixed(1) + 'px');
     s.setProperty('--rv-h', vh + 'px');
-    s.setProperty('--rv-ty', (-off).toFixed(1) + 'px');
+    if (!TOUCH) s.setProperty('--rv-ty', (-off).toFixed(1) + 'px');
     s.setProperty('--rv-dim', (clamp(p1 * 1.6) * 0.85 * (1 - clamp(q * 8))).toFixed(3));
     s.setProperty('--rv-scale', lerp(1.18, 1, o).toFixed(4));
     s.setProperty('--rv-fs', fs1.toFixed(2) + 'px');

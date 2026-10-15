@@ -174,3 +174,10 @@
 .ep-still { transform-origin: 50% 0; animation: ep-sway 9s ease-in-out infinite alternate; will-change: transform; }
 @keyframes ep-sway { from { transform: rotate(-1.4deg) translateY(0); } to { transform: rotate(1.4deg) translateY(1.2%); } }
 @media (prefers-reduced-motion: reduce) { .ep-still { animation: none; } }
+
+/* phones and tablets (epiisod-reveal.js, TOUCH): the video window is fixed to the screen, so it can never trail the finger
+   or show a gap when the address bar moves; the script only plays the circle open and closed */
+.ep-rv--touch .ep-rv_win { position: fixed; inset: 0; transform: none; will-change: clip-path; }
+.ep-rv--touch .ep-rv_video, .ep-rv--touch .ep-rv_scrim { height: 100%; }
+.ep-rv--touch .ep-rv_copy { height: 100%; }
+.ep-rv--touch.rv-idle .ep-rv_win, .ep-rv--touch.rv-covered .ep-rv_win { visibility: hidden; }

@@ -123,7 +123,8 @@
     return { e: [0, 0, R + need * 0.9], c: [0, 0, 0], fov: fov };
   }
   function camRest(asp) {
-    if (asp < 0.9) return { e: [0, -0.3, 3.0], c: [0, -0.3, 0], fov: 0.95 };
+    // phones: far enough back that the neighbouring panels curve in at both edges, so it reads as a ring
+    if (asp < 0.9) return { e: [0, -0.56, 4.8], c: [0, -0.32, 0], fov: 0.9 };
     return { e: [-0.5, 0.04, 3.7], c: [-0.5, 0, 0], fov: 0.5 };
   }
 
@@ -202,7 +203,13 @@
 
   // ---- render -----------------------------------------------------------------------------------------------------------
   var vw = 0, vh = 0;
+  // phones and tablets: the shrink onto the ring plays as a timed animation once the section is reached (scrolling
+  // back up plays it in reverse), so a flick can't skip it; desktop keeps it tied to the scroll
+  var TOUCH = sec.classList.contains('ep-rv--touch'), tA = { v: 0, from: 0, to: 0, t0: 0, ms: 1 };
+  var lastSW = 0;
   function size() {
+    if (TOUCH && lastSW && pin.clientWidth === lastSW) return;    // the address bar moving is not a resize worth a redraw
+    lastSW = pin.clientWidth;
     vw = pin.clientWidth; vh = pin.clientHeight;
     var dpr = Math.min(window.devicePixelRatio || 1, vw / vh < 0.9 ? 1.5 : 1.75);
     cv.width = Math.round(vw * dpr); cv.height = Math.round(vh * dpr);
@@ -213,10 +220,19 @@
     var rect = sec.getBoundingClientRect();
     var pr = (-rect.top) / vh - RV.hold;
     var on = pr > -0.02 && rect.bottom > 0;
+    var t;
+    if (TOUCH) {
+      var to = pr > 0.06 ? 1 : pr < 0.0 ? 0 : tA.to;
+      if (to !== tA.to) { tA.from = tA.v; tA.to = to; tA.t0 = now; tA.ms = (to ? 1300 : 950) * Math.max(0.35, Math.abs(to - tA.v)); }
+      var tu = clamp((now - tA.t0) / tA.ms);
+      tA.v = lerp(tA.from, tA.to, 0.5 - 0.5 * Math.cos(Math.PI * tu));
+      on = (pr > -0.02 || tA.v > 0.001) && rect.bottom > 0;
+      sec.classList.toggle('rv-covered', tA.v > 0.985);           // the white ring stage hides the full-screen video completely
+    }
     stage.classList.toggle('is-on', on);
     html.classList.toggle('ep-in-ring', on && rect.bottom > vh * 0.4);
     if (!on) return;
-    var t = sm(clamp(pr / TRANS)), asp = vw / vh;
+    t = TOUCH ? sm(tA.v) : sm(clamp(pr / TRANS)); var asp = vw / vh;
     stage.classList.toggle('is-rest', t > 0.97);
     stage.style.opacity = sm(clamp(pr / 0.06)).toFixed(3);
     bgEl.style.opacity = sm(clamp((t - 0.1) / 0.5)).toFixed(3);           // the backdrop whitens as the video pulls back

@@ -6,7 +6,11 @@
 (function () {
   if (!matchMedia('(pointer: coarse)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (!('DeviceOrientationEvent' in window)) return;
-  var html = document.documentElement;
+  // the tilt values go on the reveal section only (never on <html>, which would restyle the whole page every frame), and
+  // only while that section is near the screen
+  var html = document.getElementById('reveal') || document.documentElement, near = false;
+  if ('IntersectionObserver' in window && html.id === 'reveal') new IntersectionObserver(function (es) { near = es[0].isIntersecting; if (near && raw.b != null && !running) { running = true; last = 0; requestAnimationFrame(loop); } }, { rootMargin: '50% 0px' }).observe(html);
+  else near = true;
   var G = window.__epGyro = { gx: 0, gy: 0, on: false };
   var raw = { b: null, g: null }, base = { b: null, g: null }, sm = { x: 0, y: 0 }, last = 0, running = false;
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
@@ -18,10 +22,10 @@
     if (raw.b == null) { try { sessionStorage.setItem('epGyro', '1'); } catch (x) {} }            // events really flow: remember it for the visit
     raw.b = b; raw.g = g;
     if (base.b == null) { base.b = b; base.g = g; }
-    if (!running) { running = true; requestAnimationFrame(loop); }
+    if (!running && near) { running = true; requestAnimationFrame(loop); }
   }
   function loop(now) {
-    if (document.hidden) { running = false; return; }
+    if (document.hidden || !near) { running = false; last = 0; return; }
     var dt = Math.min(0.1, Math.max(0.001, (now - (last || now)) / 1000)); last = now;
     // the neutral pose follows the phone slowly, so how it is held doesn't matter, only movement does
     var k0 = 1 - Math.exp(-dt / 6);
