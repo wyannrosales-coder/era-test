@@ -150,3 +150,6 @@ section#nearby { background: #ffffff !important; }
   background: linear-gradient(90deg, #7bb0e1 0%, #82b6e6 25%, #8cbeed 50%, #8ebfee 70%, #9ac9f4 100%);
   -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.75) 30%, rgba(0,0,0,.3) 65%, transparent 100%);
   mask-image: linear-gradient(180deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.35) 45%, transparent 100%); }
+
+/* a label above its dot, reading to the right (the university label on phones) */
+.ep-loc_pt.is-over .ep-loc_label { left: -12px; right: auto; top: auto; bottom: 16px; transform: none; }

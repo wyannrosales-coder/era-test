@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.11.0
+
+- Smart room invitation, rebuilt: while the app is on screen the room darkens softly around it, a large "Try it - Tap a light and watch the room" card sits beside the phone (above the controls sheet on phones) and a ghost finger taps Desk Lights (the light in the photo really goes off and on). It repeats every few seconds until the visitor touches the app, hides when the section scrolls away and returns when you come back, and has an X to dismiss it.
+- After the first touch it becomes a mood challenge: "Set the mood - Turn the lights down for the night" with four dots; with all lights off, "Lights out - Welcome home" and Book a tour.
+- Smart room photo: no blurred band around it; as the section scrolls away (either direction) the photo leaves with it instead of being cut by the section's edge.
+- Phones: the section line on the right steps aside while the app's controls are up, so the right-hand switches can be tapped.
+- Location: the Macquarie University pin sits lower on the tower with its label on the left (above the dot on phones); Macquarie Station and Macquarie Centre swapped.
+
 ## 3.10.0
 
 - Rooms magazine: new classic-masthead cover (warm desk-nook photograph, large ROOMS masthead, three readable cover lines, price line) on desktop, tablets and phones alike. Desktop: the heading sits just above the closed cover, and the open book grows to about 86% of the screen height. Fixed the phone/tablet magazine not appearing.

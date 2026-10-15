@@ -22,9 +22,9 @@
   var DIR = (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches) ? '/assets/location/frames-m/' : '/assets/location/frames/';
   var KT = [0.3, 1.3, 2.3];
   var KP = {
-    uni:     [[0.432, 0.090], [0.427, 0.078], [0.424, 0.060]],   // the dark university tower
-    station: [[0.611, 0.159], [0.615, 0.143], [0.615, 0.125]],   // by the cranes, at the top-left of the centre
-    centre:  [[0.711, 0.238], [0.722, 0.224], [0.732, 0.200]],   // Macquarie Centre's roofs
+    uni:     [[0.432, 0.135], [0.427, 0.123], [0.424, 0.105]],   // the dark university tower, partway down it
+    station: [[0.711, 0.238], [0.722, 0.224], [0.732, 0.200]],   // on the roofs to the right
+    centre:  [[0.611, 0.159], [0.615, 0.143], [0.615, 0.125]],   // by the cranes
     home:    [[0.535, 0.409], [0.536, 0.400], [0.541, 0.378]]    // EPIISOD: the grey and brown building
   };
   var vw = 0, vh = 0, raf = 0, sp = 0, open = null, dpr = 1, lastKey = '';
@@ -181,7 +181,12 @@
       // neither side (narrow phones), keeping clear of the section line on the right
       var lab = pt.querySelector('.ep-loc_label'), lw = (lab.__w = lab.__w || lab.offsetWidth), gap = pt.getAttribute('data-loc-pt') === 'home' ? 32 : 20, edge = vw - 44;
       var fitsR = x + gap + lw < edge, fitsL = x - gap - lw > 12;
-      pt.classList.toggle('is-flip', !fitsR && fitsL);
+      // the university's label reads to the left of its dot; where there's no room for that (phones) it sits above the dot,
+      // clear of the Macquarie Centre label beside it
+      var leftFirst = pt.getAttribute('data-loc-pt') === 'uni';
+      pt.classList.toggle('is-flip', leftFirst ? fitsL : (!fitsR && fitsL));
+      pt.classList.toggle('is-over', leftFirst && !fitsL);
+      if (leftFirst && !fitsL) fitsR = fitsL = true;              // so it isn't also placed under the dot
       pt.classList.toggle('is-under', !fitsR && !fitsL);
       var below = y < vh * 0.5;
       pt.classList.toggle('is-below', below);

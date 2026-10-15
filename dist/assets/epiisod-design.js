@@ -272,8 +272,12 @@
     var w0 = Math.max(bw, bh * ar);                   // at rest: covering the whole block
     var h0 = w0 / ar, w = lerp(w0, bw, p), h = w / ar;               // zooms out until it spans the full width
     var cy = lerp(bh / 2, vh / 2 - r.top, p);         // and settles in the middle of the screen
+    // ...but never past the edges of its own block: as the section scrolls away (down or back up) the picture leaves with
+    // it, like any other content, instead of staying centred and being cut by the block's edge
+    var hv = h0 * (w / w0);
+    if (bh >= hv) cy = Math.max(hv / 2, Math.min(bh - hv / 2, cy));
     on = true;
-    box.style.background = ''; fill.style.opacity = Math.min(1, p * 6).toFixed(3);
+    box.style.background = ''; fill.style.opacity = '0';   // around the picture: the section's own background, no blurred copy
     // the picture keeps one fixed size and is scaled and moved with transforms (composited on the GPU), instead of being
     // re-laid-out every frame
     var k = w / w0, ty = cy - h0 / 2;
