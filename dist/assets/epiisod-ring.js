@@ -124,7 +124,7 @@
   }
   function camRest(asp) {
     // phones: far enough back that the neighbouring panels curve in at both edges, so it reads as a ring
-    if (asp < 0.9) return { e: [0, -0.56, 4.8], c: [0, -0.32, 0], fov: 0.9 };
+    if (asp < 0.9) return { e: [0, -0.28, 3.25], c: [0, -0.12, 0], fov: 0.9 };
     return { e: [-0.5, 0.04, 3.7], c: [-0.5, 0, 0], fov: 0.5 };
   }
 

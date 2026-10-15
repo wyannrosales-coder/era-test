@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.8.2
+
+- Wellness ring on phones: the active panel is about 1.7x bigger and sits a little lower, clear of the gyro pill. Neighbouring panels still peek in on smaller phones.
+
 ## 3.8.1
 
 Phones and tablets:
