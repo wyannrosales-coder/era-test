@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.8.1
+
+Phones and tablets:
+
+- The "Live well" circle and the hand-off onto the wellness ring follow the finger again, through a light smoothing glide with a speed limit: a flick still takes at least 0.8 s (circle) / 0.7 s (ring), so nothing pops or jitters. The circle opens over about 60% of a screen of scrolling.
+- Ring hand-off in two steps, mirrored both ways: the video and the front panel cross-fade at full screen, then the panel shrinks into the ring (scrolling up, the panel widens back to full screen and dissolves into the video).
+- Fixed the ring layer vanishing at once when scrolling back up; the original "Live well" words no longer show through mid-transition.
+
 ## 3.8.0
 
 Phones and tablets (desktop unchanged):

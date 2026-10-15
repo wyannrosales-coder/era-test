@@ -181,3 +181,4 @@
 .ep-rv--touch .ep-rv_video, .ep-rv--touch .ep-rv_scrim { height: 100%; }
 .ep-rv--touch .ep-rv_copy { height: 100%; }
 .ep-rv--touch.rv-idle .ep-rv_win, .ep-rv--touch.rv-covered .ep-rv_win { visibility: hidden; }
+.ep-rv--touch.rv-ringing .ep-rv_copy { visibility: hidden; }

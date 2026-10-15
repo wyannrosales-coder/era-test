@@ -203,9 +203,9 @@
 
   // ---- render -----------------------------------------------------------------------------------------------------------
   var vw = 0, vh = 0;
-  // phones and tablets: the shrink onto the ring plays as a timed animation once the section is reached (scrolling
-  // back up plays it in reverse), so a flick can't skip it; desktop keeps it tied to the scroll
-  var TOUCH = sec.classList.contains('ep-rv--touch'), tA = { v: 0, from: 0, to: 0, t0: 0, ms: 1 };
+  // phones and tablets: the hand-off follows the finger through a smoothing glide with a speed limit (the whole thing
+  // takes at least 0.7 s however hard the flick), so it tracks the scroll without jumping
+  var TOUCH = sec.classList.contains('ep-rv--touch'), tA = { v: 0, last: 0 };
   var lastSW = 0;
   function size() {
     if (TOUCH && lastSW && pin.clientWidth === lastSW) return;    // the address bar moving is not a resize worth a redraw
@@ -222,21 +222,26 @@
     var on = pr > -0.02 && rect.bottom > 0;
     var t;
     if (TOUCH) {
-      var to = pr > 0.06 ? 1 : pr < 0.0 ? 0 : tA.to;
-      if (to !== tA.to) { tA.from = tA.v; tA.to = to; tA.t0 = now; tA.ms = (to ? 1300 : 950) * Math.max(0.35, Math.abs(to - tA.v)); }
-      var tu = clamp((now - tA.t0) / tA.ms);
-      tA.v = lerp(tA.from, tA.to, 0.5 - 0.5 * Math.cos(Math.PI * tu));
+      var dtt = Math.min(0.05, Math.max(0.001, (now - (tA.last || now)) / 1000 || 0.016)); tA.last = now;
+      var stp = (clamp(pr / TRANS) - tA.v) * (1 - Math.exp(-dtt / 0.1)), capT = dtt / 0.7;
+      tA.v += Math.max(-capT, Math.min(capT, stp));
       on = (pr > -0.02 || tA.v > 0.001) && rect.bottom > 0;
-      sec.classList.toggle('rv-covered', tA.v > 0.985);           // the white ring stage hides the full-screen video completely
+      sec.classList.toggle('rv-covered', tA.v > 0.985);
+      sec.classList.toggle('rv-ringing', tA.v > 0.01);           // the ring's own copy of the words takes over from the originals
     }
     stage.classList.toggle('is-on', on);
     html.classList.toggle('ep-in-ring', on && rect.bottom > vh * 0.4);
     if (!on) return;
-    t = TOUCH ? sm(tA.v) : sm(clamp(pr / TRANS)); var asp = vw / vh;
+    // phones: two steps, in this order going down and mirrored coming back up. First (0-28%) the full-screen video and
+    // the front panel cross-fade at full size; then (28-100%) the panel shrinks back into its place on the ring
+    var XF = 0.28;
+    t = TOUCH ? sm(clamp((tA.v - XF) / (1 - XF))) : sm(clamp(pr / TRANS)); var asp = vw / vh;
     stage.classList.toggle('is-rest', t > 0.97);
-    stage.style.opacity = sm(clamp(pr / 0.06)).toFixed(3);
+    // phones: the ring layer stays up for the whole timed hand-off in both directions (the front panel widens back to the
+    // full-screen video and dissolves into it), and only lets go once that has finished
+    stage.style.opacity = (TOUCH ? sm(clamp(tA.v / 0.03)) : sm(clamp(pr / 0.06))).toFixed(3);
     bgEl.style.opacity = sm(clamp((t - 0.1) / 0.5)).toFixed(3);           // the backdrop whitens as the video pulls back
-    if (words) words.style.opacity = (1 - sm(clamp(t / 0.3))).toFixed(3);
+    if (words) words.style.opacity = (TOUCH ? 1 - sm(clamp(tA.v / XF)) : 1 - sm(clamp(t / 0.3))).toFixed(3);
     side.style.setProperty('--in', sm(clamp((t - 0.72) / 0.28)).toFixed(3));
     var A = camClose(asp), B = camRest(asp);
     var cam = { e: lerp3(A.e, B.e, t), c: lerp3(A.c, B.c, t), fov: lerp(A.fov, B.fov, t) };
@@ -256,7 +261,7 @@
     var ce = [cam.e[0] + gx * 0.2 * t3, cam.e[1] - gy * 0.12 * t3, cam.e[2]];                  // parallax: the camera drifts with the phone
     gl.uniformMatrix4fv(U.m, false, new Float32Array(mul(mul(mul(persp(cam.fov, asp, 0.05, 30), look(ce, cam.c)), rotX(tilt.p * t3)), rotY(ang + tilt.l * t3))));
     // the reveal's video rides on the front panel while it shrinks, then gives way to that panel's own picture
-    var mixFront = 1 - sm(clamp((t - 0.3) / 0.68));                       // a long, slow cross-dissolve between the video and the panel
+    var mixFront = TOUCH ? 1 - sm(clamp(tA.v / XF)) : 1 - sm(clamp((t - 0.3) / 0.68));                       // a long, slow cross-dissolve between the video and the panel
     if (mixFront > 0 && revealVideo && revealVideo.readyState >= 2) {
       gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, revealTex);
       try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, revealVideo); } catch (e) {}
@@ -290,5 +295,5 @@
     if (vis && !running) { running = true; requestAnimationFrame(loop); }
     else if (!vis) { running = false; html.classList.remove('ep-in-ring'); PANELS.forEach(function (p) { if (p.el && p.el.tagName === 'VIDEO') p.el.pause(); }); }
   }, { rootMargin: '20% 0px' }).observe(sec);
-  window.__epRing = { go: go };
+  window.__epRing = { go: go, t: function () { return tA.v; } };
 })();
