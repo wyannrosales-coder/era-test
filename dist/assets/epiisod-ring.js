@@ -47,6 +47,10 @@
 
   // ---- media: photos now, videos later (set p.video) ------------------------------------------------------------------
   var revealVideo = sec.querySelector('[data-rv-video]');
+  // until the video has a frame to give (iPhone can be slow to hand one over), the panel uses the video's poster still,
+  // so the hand-off never shows the panel's own picture early
+  var rvPoster = null, rvHas = false;
+  if (revealVideo && revealVideo.poster) { rvPoster = new Image(); rvPoster.src = revealVideo.poster; }
   var armed = false;
   function arm() {
     if (armed) return; armed = true;
@@ -232,16 +236,15 @@
     stage.classList.toggle('is-on', on);
     html.classList.toggle('ep-in-ring', on && rect.bottom > vh * 0.4);
     if (!on) return;
-    // phones: two steps, in this order going down and mirrored coming back up. First (0-28%) the full-screen video and
-    // the front panel cross-fade at full size; then (28-100%) the panel shrinks back into its place on the ring
-    var XF = 0.28;
-    t = TOUCH ? sm(clamp((tA.v - XF) / (1 - XF))) : sm(clamp(pr / TRANS)); var asp = vw / vh;
+    // phones: the Live well video shrinks into the front panel of the ring as one move, still playing inside it, and only
+    // dissolves into the panel's own picture over the last part as it lands (mirrored on the way back up)
+    t = TOUCH ? sm(tA.v) : sm(clamp(pr / TRANS)); var asp = vw / vh;
     stage.classList.toggle('is-rest', t > 0.97);
     // phones: the ring layer stays up for the whole timed hand-off in both directions (the front panel widens back to the
     // full-screen video and dissolves into it), and only lets go once that has finished
     stage.style.opacity = (TOUCH ? sm(clamp(tA.v / 0.03)) : sm(clamp(pr / 0.06))).toFixed(3);
     bgEl.style.opacity = sm(clamp((t - 0.1) / 0.5)).toFixed(3);           // the backdrop whitens as the video pulls back
-    if (words) words.style.opacity = (TOUCH ? 1 - sm(clamp(tA.v / XF)) : 1 - sm(clamp(t / 0.3))).toFixed(3);
+    if (words) words.style.opacity = (TOUCH ? 1 - sm(clamp(tA.v / 0.25)) : 1 - sm(clamp(t / 0.3))).toFixed(3);
     side.style.setProperty('--in', sm(clamp((t - 0.72) / 0.28)).toFixed(3));
     var A = camClose(asp), B = camRest(asp);
     var cam = { e: lerp3(A.e, B.e, t), c: lerp3(A.c, B.c, t), fov: lerp(A.fov, B.fov, t) };
@@ -261,10 +264,13 @@
     var ce = [cam.e[0] + gx * 0.2 * t3, cam.e[1] - gy * 0.12 * t3, cam.e[2]];                  // parallax: the camera drifts with the phone
     gl.uniformMatrix4fv(U.m, false, new Float32Array(mul(mul(mul(persp(cam.fov, asp, 0.05, 30), look(ce, cam.c)), rotX(tilt.p * t3)), rotY(ang + tilt.l * t3))));
     // the reveal's video rides on the front panel while it shrinks, then gives way to that panel's own picture
-    var mixFront = TOUCH ? 1 - sm(clamp(tA.v / XF)) : 1 - sm(clamp((t - 0.3) / 0.68));                       // a long, slow cross-dissolve between the video and the panel
+    var mixFront = TOUCH ? 1 - sm(clamp((tA.v - 0.6) / 0.38)) : 1 - sm(clamp((t - 0.3) / 0.68));                       // a long, slow cross-dissolve between the video and the panel
     if (mixFront > 0 && revealVideo && revealVideo.readyState >= 2) {
       gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, revealTex);
-      try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, revealVideo); } catch (e) {}
+      try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, revealVideo); rvHas = true; } catch (e) {}
+    } else if (mixFront > 0 && !rvHas && rvPoster && rvPoster.complete && rvPoster.naturalWidth) {
+      gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, revealTex);
+      try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, rvPoster); rvHas = true; } catch (e) {}
     }
     PANELS.forEach(function (p, i) {
       var src = p.el;

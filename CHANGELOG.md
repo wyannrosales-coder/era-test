@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.8.3
+
+- Wellness ring hand-off on phones: the Live well video shrinks into the ring's front panel as one move, still playing inside it, and dissolves into the panel's own picture only over the last part as it lands. Scrolling back up is the exact mirror: the picture turns back into the video as it lifts off the ring, then the video widens to full screen.
+- iPhone: until Safari hands the video's first frame to the 3D ring, the panel uses the video's poster still, so the panel's own picture never shows early.
+
 ## 3.8.2
 
 - Wellness ring on phones: the active panel is about 1.7x bigger and sits a little lower, clear of the gyro pill. Neighbouring panels still peek in on smaller phones.
