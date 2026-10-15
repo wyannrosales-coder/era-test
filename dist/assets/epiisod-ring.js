@@ -233,10 +233,12 @@
     gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     var dtf = Math.min(0.05, Math.max(0.001, (now - (frame.__t || now)) / 1000)); frame.__t = now;
     var kf = 1 - Math.exp(-dtf / (drag && drag.on ? 0.08 : 0.35));                // quick while dragging, a slow settle after
-    var pitchT = (drag && drag.on ? tilt.tp : 0) + (drag ? 0 : -tilt.hy * 0.09), leanT = (drag && drag.on ? tilt.tl : 0) + (drag ? 0 : tilt.hx * 0.14);
+    var G = window.__epGyro, gx = G && G.on ? G.gx : 0, gy = G && G.on ? G.gy : 0;                  // phone tilt (gyro), when allowed
+    var pitchT = (drag && drag.on ? tilt.tp : 0) + (drag ? 0 : -tilt.hy * 0.09) + gy * 0.17, leanT = (drag && drag.on ? tilt.tl : 0) + (drag ? 0 : tilt.hx * 0.14) + gx * 0.17;
     tilt.p += (pitchT - tilt.p) * kf; tilt.l += (leanT - tilt.l) * kf;
     var t3 = sm(clamp((t - 0.8) / 0.2));                                            // no tilt while the video is still arriving
-    gl.uniformMatrix4fv(U.m, false, new Float32Array(mul(mul(mul(persp(cam.fov, asp, 0.05, 30), look(cam.e, cam.c)), rotX(tilt.p * t3)), rotY(ang + tilt.l * t3))));
+    var ce = [cam.e[0] + gx * 0.2 * t3, cam.e[1] - gy * 0.12 * t3, cam.e[2]];                  // parallax: the camera drifts with the phone
+    gl.uniformMatrix4fv(U.m, false, new Float32Array(mul(mul(mul(persp(cam.fov, asp, 0.05, 30), look(ce, cam.c)), rotX(tilt.p * t3)), rotY(ang + tilt.l * t3))));
     // the reveal's video rides on the front panel while it shrinks, then gives way to that panel's own picture
     var mixFront = 1 - sm(clamp((t - 0.3) / 0.68));                       // a long, slow cross-dissolve between the video and the panel
     if (mixFront > 0 && revealVideo && revealVideo.readyState >= 2) {

@@ -58,22 +58,27 @@
     var rect = sec.getBoundingClientRect();
     // the video is seen through a perfect circle that sits in the middle of the screen: it grows evenly as the section
     // arrives until it covers the corners, holds full screen, then shrinks back into a circle as it is pushed up and out
-    var p1 = clamp((1 - rect.top / vh) * 2.4);                 // fully open once ~60% of a screen has been scrolled
+    var p1 = clamp((1 - rect.top / vh) * 3.4);   // fully open after ~30% of a screen of scrolling                 // fully open once ~60% of a screen has been scrolled
     var y = -rect.top;
     var q = RING ? 0 : clamp((y - (len - EXIT * vh)) / (EXIT * vh));      // the exit
     var e = ease(q);
     var full = Math.sqrt(vw * vw + vh * vh) / 2 + 2;           // radius that covers every corner
     var r0 = Math.min(vw / 6, vh * 0.22);                     // the starting circle: about a third of the width across
-    var rIn = p1 < 0.12 ? r0 * ease(p1 / 0.12) : lerp(r0, full, ease((p1 - 0.12) / 0.88));
+    // the circle is born just below the bottom edge of the screen and climbs with the scroll as it grows, reaching the middle
+    // (already most of the way to full size) at about 60% of the way in, and filling the screen by the end
+    var rise = ease(clamp(p1 / 0.6));
+    var rIn = lerp(r0 * 0.55, full, ease(p1));
+    var cyIn = lerp(vh + r0 * 0.95, vh / 2, rise);
     var r = lerp(rIn, r0, e);
     var o = clamp((r - r0) / (full - r0));                     // 0 small circle .. 1 full screen
     // the window is held to the screen while the section rises (so the circle is never cut by the section's edge); on the
     // way out the video stays put and only the shrinking circle travels up and off the top
     var off = Math.max(0, rect.top);
-    var cy = lerp(vh / 2, -r0 - 24, e);
+    var cy = lerp(cyIn, -r0 - 24, e);
     var fs0 = vw < 768 ? 26 : 30, fs1 = vw < 768 ? 38 : Math.max(36, Math.min(vw * 0.042, 66));
     var s = sec.style;
     s.setProperty('--rv-cr', r.toFixed(1) + 'px');
+    s.setProperty('--rv-gk', (1 - o).toFixed(3));                 // the gyro drift fades out as the circle fills the screen
     s.setProperty('--rv-cy', cy.toFixed(1) + 'px');
     s.setProperty('--rv-h', vh + 'px');
     s.setProperty('--rv-ty', (-off).toFixed(1) + 'px');
@@ -81,8 +86,7 @@
     s.setProperty('--rv-scale', lerp(1.18, 1, o).toFixed(4));
     s.setProperty('--rv-fs', fs1.toFixed(2) + 'px');
     // the words only arrive once the circle has filled the screen, line by line, and leave as it starts to shrink
-    var openAt = vh * (1 - 1 / 2.4);
-    var ct = p1 < 1 ? 0 : clamp((openAt - rect.top) / (vh * 0.45));
+    var ct = clamp((p1 - 0.72) / 0.28);                         // the words start arriving while the circle is still finishing
     var c = clamp(ct * 1.4);
     s.setProperty('--rv-copy', c.toFixed(3));
     var seg = function (a, b) { return ease(clamp((ct - a) / (b - a))).toFixed(3); };

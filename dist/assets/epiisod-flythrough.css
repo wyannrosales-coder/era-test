@@ -334,3 +334,7 @@ html.ep-gh-lock .ep-fly_cards { visibility: hidden; }
 @media (max-width: 767px) { .ep-fly_sbar.is-on span { opacity: 1; } }
 /* tablets: captions get a proper measure instead of a narrow column */
 @media (min-width: 768px) and (max-width: 1100px) { .ep-fly_cap { max-width: min(560px, 72vw) !important; } .ep-fly_cap_title { font-size: clamp(30px, 4.6vw, 44px); } .ep-fly_cap_body { font-size: 16px; line-height: 26px; } }
+
+/* "Watch the tour again": a quick dark dissolve, straight back to the opening screen */
+.ep-fly_cut { position: absolute; inset: 0; z-index: 9; background: #24120c; opacity: 0; pointer-events: none; transition: opacity .38s ease; }
+.ep-fly.is-cut .ep-fly_cut { opacity: 1; transition-duration: .22s; }

@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.7.0
+
+- Gyro 3D on phones: tilting the phone tips and shifts the wellness ring (pitch, lean and camera parallax), and the "Live well" circle drifts with it while small. Android works with no prompt; iPhone shows a small "Tilt your phone in 3D · Enable" pill (Apple's permission prompt) near the circle.
+- Live well: the circle is born below the bottom edge and rises as it grows, filling the screen after about 30% of a screen of scrolling; the words arrive while it finishes.
+- Hero tour: "Watch the tour again" cuts straight to the opening screen and the tour plays again by itself (the countdown no longer stops); jumping several spaces is one even flight with no stops at the spaces in between.
+- Hero tour pauses while the hero is covered by the Live well circle or scrolled away, and carries on from where it stopped (bar included) when you come back.
+
 ## 3.6.0
 
 - Wellness ring: after "Live well, study better" fills the screen, scrolling on shrinks that video onto the front panel of a 3D ring of the wellness amenities (Fitness Gym, Sauna, Ice Bath, Yoga Studio, Rooftop Pool & Terrace) on a white background. It replaces the old amenities slider.

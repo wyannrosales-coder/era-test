@@ -44,3 +44,12 @@ html.ep-in-ring .ep-nav_btns { opacity: 0 !important; pointer-events: none !impo
 
 /* a soft floor shadow under the ring so it reads as a solid object (static: a live blur on the canvas would be costly) */
 @media (min-aspect-ratio: 9/10) { .ep-ring_bg { background: radial-gradient(ellipse 34% 5.5% at 61% 76%, rgba(36,18,12,.13), rgba(36,18,12,0) 72%), #fff; } }
+
+/* iPhone motion permission pill (epiisod-gyro.js) */
+.ep-gyro_pill { position: fixed; z-index: 1350; left: 50%; top: calc(76px + env(safe-area-inset-top)); transform: translateX(-50%); white-space: nowrap; display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 8px 0 16px; border: 1px solid rgba(255,255,255,.35); border-radius: 99px;
+  background: rgba(36,18,12,.86); color: #fff; font: 600 12px/1 "Albert Sans", sans-serif; letter-spacing: .04em; cursor: pointer; box-shadow: 0 10px 28px rgba(20,10,6,.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.ep-gyro_pill[hidden] { display: none; }
+.ep-gyro_pill svg { width: 15px; height: 15px; }
+.ep-gyro_pill b { display: inline-flex; align-items: center; height: 30px; padding: 0 14px; border-radius: 99px; background: #d0a77f; color: #24120c; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: 10.5px; }
+/* the circle drifts slightly with the phone while it is still small (gyro); full-screen it stays put so no corner shows */
+.ep-rv_win { clip-path: circle(var(--rv-cr, 0px) at calc(50% + var(--gx, 0) * 22px * var(--rv-gk, 1)) calc(var(--rv-cy, 50vh) + var(--gy, 0) * 18px * var(--rv-gk, 1))) !important; }

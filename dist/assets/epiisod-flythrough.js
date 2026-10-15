@@ -176,7 +176,7 @@
     return (pre + seg * (1 - pre)) * it.duration;
   }
 
-  var smoothed = 0, capTriggers = null, storyFill = null;
+  var smoothed = 0, capTriggers = null, storyFill = null, visible = true;
 
   function tick() {
     var rect = root.getBoundingClientRect(), vh = window.innerHeight;
@@ -184,11 +184,14 @@
     var inHero = rect.bottom > vh * 1.45;
     if (inHero !== tick.__in) { tick.__in = inHero; document.documentElement.classList.toggle('ep-in-hero', inHero); }
     // nothing to do while the section is well off screen
-    if (rect.bottom < -vh || rect.top > vh * 2) return;
+    if (rect.bottom < -vh || rect.top > vh * 2) { tick.__off = tick.__off || performance.now(); return; }
+    if (tick.__off) { if (tw) tw.t0 += performance.now() - tick.__off; tick.__off = 0; }   // a flight in progress waits while we are away
     // the camera position comes from swipes / arrows / the segment bar (see goTo), not from the page scroll
-    if (tw) {
+    var nowF = performance.now();
+    if (!visible) { if (tw) tw.t0 += nowF - (tick.__ft || nowF); tick.__ft = nowF; } else tick.__ft = 0;     // covered: a flight in progress waits
+    if (tw && visible) {
       var u = Math.min(1, (performance.now() - tw.t0) / (tw.dur * 1000));
-      vpos = tw.from + (tw.to - tw.from) * (0.5 - 0.5 * Math.cos(Math.PI * u));
+      vpos = Winv(tw.wf + (tw.wt - tw.wf) * (0.5 - 0.5 * Math.cos(Math.PI * u)));
       if (u >= 1) { var done = tw.done; tw = null; if (done) done(); }
     }
     var p = vpos / N;
@@ -339,7 +342,12 @@
   function posOf(s) { return s <= 0 ? 0 : Math.min(s, N) - 1 + SCRUB - 0.012; }
   function clampPos(v) { return Math.max(0, Math.min(posOf(N), v)); }
   function loadAround(v) { var k = Math.max(0, Math.floor(v)); load(k); if (items[k + 1]) load(k + 1); }
-  function glide(to, dur, done) { tw = { from: vpos, to: to, t0: performance.now(), dur: dur, done: done }; }
+  // Flights run along a path where the held last frame and dissolve of each space (the last 22% of its length) is crossed
+  // quickly, so passing several spaces is one even flight instead of a stop at each
+  var HW = 0.28, PER = SCRUB + HW * (1 - SCRUB);
+  function Wf(v) { v = Math.max(0, Math.min(N, v)); var k = Math.min(N - 1, Math.floor(v)), f = v - k; return k * PER + (f <= SCRUB ? f : SCRUB + HW * (f - SCRUB)); }
+  function Winv(w) { var k = Math.max(0, Math.min(N - 1, Math.floor(w / PER))), r = w - k * PER; return k + (r <= SCRUB ? r : SCRUB + (r - SCRUB) / HW); }
+  function glide(to, dur, done) { tw = { from: vpos, to: to, wf: Wf(vpos), wt: Wf(to), t0: performance.now(), dur: dur, done: done }; }
   function goTo(s, opt) {
     opt = opt || {};
     s = Math.max(0, Math.min(END, s));
@@ -351,12 +359,14 @@
     var from = vpos, lo = Math.min(from, to), hi = Math.max(from, to), waits = [];
     for (var k = Math.max(0, Math.floor(lo + 0.0001)); k <= Math.min(N - 1, Math.floor(hi)); k++) waits.push(load(k));
     loadAround(hi);
-    var dur = Math.max(0.6, Math.min(5.2, Math.abs(to - from) * 2.6));
+    var dur = Math.max(0.6, Math.min(5.2, Math.abs(Wf(to) - Wf(from)) * 2.7));
     clearTimeout(autoT); dwell = null;
     var start = function () { if (state !== s) return; glide(to, dur, arrived); };
     var timer = setTimeout(start, 2500);  // never wait forever on a slow connection
     Promise.all(waits).then(function () { clearTimeout(timer); start(); });
   }
+
+  window.__epFly = { pos: function () { return vpos; }, state: function () { return state; } };   // read-only, for debugging
 
   // chevrons + count, the swipe hint, the end card
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
@@ -393,13 +403,24 @@
     if (L && L.scrollTo && !touch) L.scrollTo(y, { duration: 1.4, easing: function (x) { return 1 - Math.pow(1 - x, 4); } });
     else window.scrollTo({ top: y, behavior: 'smooth' });
   }
+  var cut = document.createElement('div'); cut.className = 'ep-fly_cut'; pin.appendChild(cut);
+  // straight back to the opening screen (a quick dissolve, no rewind through the clips), then the tour plays by itself
+  function restartTour() {
+    clearTimeout(autoT); clearTimeout(resumeT); dwell = null; tw = null;
+    root.classList.add('is-cut');
+    setTimeout(function () {
+      vpos = 0; state = 0; syncNav(); loadAround(0);
+      root.classList.remove('is-cut');
+      autoT = setTimeout(function () { if (state === 0 && !tw && !dg) goTo(1, { auto: true }); }, 300);
+    }, 240);
+  }
   endEl.addEventListener('click', function (e) {
     var b = e.target.closest('[data-end]'); if (!b) return;
     var k = b.getAttribute('data-end');
     e.preventDefault();
     if (k === 'rooms') { var r = document.getElementById('rooms'); if (r) scrollToY(r.getBoundingClientRect().top + window.pageYOffset); }
     else if (k === 'down') scrollToY(root.getBoundingClientRect().top + window.pageYOffset + window.innerHeight);
-    else if (k === 'again') goTo(0);
+    else if (k === 'again') restartTour();
   });
 
   // chapters: story bars at the top on phones, chapter cards along the bottom on larger screens. Both fill the same way:
@@ -431,7 +452,7 @@
       // bar i belongs to space i+1: empty until the camera stops there, then it fills as the timer to the next flight,
       // and stays full once the tour has moved past it
       var past = state > i + 1 && !(tw && vpos < posOf(i + 1) + 0.001);
-      var x = past ? 1 : (state === i + 1 && dwell && dwell.s === i ? Math.min(1, (now - dwell.t0) / dwell.ms) : 0), key = x.toFixed(3);
+      var x = past ? 1 : (state === i + 1 && dwell && dwell.s === i ? Math.min(1, ((dwell.p || now) - dwell.t0) / dwell.ms) : 0), key = x.toFixed(3);
       [fills[i], fills[i + N]].forEach(function (f) { if (f && f.__k !== key) { f.style.transform = 'scaleX(' + key + ')'; f.__k = key; } });
     }
     var on = Math.min(state, N) - 1;
@@ -500,26 +521,49 @@
   // 0.3 s after the page loader clears, the camera flies from the lobby to the Concierge by itself. At each stop the
   // space's bar fills as a 4-second timer; when it is full the next flight starts. After the Rooftop's timer, the end
   // card. Any touch, click, key or wheel pauses the tour; after a quiet spell the current space's timer starts again.
-  var DWELL = 4000, IDLE = 8000, autoT = 0, ready = false;
-  function inView() { var r = root.getBoundingClientRect(); return r.top < window.innerHeight * 0.3 && r.bottom > window.innerHeight * 1.4 && !document.hidden; }
-  function countdown() {
+  var DWELL = 4000, IDLE = 8000, autoT = 0, resumeT = 0, ready = false;
+  function arm(ms) { clearTimeout(autoT); autoT = setTimeout(fire, ms); }
+  function fire() {
+    if (!visible) { pauseTour(); return; }
+    if (tw || dg) { autoT = setTimeout(fire, 700); return; }
+    dwell = null;
+    goTo(state + 1, { auto: true });                           // past the Rooftop this is the end card
+  }
+  function countdown() {                                       // the current space's bar fills as a 4 s timer, then the next flight
     clearTimeout(autoT);
     if (state < 1 || state > N) { dwell = null; return; }
-    dwell = { s: state - 1, t0: performance.now(), ms: DWELL };
-    autoT = setTimeout(function () {
-      if (!inView() || tw || dg) { dwell = null; autoT = setTimeout(countdown, 1200); return; }   // try again shortly
-      dwell = null;
-      goTo(state + 1, { auto: true });                         // past the Rooftop this is the end card
-    }, DWELL);
+    dwell = { s: state - 1, t0: performance.now(), ms: DWELL, p: null };
+    if (!visible) { dwell.p = dwell.t0; return; }
+    arm(DWELL);
   }
   function arrived() { if (state >= 1 && state <= N) countdown(); }
+  // away from the hero (scrolled past it, or the Live well circle has risen over it): everything holds still, bar included
+  function pauseTour() { clearTimeout(autoT); clearTimeout(resumeT); if (dwell && dwell.p == null) dwell.p = performance.now(); }
+  function resumeTour() {                                      // back: the same space, the timer carries on from where it stopped
+    if (!ready || tw || dg || state >= END) return;
+    if (state === 0) { goTo(1, { auto: true }); return; }
+    if (dwell && dwell.p != null) { var n = performance.now(), el = dwell.p - dwell.t0; dwell.t0 = n - el; dwell.p = null; arm(Math.max(250, DWELL - el)); }
+    else countdown();
+  }
   function userActed() {                                       // hand control to the visitor, resume after a quiet spell
-    clearTimeout(autoT); dwell = null;
-    if (state < END) autoT = setTimeout(countdown, IDLE);
+    clearTimeout(autoT); clearTimeout(resumeT); dwell = null;
+    if (state < END) autoT = setTimeout(function () { if (state === 0) goTo(1, { auto: true }); else countdown(); }, IDLE);
   }
   ['pointerdown', 'keydown', 'wheel'].forEach(function (ev) {
     root.addEventListener(ev, function () { if (ready) userActed(); }, { passive: true });
   });
+  // "visible" means the hero is on screen AND not being covered by the rising Live well circle
+  var revealEl = document.getElementById('reveal'), pinSeen = true;
+  function checkVisible() {
+    var v = pinSeen && !(revealEl && revealEl.getBoundingClientRect().top < window.innerHeight * 0.72);
+    if (v === visible) return;
+    visible = v; clearTimeout(resumeT);
+    if (!v) { pauseTour(); return; }
+    resumeT = setTimeout(resumeTour, 450);
+  }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { pinSeen = es[0].intersectionRatio > 0.5; checkVisible(); }, { threshold: [0, 0.25, 0.5, 0.75, 1] }).observe(pin);
+  var chkQ = false;
+  window.addEventListener('scroll', function () { if (chkQ) return; chkQ = true; requestAnimationFrame(function () { chkQ = false; checkVisible(); }); }, { passive: true });
   function onReady() {
     if (ready) return;
     var pl = document.querySelector('[data-preloader]');
