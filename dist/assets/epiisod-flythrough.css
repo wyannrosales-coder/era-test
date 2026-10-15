@@ -338,3 +338,11 @@ html.ep-gh-lock .ep-fly_cards { visibility: hidden; }
 /* "Watch the tour again": a quick dark dissolve, straight back to the opening screen */
 .ep-fly_cut { position: absolute; inset: 0; z-index: 9; background: #24120c; opacity: 0; pointer-events: none; transition: opacity .38s ease; }
 .ep-fly.is-cut .ep-fly_cut { opacity: 1; transition-duration: .22s; }
+
+/* phones: on the opening screen "or scroll to continue" sits at the foot of the screen */
+@media (max-width: 767px) {
+  /* measured from the foot of the intro block (which ends 67px above the foot of the screen): 22px from the bottom */
+  .ep-fly_skip { position: absolute; left: 50%; transform: translateX(-50%); bottom: -45px; white-space: nowrap; align-items: center !important; padding-left: 8px !important; }
+}
+/* phones and tablets: no hairline under the transparent header over the hero */
+@media (max-width: 1023px) { html.ep-in-hero .ep-gh:not(.is-dark):not(.is-mega) { border-bottom-color: transparent; } }

@@ -217,8 +217,10 @@
     var seg = ease(Math.min(1, segRaw / SCRUB), LINGER);
 
     // progressive: the next clip once this one is under way, the one after from its midpoint
-    if (segRaw > 0.02 && items[idx + 1]) load(idx + 1);
-    if (segRaw > 0.5 && items[idx + 2]) load(idx + 2);
+    // look-ahead loading only while the visitor scrubs by hand: during a flight a new clip being set up mid-way stutters
+    // the picture (first load, end of the Concierge flight), so flights load what comes next once they have landed
+    if (!tw && segRaw > 0.02 && items[idx + 1]) load(idx + 1);
+    if (!tw && segRaw > 0.5 && items[idx + 2]) load(idx + 2);
 
     // a long eased dissolve with a matched push and a peak of blur hides the cut
     var seam = segRaw > 1 - XF && !!items[idx + 1];
@@ -358,10 +360,11 @@
     state = s; syncNav();
     var from = vpos, lo = Math.min(from, to), hi = Math.max(from, to), waits = [];
     for (var k = Math.max(0, Math.floor(lo + 0.0001)); k <= Math.min(N - 1, Math.floor(hi)); k++) waits.push(load(k));
-    loadAround(hi);
+    // the clip after the destination is fetched and decoded only once the camera has arrived: setting it up mid-flight
+    // (as on first load, near the end of the Concierge clip) competes with the flight for the decoder and stutters it
     var dur = Math.max(0.6, Math.min(5.2, Math.abs(Wf(to) - Wf(from)) * 2.7));
     clearTimeout(autoT); dwell = null;
-    var start = function () { if (state !== s) return; glide(to, dur, arrived); };
+    var start = function () { if (state !== s) return; glide(to, dur, function () { loadAround(to); setTimeout(function () { if (!tw) loadAround(to + 1); }, 600); arrived(); }); };
     var timer = setTimeout(start, 2500);  // never wait forever on a slow connection
     Promise.all(waits).then(function () { clearTimeout(timer); start(); });
   }
@@ -388,6 +391,7 @@
   if (hint) hint.parentNode.insertBefore(startEl, hint.nextSibling);
   startEl.querySelector('.ep-fly_startbtn').addEventListener('click', function () { goTo(1); });
   startEl.querySelector('.ep-fly_skip').addEventListener('click', function () { scrollToY(root.getBoundingClientRect().top + window.pageYOffset + window.innerHeight); });
+  if (hint && touch) { hint.remove(); hint = null; }
   if (hint) {
     hint.innerHTML = (touch ? '<span class="ep-fly_hand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1-6 6h-1.2a6 6 0 0 1-4.6-2.2L3.6 15a1.6 1.6 0 0 1 2.4-2.1L9 15.5"/></svg></span>Tap or swipe through the spaces' : 'Or pick a space below');
   }
@@ -536,7 +540,11 @@
     if (!visible) { dwell.p = dwell.t0; return; }
     arm(DWELL);
   }
-  function arrived() { if (state >= 1 && state <= N) countdown(); }
+  function arrived() {
+    if (state >= 1 && state <= N) { countdown(); return; }
+    // back at the opening screen (e.g. Back from the Concierge): after a short pause the tour starts again by itself
+    if (state === 0 && ready) { clearTimeout(autoT); autoT = setTimeout(function () { if (state === 0 && !tw && !dg && visible) goTo(1, { auto: true }); }, 1800); }
+  }
   // away from the hero (scrolled past it, or the Live well circle has risen over it): everything holds still, bar included
   function pauseTour() { clearTimeout(autoT); clearTimeout(resumeT); if (dwell && dwell.p == null) dwell.p = performance.now(); }
   function resumeTour() {                                      // back: the same space, the timer carries on from where it stopped

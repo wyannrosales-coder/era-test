@@ -9,14 +9,23 @@
   // with the video ring (epiisod-ring.js) the full-screen video does not shrink away: it becomes one panel of the ring,
   // which turns through the other moments while the section stays pinned for RING more screens
   var RING = sec.hasAttribute('data-ep-ring') && !reduce ? 1.15 : 0;
-  if (RING) EXIT = 0.0001;
-  var LEN_VH = HOLD + (RING || EXIT);
-  window.__epRv = { sec: sec, hold: HOLD, ring: RING };
-  var vw = 0, vh = 0, len = 0, raf = 0, playing = false, theme = '';
   // Phones and tablets: the circle follows the finger, but through a smoothing glide with a speed limit, so a flick
   // (which can travel a screen in a few frames) still plays across at least 0.8 s instead of popping; and the
   // video window is fixed to the screen by the browser instead of being held in place by script, so it can't lag.
   var TOUCH = matchMedia('(hover: none) and (pointer: coarse)').matches && !reduce;
+  var K = TOUCH ? 1.7 : 3.4;                 // the circle is full once 1/K of a screen has been scrolled into the section
+  if (RING) {
+    // with the ring, the full-screen video holds only for READ (a quarter of a screen, long enough to read the words)
+    // and then the shrink onto the ring starts straight away, even before the section has locked to the top of the
+    // screen; after the ring settles it stays pinned for a quarter of a screen more. HOLD is where the ring starts,
+    // in screens past the section's top reaching the top of the screen (negative: before it gets there).
+    var READ = 0.25;
+    HOLD = READ - (1 - 1 / K);
+    EXIT = 0.0001;
+  }
+  var LEN_VH = RING ? HOLD + RING : HOLD + EXIT;
+  window.__epRv = { sec: sec, hold: HOLD, ring: RING };
+  var vw = 0, vh = 0, len = 0, raf = 0, playing = false, theme = '';
   var anim = { v: 0, last: 0, on: false }, animRaf = 0, lastW = 0;
   if (TOUCH) sec.classList.add('ep-rv--touch');
   function animStep() {
@@ -84,9 +93,9 @@
     if (TOUCH) vh = window.innerHeight;
     // the video is seen through a perfect circle that sits in the middle of the screen: it grows evenly as the section
     // arrives until it covers the corners, holds full screen, then shrinks back into a circle as it is pushed up and out
-    var p1 = clamp((1 - rect.top / vh) * 3.4);   // fully open after ~30% of a screen of scrolling
+    var p1 = clamp((1 - rect.top / vh) * K);     // fully open after 1/K of a screen of scrolling
     if (TOUCH) {
-      follow(clamp((1 - rect.top / vh) * 1.7));                 // opens over ~60% of a screen of scrolling
+      follow(clamp((1 - rect.top / vh) * K));                   // opens over ~60% of a screen of scrolling
       p1 = anim.v;
       // nothing to draw (closed, or the ring has covered it, or the section has gone): let the browser skip it entirely
       sec.classList.toggle('rv-idle', p1 <= 0.001 || rect.bottom < vh * 0.25);

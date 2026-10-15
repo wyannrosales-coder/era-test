@@ -234,6 +234,12 @@
       sec.classList.toggle('rv-ringing', tA.v > 0.01);           // the ring's own copy of the words takes over from the originals
     }
     stage.classList.toggle('is-on', on);
+    // the shrink can start before the section has locked to the top of the screen: until then the stage is held to the
+    // screen (fixed on phones, so the browser does it with no lag; moved into place on desktop, where the smooth scroll
+    // and this frame run together)
+    var early = on && rect.top > 0;
+    if (TOUCH) stage.classList.toggle('is-held', early);
+    else stage.style.transform = early ? 'translateY(' + (-rect.top).toFixed(1) + 'px)' : '';
     html.classList.toggle('ep-in-ring', on && rect.bottom > vh * 0.4);
     if (!on) return;
     // phones: the Live well video shrinks into the front panel of the ring as one move, still playing inside it, and only

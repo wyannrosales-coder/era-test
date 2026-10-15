@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.9.0
+
+- Live well: the full-screen video now holds for only about a quarter of a screen (long enough to read the words) before the shrink onto the ring starts, in both directions and on all devices; the ring stays pinned a quarter of a screen after it settles. Previously about 0.75 (phones) to 1 (desktop) screen of scrolling did nothing.
+- Hero, first load: no more stutter near the end of the Concierge flight. Upcoming clips are fetched and decoded only after the camera lands, never mid-flight.
+- Hero: Back from the Concierge to the opening screen now restarts the tour by itself after about 1.8 s (the restart timer was being cancelled).
+- Hero on phones: "or scroll to continue" sits at the foot of the screen; the "Tap or swipe through the spaces" line is removed; no hairline under the header over the hero (phones and tablets).
+
 ## 3.8.3
 
 - Wellness ring hand-off on phones: the Live well video shrinks into the ring's front panel as one move, still playing inside it, and dissolves into the panel's own picture only over the last part as it lands. Scrolling back up is the exact mirror: the picture turns back into the video as it lifts off the ring, then the video widens to full screen.

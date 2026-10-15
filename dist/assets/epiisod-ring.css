@@ -53,3 +53,6 @@ html.ep-in-ring .ep-nav_btns { opacity: 0 !important; pointer-events: none !impo
 .ep-gyro_pill b { display: inline-flex; align-items: center; height: 30px; padding: 0 14px; border-radius: 99px; background: #d0a77f; color: #24120c; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: 10.5px; }
 /* the circle drifts slightly with the phone while it is still small (gyro); full-screen it stays put so no corner shows */
 .ep-rv_win { clip-path: circle(var(--rv-cr, 0px) at calc(50% + var(--gx, 0) * 22px * var(--rv-gk, 1)) calc(var(--rv-cy, 50vh) + var(--gy, 0) * 18px * var(--rv-gk, 1))) !important; }
+
+/* phones: while the section is still rising into place, the ring stage is fixed to the screen (see epiisod-ring.js) */
+.ep-ring.is-held { position: fixed; }
