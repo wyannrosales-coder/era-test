@@ -176,21 +176,28 @@
     return (pre + seg * (1 - pre)) * it.duration;
   }
 
-  var smoothed = 0, capTriggers = null;
+  var smoothed = 0, capTriggers = null, storyFill = null;
 
   function tick() {
-    var span = N * W * window.innerHeight;
-    var rect = root.getBoundingClientRect();
+    var rect = root.getBoundingClientRect(), vh = window.innerHeight;
+    // the page's bottom-right section chevrons only appear once the hero has been scrolled past
+    var inHero = rect.bottom > vh * 1.45;
+    if (inHero !== tick.__in) { tick.__in = inHero; document.documentElement.classList.toggle('ep-in-hero', inHero); }
     // nothing to do while the section is well off screen
-    if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight * 2) return;
-    var p = span > 0 ? -rect.top / span : 0;
+    if (rect.bottom < -vh || rect.top > vh * 2) return;
+    // the camera position comes from swipes / arrows / the segment bar (see goTo), not from the page scroll
+    if (tw) {
+      var u = Math.min(1, (performance.now() - tw.t0) / (tw.dur * 1000));
+      vpos = tw.from + (tw.to - tw.from) * (0.5 - 0.5 * Math.cos(Math.PI * u));
+      if (u >= 1) { var done = tw.done; tw = null; if (done) done(); }
+    }
+    var p = vpos / N;
     p = p < 0 ? 0 : p > 1 ? 1 : p;
-    var nowT = performance.now(), dtT = Math.min(0.08, Math.max(0.004, (nowT - (tick.__t || nowT)) / 1000)); tick.__t = nowT;
-    smoothed += (p - smoothed) * (1 - Math.exp(-dtT / (touch ? 0.08 : 0.14)));   // medium ease: silky, still attached to the hand
-    if (Math.abs(p - smoothed) < 0.00002) smoothed = p;
+    smoothed = p;
     var sp = smoothed;
 
     if (bar) bar.style.width = (sp * 100).toFixed(2) + '%';
+    if (storyFill) storyFill(vpos);
     if (intro) {
       var o0 = sp < 0.07 ? 1 - sp / 0.07 : 0;
       intro.style.opacity = o0.toFixed(3);
@@ -320,76 +327,208 @@
       if (lb) { lb.__hover = false; lb.style.color = '#d0a77f'; lb.style.opacity = lb.__active ? '1' : '0'; lb.style.transform = lb.__active ? 'translateX(0)' : 'translateX(6px)'; }
       if (tk && !tk.__active) { tk.style.height = '34px'; tk.style.background = 'rgba(233,223,208,.3)'; }
     });
-    btn.addEventListener('click', function () {
-      var target = (i + SCRUB - 0.012) / N;   // just short of the dissolve, so the forward snap leaves it alone
-      var span = N * W * window.innerHeight;
-      var r0 = root.getBoundingClientRect().top + window.pageYOffset;
-      var top = r0 + target * span, from = window.pageYOffset;
-      // a visible fly-through: every clip on the way is loaded, and the trip takes ~1.6s for the next segment up to ~3.6s
-      // for the far end, on a gentle sine curve (its top speed is only ~1.6x the average, so the middle doesn't flash by)
-      var here = Math.max(0, Math.min(N - 1, Math.floor(((from - r0) / span) * N)));
-      for (var k = Math.min(here, i); k <= Math.max(here, i); k++) load(k);
-      var segs = Math.abs(top - from) / span * N;
-      var dur = Math.min(3.6, Math.max(1.4, 1.0 + segs * 0.85));
-      var sine = function (t) { return 0.5 - 0.5 * Math.cos(Math.PI * t); };
-      var Ln = window.__lenis;
-      if (Ln && Ln.scrollTo && !touch) { Ln.scrollTo(top, { duration: dur, easing: sine, force: true }); return; }
-      // phones scroll natively: run the same curve frame by frame, and let a touch take over at any moment
-      var t0 = performance.now(), stop = false;
-      function cancel() { stop = true; }
-      window.addEventListener('touchstart', cancel, { passive: true, once: true });
-      window.addEventListener('wheel', cancel, { passive: true, once: true });
-      (function step(now) {
-        if (stop) return;
-        var u = Math.min(1, (now - t0) / (dur * 1000));
-        window.scrollTo({ top: from + (top - from) * sine(u), behavior: 'instant' });
-        if (u < 1) requestAnimationFrame(step);
-        else { window.removeEventListener('touchstart', cancel); window.removeEventListener('wheel', cancel); }
-      })(t0);
-    });
+    btn.addEventListener('click', function () { goTo(i + 1); });
   });
 
+  // ---- scenes: drag / arrows / keys / story bars / auto-tour ------------------------------------------------------
+  // Scene 0 is the title over the lobby; scenes 1-4 hold on the end of each clip with its caption; after the Rooftop an
+  // end card offers the next step. Moving between scenes plays the flythrough (forward or in reverse); a sideways drag
+  // scrubs it live under the finger. Left alone, the hero tours itself; any touch hands control back.
+  var vpos = 0, state = 0, tw = null, END = N + 1;
+  var pin = root.querySelector('.ep-fly_pin');
+  function posOf(s) { return s <= 0 ? 0 : Math.min(s, N) - 1 + SCRUB - 0.012; }
+  function clampPos(v) { return Math.max(0, Math.min(posOf(N), v)); }
+  function loadAround(v) { var k = Math.max(0, Math.floor(v)); load(k); if (items[k + 1]) load(k + 1); }
+  function glide(to, dur, done) { tw = { from: vpos, to: to, t0: performance.now(), dur: dur, done: done }; }
+  function goTo(s, opt) {
+    opt = opt || {};
+    s = Math.max(0, Math.min(END, s));
+    if (!opt.auto) userActed();
+    var to = posOf(s);
+    if (s === state && !tw && Math.abs(vpos - to) < 0.002) return;
+    if (!opt.auto) root.classList.add('has-moved');
+    state = s; syncNav();
+    var from = vpos, lo = Math.min(from, to), hi = Math.max(from, to), waits = [];
+    for (var k = Math.max(0, Math.floor(lo + 0.0001)); k <= Math.min(N - 1, Math.floor(hi)); k++) waits.push(load(k));
+    loadAround(hi);
+    var dur = Math.max(0.6, Math.min(5.2, Math.abs(to - from) * 2.6));
+    clearTimeout(autoT); dwell = null;
+    var start = function () { if (state !== s) return; glide(to, dur, arrived); };
+    var timer = setTimeout(start, 2500);  // never wait forever on a slow connection
+    Promise.all(waits).then(function () { clearTimeout(timer); start(); });
+  }
 
-  // ---- forward snap -------------------------------------------------------------
-  // The video scrubs freely with the scroll. When scrolling comes to rest in the last part of a clip, glide FORWARD to its
-  // end (last frame, caption and pins). Resting between two clips (mid-dissolve) completes the dissolve. It never moves
-  // backward, never acts while a finger is down, and never touches the way out of the last clip into the video section.
-  (function () {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var RANGE = 0.20;                                 // share of a clip's scrub in which the snap is offered
-    var timer = 0, touching = false, lastY = window.pageYOffset, dir = 0, snapping = false, snapEnd = 0;
-    function rootTop() { return root.getBoundingClientRect().top + window.pageYOffset; }
-    function span() { return N * W * window.innerHeight; }
-    function lenisOn() { var L = window.__lenis; return L && !L.isStopped ? L : null; }
-    function snapTo(pos, ms) {
-      var y = rootTop() + (pos / N) * span();
-      if (y <= window.pageYOffset + 6) return;        // forward only, and not for a few pixels
-      snapping = true; snapEnd = performance.now() + ms + 200;
-      var L = lenisOn();
-      if (L && L.scrollTo) L.scrollTo(y, { duration: ms / 1000, force: true, easing: function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; } });
-      else window.scrollTo({ top: y, behavior: 'smooth' });
+  // chevrons + count, the swipe hint, the end card
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  var arrow = function (d) { return '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="' + (d < 0 ? 'M10 3 5 8l5 5' : 'M6 3l5 5-5 5') + '" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; };
+  var navEl = document.createElement('div');
+  navEl.className = 'ep-fly_nav';
+  navEl.innerHTML = '<button type="button" class="ep-fly_navbtn" data-go="-1" aria-label="Previous space">' + arrow(-1) + '</button>' +
+    '<span class="ep-fly_count" aria-live="polite"></span>' +
+    '<button type="button" class="ep-fly_navbtn" data-go="1" aria-label="Next space">' + arrow(1) + '</button>';
+  pin.appendChild(navEl);
+  var countEl = navEl.querySelector('.ep-fly_count'), prevBtn = navEl.querySelector('[data-go="-1"]'), nextBtn = navEl.querySelector('[data-go="1"]');
+  navEl.addEventListener('click', function (e) { var b = e.target.closest('[data-go]'); if (b) goTo(state + +b.getAttribute('data-go')); });
+  var hint = root.querySelector('.ep-fly_hint');
+  // the opening screen offers a clear choice: start the tour, or carry on down the page
+  var startEl = document.createElement('div');
+  startEl.className = 'ep-fly_start';
+  startEl.innerHTML = '<button type="button" class="ep-fly_startbtn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7.5-4.5z" fill="currentColor"/></svg>Start the tour</button>' +
+    '<button type="button" class="ep-fly_skip">or scroll to continue<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+  if (hint) hint.parentNode.insertBefore(startEl, hint.nextSibling);
+  startEl.querySelector('.ep-fly_startbtn').addEventListener('click', function () { goTo(1); });
+  startEl.querySelector('.ep-fly_skip').addEventListener('click', function () { scrollToY(root.getBoundingClientRect().top + window.pageYOffset + window.innerHeight); });
+  if (hint) {
+    hint.innerHTML = (touch ? '<span class="ep-fly_hand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1-6 6h-1.2a6 6 0 0 1-4.6-2.2L3.6 15a1.6 1.6 0 0 1 2.4-2.1L9 15.5"/></svg></span>Tap or swipe through the spaces' : 'Or pick a space below');
+  }
+  var endEl = document.createElement('div');
+  endEl.className = 'ep-fly_end'; endEl.setAttribute('aria-hidden', 'true');
+  endEl.innerHTML = '<div class="ep-fly_end_in"><p class="ep-fly_end_eb">That’s the tour</p><h3 class="ep-fly_end_h">Seen enough to picture yourself here?</h3>' +
+    '<div class="ep-fly_end_btns"><a href="#rooms" class="ep-fly_end_btn ep-fly_end_btn--sand" data-end="rooms">View rooms</a><a href="#" class="ep-fly_end_btn" data-end="tour">Book a tour</a></div>' +
+    '<button type="button" class="ep-fly_end_down" data-end="down">Keep scrolling<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+    '<button type="button" class="ep-fly_end_again" data-end="again">Watch the tour again</button></div>';
+  pin.appendChild(endEl);
+  function scrollToY(y) {
+    var L = window.__lenis;
+    if (L && L.scrollTo && !touch) L.scrollTo(y, { duration: 1.4, easing: function (x) { return 1 - Math.pow(1 - x, 4); } });
+    else window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+  endEl.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-end]'); if (!b) return;
+    var k = b.getAttribute('data-end');
+    e.preventDefault();
+    if (k === 'rooms') { var r = document.getElementById('rooms'); if (r) scrollToY(r.getBoundingClientRect().top + window.pageYOffset); }
+    else if (k === 'down') scrollToY(root.getBoundingClientRect().top + window.pageYOffset + window.innerHeight);
+    else if (k === 'again') goTo(0);
+  });
+
+  // chapters: story bars at the top on phones, chapter cards along the bottom on larger screens. Both fill the same way:
+  // the first part counts down the auto-tour's pause on a space, the rest follows the camera to the next one.
+  var names = caps.map(function (c, i) { return labels[i] ? labels[i].textContent : ''; });
+  var story = document.createElement('div');
+  story.className = 'ep-fly_story';
+  story.innerHTML = names.map(function (n, i) {
+    return '<button type="button" class="ep-fly_sbar" data-chap="' + (i + 1) + '"><i><b></b></i><span>' + n + '</span></button>';
+  }).join('');
+  pin.appendChild(story);
+  var cards = document.createElement('div');
+  cards.className = 'ep-fly_cards';
+  cards.innerHTML = names.map(function (n, i) {
+    var t = caps[i] && caps[i].querySelector('.ep-fly_cap_title');
+    return '<button type="button" class="ep-fly_card" data-chap="' + (i + 1) + '" aria-label="Go to ' + (t ? t.textContent : n) + '">' +
+      '<span class="ep-fly_card_img" style="background-image:url(/assets/flythrough/thumb' + (i + 1) + '.webp)"></span>' +
+      '<span class="ep-fly_card_t"><em>' + pad(i + 1) + '</em><strong>' + (t ? t.textContent : n) + '</strong></span>' +
+      '<i class="ep-fly_card_bar"><b></b></i></button>';
+  }).join('');
+  pin.appendChild(cards);
+  var fills = [].slice.call(story.querySelectorAll('b')).concat([].slice.call(cards.querySelectorAll('b')));
+  var cardEls = [].slice.call(cards.querySelectorAll('.ep-fly_card')).concat([].slice.call(story.querySelectorAll('.ep-fly_sbar')));
+  [story, cards].forEach(function (el) { el.addEventListener('click', function (e) { var b = e.target.closest('[data-chap]'); if (b) goTo(+b.getAttribute('data-chap')); }); });
+  var dwell = null;                                    // { s: scene, t0, ms } while the auto-tour waits on a space
+  storyFill = function (v) {
+    var now = performance.now();
+    for (var i = 0; i < N; i++) {
+      // bar i belongs to space i+1: empty until the camera stops there, then it fills as the timer to the next flight,
+      // and stays full once the tour has moved past it
+      var past = state > i + 1 && !(tw && vpos < posOf(i + 1) + 0.001);
+      var x = past ? 1 : (state === i + 1 && dwell && dwell.s === i ? Math.min(1, (now - dwell.t0) / dwell.ms) : 0), key = x.toFixed(3);
+      [fills[i], fills[i + N]].forEach(function (f) { if (f && f.__k !== key) { f.style.transform = 'scaleX(' + key + ')'; f.__k = key; } });
     }
-    function settle() {
-      if (touching || dir <= 0) return;
-      var pos = ((window.pageYOffset - rootTop()) / span()) * N;
-      if (pos <= 0.01 || pos >= N) return;
-      var i = Math.min(N - 1, Math.floor(pos)), f = pos - i;
-      if (f >= SCRUB * (1 - RANGE) && f < SCRUB) { snapTo(i + SCRUB, 1300); return; }   // near the end of the clip
-      if (f >= SCRUB && i < N - 1) snapTo(i + 1 + 0.02, 1300);                             // mid-dissolve: finish it
+    var on = Math.min(state, N) - 1;
+    cardEls.forEach(function (c, k) { var a = k % N === on; if (c.__on !== a) { c.classList.toggle('is-on', a); c.__on = a; } });
+  };
+
+  function syncNav() {
+    var shown = Math.min(state, N);
+    countEl.textContent = pad(shown + 1) + ' / ' + pad(N + 1);
+    prevBtn.disabled = state === 0; nextBtn.disabled = state === END;
+    root.classList.toggle('is-first', state === 0);
+    root.classList.toggle('is-end', state === END);
+    endEl.setAttribute('aria-hidden', state === END ? 'false' : 'true');
+  }
+  syncNav();
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    var r = root.getBoundingClientRect();
+    if (r.top > window.innerHeight * 0.3 || r.bottom < window.innerHeight * 1.4) return;   // only while the hero fills the screen
+    if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
+    goTo(state + (e.key === 'ArrowRight' ? 1 : -1));
+  });
+
+  // touch: a sideways drag scrubs the flythrough live under the finger (one screen width = one space); on release it
+  // glides to the nearest space, moving at least one space when the drag was decisive. Vertical drags scroll the page.
+  var dg = null;
+  pin.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'mouse' || e.target.closest('button, a')) return;
+    dg = { x: e.clientX, y: e.clientY, v0: vpos, s0: Math.min(state, N), on: false, t0: performance.now() };
+  });
+  pin.addEventListener('pointermove', function (e) {
+    if (!dg) return;
+    var dx = e.clientX - dg.x, dy = e.clientY - dg.y;
+    if (!dg.on) {
+      if (Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(dy)) return;
+      dg.on = true; tw = null; userActed(); root.classList.add('has-moved');
+      if (state === END) { state = N; syncNav(); }
+      dg.x = e.clientX; dx = 0;
     }
-    window.addEventListener('scroll', function () {
-      var y = window.pageYOffset;
-      if (Math.abs(y - lastY) > 1) dir = y > lastY ? 1 : -1;
-      lastY = y;
-      if (snapping) { if (performance.now() < snapEnd) { clearTimeout(timer); return; } snapping = false; }
-      clearTimeout(timer);
-      timer = setTimeout(settle, 170);
-    }, { passive: true });
-    window.addEventListener('touchstart', function () { touching = true; clearTimeout(timer); snapping = false; }, { passive: true });
-    window.addEventListener('touchend', function () { touching = false; clearTimeout(timer); timer = setTimeout(settle, 220); }, { passive: true });
-    window.addEventListener('touchcancel', function () { touching = false; }, { passive: true });
-    window.addEventListener('wheel', function () { snapping = false; }, { passive: true });   // a new scroll takes over from a snap
-  })();
+    vpos = clampPos(dg.v0 - dx / (window.innerWidth * 0.85));
+    loadAround(vpos);
+  });
+  function release(e) {
+    if (!dg) return;
+    var d = dg; dg = null;
+    if (!d.on) {
+      // a quick tap: right side moves on, left third goes back (like stories); a long press just pauses the tour
+      if (e && performance.now() - d.t0 < 350 && Math.abs(e.clientX - d.x) < 10 && Math.abs(e.clientY - d.y) < 10) {
+        if (e.clientX > window.innerWidth * 0.33) goTo(Math.min(state, N) + 1); else goTo(Math.min(state, N) - 1);
+      }
+      return;
+    }
+    var dx = (e && e.clientX != null ? e.clientX : d.x) - d.x, w = window.innerWidth;
+    var near = 0, best = 9;
+    for (var k = 0; k <= N; k++) { var dd = Math.abs(posOf(k) - vpos); if (dd < best) { best = dd; near = k; } }
+    if (dx < -w * 0.12 && near <= d.s0) near = d.s0 + 1;        // a decisive drag always moves at least one space
+    if (dx > w * 0.12 && near >= d.s0) near = d.s0 - 1;
+    near = Math.max(0, Math.min(N, near));
+    state = -1;                                                // force the glide even if we settle back where we began
+    goTo(near);
+  }
+  pin.addEventListener('pointerup', release);
+  pin.addEventListener('pointercancel', function () { if (dg && dg.on) release(null); else dg = null; });
+
+  // ---- auto-tour -------------------------------------------------------------------------------------------------
+  // 0.3 s after the page loader clears, the camera flies from the lobby to the Concierge by itself. At each stop the
+  // space's bar fills as a 4-second timer; when it is full the next flight starts. After the Rooftop's timer, the end
+  // card. Any touch, click, key or wheel pauses the tour; after a quiet spell the current space's timer starts again.
+  var DWELL = 4000, IDLE = 8000, autoT = 0, ready = false;
+  function inView() { var r = root.getBoundingClientRect(); return r.top < window.innerHeight * 0.3 && r.bottom > window.innerHeight * 1.4 && !document.hidden; }
+  function countdown() {
+    clearTimeout(autoT);
+    if (state < 1 || state > N) { dwell = null; return; }
+    dwell = { s: state - 1, t0: performance.now(), ms: DWELL };
+    autoT = setTimeout(function () {
+      if (!inView() || tw || dg) { dwell = null; autoT = setTimeout(countdown, 1200); return; }   // try again shortly
+      dwell = null;
+      goTo(state + 1, { auto: true });                         // past the Rooftop this is the end card
+    }, DWELL);
+  }
+  function arrived() { if (state >= 1 && state <= N) countdown(); }
+  function userActed() {                                       // hand control to the visitor, resume after a quiet spell
+    clearTimeout(autoT); dwell = null;
+    if (state < END) autoT = setTimeout(countdown, IDLE);
+  }
+  ['pointerdown', 'keydown', 'wheel'].forEach(function (ev) {
+    root.addEventListener(ev, function () { if (ready) userActed(); }, { passive: true });
+  });
+  function onReady() {
+    if (ready) return;
+    var pl = document.querySelector('[data-preloader]');
+    if (pl && getComputedStyle(pl).display !== 'none') { setTimeout(onReady, 150); return; }
+    ready = true;
+    setTimeout(function () {
+      if (state === 0 && !tw && !dg && !root.classList.contains('has-moved')) goTo(1, { auto: true });
+    }, 300);
+  }
 
   // ---- hotspots -------------------------------------------------------------
   // Pin coordinates are fractions of the 16:9 video frame, so they stay on the
@@ -459,6 +598,7 @@
   function next() { load(1); window.removeEventListener('wheel', next); window.removeEventListener('touchstart', next); window.removeEventListener('keydown', next); }
   load(0).then(function () {
     hideBoot();
+    onReady();
     window.addEventListener('wheel', next, { passive: true });
     window.addEventListener('touchstart', next, { passive: true });
     window.addEventListener('keydown', next);

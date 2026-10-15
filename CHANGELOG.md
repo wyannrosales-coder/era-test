@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.5.0
+
+- Hero redesign: one pinned screen; the flythrough plays between spaces (forward or in reverse) instead of scroll-scrubbing.
+  - Auto-tour: 0.3 s after the loader the camera flies to the Concierge; each stop's bar fills as a 4 s timer, then the next flight. Any interaction pauses it.
+  - Desktop/tablet: chapter cards along the bottom (thumbnail, number, name, timer line). Phones: Stories (bars at the top, tap right/left, hold to pause, drag to scrub live), edge chevrons.
+  - Opening screen with "Start the tour" and "or scroll to continue"; end card after the Rooftop (View rooms, Book a tour, Keep scrolling, Watch again).
+- Global EPIISOD header (About Us, Life @ EPIISOD and Contact mega menus, Promotions, Book A Tour, View Rooms, Login, EN / 中文; burger panel under 1024px). Hides while scrolling down, returns on scroll up. Logo is a text placeholder until the wordmark file arrives.
+- "Live well, study better" reveal is a true circle that grows from the centre to full screen and shrinks back out on exit; text arrives once full screen.
+- Location: new canopy-flight aerial video (1440px desktop / 960px phone frames), markers re-placed; EPIISOD marker is a Saf Sand pin with the E and a pulse; labels drop under their dot when they don't fit.
+- Rooms magazine: "View rooms" cursor on the cover (desktop); "Open the rooms magazine" button, page arrows and swipe on tablets.
+- "Flexible stays" text centres and holds before the Life beyond arch rises.
+- Cookie banner removed for now; loader no longer swallows the first tap; right-hand section line hidden over the hero on phones/tablets; bottom-right chevrons appear only after the hero.
+
 ## 3.4.1
 
 - Reduce Motion carousel: each scene uses its clip's final frame (courtyard garden, rooftop pool) instead of the opening frame.

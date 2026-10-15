@@ -334,3 +334,17 @@
   .ep-mag_pg { box-shadow: 0 2px 5px rgba(36,18,12,.08); }
   .ep-mag_book::before { content: ""; position: absolute; z-index: -1; /* sits under the cover alone while closed (--c = 1), the whole spread once open */ left: calc(-7% + var(--c, 0) * 53.5%); right: -7%; top: 8%; bottom: -9%; pointer-events: none; background: radial-gradient(ellipse 56% 52% at 50% 52%, rgba(36,18,12,.4) 0%, rgba(36,18,12,.3) 25%, rgba(36,18,12,.2) 45%, rgba(36,18,12,.1) 62%, rgba(36,18,12,.025) 78%, rgba(36,18,12,0) 100%); filter: blur(14px); }
 }
+
+/* tablets showing the book (no hover, so no "Next" cursor): an open button on the cover, arrows beside the page numbers */
+.ep-mag_tbtn, .ep-mag_topen { display: none; }
+@media (min-width: 992px) and (hover: none), (min-width: 992px) and (pointer: coarse) {
+  .ep-mag_tbtn { position: absolute; bottom: calc(3.2vh - 11px); z-index: 6; width: 44px; height: 44px; padding: 0; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgba(36,18,12,.3); background: #f4f2f0; color: #24120c; cursor: pointer; box-shadow: 0 6px 18px rgba(36,18,12,.12); transition: opacity .3s; }
+  .ep-mag_tbtn svg { width: 16px; height: 16px; }
+  .ep-mag_tprev { left: calc(50% - 210px); }
+  .ep-mag_tnext { left: calc(50% + 166px); }
+  .is-cover .ep-mag_tbtn { display: none; }
+  .is-end .ep-mag_tnext { opacity: .3; pointer-events: none; }
+  .ep-mag_topen { position: absolute; left: 50%; bottom: calc(3.2vh - 8px); transform: translateX(-50%); z-index: 6; align-items: center; gap: 12px; padding: 15px 24px; border: 0; border-radius: 99px; background: #24120c; color: #f4f2f0; font: 600 12px/1 "Albert Sans", sans-serif; letter-spacing: .18em; text-transform: uppercase; cursor: pointer; box-shadow: 0 10px 28px rgba(36,18,12,.3); white-space: nowrap; }
+  .ep-mag_topen svg { width: 14px; height: 14px; }
+  .is-cover .ep-mag_topen { display: inline-flex; }
+}

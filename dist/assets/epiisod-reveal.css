@@ -32,7 +32,7 @@
   position: absolute;
   inset: 0 0 calc(var(--_special-units---100vh, 100vh) * -.5) 0;
   background: #24120c;
-  clip-path: inset(var(--rv-top) var(--rv-side) var(--rv-bot, 0px) var(--rv-side) round var(--rv-r) var(--rv-r) var(--rv-rbx, 0px) var(--rv-rbx, 0px) / var(--rv-r) var(--rv-r) var(--rv-rby, 0px) var(--rv-rby, 0px));
+  clip-path: circle(var(--rv-cr, 0px) at 50% var(--rv-cy, 50vh));   /* a true circle, centred on the screen */
   transform: translateY(var(--rv-ty, 0px));
   will-change: clip-path, transform;
 }

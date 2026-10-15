@@ -107,7 +107,7 @@
 /* ---- one long pinned scroll: 4 scenes (scrub + hold + dissolve), then the arch rises over it ---- */
 /* scenes run (N * W) screens; the video arch starts rising right after the last pin view, so the section is only as
    long as the scenes up to that point plus the screen the arch rises over: (3 + .78) * 1.2 + 2 screens */
-.ep-fly { height: calc(var(--_special-units---100vh, 100vh) * 6.8); }
+.ep-fly { height: calc(var(--_special-units---100vh, 100vh) * 2); }   /* one pinned screen; the second screen is where the arch rises over it */
 .ep-fly_pin { height: var(--_special-units---100vh, 100vh); }
 
 /* ---- hotspots ---- */
@@ -191,6 +191,58 @@
   .ep-fly_cta { bottom: calc(112px + env(safe-area-inset-bottom)); }
 }
 
+/* scenes are moved by swipe / arrows / keys / the segment bar; the page scroll carries on past the hero */
+.ep-fly_pin { touch-action: pan-y; }
+.ep-fly_nav { position: absolute; z-index: 6; left: 50%; transform: translateX(-50%); bottom: calc(clamp(64px, 9.5vh, 112px) + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 16px; color: #fff; }
+.ep-fly_navbtn { width: 48px; height: 48px; padding: 0; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgba(244,242,240,.6); background: rgba(20,10,6,.4); color: #fff; cursor: pointer; transition: background-color .2s, border-color .2s, opacity .2s; }
+.ep-fly_navbtn:hover:not(:disabled), .ep-fly_navbtn:focus-visible { background: rgba(244,242,240,.18); border-color: #fff; outline: none; }
+.ep-fly_navbtn:disabled { opacity: .3; cursor: default; }
+.ep-fly_navbtn svg { width: 16px; height: 16px; }
+.ep-fly_count { min-width: 64px; text-align: center; font-size: 11px; font-weight: 600; letter-spacing: .2em; text-shadow: 0 1px 10px rgba(20,10,6,.8); }
+.ep-fly_hint { display: inline-flex; align-items: center; gap: 10px; }
+.ep-fly_hand { display: inline-block; width: 26px; height: 26px; animation: ep-fly-swipe 1.8s ease-in-out infinite; }
+.ep-fly_hand svg { width: 100%; height: 100%; }
+@keyframes ep-fly-swipe { 0%, 15% { transform: translateX(10px); opacity: 0; } 30% { opacity: 1; } 70% { transform: translateX(-12px); opacity: 1; } 85%, 100% { transform: translateX(-12px); opacity: 0; } }
+.ep-fly.has-moved .ep-fly_hint { opacity: 0; transition: opacity .4s; }
+/* the old last-scene buttons give way to the end card */
+.ep-fly_cta { display: none !important; }
+/* end card: after the Rooftop, the tour closes on a clear next step */
+.ep-fly_end { position: absolute; inset: 0; z-index: 7; display: grid; place-items: center; padding: 0 24px; background: rgba(20,10,6,.62); opacity: 0; visibility: hidden; transition: opacity .45s ease, visibility .45s; }
+.ep-fly.is-end .ep-fly_end { opacity: 1; visibility: visible; }
+.ep-fly.is-end .ep-fly_caps, .ep-fly.is-end .ep-fly_nav .ep-fly_count { opacity: 0; transition: opacity .3s; }
+.ep-fly_end_in { max-width: 560px; text-align: center; color: #fff; transform: translateY(14px); transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.ep-fly.is-end .ep-fly_end_in { transform: none; }
+.ep-fly_end_eb { margin: 0 0 14px; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: #f0d2ae; }
+.ep-fly_end_h { margin: 0 0 26px; font-family: "Playfair Display", serif; font-weight: 400; font-size: clamp(30px, 4vw, 52px); line-height: 1.08; }
+.ep-fly_end_btns { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.ep-fly_end_btn { display: inline-flex; align-items: center; justify-content: center; height: 50px; padding: 0 26px; border: 1px solid rgba(244,242,240,.7); color: #fff; font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; }
+.ep-fly_end_btn--sand { background: #d0a77f; border-color: #d0a77f; color: #24120c; }
+.ep-fly_end_down { margin: 28px auto 0; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 6px 10px; border: 0; background: none; color: #fff; font: 600 11px/1 "Albert Sans", sans-serif; letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
+.ep-fly_end_down svg { width: 18px; height: 18px; animation: ep-fly-bob 1.6s ease-in-out infinite; }
+@keyframes ep-fly-bob { 50% { transform: translateY(5px); } }
+.ep-fly_end_again { margin: 14px auto 0; display: block; padding: 4px 8px; border: 0; background: none; color: rgba(255,255,255,.7); font: 500 12px/1.2 "Albert Sans", sans-serif; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+/* story bars: phones only (desktop keeps the labelled bar along the bottom) */
+.ep-fly_story { display: none; }
+.ep-fly.is-nudge .ep-fly_hint { animation: ep-fly-pulse .9s ease-in-out 2; }
+@keyframes ep-fly-pulse { 50% { opacity: .55; } }
+@media (max-width: 767px) {
+  .ep-fly_story { display: flex; position: absolute; z-index: 6; left: 14px; right: 14px; top: calc(80px + env(safe-area-inset-top)); gap: 6px; }
+  .ep-fly_sbar { flex: 1; min-width: 0; padding: 0 0 6px; border: 0; background: none; cursor: pointer; text-align: left; }
+  .ep-fly_sbar i { display: block; height: 3px; border-radius: 3px; overflow: hidden; background: rgba(244,242,240,.32); }
+  .ep-fly_sbar b { display: block; height: 100%; background: #fff; transform: scaleX(0); transform-origin: 0 50%; }
+  .ep-fly_sbar span { display: block; margin-top: 7px; font-size: 9.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 8px rgba(20,10,6,.8); }
+  .ep-fly_rail { display: none !important; }
+  /* chevrons at the left and right edges, mid-screen */
+  .ep-fly_nav { display: flex; left: 0; right: 0; top: 50%; bottom: auto; transform: translateY(-50%); justify-content: space-between; padding: 0 10px; pointer-events: none; }
+  .ep-fly_navbtn { pointer-events: auto; width: 42px; height: 42px; background: rgba(20,10,6,.38); border-color: rgba(244,242,240,.55); }
+  .ep-fly_navbtn:disabled { opacity: 0; }
+  .ep-fly_count { display: none; }
+  .ep-fly_caps { bottom: calc(44px + env(safe-area-inset-bottom)); }
+  .ep-fly_intro { bottom: calc(64px + env(safe-area-inset-bottom)); }
+}
+/* the page's own bottom-right section chevrons stay away while the hero has its own controls */
+html.ep-in-hero .ep-nav_btns { opacity: 0 !important; pointer-events: none !important; transition: opacity .3s; }
+
 /* Reduce Motion (iPhone/Mac accessibility setting): no scrubbing and no pinning. The hero becomes a one-screen carousel:
    slide 1 is the title over the lobby, slides 2-5 the four scenes with their captions. Swipe, arrows, keys or dots move
    it, with a short crossfade and no autoplay (epiisod-flythrough.js builds the controls; the scroll script stays idle). */
@@ -226,3 +278,59 @@
   .ep-fly_stage[data-fly-stage="2"] .ep-fly_poster { background-image: url(/assets/flythrough/still3.webp) !important; }
   .ep-fly_stage[data-fly-stage="3"] .ep-fly_poster { background-image: url(/assets/flythrough/still4.webp) !important; }
 }
+/* touch screens: the right-hand section line steps aside while the hero is up, so a swipe that starts near the right edge
+   turns the scene instead of opening the section fan */
+@media (pointer: coarse) { html.ep-in-hero .ep-rnav { opacity: 0 !important; pointer-events: none !important; transition: opacity .3s; } }
+.ep-fly.is-end .ep-fly_nav { opacity: 0; pointer-events: none; }
+/* phones and tablets: the right-hand section line stays out of the hero so it never sits over the right chevron */
+@media (max-width: 991px) { html.ep-in-hero .ep-rnav, html.ep-in-hero .ep-rnav_arch, html.ep-in-hero .ep-rnav_veil { opacity: 0 !important; pointer-events: none !important; } }
+
+/* ===== hero redesign: chapter cards (desktop/tablet), stories (phones), a clear start ===== */
+/* the opening choice */
+.ep-fly_start { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-top: 26px; pointer-events: auto; }
+.ep-fly_startbtn { display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 26px 0 22px; border: 0; border-radius: 99px; background: #d0a77f; color: #24120c; cursor: pointer;
+  font: 600 13px/1 "Albert Sans", sans-serif; letter-spacing: .16em; text-transform: uppercase; box-shadow: 0 12px 30px rgba(20,10,6,.35); transition: transform .2s, background-color .2s; }
+.ep-fly_startbtn:hover { transform: translateY(-1px); background: #dcb48c; }
+.ep-fly_startbtn svg { width: 14px; height: 14px; }
+.ep-fly_skip { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 8px; border: 0; background: none; color: rgba(255,255,255,.8); cursor: pointer; font: 600 10.5px/1 "Albert Sans", sans-serif; letter-spacing: .18em; text-transform: uppercase; text-shadow: 0 1px 10px rgba(20,10,6,.8); }
+.ep-fly_skip svg { width: 16px; height: 16px; animation: ep-fly-bob 1.6s ease-in-out infinite; }
+.ep-fly_hint { margin-top: 18px !important; font-size: 10.5px !important; opacity: .8; }
+.ep-fly_intro { pointer-events: none; }
+
+/* chapter cards along the bottom (tablet and desktop) */
+.ep-fly_cards { display: none; }
+@media (min-width: 768px) {
+  .ep-fly_rail, .ep-fly_nav { display: none !important; }
+  .ep-fly_cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; position: absolute; z-index: 6; left: var(--fly-gutter-l); right: var(--fly-gutter-r); bottom: calc(24px + env(safe-area-inset-bottom)); }
+  .ep-fly_card { position: relative; display: flex; align-items: center; gap: 14px; min-width: 0; padding: 10px 14px 14px 10px; border: 1px solid rgba(244,242,240,.22); border-radius: 4px; background: rgba(20,10,6,.42); color: #fff; text-align: left; cursor: pointer;
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background-color .25s, border-color .25s, transform .25s; }
+  .ep-fly_card:hover { background: rgba(20,10,6,.62); border-color: rgba(244,242,240,.5); transform: translateY(-3px); }
+  .ep-fly_card.is-on { background: rgba(20,10,6,.7); border-color: #d0a77f; }
+  .ep-fly_card_img { flex: none; width: 76px; height: 52px; border-radius: 3px; background: center / cover no-repeat #3a2419; opacity: .8; transition: opacity .25s; }
+  .ep-fly_card:hover .ep-fly_card_img, .ep-fly_card.is-on .ep-fly_card_img { opacity: 1; }
+  .ep-fly_card_t { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .ep-fly_card_t em { font-style: normal; font-size: 10.5px; font-weight: 700; letter-spacing: .2em; color: #d0a77f; }
+  .ep-fly_card_t strong { font-family: "Playfair Display", serif; font-weight: 400; font-size: clamp(14px, 1.2vw, 18px); line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ep-fly_card_bar { position: absolute; left: 10px; right: 10px; bottom: 6px; height: 2px; border-radius: 2px; background: rgba(244,242,240,.18); overflow: hidden; }
+  .ep-fly_card_bar b { display: block; height: 100%; background: #d0a77f; transform: scaleX(0); transform-origin: 0 50%; }
+  /* captions and the opening sit above the cards */
+  .ep-fly_caps { bottom: calc(132px + env(safe-area-inset-bottom)) !important; }
+  .ep-fly_intro { bottom: calc(110px + env(safe-area-inset-bottom)); }
+  html.ep-in-hero .ep-nav_btns { display: none; }
+}
+@media (min-width: 768px) and (max-width: 1100px) { .ep-fly_card_img { width: 56px; height: 42px; } .ep-fly_card { gap: 10px; } }
+html.ep-gh-lock .ep-fly_cards { visibility: hidden; }
+
+/* phones: stories — bars at the top, tap right for next / left for back, hold to pause, drag to scrub */
+@media (max-width: 767px) {
+  .ep-fly_sbar span { opacity: .55; transition: opacity .3s; }
+  .ep-fly_navbtn { width: 34px; height: 34px; background: transparent; border-color: transparent; opacity: .75; }
+  .ep-fly_navbtn svg { width: 20px; height: 20px; filter: drop-shadow(0 1px 6px rgba(20,10,6,.8)); }
+  .ep-fly_start { align-items: flex-start; margin-top: 20px; }
+  .ep-fly_startbtn { height: 48px; padding: 0 22px 0 18px; font-size: 12px; }
+  .ep-fly_skip { align-items: flex-start; padding-left: 2px; }
+}
+@media (prefers-reduced-motion: reduce) { .ep-fly_start, .ep-fly_cards, .ep-fly_story { display: none !important; } }
+@media (max-width: 767px) { .ep-fly_sbar.is-on span { opacity: 1; } }
+/* tablets: captions get a proper measure instead of a narrow column */
+@media (min-width: 768px) and (max-width: 1100px) { .ep-fly_cap { max-width: min(560px, 72vw) !important; } .ep-fly_cap_title { font-size: clamp(30px, 4.6vw, 44px); } .ep-fly_cap_body { font-size: 16px; line-height: 26px; } }

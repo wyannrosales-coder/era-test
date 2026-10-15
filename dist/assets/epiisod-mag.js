@@ -254,6 +254,7 @@
       ticks.forEach(function (t, i) { t.classList.toggle('is-on', i + 1 === cur); });
       idx.classList.toggle('is-cover', cur === 0);
       stage.classList.toggle('is-cover', cur === 0);
+      stage.classList.toggle('is-end', cur === TURNS);
     }
   }
   function setInert(el, on) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); }
@@ -276,7 +277,7 @@
     if (!side) { cursor.classList.remove('is-on'); return; }
     cursor.classList.add('is-on');
     cursor.classList.toggle('is-back', side === 'back');
-    cLabel.textContent = side === 'back' ? 'Back' : 'Next';
+    cLabel.textContent = side === 'back' ? 'Back' : cur === 0 ? 'View rooms' : 'Next';
     cursor.style.transform = 'translate3d(' + pt.x + 'px,' + pt.y + 'px,0)';
   }
   book.addEventListener('pointermove', function (e) {
@@ -286,7 +287,7 @@
   });
   book.addEventListener('pointerleave', function () { pt = null; refreshCur(); });
   book.addEventListener('click', function (e) {
-    if (!mq.matches || e.target.closest('a')) return;
+    if (!mq.matches || e.target.closest('a') || (book.__swiped && performance.now() - book.__swiped < 400)) return;
     var side = sideAt(e.clientX);
     if (side === 'next') setCur(cur + 1); else if (side === 'back') setCur(cur - 1);
   });
@@ -298,6 +299,26 @@
     setCur(cur + (e.key === 'ArrowRight' ? 1 : -1));
   });
   window.addEventListener('scroll', function () { if (pt) { pt = null; refreshCur(); } }, { passive: true });
+
+  // tablets (book layout, no hover): a visible "Open the rooms magazine" button on the cover, then back / next arrows
+  // either side of the page numbers, and swipe on the book itself
+  var chev = function (d) { return '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="' + (d < 0 ? 'M10 3 5 8l5 5' : 'M6 3l5 5-5 5') + '" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; };
+  var tPrev = document.createElement('button'), tNext = document.createElement('button'), tOpen = document.createElement('button');
+  tPrev.type = tNext.type = tOpen.type = 'button';
+  tPrev.className = 'ep-mag_tbtn ep-mag_tprev'; tPrev.setAttribute('aria-label', 'Previous page'); tPrev.innerHTML = chev(-1);
+  tNext.className = 'ep-mag_tbtn ep-mag_tnext'; tNext.setAttribute('aria-label', 'Next page'); tNext.innerHTML = chev(1);
+  tOpen.className = 'ep-mag_topen'; tOpen.innerHTML = '<span>Open the rooms magazine</span>' + chev(1);
+  idx.parentNode.insertBefore(tPrev, idx); idx.parentNode.insertBefore(tNext, idx.nextSibling); idx.parentNode.insertBefore(tOpen, idx);
+  tPrev.addEventListener('click', function () { setCur(cur - 1); });
+  tNext.addEventListener('click', function () { setCur(cur + 1); });
+  tOpen.addEventListener('click', function () { setCur(1); });
+  var sw = null;
+  book.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') sw = { x: e.clientX, y: e.clientY }; });
+  book.addEventListener('pointerup', function (e) {
+    if (!sw || !mq.matches) { sw = null; return; }
+    var dx = e.clientX - sw.x, dy = e.clientY - sw.y; sw = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) { e.preventDefault(); setCur(cur + (dx < 0 ? 1 : -1)); book.__swiped = performance.now(); }
+  });
   if (mq.addEventListener) mq.addEventListener('change', function () { refreshCur(); });
   render();
 

@@ -16,13 +16,16 @@
   // Reduce Motion: the map is a still with its labelled dots, and the closing words follow as their own white section
   if (reduce) { sec.classList.add('is-rm'); if (endBox) { sec.appendChild(endBox); endBox.classList.add('is-in'); } }
   var FRAME = 16 / 9;
-  var FRAMES = 96, DUR = 6.0, DIR = '/assets/location/frames/';
-  var KT = [0.2, 0.8, 1.4];
+  // the canopy flight (8 s): an aerial drift towards EPIISOD (0-2.4 s, 16 frames a second), then a dive through the
+  // treetops that settles on the building (10 a second). Phones load a lighter 960px set.
+  var FRAMES = 94, DUR = 8.0, DRIFT = 2.4;
+  var DIR = (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches) ? '/assets/location/frames-m/' : '/assets/location/frames/';
+  var KT = [0.3, 1.3, 2.3];
   var KP = {
-    uni:     [[0.264, 0.268], [0.243, 0.234], [0.218, 0.186]],
-    station: [[0.455, 0.323], [0.445, 0.299], [0.427, 0.242]],
-    centre:  [[0.527, 0.396], [0.532, 0.363], [0.509, 0.299]],
-    home:    [[0.359, 0.565], [0.323, 0.541], [0.264, 0.485]]
+    uni:     [[0.432, 0.090], [0.427, 0.078], [0.424, 0.060]],   // the dark university tower
+    station: [[0.611, 0.159], [0.615, 0.143], [0.615, 0.125]],   // by the cranes, at the top-left of the centre
+    centre:  [[0.711, 0.238], [0.722, 0.224], [0.732, 0.200]],   // Macquarie Centre's roofs
+    home:    [[0.535, 0.409], [0.536, 0.400], [0.541, 0.378]]    // EPIISOD: the grey and brown building
   };
   var vw = 0, vh = 0, raf = 0, sp = 0, open = null, dpr = 1, lastKey = '';
   var imgs = new Array(FRAMES), ready = new Array(FRAMES);
@@ -33,9 +36,9 @@
 
   // section progress -> clip time: arrive, a slow drift over the aerial view (hotspots live here), then the dive
   function timeAt(p) {
-    if (p < 0.12) return lerp(0, 0.2, p / 0.12);
-    if (p < 0.72) return lerp(0.2, 1.4, (p - 0.12) / 0.6);
-    return lerp(1.4, DUR - 0.05, smooth((p - 0.72) / 0.15));
+    if (p < 0.12) return lerp(0, KT[0], p / 0.12);
+    if (p < 0.72) return lerp(KT[0], KT[2], (p - 0.12) / 0.6);
+    return lerp(KT[2], DUR - 0.05, smooth((p - 0.72) / 0.18));
   }
   // where the 16:9 frame sits in the pin (css px). Desktop: like object-fit cover. Portrait phones: zoomed out so every
   // hotspot is in view during the aerial drift, easing back to a full-bleed cover for the dive
@@ -45,9 +48,9 @@
       var dw = vw / vh > FRAME ? vw : vh * FRAME;
       return { dw: dw, dh: dw / FRAME, x: (vw - dw) / 2, y: (vh - dw / FRAME) / 2, zo: 0 };
     }
-    var zo = 1 - smooth((t - 1.4) / 1.6);
+    var zo = 1 - smooth((t - KT[2]) / 1.6);
     var cover = vw / (vh * FRAME), fv = lerp(cover, FV, zo);
-    var w = vw / fv, h = w / FRAME, xc = lerp(0.5, 0.38, zo), yc = lerp(0.5, 0.38, zo);
+    var w = vw / fv, h = w / FRAME, xc = lerp(0.5, 0.575, zo), yc = lerp(0.5, 0.3, zo);
     return { dw: w, dh: h, x: vw / 2 - xc * w, y: vh * lerp(0.5, 0.47, zo) - yc * h, zo: zo };
   }
   function posAt(k, t) {
@@ -61,7 +64,7 @@
   function startLoad() {
     if (!lastKey && !ready.some(Boolean)) canvas.classList.add('is-poster');
     if (started) return; started = true;
-    if (reduce) { fetchOne(19); return; }      // Reduce Motion: one still of the aerial drift (t = 0.8), dots on top
+    if (reduce) { fetchOne(21); return; }      // Reduce Motion: one still of the aerial drift (t = 1.3), dots on top
     var next = 0, active = 0, MAX = 6;
     function pump() {
       while (active < MAX && next < FRAMES) { (function (i) { active++; fetchOne(i, function () { active--; pump(); }); })(next++); }
@@ -95,8 +98,8 @@
   }
   // draw like object-fit: cover, blending the two frames either side of the exact time
   function draw(t) {
-    // 24 frames a second for the first two seconds (the aerial drift), 12 a second for the dive
-    var fp = Math.max(0, Math.min(FRAMES - 1.001, t < 2 ? t * 24 : 48 + (t - 2) * 12)), i0 = Math.floor(fp), u = fp - i0;
+    // 16 frames a second through the aerial drift, 10 a second for the dive
+    var fp = Math.max(0, Math.min(FRAMES - 1.001, t < DRIFT ? t * 16 : DRIFT * 16 + (t - DRIFT) * 10)), i0 = Math.floor(fp), u = fp - i0;
     var a = nearest(i0, -1), b = nearest(i0 + 1, 1);
     if (a < 0 && b < 0) return;
     if (a < 0) a = b;
@@ -147,7 +150,7 @@
     var now = performance.now(), dt = Math.min(0.1, Math.max(0.004, (now - (update.__t || now)) / 1000)); update.__t = now;
     sp += (p - sp) * (1 - Math.exp(-dt / 0.15));
     if (Math.abs(p - sp) > 0.0003) raf = requestAnimationFrame(update); else { sp = p; update.__t = 0; }
-    var t = reduce ? 0.8 : timeAt(sp);
+    var t = reduce ? 1.3 : timeAt(sp);
     draw(t);
 
     // text is there on arrival and gives way to the dive
@@ -172,7 +175,12 @@
       var x = LY.x + xy[0] * dw, y = LY.y + xy[1] * dh;
       pt.style.left = x.toFixed(1) + 'px';
       pt.style.top = y.toFixed(1) + 'px';
-      pt.classList.toggle('is-flip', x > vw * (vw / vh < 0.9 ? 0.55 : 0.7));
+      // the label sits to the right of its dot; it flips left near the right edge, and goes under the dot when it fits
+      // neither side (narrow phones), keeping clear of the section line on the right
+      var lab = pt.querySelector('.ep-loc_label'), lw = (lab.__w = lab.__w || lab.offsetWidth), gap = pt.getAttribute('data-loc-pt') === 'home' ? 32 : 20, edge = vw - 44;
+      var fitsR = x + gap + lw < edge, fitsL = x - gap - lw > 12;
+      pt.classList.toggle('is-flip', !fitsR && fitsL);
+      pt.classList.toggle('is-under', !fitsR && !fitsL);
       var below = y < vh * 0.5;
       pt.classList.toggle('is-below', below);
       pt.classList.toggle('is-above', !below);

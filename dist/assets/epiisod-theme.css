@@ -183,3 +183,9 @@ html body {
 
 /* the design is light-only: stop browsers' automatic dark mode (Chrome/Samsung "auto dark") from inverting it */
 :root { color-scheme: only light; }
+
+/* cookie banner removed for now (it covered the bottom-right of every section) */
+.cookies { display: none !important; }
+
+/* the loader has nothing to press: while it opens onto the hero, a first tap or swipe goes through to the page */
+[data-preloader], [data-preloader] * { pointer-events: none !important; }

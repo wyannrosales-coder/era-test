@@ -17,7 +17,17 @@
   function measureRooms() {
     if (!roomsPin) return;
     var s = roomsPin.firstElementChild;
-    roomsPin.style.height = (s.offsetHeight + window.innerHeight) + 'px';
+    // the "Flexible stays" words sit in the middle of the screen, and stay there for a moment (HOLD) before the Life
+    // beyond the classroom arch starts rising over them
+    var lead = s.querySelector('.info-s_lead');
+    if (lead) {
+      lead.style.transform = '';
+      var r = lead.getBoundingClientRect(), sr = s.getBoundingClientRect();
+      var d = (sr.top + Math.min(s.offsetHeight, window.innerHeight) / 2) - (r.top + r.height / 2);
+      lead.style.transform = 'translateY(' + Math.round(d) + 'px)';
+    }
+    var HOLD = reduce ? 0 : 0.45;
+    roomsPin.style.height = (s.offsetHeight + window.innerHeight * (1 + HOLD)) + 'px';
   }
 
   function measure() {
@@ -41,48 +51,42 @@
   function update() {
     raf = 0;
     var rect = sec.getBoundingClientRect();
-    // approach: the section's top travels from the bottom of the screen to the top; the arch rises and widens
-    var p1 = clamp((1 - rect.top / vh) * 2.4);   // fully open once ~60% of a screen has been scrolled
-    var o0 = ease(p1);
-    // exit: the video stays pinned while it narrows into a downward-pointing arch and is pushed up and out at scroll
-    // speed; the amenities section is already in place behind it
+    // the video is seen through a perfect circle that sits in the middle of the screen: it grows evenly as the section
+    // arrives until it covers the corners, holds full screen, then shrinks back into a circle as it is pushed up and out
+    var p1 = clamp((1 - rect.top / vh) * 2.4);                 // fully open once ~60% of a screen has been scrolled
     var y = -rect.top;
-    var q = clamp((y - (len - EXIT * vh)) / (EXIT * vh));
+    var q = clamp((y - (len - EXIT * vh)) / (EXIT * vh));      // the exit
     var e = ease(q);
-    var o = o0 * (1 - e);
-    var w0 = Math.min(vw < 768 ? vw * 0.7 : 340, vw * 0.8);
-    var w = lerp(w0, vw, o);
-    var side = (vw - w) / 2;
-    var top = lerp(vh * 0.16, 0, o0);
-    var bot = vh * 0.22 * e;
-    // entry: the arch comes in higher, rising ahead of the section and closing the gap smoothly as the section arrives
-    var lift = 0.66 * (0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, p1))) * Math.max(0, rect.top);   // only ever shrinks as the section arrives, so the arch never moves back down
-    var r = (w / 2) * (1 - Math.pow(o0, 3));
-    var rb = (w / 2) * e;
+    var full = Math.sqrt(vw * vw + vh * vh) / 2 + 2;           // radius that covers every corner
+    var r0 = Math.min(vw / 6, vh * 0.22);                     // the starting circle: about a third of the width across
+    var rIn = p1 < 0.12 ? r0 * ease(p1 / 0.12) : lerp(r0, full, ease((p1 - 0.12) / 0.88));
+    var r = lerp(rIn, r0, e);
+    var o = clamp((r - r0) / (full - r0));                     // 0 small circle .. 1 full screen
+    // the window is held to the screen while the section rises (so the circle is never cut by the section's edge); on the
+    // way out the video stays put and only the shrinking circle travels up and off the top
+    var off = Math.max(0, rect.top);
+    var cy = lerp(vh / 2, -r0 - 24, e);
     var fs0 = vw < 768 ? 26 : 30, fs1 = vw < 768 ? 38 : Math.max(36, Math.min(vw * 0.042, 66));
     var s = sec.style;
-    s.setProperty('--rv-side', side + 'px');
-    s.setProperty('--rv-top', top + 'px');
-    s.setProperty('--rv-bot', (vh * 0.5 - lift + bot).toFixed(1) + 'px');
-    s.setProperty('--rv-h', (vh + lift).toFixed(1) + 'px');
-    s.setProperty('--rv-ty', (-EXIT * vh * q - lift).toFixed(1) + 'px');
+    s.setProperty('--rv-cr', r.toFixed(1) + 'px');
+    s.setProperty('--rv-cy', cy.toFixed(1) + 'px');
+    s.setProperty('--rv-h', vh + 'px');
+    s.setProperty('--rv-ty', (-off).toFixed(1) + 'px');
     s.setProperty('--rv-dim', (clamp(p1 * 1.6) * 0.85 * (1 - clamp(q * 8))).toFixed(3));
-    s.setProperty('--rv-r', r + 'px');
-    s.setProperty('--rv-rbx', rb.toFixed(1) + 'px');
-    s.setProperty('--rv-rby', Math.min(rb, vh * 0.5).toFixed(1) + 'px');
     s.setProperty('--rv-scale', lerp(1.18, 1, o).toFixed(4));
-    s.setProperty('--rv-fs', lerp(fs0, fs1, o).toFixed(2) + 'px');
-    // copy appears once the video is full-bleed, rides the video as it narrows, and fades late
-    var c = clamp((p1 - 0.78) / 0.22);
+    s.setProperty('--rv-fs', fs1.toFixed(2) + 'px');
+    // the words only arrive once the circle has filled the screen, line by line, and leave as it starts to shrink
+    var openAt = vh * (1 - 1 / 2.4);
+    var ct = p1 < 1 ? 0 : clamp((openAt - rect.top) / (vh * 0.45));
+    var c = clamp(ct * 1.4);
     s.setProperty('--rv-copy', c.toFixed(3));
-    // text arrives once the video is ~70% open, line by line
-    var ct = clamp((p1 - 0.7) / 0.3), seg = function (a, b) { return ease(clamp((ct - a) / (b - a))).toFixed(3); };
-    s.setProperty('--rv-t1', seg(0, 0.5));
-    s.setProperty('--rv-t2', seg(0.2, 0.7));
-    s.setProperty('--rv-t3', seg(0.4, 0.9));
-    s.setProperty('--rv-t4', seg(0.55, 1));
-    s.setProperty('--rv-ttl', (1 - clamp((q - 0.5) / 0.4)).toFixed(3));
-    sec.classList.toggle('is-open', c > 0.9 && e < 0.1);
+    var seg = function (a, b) { return ease(clamp((ct - a) / (b - a))).toFixed(3); };
+    s.setProperty('--rv-t1', seg(0, 0.45));
+    s.setProperty('--rv-t2', seg(0.15, 0.6));
+    s.setProperty('--rv-t3', seg(0.3, 0.75));
+    s.setProperty('--rv-t4', seg(0.45, 0.9));
+    s.setProperty('--rv-ttl', (1 - clamp(q / 0.3)).toFixed(3));
+    sec.classList.toggle('is-open', c > 0.9 && q < 0.1);
     // only decode video while the section is on screen
     var on = rect.top < vh && rect.bottom > 0;
     if (video && on !== playing) {
