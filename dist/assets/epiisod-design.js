@@ -269,8 +269,9 @@
     // sizes come from the block's own (unscaled) layout box: during the intro the block is drawn scaled down, and its
     // on-screen size would leave the picture short of the bottom of the block
     var bw = box.offsetWidth || r.width, bh = box.offsetHeight || r.height;
-    var w0 = Math.max(bw, bh * ar);                   // at rest: covering the whole block
-    var h0 = w0 / ar, w = lerp(w0, bw, p), h = w / ar;               // zooms out until it spans the full width
+    var w0 = Math.max(bw, Math.max(bh, vh) * ar);     // at rest: covering the whole block (and the screen)
+    var wEnd = Math.max(bw, vh * ar);                 // zoomed out it still covers the whole screen, so no band shows above or below it
+    var h0 = w0 / ar, w = lerp(w0, wEnd, p), h = w / ar;
     var cy = lerp(bh / 2, vh / 2 - r.top, p);         // and settles in the middle of the screen
     // ...but never past the edges of its own block: as the section scrolls away (down or back up) the picture leaves with
     // it, like any other content, instead of staying centred and being cut by the block's edge

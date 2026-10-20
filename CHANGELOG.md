@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.13.1
+
+(also in this release)
+- Smart room on tablets (landscape): the app's panel is filled top to bottom: a roomier title and cards, and the four lights share the free height instead of leaving the lower half empty.
+- Smart room on phones (portrait): the sheet is only as tall as its controls need (up to about 60% of the screen) and the picture takes the rest, so it is much taller than before.
+- Smart room on phones and tablets: turn or tilt the phone to look left and right across the room (the picture is wider than the screen and slides with the phone; Android works straight away, iPhone through the one-tap "Tilt your phone in 3D" pill). The gyro module now serves any section that registers with it.
+
+- Smart room (desktop): the photograph covers the whole screen when zoomed out, so no band shows above or below it on screens shorter than 16:9.
+- Smart room (phones and tablets): the app always fits.
+  - Landscape and wide screens (tablets, phones on their side): the photo on the left and the app in a full-height panel on the right.
+  - Portrait: the sheet's controls measure the room they have and scale down so every control, including the aircon, is visible; portrait tablets get a shorter picture, a taller sheet and controls capped at a comfortable width.
+  - The "Try it" card sits over the picture when the app is at the side.
+
 ## 3.13.0
 
 - Footer: the resident pass. An EPIISOD access card hangs from a sand lanyard at the top of the footer; drag it and it swings, tilts and can be flicked into a spin; tap or click it to flip it. The front is a chocolate pass with the emblem and "Welcome home, <your name>" (type a name in the form beside it and it prints on the pass; remembered on that device only); the back is pearl with "Your room is waiting", Book a tour and View rooms buttons on the card itself.

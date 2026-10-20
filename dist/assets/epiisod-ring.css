@@ -67,3 +67,6 @@ html.ep-in-ring .ep-nav_btns { opacity: 0 !important; pointer-events: none !impo
 
 /* the Live well video's dark overlay, carried onto the ring stage and faded through the hand-off (epiisod-ring.js) */
 .ep-ring_scrim { position: absolute; inset: 0; pointer-events: none; opacity: 1; background: linear-gradient(180deg, rgba(36,18,12,.45) 0%, rgba(36,18,12,.32) 45%, rgba(36,18,12,.6) 100%); }
+
+/* phones on their side and tablets (landscape): the permission pill sits at the left, over the picture, not the app panel */
+@media (max-width: 991px) and (min-aspect-ratio: 101/100) { .ep-gyro_pill { left: 16px; transform: none; top: calc(16px + env(safe-area-inset-top)); } }

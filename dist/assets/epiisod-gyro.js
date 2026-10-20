@@ -8,10 +8,23 @@
   if (!('DeviceOrientationEvent' in window)) return;
   // the tilt values go on the reveal section only (never on <html>, which would restyle the whole page every frame), and
   // only while that section is near the screen
-  var html = document.getElementById('reveal') || document.documentElement, near = false;
-  if ('IntersectionObserver' in window && html.id === 'reveal') new IntersectionObserver(function (es) { near = es[0].isIntersecting; if (near && raw.b != null && !running) { running = true; last = 0; requestAnimationFrame(loop); } }, { rootMargin: '50% 0px' }).observe(html);
-  else near = true;
-  var G = window.__epGyro = { gx: 0, gy: 0, on: false };
+  var html = document.getElementById('reveal') || document.documentElement, near = false, nearList = [], pillRef = null;
+  function setNear(el, v) {
+    var i = nearList.indexOf(el);
+    if (v && i < 0) nearList.push(el); else if (!v && i >= 0) nearList.splice(i, 1);
+    near = nearList.length > 0;
+    if (near && raw.b != null && !running) { running = true; last = 0; requestAnimationFrame(loop); }
+    if (pillRef && !pillRef.__done) pillRef.hidden = !near;
+  }
+  // sections that use the tilt (the Live well circle and ring, the smart room picture) register here; the sensor is only
+  // read while one of them is near the screen
+  function watch(el) {
+    if (!el) return;
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { setNear(el, es[0].isIntersecting); }, { rootMargin: '50% 0px' }).observe(el);
+    else setNear(el, true);
+  }
+  var G = window.__epGyro = { gx: 0, gy: 0, on: false, watch: watch };
+  if (html.id === 'reveal') watch(html); else near = true;
   var raw = { b: null, g: null }, base = { b: null, g: null }, sm = { x: 0, y: 0 }, last = 0, running = false;
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
 
@@ -57,7 +70,6 @@
     pill.addEventListener('click', function () {
       DeviceOrientationEvent.requestPermission().then(function (r) { if (r === 'granted') listen(); pill.hidden = true; pill.__done = true; }).catch(function () { pill.hidden = true; pill.__done = true; });
     });
-    var near = document.querySelector('#reveal');
-    if (near && 'IntersectionObserver' in window) new IntersectionObserver(function (es) { if (!pill.__done) pill.hidden = !es[0].isIntersecting; }, { threshold: 0.2 }).observe(near);
+    pillRef = pill; pill.hidden = !near;
   }, 1500);
 })();

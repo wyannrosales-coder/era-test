@@ -45,8 +45,9 @@
     var sheet = phone.closest('.ep-msm_sheet');
     var x, y;
     if (sheet) {
-      var st = sheet.getBoundingClientRect().top;
-      x = (vw - cw) / 2; y = Math.max(12, st - ch - 14);
+      var sr = sheet.getBoundingClientRect();
+      if (sr.left > vw * 0.3) { x = Math.max(12, (sr.left - cw) / 2); y = Math.max(12, vh * 0.34 - ch / 2); }     // side by side: over the picture
+      else { x = (vw - cw) / 2; y = Math.max(12, sr.top - ch - 14); }
     } else {
       x = r.left - cw - 44; if (x < 16) x = Math.min(vw - cw - 16, r.right + 44);
       y = r.top + r.height * 0.36 - ch / 2;
