@@ -114,7 +114,7 @@ html body {
   position: relative; height: calc(var(--w) * 1.95 + 90px); margin: 0 auto; max-width: 100%; overflow: visible; touch-action: pan-y; cursor: grab; outline-offset: 4px; user-select: none; -webkit-user-select: none; }
 .ep-fan.is-drag { cursor: grabbing; }
 .ep-fan_card { --off: 0; position: absolute; left: 50%; top: calc(var(--w) * .16 + 30px); width: var(--w); margin: 0; padding: calc(var(--w) * .05) calc(var(--w) * .05) 0; background: #fcfbf9; border: 1px solid var(--_colors---base-1000--line);
-  box-shadow: 0 16px 36px rgba(36,18,12,.15), 0 2px 3px rgba(36,18,12,.05);
+  box-shadow: 0 16px 36px rgba(var(--fly-tint),.15), 0 2px 3px rgba(var(--fly-tint),.05);
   transform-origin: 50% 85%;
   transform: translateX(-50%) translateX(calc(var(--off) * var(--gx))) translateY(calc(var(--off) * var(--off) * var(--gy))) translateY(var(--rise, 0px)) rotate(calc(var(--off) * var(--rot))) scale(max(.84, calc(1.14 - var(--abs, 0) * .2)));
   transition: transform 900ms cubic-bezier(.22,.9,.2,1), opacity 500ms ease;

@@ -49,7 +49,7 @@
   position: absolute;
   inset: 0 0 auto 0;
   height: var(--rv-h, var(--_special-units---100vh, 100vh));
-  background: linear-gradient(180deg, rgba(36,18,12,.45) 0%, rgba(36,18,12,.32) 45%, rgba(36,18,12,.6) 100%);
+  background: linear-gradient(180deg, rgba(var(--fly-tint),.45) 0%, rgba(var(--fly-tint),.32) 45%, rgba(var(--fly-tint),.6) 100%);
 }
 .ep-rv_copy {
   opacity: var(--rv-ttl, 1);

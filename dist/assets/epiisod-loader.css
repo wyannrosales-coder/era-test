@@ -1,0 +1,27 @@
+/* Loader: a pearl frame around a chocolate card; a counter, then EPIISOD with Sydney · Macquarie Park beneath it; the middle I
+   opens and the hero's first frame grows out of it (epiisod-loader.js draws the card and the opening on a canvas). The
+   page's own preloader stays in the DOM (other scripts wait for it) but is never seen. */
+[data-preloader] { visibility: hidden !important; }
+.ep-ld { --ld-m: clamp(10px, 2.2vw, 30px); --ld-r: clamp(4px, .6vw, 10px); position: fixed; inset: 0; z-index: 2147483000; background: #24120c; color: #f6f1ea; touch-action: none; overflow: hidden; }
+.ep-ld_card { position: absolute; inset: var(--ld-m); border-radius: var(--ld-r); background: radial-gradient(120% 90% at 50% 45%, #33190f 0%, #24120c 60%, #1c0e09 100%); }
+.ep-ld_cv { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
+.ep-ld.is-canvas { background: transparent; }   /* the canvas paints the frame, so the opening shows the page, not this */
+.ep-ld.is-canvas .ep-ld_cv { display: block; }
+.ep-ld.is-canvas .ep-ld_card { display: none; }
+.ep-ld_mark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; white-space: nowrap; }
+.ep-ld_word { display: inline-flex; align-items: center; font: 500 clamp(44px, 13vw, 176px)/1 "Playfair Display", ui-serif, Georgia, serif; letter-spacing: .06em; text-transform: uppercase; color: #f6f1ea; }
+.ep-ld_w { display: inline-flex; will-change: transform; }
+.ep-ld_c { display: inline-block; overflow: hidden; padding: .06em 0 .1em; margin: -.06em 0 -.1em; }
+.ep-ld_c > i { display: block; font-style: normal; transform: translateY(112%); will-change: transform; }
+.ep-ld_i { will-change: opacity; }
+.ep-ld_sub { position: absolute; left: 0; right: 0; top: calc(100% + clamp(14px, 2.2vw, 32px)); margin: 0; text-align: center; opacity: 0; font: 600 clamp(10px, 1.05vw, 15px)/1 "Albert Sans", system-ui, sans-serif; letter-spacing: .46em; text-transform: uppercase; color: #d0a77f; padding-left: .46em; }
+.ep-ld_count { position: absolute; left: 50%; bottom: calc(var(--ld-m) + clamp(24px, 5.5vh, 56px)); transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 12px; will-change: opacity, transform; }
+.ep-ld_n { font: 600 clamp(12px, 1.05vw, 15px)/1 "Albert Sans", system-ui, sans-serif; letter-spacing: .22em; color: rgba(246, 241, 234, .9); font-variant-numeric: tabular-nums; padding-left: .22em; }
+.ep-ld_line { display: block; position: relative; width: clamp(96px, 9vw, 140px); height: 1px; background: rgba(246, 241, 234, .22); overflow: hidden; }
+.ep-ld_line b { position: absolute; inset: 0; background: #d0a77f; transform: scaleX(0); transform-origin: 0 50%; }
+@media (prefers-reduced-motion: reduce) { .ep-ld_c > i { transform: none !important; } }
+
+/* while the loader runs, the hero's own words wait; they fade in as the opening finishes */
+html.ep-ld-hide .ep-fly_intro, html.ep-ld-hide .ep-fly_cards, html.ep-ld-hide .ep-fly_story, html.ep-ld-hide .ep-fly_nav, html.ep-ld-hide .ep-fly_hint, html.ep-ld-hide .ep-fly_rail, html.ep-ld-hide .ep-gh { opacity: 0 !important; }
+html.ep-ld-in .ep-fly_intro, html.ep-ld-in .ep-fly_cards, html.ep-ld-in .ep-fly_story, html.ep-ld-in .ep-fly_nav, html.ep-ld-in .ep-fly_hint, html.ep-ld-in .ep-fly_rail, html.ep-ld-in .ep-gh { animation: ep-ld-fade .8s ease both; }
+@keyframes ep-ld-fade { from { opacity: 0; } }

@@ -5,7 +5,7 @@
 .ep-badge { position: relative; min-height: 0; z-index: 2; }
 .ep-badge_cv { position: absolute; left: 0; top: 0; z-index: 3; display: block; pointer-events: none; -webkit-tap-highlight-color: transparent; }
 .ep-footer .footer-s { position: relative; }
-.ep-badge_still { position: absolute; left: 50%; top: 50%; width: min(300px, 64%); transform: translate(-50%, -50%); border-radius: 22px; box-shadow: 0 30px 60px rgba(8, 4, 2, .5); }
+.ep-badge_still { position: absolute; left: 50%; top: 50%; width: min(300px, 64%); transform: translate(-50%, -50%); border-radius: 22px; box-shadow: 0 30px 60px rgba(var(--fly-tint2), .5); }
 .ep-badge_hint { position: absolute; left: 0; right: 0; bottom: clamp(18px, 4vh, 40px); margin: 0; text-align: center; pointer-events: none; color: rgba(246, 241, 234, .6);
   font: 600 10.5px/1 "Albert Sans", sans-serif; letter-spacing: .22em; text-transform: uppercase; }
 .ep-badge_hint i { display: inline-block; width: 18px; height: 1px; margin: 0 12px 3px 0; background: var(--bd-sand); vertical-align: middle; }

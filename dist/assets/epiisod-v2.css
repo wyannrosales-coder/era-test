@@ -1,0 +1,108 @@
+/* Version 2: no chocolate tint, the EPIISOD design-system colours (Figma "White" scheme), the lighter navigation.
+   Everything here sits under html[data-ep-ver="2"], so version 1 is untouched.
+   pearl #f4f2f0 · stone #dcd7d3 · ink #212529 / #343a40 / #6c757d · chocolate #391d13 · bronze #896d42 */
+html[data-ep-ver="2"] {
+  --v2-white: #fff; --v2-pearl: #f4f2f0; --v2-stone: #dcd7d3; --v2-line: #dee2e6;
+  --v2-ink: #212529; --v2-ink2: #343a40; --v2-mute: #6c757d; --v2-choc: #391d13; --v2-bronze: #896d42;
+}
+/* switching versions: colours ease over half a second (the class is on <html> only while that happens) */
+html.ep-ver-fade *, html.ep-ver-fade *::before, html.ep-ver-fade *::after { transition-property: background-color, color, border-color, fill, stroke, box-shadow, opacity !important; transition-duration: .5s !important; transition-timing-function: ease !important; transition-delay: 0s !important; }
+
+/* ---- loader ---- */
+html[data-ep-ver="2"] .ep-ld:not(.is-canvas) { background: var(--v2-pearl); }
+html[data-ep-ver="2"] .ep-ld { color: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-ld_word { color: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-ld_n { color: var(--v2-ink2); }
+html[data-ep-ver="2"] .ep-ld_line { background: rgba(33, 37, 41, .14); }
+html[data-ep-ver="2"] .ep-ld_line b { background: var(--v2-bronze); }
+html[data-ep-ver="2"] .ep-ld_sub { color: var(--v2-bronze); }
+
+/* ---- navigation (from epiisod-test.vercel.app): links left, emblem centred, Log in / EN / Book a tour right, a burger that opens a
+   white drawer; a white, blurred, slimmer bar once the page is scrolled ---- */
+.ep-gh_emb, .ep-gh_bd { display: none; }
+html[data-ep-ver="2"] .ep-gh, html[data-ep-ver="2"] .ep-gh_mega, html[data-ep-ver="2"] .ep-gh_panel { --gh-h: 84px; --gh-gold: #fff; --gh-line: rgba(255,255,255,.6); }
+html[data-ep-ver="2"] .ep-gh { border-bottom: 0; }
+html[data-ep-ver="2"] .ep-gh_in { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; max-width: none; padding: 0 clamp(20px, 3.2vw, 48px); }
+html[data-ep-ver="2"] .ep-gh_nav { grid-column: 1; grid-row: 1; margin: 0; gap: clamp(14px, 1.8vw, 30px); }
+html[data-ep-ver="2"] .ep-gh_logo { grid-column: 2; grid-row: 1; width: 44px; height: 44px; justify-content: center; color: #fff; }
+html[data-ep-ver="2"] .ep-gh_word { display: none; }
+html[data-ep-ver="2"] .ep-gh_emb { display: block; width: 44px; height: 44px; }
+html[data-ep-ver="2"] .ep-gh_emb svg { display: block; width: 100%; height: 100%; }
+html[data-ep-ver="2"] .ep-gh_act { grid-column: 3; grid-row: 1; justify-self: end; gap: clamp(14px, 1.6vw, 26px); margin: 0; }
+html[data-ep-ver="2"] .ep-gh_item, html[data-ep-ver="2"] .ep-gh_link, html[data-ep-ver="2"] .ep-gh_lang { font-family: "Albert Sans", sans-serif; font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #fff; }
+html[data-ep-ver="2"] .ep-gh_link { border-bottom: 0; }
+html[data-ep-ver="2"] .ep-gh_link svg, html[data-ep-ver="2"] .ep-gh_zh, html[data-ep-ver="2"] .ep-gh_rooms { display: none; }
+/* Book a tour: the outlined button */
+html[data-ep-ver="2"] .ep-gh_act .ep-gh_link:first-child { display: inline-flex; height: 42px; padding: 0 22px; border: 1px solid rgba(255,255,255,.85); border-radius: 4px; transition: background-color .2s, color .2s; }
+html[data-ep-ver="2"] .ep-gh_act .ep-gh_link:first-child:hover { background: #fff; color: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-gh_burger { display: flex; padding: 10px; }
+html[data-ep-ver="2"] .ep-gh_burger i { width: 24px; }
+/* scrolled: white, blurred and slimmer, dark type */
+html[data-ep-ver="2"] .ep-gh.is-dark { --gh-h: 68px; background: rgba(255,255,255,.9); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-bottom: 1px solid var(--v2-line); }
+html[data-ep-ver="2"] .ep-gh.is-dark::before { opacity: 0; }
+html[data-ep-ver="2"] .ep-gh.is-dark .ep-gh_item, html[data-ep-ver="2"] .ep-gh.is-dark .ep-gh_link, html[data-ep-ver="2"] .ep-gh.is-dark .ep-gh_lang, html[data-ep-ver="2"] .ep-gh.is-dark .ep-gh_logo { color: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-gh.is-dark .ep-gh_act .ep-gh_link:first-child { border-color: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-gh.is-dark .ep-gh_act .ep-gh_link:first-child:hover { background: var(--v2-ink); color: #fff; }
+html[data-ep-ver="2"] .ep-gh.is-dark .ep-gh_burger i { background: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-gh.is-dark .ep-gh_item.is-on { border-bottom-color: var(--v2-bronze); }
+/* dropdowns: white */
+html[data-ep-ver="2"] .ep-gh.is-mega { background: #fff; border-bottom: 1px solid var(--v2-line); }
+html[data-ep-ver="2"] .ep-gh.is-mega .ep-gh_item, html[data-ep-ver="2"] .ep-gh.is-mega .ep-gh_link, html[data-ep-ver="2"] .ep-gh.is-mega .ep-gh_lang, html[data-ep-ver="2"] .ep-gh.is-mega .ep-gh_logo { color: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-gh.is-mega .ep-gh_act .ep-gh_link:first-child { border-color: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-gh.is-mega .ep-gh_burger i { background: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-gh_mega { top: 68px; background: #fff; border-top: 1px solid var(--v2-line); box-shadow: 0 24px 48px rgba(0,0,0,.08); }
+html[data-ep-ver="2"] .ep-gh_mega_img { border-radius: 4px; background: var(--v2-stone); }
+html[data-ep-ver="2"] .ep-gh_ml_a .ep-gh_ml, html[data-ep-ver="2"] .ep-gh_sl .ep-gh_ml { font-family: "Playfair Display", serif; letter-spacing: .02em; text-transform: none; color: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-gh_ml_a .ep-gh_ms, html[data-ep-ver="2"] .ep-gh_sl .ep-gh_ms { color: var(--v2-mute); }
+html[data-ep-ver="2"] .ep-gh_ml_a:hover .ep-gh_ml { color: var(--v2-bronze); }
+/* the drawer */
+html[data-ep-ver="2"] .ep-gh_bd { display: block; position: fixed; inset: 0; z-index: 1298; background: rgba(0,0,0,.28); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+html[data-ep-ver="2"] html.ep-gh-lock .ep-gh_bd, html[data-ep-ver="2"].ep-gh-lock .ep-gh_bd { opacity: 1; pointer-events: auto; }
+html[data-ep-ver="2"] .ep-gh_panel { top: 0; left: auto; right: 0; bottom: 0; width: min(420px, 100vw); padding: 104px 32px 32px; background: #fff; box-shadow: -24px 0 60px rgba(0,0,0,.12); display: flex; transform: translateX(0); animation: ep-v2-drawer .45s cubic-bezier(.16,1,.3,1); }
+html[data-ep-ver="2"] .ep-gh_panel[hidden] { display: none; }
+@keyframes ep-v2-drawer { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+html[data-ep-ver="2"] .ep-gh_pi { font-family: "Albert Sans", sans-serif; font-size: 14px; font-weight: 500; letter-spacing: .08em; color: var(--v2-ink); border-bottom: 1px solid var(--v2-line); }
+html[data-ep-ver="2"] .ep-gh_sub { border-left-color: var(--v2-line); }
+html[data-ep-ver="2"] .ep-gh_pb { border-radius: 4px; border-color: var(--v2-line); color: var(--v2-ink2); }
+html[data-ep-ver="2"] .ep-gh_pb--gold { background: var(--v2-bronze); border-color: var(--v2-bronze); color: #fff; }
+html[data-ep-ver="2"] .ep-gh.is-menu { background: transparent; border-bottom-color: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+html[data-ep-ver="2"] .ep-gh.is-menu .ep-gh_nav, html[data-ep-ver="2"] .ep-gh.is-menu .ep-gh_act > :not(.ep-gh_burger) { visibility: hidden; }
+html[data-ep-ver="2"] .ep-gh.is-menu .ep-gh_burger i { background: var(--v2-ink); }
+html[data-ep-ver="2"] .ep-gh.is-menu .ep-gh_logo { color: #fff; }
+@media (max-width: 1023px) {
+  html[data-ep-ver="2"] .ep-gh_in { grid-template-columns: 1fr auto 1fr; }
+  html[data-ep-ver="2"] .ep-gh_act { grid-column: 3; grid-row: 1; }
+  html[data-ep-ver="2"] .ep-gh_logo { grid-column: 2; grid-row: 1; }
+}
+
+/* ---- colour: the site's tokens re-pointed at the design-system scheme ---- */
+html[data-ep-ver="2"], html[data-ep-ver="2"] body {
+  --_global-colors---base-1000--0: #21252900; --_global-colors---base-1000--5: #2125290d; --_global-colors---base-1000--10: #2125291a;
+  --_global-colors---base-1000--30: #2125294d; --_global-colors---base-1000--60: #21252999; --_global-colors---base-1000--100: #212529;
+  --_global-colors---brand-500--velvet-plum: #dcd7d3;    /* dark surface  -> stone */
+  --_global-colors---brand-500--powder-sky: #dcd7d3;     /* brand surface -> stone */
+  --_global-colors---brand-500--blush-bloom: #896d42;    /* accent        -> bronze */
+}
+/* sections that were dark or sand become stone, with chocolate type (the design system's "dark" variant) */
+html[data-ep-ver="2"] .theme_on-dark, html[data-ep-ver="2"] .theme_on-color:not(.ep-fly):not(.arch-w) {
+  --_colors---base-1000--primary: #391d13; --_colors---base-1000--gray-text: rgba(57,29,19,.72); --_colors---base-1000--line: rgba(57,29,19,.16); --_colors---base-1000--disabled: rgba(57,29,19,.35);
+  --_colors---other--bg: #dcd7d3;
+}
+html[data-ep-ver="2"] .theme_on-brand { --_colors---other--bg: #dcd7d3; }
+
+/* ---- buttons: the design system's bronze, white label, 4px radius ---- */
+html[data-ep-ver="2"] .ep-footer { --bd-pearl: #391d13; --bd-sand: #896d42; --bd-sand-2: #6f5733; }
+html[data-ep-ver="2"] .ep-badge_book, html[data-ep-ver="2"] .loc-info-w .ep-sf_cta, html[data-ep-ver="2"] .sm-cap_cta, html[data-ep-ver="2"] .ep-rv_btn { background: #896d42; color: #fff; border-radius: 4px; }
+html[data-ep-ver="2"] .ep-badge_book:hover, html[data-ep-ver="2"] .ep-badge_book:focus-visible, html[data-ep-ver="2"] .loc-info-w .ep-sf_cta:hover, html[data-ep-ver="2"] .sm-cap_cta:hover, html[data-ep-ver="2"] .ep-rv_btn:hover { background: #6f5733; color: #fff; }
+html[data-ep-ver="2"] .ep-badge_in { border-bottom-color: rgba(57,29,19,.35); }
+html[data-ep-ver="2"] .ep-badge_in::placeholder { color: rgba(57,29,19,.5); }
+
+/* the Smart Rooms photo section keeps light type on a neutral dark scrim (no chocolate, no stone) */
+html[data-ep-ver="2"] .arch-w.theme_on-color {
+  --_colors---base-1000--primary: #fff; --_colors---base-1000--gray-text: rgba(255,255,255,.82); --_colors---base-1000--line: rgba(255,255,255,.22); --_colors---base-1000--disabled: rgba(255,255,255,.4);
+  --_colors---other--bg: #1b1d1f; --_colors---base-0--primary: #fff;
+}
+
+/* the room photograph is graded warm; version 2 takes some of that out */
+html[data-ep-ver="2"] .arch-w .w_bg, html[data-ep-ver="2"] .arch-w .ep-lights { filter: saturate(.78); }
+

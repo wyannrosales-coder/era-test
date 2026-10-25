@@ -11,9 +11,10 @@
   var PRE = 0.07;        // share of each clip reserved as dissolve pre-roll
   var CAP_START = 0.44;  // where each scene's caption takes over
   var XF = 0.22;         // dissolve band at the tail of each scene
-  var LINGER = 0.3;
+  var LINGER = 0.1;
   var W = 1.2;           // scroll length of each scene, in viewport heights
   var SCRUB = 0.78;      // share of a scene spent scrubbing; the rest holds on the last frame
+  var FLIGHT_S = 5;     // flight time per clip, seconds (2.7 was the original: too fast; 8.7 is about real time)
   var PIN_IN = 0.62, PIN_OUT = 0.80;
 
   var stages = [].slice.call(root.querySelectorAll('[data-fly-stage]'));
@@ -27,6 +28,9 @@
   var railBtns = [].slice.call(root.querySelectorAll('[data-fly-railbtn]'));
   var pinLayers = [].slice.call(root.querySelectorAll('[data-fly-pins]'));
   var pts = [].slice.call(root.querySelectorAll('[data-fly-pt]'));
+  // the hover hotspots are gone: no pins, no cards
+  pinLayers.forEach(function (l) { if (l.parentNode) l.parentNode.removeChild(l); });
+  pinLayers = []; pts = [];
 
   var items = stages.map(function (stage) {
     return {
@@ -98,29 +102,30 @@
 
   function load(idx) {
     var it = items[idx];
-    if (!it || it.loaded || it.loading) return Promise.resolve();
+    if (!it || it.loaded) return Promise.resolve();
+    if (it.pr) return it.pr;                     // already on its way: whoever asks waits for that same download, not for nothing
     it.loading = true;
     var src = it.video.getAttribute('data-src');
     // phones get a lighter version of the same clip
-    if (touch || window.innerWidth < 768) src = src.replace(/\.mp4$/, '-m.mp4');
-    return fetch(src)
+    if (touch || window.innerWidth < 768) src = src.replace(/\.mp4(\?.*)?$/, '-m.mp4$1');
+    it.pr = fetch(src)
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
       .then(function (b) {
         return new Promise(function (res) {
           it.objectUrl = URL.createObjectURL(b);
           var v = it.video;
-          v.addEventListener('loadedmetadata', function () {
-            it.duration = Math.max(0.4, (v.duration || 6) - 0.3);
-            it.loaded = true;
-            res();
-          }, { once: true });
-          v.addEventListener('error', function () { it.loaded = true; res(); }, { once: true });
+          var finish = function () { it.loaded = true; res(); };
+          v.addEventListener('loadedmetadata', function () { it.duration = Math.max(0.4, (v.duration || 6) - 0.3); }, { once: true });
+          v.addEventListener('error', finish, { once: true });
           v.src = it.objectUrl;
           v.load();
-          v.addEventListener('loadeddata', function () { paint(it); }, { once: true });
+          // ready once a frame is there to show (not just the file's header), so a flight never starts over nothing
+          v.addEventListener('loadeddata', function () { it.loaded = true; paint(it); res(); }, { once: true });
+          setTimeout(function () { if (!it.loaded) finish(); }, 8000);
         });
       })
       .catch(function () { it.loaded = true; });
+    return it.pr;
   }
 
   function primeAll() {
@@ -176,6 +181,28 @@
     return (pre + seg * (1 - pre)) * it.duration;
   }
 
+  // During a flight the film is played by the browser itself (steady pacing, no seek on every refresh); its speed follows the
+  // flight's easing and any drift is nudged back by speeding it up or slowing it down. Hand-scrubbing and holds still seek.
+  // mostly linear with a soft start and stop: peak speed about 1.2x the average
+  function tween(u) { return 0.7 * u + 0.15 * (1 - Math.cos(Math.PI * u)); }
+  function flightTime(it, i, vp) {
+    var sr = Math.min(1, Math.max(0, vp - i));
+    return timeFor(it, i, ease(Math.min(1, sr / SCRUB), LINGER));
+  }
+  function playTo(it, i, target) {
+    var v = it.video;
+    if (!it.painted) paint(it);
+    if (v.seeking) return;
+    var u = Math.min(1, (performance.now() - tw.t0) / (tw.dur * 1000)), du = 0.08 / tw.dur;
+    var u2 = Math.min(1, u + du), ue2 = tween(u2);
+    var t2 = flightTime(it, i, Winv(tw.wf + (tw.wt - tw.wf) * ue2));
+    var rate = (t2 - target) / 0.08, drift = v.currentTime - target;
+    if (Math.abs(drift) > 0.4) { try { v.currentTime = target; } catch (e) {} return; }
+    rate = Math.max(0.1, Math.min(3, rate - drift * 2));          // browsers refuse rates under 1/16
+    if (Math.abs(v.playbackRate - rate) > 0.02) { try { v.playbackRate = rate; } catch (e) {} }
+    if (v.paused) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); }
+  }
+
   var smoothed = 0, capTriggers = null, storyFill = null, visible = true;
 
   function tick() {
@@ -191,7 +218,8 @@
     if (!visible) { if (tw) tw.t0 += nowF - (tick.__ft || nowF); tick.__ft = nowF; } else tick.__ft = 0;     // covered: a flight in progress waits
     if (tw && visible) {
       var u = Math.min(1, (performance.now() - tw.t0) / (tw.dur * 1000));
-      vpos = Winv(tw.wf + (tw.wt - tw.wf) * (0.5 - 0.5 * Math.cos(Math.PI * u)));
+      var ue = tween(u);
+      vpos = Winv(tw.wf + (tw.wt - tw.wf) * ue);
       if (u >= 1) { var done = tw.done; tw = null; if (done) done(); }
     }
     var p = vpos / N;
@@ -225,19 +253,19 @@
     // a long eased dissolve with a matched push and a peak of blur hides the cut
     var seam = segRaw > 1 - XF && !!items[idx + 1];
     var f = seam ? smoothstep((segRaw - (1 - XF)) / XF) : 0;
-    var blur = seam && !touch && !window.__epLite ? 2.6 * Math.sin(Math.PI * f) : 0;
+    var blur = 0;                              // no blur or extra push through the dissolve: the picture just blends, with no pulse
 
     items.forEach(function (it, i) {
       var op = 0;
-      if (i === idx) op = seam ? 1 - f : 1;
+      // the outgoing scene stays fully opaque underneath while the next one fades in over it (fading both at once let the dark
+      // backdrop through the middle of the dissolve: a dip in brightness)
+      if (i === idx) op = 1;
       else if (i === idx + 1) op = f;
       op = op < 0 ? 0 : op > 1 ? 1 : op;
       if (it.stage.__op !== op.toFixed(2)) { it.stage.style.opacity = op.toFixed(3); it.stage.__op = op.toFixed(2); }
 
-      var sc = 1;
-      if (i === idx) sc = 1 + 0.03 * seg;      // a slow push-in: continuous motion between the footage's own 24 frames
-      if (seam && i === idx) sc = (1 + 0.03 * seg) * (1 + 0.038 * f);
-      else if (seam && i === idx + 1) sc = 1.048 - 0.048 * f;
+      var sc = 1;                              // no zoom at all: the picture is the footage, at its own size, from start to finish
+      // (the dissolve used to add a zoom-in on the outgoing scene and a settle from 4.8% on the incoming one: a visible pulse)
       var fx = (op > 0 ? 'blur(' + blur.toFixed(2) + 'px)' : 'none') + '|' + sc.toFixed(4);
       if (it.stage.__fx !== fx) {
         it.stage.style.transform = 'scale(' + sc.toFixed(4) + ')';
@@ -247,11 +275,15 @@
 
       // only ONE video is seeked per frame; past the dissolve midpoint the incoming
       // clip takes over the scrub
-      var driveNext = seam && f > 0.5;
-      if (i === idx && !driveNext) { seek(it, timeFor(it, i, seg)); return; }
+      // the outgoing scene is already on its last frame when the dissolve starts, so the decoder is free to run the incoming
+      // film from its first frame all the way through the dissolve (it used to wait, then jump ahead at the midpoint)
+      var flying = i === idx && !seam && tw && tw.wt > tw.wf && visible && !reduced && it.loaded;      // forwards only: a film cannot be played backwards, so flying back seeks
+      if (!flying && it.video && !it.video.paused) it.video.pause();
+      if (flying) { playTo(it, i, timeFor(it, i, seg)); return; }
+      if (i === idx && !seam) { seek(it, timeFor(it, i, seg)); return; }
       if (i === idx + 1 && it.loaded) {
         paint(it);
-        if (driveNext) seek(it, f * PRE * it.duration);
+        if (seam) seek(it, Math.max(0.04, f * PRE * it.duration));
       }
     });
 
@@ -341,12 +373,13 @@
   // scrubs it live under the finger. Left alone, the hero tours itself; any touch hands control back.
   var vpos = 0, state = 0, tw = null, END = N + 1;
   var pin = root.querySelector('.ep-fly_pin');
+  var waitEl = document.createElement('span'); waitEl.className = 'ep-fly_wait'; waitEl.setAttribute('aria-hidden', 'true'); pin.appendChild(waitEl);
   function posOf(s) { return s <= 0 ? 0 : Math.min(s, N) - 1 + SCRUB - 0.012; }
   function clampPos(v) { return Math.max(0, Math.min(posOf(N), v)); }
   function loadAround(v) { var k = Math.max(0, Math.floor(v)); load(k); if (items[k + 1]) load(k + 1); }
   // Flights run along a path where the held last frame and dissolve of each space (the last 22% of its length) is crossed
   // quickly, so passing several spaces is one even flight instead of a stop at each
-  var HW = 0.28, PER = SCRUB + HW * (1 - SCRUB);
+  var HW = 0.45, PER = SCRUB + HW * (1 - SCRUB);
   function Wf(v) { v = Math.max(0, Math.min(N, v)); var k = Math.min(N - 1, Math.floor(v)), f = v - k; return k * PER + (f <= SCRUB ? f : SCRUB + HW * (f - SCRUB)); }
   function Winv(w) { var k = Math.max(0, Math.min(N - 1, Math.floor(w / PER))), r = w - k * PER; return k + (r <= SCRUB ? r : SCRUB + (r - SCRUB) / HW); }
   function glide(to, dur, done) { tw = { from: vpos, to: to, wf: Wf(vpos), wt: Wf(to), t0: performance.now(), dur: dur, done: done }; }
@@ -357,19 +390,70 @@
     var to = posOf(s);
     if (s === state && !tw && Math.abs(vpos - to) < 0.002) return;
     if (!opt.auto) root.classList.add('has-moved');
+    // only the chapter next door is flown to; anything further away dissolves straight there, however it was picked
+    if (Math.abs(s - state) > 1) { jumpTo(s, opt); return; }
     state = s; syncNav();
     var from = vpos, lo = Math.min(from, to), hi = Math.max(from, to), waits = [];
     for (var k = Math.max(0, Math.floor(lo + 0.0001)); k <= Math.min(N - 1, Math.floor(hi)); k++) waits.push(load(k));
     // the clip after the destination is fetched and decoded only once the camera has arrived: setting it up mid-flight
     // (as on first load, near the end of the Concierge clip) competes with the flight for the decoder and stutters it
-    var dur = Math.max(0.6, Math.min(5.2, Math.abs(Wf(to) - Wf(from)) * 2.7));
+    // seconds of flight per clip: the first version took about 2.4 s (3x speed, peaking near 5x: dizzying), real time is about 7.7 s
+    var dur = Math.max(1.2, Math.min(13, Math.abs(Wf(to) - Wf(from)) * FLIGHT_S));
     clearTimeout(autoT); dwell = null;
     var start = function () { if (state !== s) return; glide(to, dur, function () { loadAround(to); setTimeout(function () { if (!tw) loadAround(to + 1); }, 600); arrived(); }); };
-    var timer = setTimeout(start, 2500);  // never wait forever on a slow connection
-    Promise.all(waits).then(function () { clearTimeout(timer); start(); });
+    var waitT = setTimeout(function () { root.classList.add('is-wait'); }, 350);      // a small ring if the clip isn't here yet
+    var timer = setTimeout(function () { clearTimeout(waitT); root.classList.remove('is-wait'); start(); }, 9000);    // never wait forever on a bad connection
+    Promise.all(waits).then(function () { clearTimeout(timer); clearTimeout(waitT); root.classList.remove('is-wait'); start(); });
   }
 
-  window.__epFly = { pos: function () { return vpos; }, state: function () { return state; } };   // read-only, for debugging
+  window.__epFly = { pos: function () { return vpos; }, state: function () { return state; }, busy: function () { return !!tw; }, target: function () { return posOf(state); }, dragging: function () { return !!dg; }, loaded: function () { return items.map(function (it) { return !!it.loaded; }); }, seeking: function () { return items.map(function (it) { return !!(it.video && it.video.seeking); }); } };   // read-only, for debugging
+
+  // a cross-dissolve to a chapter that is not next door: the current picture is frozen on a canvas, the camera is put at the
+  // destination (its caption and bar with it), and the frozen picture fades away over about a third of a second
+  var jumpSeq = 0;
+  function snapshot() {
+    var pr = pin.getBoundingClientRect(), c = document.createElement('canvas'), dp = Math.min(window.devicePixelRatio || 1, 1.5);
+    c.className = 'ep-fly_snap'; c.width = Math.round(pr.width * dp); c.height = Math.round(pr.height * dp); c.setAttribute('aria-hidden', 'true');
+    var g = c.getContext('2d'); g.scale(dp, dp);
+    items.forEach(function (it) {
+      var v = it.video; if (!v || !v.videoWidth || v.readyState < 2) return;
+      var a = parseFloat(getComputedStyle(it.stage).opacity) * parseFloat(getComputedStyle(v).opacity); if (!(a > 0.02)) return;
+      var r = v.getBoundingClientRect(), k = Math.max(r.width / v.videoWidth, r.height / v.videoHeight), sw = r.width / k, sh = r.height / k;
+      g.globalAlpha = a;
+      try { g.drawImage(v, (v.videoWidth - sw) / 2, (v.videoHeight - sh) / 2, sw, sh, r.left - pr.left, r.top - pr.top, r.width, r.height); } catch (e) {}
+    });
+    var scrim = root.querySelector('.ep-fly_scrim'); if (scrim) pin.insertBefore(c, scrim); else pin.appendChild(c);
+    return c;
+  }
+  function jumpTo(s, opt) {
+    opt = opt || {};
+    var seq = ++jumpSeq;
+    if (!opt.auto) userActed();
+    clearTimeout(autoT); dwell = null; tw = null;
+    var to = posOf(s), waits = [];
+    for (var k = Math.max(0, Math.floor(to)); k <= Math.min(N - 1, Math.floor(to) + 0); k++) waits.push(load(k));
+    state = s; syncNav();
+    var go = function () {
+      if (seq !== jumpSeq || state !== s) return;
+      var snap = reduced ? null : snapshot();
+      vpos = to; loadAround(to);
+      var t0 = performance.now();
+      (function settle() {
+        if (seq !== jumpSeq) { if (snap) snap.remove(); return; }
+        var it = items[Math.max(0, Math.min(N - 1, Math.floor(to)))], seeking = it && it.video && it.video.seeking;
+        if (seeking && performance.now() - t0 < 500) { requestAnimationFrame(settle); return; }
+        requestAnimationFrame(function () {
+          if (!snap) { arrived(); return; }
+          var an = snap.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 720, easing: 'ease-in-out', fill: 'forwards' });
+          an.onfinish = function () { snap.remove(); };
+          arrived();
+        });
+      })();
+    };
+    var waitT = setTimeout(function () { root.classList.add('is-wait'); }, 350);
+    var timer = setTimeout(function () { clearTimeout(waitT); root.classList.remove('is-wait'); go(); }, 9000);
+    Promise.all(waits).then(function () { clearTimeout(timer); clearTimeout(waitT); root.classList.remove('is-wait'); go(); });
+  }
 
   // chevrons + count, the swipe hint, the end card
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
@@ -441,7 +525,7 @@
   cards.innerHTML = names.map(function (n, i) {
     var t = caps[i] && caps[i].querySelector('.ep-fly_cap_title');
     return '<button type="button" class="ep-fly_card" data-chap="' + (i + 1) + '" aria-label="Go to ' + (t ? t.textContent : n) + '">' +
-      '<span class="ep-fly_card_img" style="background-image:url(/assets/flythrough/thumb' + (i + 1) + '.webp)"></span>' +
+      '<span class="ep-fly_card_img" style="background-image:url(/assets/flythrough/thumb' + (i + 1) + '.webp?v=1792820100)"></span>' +
       '<span class="ep-fly_card_t"><em>' + pad(i + 1) + '</em><strong>' + (t ? t.textContent : n) + '</strong></span>' +
       '<i class="ep-fly_card_bar"><b></b></i></button>';
   }).join('');

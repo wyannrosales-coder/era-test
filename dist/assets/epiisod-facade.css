@@ -38,7 +38,7 @@
   .ep-facade .btn-circle { width: clamp(88px, 15vh, 180px); height: clamp(88px, 15vh, 180px); }
   /* a soft shade on the left, where the words are */
   .ep-facade .w_bg .img-w::after { content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(90deg, rgba(18,9,5,.58) 0%, rgba(18,9,5,.42) 24%, rgba(18,9,5,.1) 42%, rgba(18,9,5,0) 54%); }
+    background: linear-gradient(90deg, rgba(var(--fly-tint2),.58) 0%, rgba(var(--fly-tint2),.42) 24%, rgba(var(--fly-tint2),.1) 42%, rgba(var(--fly-tint2),0) 54%); }
 }
 /* very short landscape screens (phones on their side): the paragraph steps out so the rest fits */
 @media (min-aspect-ratio: 101/100) and (max-height: 520px) { .ep-facade .cta-s_desc > .l1 { display: none; } }

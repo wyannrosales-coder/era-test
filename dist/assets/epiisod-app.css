@@ -3,7 +3,7 @@
 .ep-ap_pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .ep-ap_in { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 4vw; padding: 0 7vw; box-sizing: border-box; }
 .ep-ap_stage { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-.ep-ap_phone { --h: min(80vh, 760px); height: var(--h); aspect-ratio: 717 / 1535; filter: drop-shadow(0 34px 50px rgba(36, 18, 12, .28)); }
+.ep-ap_phone { --h: min(80vh, 760px); height: var(--h); aspect-ratio: 717 / 1535; filter: drop-shadow(0 34px 50px rgba(var(--fly-tint), .28)); }
 .ep-ap_body { position: relative; height: 100%; padding: 11px; border-radius: 46px; background: #0d0705; box-shadow: inset 0 0 0 2px #7a6657; box-sizing: border-box; }
 .ep-ap_notch { display: none; }
 .ep-ap_screen { position: relative; height: 100%; overflow: hidden; border-radius: 36px; background: #f4f2f0; }
@@ -45,7 +45,7 @@
   .ep-ap_slide { flex: 0 0 calc(100% / var(--n, 6)); }
   .ep-ap_track { width: calc(var(--n, 6) * 100%); }
   .ep-ap_dots { grid-column: 1 / -1; display: flex; justify-content: center; gap: 8px; margin-top: 22px; }
-  .ep-ap_dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(36, 18, 12, .25); cursor: pointer; transition: width .3s, background-color .3s; }
+  .ep-ap_dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(var(--fly-tint), .25); cursor: pointer; transition: width .3s, background-color .3s; }
   .ep-ap_dots button.is-on { width: 24px; border-radius: 4px; background: #24120c; }
   .ep-ap_mtxt { display: block; min-width: 0; }
   .ep-ap_mno { margin: 0 0 12px; font-size: 11px; letter-spacing: .14em; color: #a98462; }
@@ -80,7 +80,7 @@
 .ep-ap_fx { position: absolute; inset: 11px; pointer-events: none; z-index: 5; }
 .ep-ap_pop { position: absolute; opacity: 0; background-repeat: no-repeat; transform-origin: 50% 50%; transition: transform .8s cubic-bezier(.2, .85, .2, 1), box-shadow .8s ease, opacity .15s; border-radius: 3px; }
 .ep-ap_pop.is-on { opacity: 1; }
-.ep-ap_pop.is-pop { transform: translateX(var(--dx, 0)) scale(var(--k, 1.4)); box-shadow: 0 26px 46px rgba(36, 18, 12, .32); }
+.ep-ap_pop.is-pop { transform: translateX(var(--dx, 0)) scale(var(--k, 1.4)); box-shadow: 0 26px 46px rgba(var(--fly-tint), .32); }
 @media (max-width: 991px) { .ep-ap_fx { inset: 8px; } }
 @media (prefers-reduced-motion: reduce) { .ep-ap_sheet, .ep-ap_pop, .ep-ap_dim { transition: none; } }
 
@@ -108,7 +108,7 @@
   @keyframes ep-ap-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 }
 /* the travelling phone (smart room to app) */
-.ep-trv { position: fixed; z-index: 60; display: none; pointer-events: none; box-sizing: border-box; background: #0d0705; box-shadow: inset 0 0 0 2px #7a6657; filter: drop-shadow(0 30px 50px rgba(36, 18, 12, .3)); }
+.ep-trv { position: fixed; z-index: 60; display: none; pointer-events: none; box-sizing: border-box; background: #0d0705; box-shadow: inset 0 0 0 2px #7a6657; filter: drop-shadow(0 30px 50px rgba(var(--fly-tint), .3)); }
 .ep-trv_in { position: relative; width: 100%; height: 100%; overflow: hidden; background: #f4f2f0; }
 .ep-trv_a, .ep-trv_b { position: absolute; inset: 0; }
 .ep-trv_a { overflow: hidden; }

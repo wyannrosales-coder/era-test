@@ -28,7 +28,7 @@
   h.innerHTML =
     '<div class="ep-gh_in">' +
       // logo: placeholder until the EPIISOD wordmark file is dropped in
-      '<a href="#flythrough" class="ep-gh_logo" aria-label="EPIISOD, back to top"><span class="ep-gh_word">EPIISOD</span></a>' +
+      '<a href="#" class="ep-gh_logo" aria-label="EPIISOD (switches between the two versions)"><span class="ep-gh_word">EPIISOD</span><span class="ep-gh_emb" aria-hidden="true"></span></a>' +
       '<nav class="ep-gh_nav" aria-label="Main">' +
         '<a href="#" class="ep-gh_item" data-plain>About Us</a>' +
         '<button type="button" class="ep-gh_item" data-mega="life" aria-expanded="false">Life @ EPIISOD' + caret + '</button>' +
@@ -39,7 +39,7 @@
         '<a href="#" class="ep-gh_link ep-gh_wide">Book A Tour' + eye + '</a>' +
         '<a href="#rooms" class="ep-gh_rooms" data-rooms>View Rooms</a>' +
         '<a href="#" class="ep-gh_link ep-gh_wide">Login' + signin + '</a>' +
-        '<span class="ep-gh_lang ep-gh_wide">EN <i>/</i> 中文' + caret + '</span>' +
+        '<span class="ep-gh_lang ep-gh_wide">EN<span class="ep-gh_zh"> <i>/</i> 中文</span>' + caret + '</span>' +
         '<button type="button" class="ep-gh_burger" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button>' +
       '</div>' +
     '</div>';
@@ -56,7 +56,15 @@
     '<button type="button" class="ep-gh_pi" data-sub="contact" aria-expanded="false">Contact' + caret + '</button>' +
     '<div class="ep-gh_sub" data-subl="contact" hidden>' + links(CONTACT, 'ep-gh_sl') + '</div>' +
     '<div class="ep-gh_pbtns"><a href="#" class="ep-gh_pb ep-gh_pb--gold">Book A Tour</a><a href="#" class="ep-gh_pb">Login</a><span class="ep-gh_pb">EN</span></div>';
+  var bd = document.createElement('div'); bd.className = 'ep-gh_bd';          // version 2: the dimmed, blurred page behind the drawer
+  document.body.appendChild(bd);
   document.body.appendChild(h); document.body.appendChild(mega); document.body.appendChild(panel);
+  // the emblem (version 2's logo), copied from the one on the page
+  (function () {
+    var src = document.querySelector('[data-ep-emblem]'), slot = h.querySelector('.ep-gh_emb');
+    if (!src || !slot) return;
+    var c = src.cloneNode(true); c.removeAttribute('data-ep-emblem'); c.removeAttribute('width'); c.removeAttribute('height'); c.setAttribute('aria-hidden', 'true'); slot.appendChild(c);
+  })();
   document.documentElement.classList.add('has-ep-gh');
 
   var html = document.documentElement, open = null, menu = false, closeT = 0;
@@ -109,6 +117,7 @@
     setDark();
   }
   burger.addEventListener('click', function () { setMenu(!menu); });
+  bd.addEventListener('click', function () { setMenu(false); });
   [].forEach.call(panel.querySelectorAll('[data-sub]'), function (b) {
     b.addEventListener('click', function () {
       var k = b.getAttribute('data-sub'), list = panel.querySelector('[data-subl="' + k + '"]'), on = list.hasAttribute('hidden');

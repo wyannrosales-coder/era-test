@@ -8,7 +8,7 @@
   transition: height .24s cubic-bezier(.4,0,.2,1), background-color .24s cubic-bezier(.4,0,.2,1), border-color .24s, transform .38s cubic-bezier(.4,0,.2,1); }
 .ep-gh.is-hidden { transform: translateY(-100%); }
 .ep-gh.is-dark, .ep-gh.is-mega { --gh-h: 76px; background: var(--gh-choc-600); border-bottom-color: rgba(255,255,255,.12); }
-.ep-gh::before { content: ""; position: absolute; inset: 0 0 -40px; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(20,10,6,.45), rgba(20,10,6,0)); transition: opacity .24s; }
+.ep-gh::before { content: ""; position: absolute; inset: 0 0 -40px; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(var(--fly-tint2),.45), rgba(var(--fly-tint2),0)); transition: opacity .24s; }
 .ep-gh.is-dark::before, .ep-gh.is-mega::before { opacity: 0; }
 .ep-gh_in { max-width: 1760px; height: 100%; margin: 0 auto; padding: 0 clamp(20px, 3vw, 40px); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .ep-gh_logo { flex: none; display: flex; align-items: center; width: 132px; color: #fff; text-decoration: none; }
