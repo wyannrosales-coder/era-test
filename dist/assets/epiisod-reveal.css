@@ -188,3 +188,7 @@
   .ep-rooms-pin .flower.apart-info { width: 34vw !important; max-width: 340px; height: auto !important; }
   .ep-rooms-pin .info-s_lead { position: relative; z-index: 2; }
 }
+
+/* the video window is taller than the section and its dark circle hung over the top of the section below as a curve: the section now
+   cuts it off at its own bottom edge. The top stays open, because the circle is born above the section (over the hero). */
+#reveal.ep-rv { clip-path: inset(-200vh 0 0 0); }

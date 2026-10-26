@@ -106,3 +106,10 @@ html[data-ep-ver="2"] .arch-w.theme_on-color {
 /* the room photograph is graded warm; version 2 takes some of that out */
 html[data-ep-ver="2"] .arch-w .w_bg, html[data-ep-ver="2"] .arch-w .ep-lights { filter: saturate(.78); }
 
+
+/* The building section */
+html[data-ep-ver="2"] .bd_btn { background: #896d42; color: #fff; border-radius: 4px; }
+html[data-ep-ver="2"] .bd_btn:hover { background: #6f5733; }
+html[data-ep-ver="2"] .bd_bg { background: #efe9de; }
+html[data-ep-ver="2"] .bd_row::after { background: #896d42; }
+html[data-ep-ver="2"] .bd_rb em { color: #896d42; }

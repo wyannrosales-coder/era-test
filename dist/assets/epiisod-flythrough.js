@@ -387,6 +387,7 @@
     opt = opt || {};
     s = Math.max(0, Math.min(END, s));
     if (!opt.auto) userActed();
+    if (!opt.auto) started = s >= 1;                           // choosing a space starts the tour; going back to the title stops it
     var to = posOf(s);
     if (s === state && !tw && Math.abs(vpos - to) < 0.002) return;
     if (!opt.auto) root.classList.add('has-moved');
@@ -429,6 +430,7 @@
     opt = opt || {};
     var seq = ++jumpSeq;
     if (!opt.auto) userActed();
+    if (!opt.auto) started = s >= 1;                           // choosing a space starts the tour; going back to the title stops it
     clearTimeout(autoT); dwell = null; tw = null;
     var to = posOf(s), waits = [];
     for (var k = Math.max(0, Math.floor(to)); k <= Math.min(N - 1, Math.floor(to) + 0); k++) waits.push(load(k));
@@ -494,6 +496,7 @@
   var cut = document.createElement('div'); cut.className = 'ep-fly_cut'; pin.appendChild(cut);
   // straight back to the opening screen (a quick dissolve, no rewind through the clips), then the tour plays by itself
   function restartTour() {
+    started = true;
     clearTimeout(autoT); clearTimeout(resumeT); dwell = null; tw = null;
     root.classList.add('is-cut');
     setTimeout(function () {
@@ -610,6 +613,7 @@
   // space's bar fills as a 4-second timer; when it is full the next flight starts. After the Rooftop's timer, the end
   // card. Any touch, click, key or wheel pauses the tour; after a quiet spell the current space's timer starts again.
   var DWELL = 4000, IDLE = 8000, autoT = 0, resumeT = 0, ready = false;
+  var started = false;                                          // the tour only begins once the visitor has pressed Start the tour (or chosen a space)
   function arm(ms) { clearTimeout(autoT); autoT = setTimeout(fire, ms); }
   function fire() {
     if (!visible) { pauseTour(); return; }
@@ -627,19 +631,19 @@
   function arrived() {
     if (state >= 1 && state <= N) { countdown(); return; }
     // back at the opening screen (e.g. Back from the Concierge): after a short pause the tour starts again by itself
-    if (state === 0 && ready) { clearTimeout(autoT); autoT = setTimeout(function () { if (state === 0 && !tw && !dg && visible) goTo(1, { auto: true }); }, 1800); }
+    if (state === 0 && ready && started) { clearTimeout(autoT); autoT = setTimeout(function () { if (state === 0 && !tw && !dg && visible) goTo(1, { auto: true }); }, 1800); }
   }
   // away from the hero (scrolled past it, or the Live well circle has risen over it): everything holds still, bar included
   function pauseTour() { clearTimeout(autoT); clearTimeout(resumeT); if (dwell && dwell.p == null) dwell.p = performance.now(); }
   function resumeTour() {                                      // back: the same space, the timer carries on from where it stopped
     if (!ready || tw || dg || state >= END) return;
-    if (state === 0) { goTo(1, { auto: true }); return; }
+    if (state === 0) { if (started) goTo(1, { auto: true }); return; }
     if (dwell && dwell.p != null) { var n = performance.now(), el = dwell.p - dwell.t0; dwell.t0 = n - el; dwell.p = null; arm(Math.max(250, DWELL - el)); }
     else countdown();
   }
   function userActed() {                                       // hand control to the visitor, resume after a quiet spell
     clearTimeout(autoT); clearTimeout(resumeT); dwell = null;
-    if (state < END) autoT = setTimeout(function () { if (state === 0) goTo(1, { auto: true }); else countdown(); }, IDLE);
+    if (state < END) autoT = setTimeout(function () { if (state === 0) { if (started) goTo(1, { auto: true }); } else countdown(); }, IDLE);
   }
   ['pointerdown', 'keydown', 'wheel'].forEach(function (ev) {
     root.addEventListener(ev, function () { if (ready) userActed(); }, { passive: true });
@@ -660,10 +664,7 @@
     if (ready) return;
     var pl = document.querySelector('[data-preloader]');
     if (pl && getComputedStyle(pl).display !== 'none') { setTimeout(onReady, 150); return; }
-    ready = true;
-    setTimeout(function () {
-      if (state === 0 && !tw && !dg && !root.classList.contains('has-moved')) goTo(1, { auto: true });
-    }, 300);
+    ready = true;                                              // no automatic start: the opening screen waits for Start the tour
   }
 
   // ---- hotspots -------------------------------------------------------------
