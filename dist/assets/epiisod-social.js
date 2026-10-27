@@ -9,6 +9,7 @@
   var cards = [].slice.call(track.querySelectorAll('[data-sc]'));
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var TOP = 84;                                                           // clear of the header bar at the top of the sheet
   var ROT = [-8, 6, -4, 9, 12, -11, -5, 7, 7, -9, 5, -7, 4, -6];       // each print's resting angle
   var geo = [], st = [], sw = 0, sh = 0, raf = 0, played = false, t0 = 0, zTop = 10, drag = null, spilling = false, t1 = 0;
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
@@ -19,7 +20,8 @@
     cards.forEach(function (c) { c.style.setProperty('--fx', 0); c.style.setProperty('--fy', 0); });
     geo = cards.map(function (c, i) {
       var cs = getComputedStyle(c), w = c.offsetWidth, h = c.offsetHeight;
-      var x = clamp(parseFloat(cs.getPropertyValue('--x')) / 100 * sw, 10, sw - w - 10), y = clamp(parseFloat(cs.getPropertyValue('--y')) / 100 * sh, 10, sh - h - 10);
+      var x = clamp(parseFloat(cs.getPropertyValue('--x')) / 100 * sw, 10, sw - w - 10), y = clamp(TOP + parseFloat(cs.getPropertyValue('--y')) / 100 * (sh - TOP), TOP, sh - h - 12);
+      c.style.left = x.toFixed(1) + 'px'; c.style.top = y.toFixed(1) + 'px';       // the kept-clear, kept-whole position
       return { x: x, y: y, w: w, h: h, cx: x + w / 2, cy: y + h / 2, rot: ROT[i % ROT.length] };
     });
     st = cards.map(function (c, i) {
@@ -59,7 +61,7 @@
     cards.forEach(function (c, i) {
       var s = st[i], g = geo[i]; if (!s.free || (drag && drag.i === i)) return;
       s.x += s.vx; s.y += s.vy; s.r += s.vr; s.vx *= 0.955; s.vy *= 0.955; s.vr *= 0.94;
-      var minX = -g.x, maxX = sw - g.w - g.x, minY = -g.y, maxY = sh - g.h - g.y;
+      var minX = -g.x, maxX = sw - g.w - g.x, minY = TOP - g.y, maxY = sh - g.h - g.y;
       if (s.x < minX) { s.x = minX; s.vx = Math.abs(s.vx) * 0.55; s.vr *= -0.6; } else if (s.x > maxX) { s.x = maxX; s.vx = -Math.abs(s.vx) * 0.55; s.vr *= -0.6; }
       if (s.y < minY) { s.y = minY; s.vy = Math.abs(s.vy) * 0.55; s.vr *= -0.6; } else if (s.y > maxY) { s.y = maxY; s.vy = -Math.abs(s.vy) * 0.55; s.vr *= -0.6; }
       s.s += ((drag && drag.i === i ? 1.06 : 1) - s.s) * 0.2;
@@ -98,7 +100,7 @@
         var s = st[i], g = geo[i], dx = e.clientX - drag.px, dy = e.clientY - drag.py;
         if (!drag.moved && Math.hypot(dx, dy) < 5) return;
         drag.moved = true;
-        s.x = clamp(drag.sx + dx, -g.x, sw - g.w - g.x); s.y = clamp(drag.sy + dy, -g.y, sh - g.h - g.y);
+        s.x = clamp(drag.sx + dx, -g.x, sw - g.w - g.x); s.y = clamp(drag.sy + dy, TOP - g.y, sh - g.h - g.y);
         s.r += (clamp(dx - (drag.lastdx || 0), -20, 20) * 0.35 - (s.r - g.rot) * 0.05); drag.lastdx = dx;
         var now = performance.now(); drag.hist.push({ t: now, x: e.clientX, y: e.clientY });
         while (drag.hist.length > 2 && now - drag.hist[0].t > 90) drag.hist.shift();
