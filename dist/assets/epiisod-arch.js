@@ -24,7 +24,9 @@
     var w0 = Math.min(vw < 768 ? vw * 0.72 : 360, vw * 0.8);
     var w = lerp(w0, vw, p);
     var side = (vw - w) / 2;
-    var r = lerp(w / 2, R, p * p);
+    // the top rounds off into a wide arch while it grows, then opens right out to the full, square-cornered sheet
+    var open = clamp((p - 0.72) / 0.28); open = open * open * (3 - 2 * open);
+    var r = lerp(w / 2, R, p * p) * (1 - open);
     sec.style.clipPath = 'inset(0 ' + side.toFixed(1) + 'px 0 ' + side.toFixed(1) + 'px round ' + r.toFixed(1) + 'px ' + r.toFixed(1) + 'px 0 0)';
   }
   function tick() { if (!raf) raf = requestAnimationFrame(update); }

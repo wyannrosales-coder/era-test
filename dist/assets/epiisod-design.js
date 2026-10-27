@@ -292,7 +292,7 @@
       var br = blk.getBoundingClientRect();
       phone.style.display = 'block';
       var ph = phone.offsetHeight || 560, pw = phone.offsetWidth || 280;
-      phone.style.left = (vw / 2 - br.left - pw / 2 + ox).toFixed(1) + 'px';
+      phone.style.left = (vw - Math.max(36, vw * 0.075) - pw - br.left + ox).toFixed(1) + 'px';   // near the right edge, the room's picture and caption read on the left
       phone.style.top = ((vh - ph) / 2 - br.top + (1 - q) * (vh * 0.55) + oy).toFixed(1) + 'px';
       phone.style.opacity = q.toFixed(3);
       phone.style.pointerEvents = q > 0.6 ? 'auto' : 'none';

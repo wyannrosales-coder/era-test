@@ -12,10 +12,10 @@
   var rows = [].slice.call(sec.querySelectorAll('[data-bc]'));
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var small = window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
-  // where the film rests (seconds): the pencil sketch drawn (3.9), the line drawing (8.3), then the colour render sweeps in and settles
-  var SEGS = [[0.03, 0.24, 0, 3.9], [0.30, 0.48, 3.9, 8.3], [0.55, 0.76, 8.3, 10.6], [0.82, 0.94, 10.6, 11.55]];
-  var STAGE_AT = [0.28, 0.54, 0.80], CARD_AT = 0.25;
-  var JUMP = [0.27, 0.52, 0.72, 0.96];                       // scroll positions at which each stage is at rest
+  // where the film rests (seconds): the pencil sketch drawn (4.0), the line drawing (7.4), the grey model (11.5), then the colour render (15.3)
+  var SEGS = [[0.03, 0.20, 0, 4.0], [0.25, 0.38, 4.0, 7.4], [0.44, 0.60, 7.4, 11.5], [0.66, 0.86, 11.5, 15.3]];
+  var STAGE_AT = [0.23, 0.42, 0.64], CARD_AT = 0.21;
+  var JUMP = [0.22, 0.40, 0.62, 0.95];                       // scroll positions at which each stage is at rest
   var ready = false, loading = false, cur = 0, stageNow = -1, cardNow = null, active = false, raf = 0;
   function clamp(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function rng(p, a, b) { return clamp((p - a) / (b - a)); }
@@ -32,11 +32,11 @@
   var bg = sec.querySelector('.bd_bg');
   function drawExt() {
     if (!ectx || !vid.videoWidth) return;
-    try { ectx.drawImage(vid, 0, 0, 3, vid.videoHeight, 0, 0, ext.width, ext.height); } catch (e) {}      // the film's left edge, stretched across: its top-to-bottom colours (sky, white, ground), none of its shapes
+    try { ectx.drawImage(vid, 14, 14, 3, vid.videoHeight - 28, 0, 0, ext.width, ext.height); } catch (e) {}      // the film's left edge, stretched across: its top-to-bottom colours (sky, white, ground), none of its shapes
   }
   window.addEventListener('resize', drawExt);
   if (bg) bg.addEventListener('transitionend', drawExt);
-  if (reduce) { vid.setAttribute('poster', '/assets/building/final.jpg?v=3'); setStage(3); setCard(true); sec.classList.add('is-still'); return; }
+  if (reduce) { vid.setAttribute('poster', '/assets/building/final.jpg?v=4'); setStage(3); setCard(true); sec.classList.add('is-still'); return; }
 
   function load() {
     if (loading) return; loading = true;
@@ -51,7 +51,7 @@
   function progress() { var r = track.getBoundingClientRect(), off = parseFloat(getComputedStyle(stick).top) || 0; return clamp((off - r.top) / Math.max(1, r.height - stick.offsetHeight)); }
   function step() {
     raf = 0; if (!active) return;
-    var p = progress(), target = Math.min(timeAt(p), (vid.duration || 11.6) - 0.04);
+    var p = progress(), target = Math.min(timeAt(p), (vid.duration || 15.4) - 0.04);
     cur += (target - cur) * 0.22; if (Math.abs(target - cur) < 0.005) cur = target;
     if (ready && !vid.seeking && Math.abs(vid.currentTime - cur) > 0.02) { try { vid.currentTime = cur; } catch (e) {} }
     setStage(stageAt(p)); setCard(p >= CARD_AT);
