@@ -2,6 +2,8 @@
 
 ## 3.14.0
 
+- **Build number is easier to see on phones.** On screens under 768 px the "v3.14.0" label moves to the top-right of the loading frame (below the status bar), a little bigger and darker, because the bottom is often covered by the browser toolbar.
+
 - **Build number on the loading screen.** A tiny "v3.14.0" now sits in the bottom-right corner of the loading frame (faint, follows the dark or light colours) so you can tell which build you are looking at after a deploy. Update the number in `dist/index.html` (`.ep-ld_ver`) when the version changes.
 
 - **Phone chapter navigation: no more selecting.** Touching the right-edge strip now cancels the browser's own touch handling (so iOS and Android never start their press-and-hold text / image selection or callout menu), clears any selection that does start, and blocks the selection, context-menu and drag events while a finger is down. The touch area reaches 22 px further left.

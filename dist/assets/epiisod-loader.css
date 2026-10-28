@@ -27,3 +27,7 @@ html.ep-ld-in .ep-fly_intro, html.ep-ld-in .ep-fly_cards, html.ep-ld-in .ep-fly_
 @keyframes ep-ld-fade { from { opacity: 0; } }
 /* build number, tucked small into the bottom-right corner of the frame */
 .ep-ld_ver { position: absolute; right: calc(var(--ld-m) + clamp(12px, 1.6vw, 22px)); bottom: calc(var(--ld-m) + clamp(10px, 1.6vh, 18px)); font: 500 10px/1 "Albert Sans", system-ui, sans-serif; letter-spacing: .14em; color: currentColor; opacity: .42; pointer-events: none; user-select: none; }
+/* phones: bigger and darker, and up top by the status bar, since the bottom is where browser toolbars and the home bar cover the screen */
+@media (max-width: 767px) {
+  .ep-ld_ver { top: calc(var(--ld-m) + env(safe-area-inset-top, 0px) + 16px); bottom: auto; right: calc(var(--ld-m) + 16px); font-size: 12px; font-weight: 600; letter-spacing: .12em; opacity: .75; }
+}
