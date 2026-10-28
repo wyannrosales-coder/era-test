@@ -50,7 +50,8 @@
   });
 
   function pad(n) { return ('0' + n).slice(-2); }
-  function ph(r, n, st, cls) { return '<figure class="mg-ph ' + (cls || '') + '" style="' + st + '"><img src="' + IMG + r.img + '-' + n + '.webp" alt="' + r.full + '" draggable="false"></figure>'; }
+  function ph(r, n, st, cls) { return '<figure class="mg-ph ' + (cls || '') + '" style="' + st + '"><img src="' + IMG + r.img + '-' + n + '.webp?v=3" alt="' + r.full + '" draggable="false"></figure>'; }
+  function pq(t, sz) { return '<blockquote class="mg-pq hd" style="font-size:' + (sz || 5) + 'cqw">' + t + '</blockquote>'; }
   function fo(no, side, cls) { return '<div class="mg-fo ' + side + ' ' + (cls || '') + '"><span>' + pad(no) + '</span><span>EPIISOD · Rooms</span></div>'; }
   function lk(r) { return '<a class="mg-lk" href="' + r.url + '" target="_blank" rel="noopener" draggable="false">Explore room <i>→</i></a>'; }
   function pr(r, sz) { return '<div class="mg-pr"><small>From</small><b class="hd" style="font-size:' + (sz || 6) + 'cqw">AU$' + r.price + '</b><small>' + r.unit + '</small></div>'; }
@@ -63,11 +64,12 @@
     // 01 Quad: photograph left, classic title page right
     function (r, pl, pr_) {
       return {
-        L: ['t-choc', ph(r, 1, 'inset:0') + '<div class="mg-grad"></div><div class="hd mg-num" style="left:6cqw;top:6cqw;font-size:40cqw;color:#f4f2f0">' + r.no + '</div>' +
+        L: ['t-choc', ph(r, 1, 'inset:0') + '<div class="mg-grad"></div>' + ph(r, 2, 'right:7cqw;top:8cqw;width:28cqw;height:36cqw;border:1.2cqw solid #f4f2f0;box-shadow:0 2cqw 5cqw rgba(0,0,0,.25)') + '<div class="hd mg-num" style="left:6cqw;top:6cqw;font-size:40cqw;color:#f4f2f0">' + r.no + '</div>' +
           '<div class="mg-cap" style="left:8cqw;bottom:13cqw;width:70cqw"><span class="eb">' + r.kind + '</span><p class="hd" style="font-size:4.6cqw;line-height:1.2;margin:2cqw 0 0;font-style:italic">' + r.quote + '</p></div>' + fo(pl, 'l', 'on-ph')],
         R: ['t-pearl', '<div class="mg-col"><span class="eb">' + r.kind + ' · 4 bedrooms</span><h3 class="hd" style="font-size:30cqw;margin:5cqw 0 0;letter-spacing:-.03em">' + r.name + '</h3>' +
           '<div class="hd" style="font-size:5.2cqw;font-style:italic;margin:1cqw 0 0">4 Bedroom Ensuite</div><hr class="mg-hr"><p class="tx mg-drop">' + r.desc + '</p>' +
-          '<div class="mg-row" style="margin-top:auto">' + sp(r.sqm, 'sqm · room') + sp(r.sqm2, 'sqm · apartment') + sp('King', 'single bed') + '</div>' +
+          '<div class="mg-row" style="margin-top:4cqw;gap:2cqw;flex:none">' + ph(r, 3, 'position:relative;flex:1;height:15cqw') + ph(r, 4, 'position:relative;flex:1;height:15cqw') + '</div>' +
+          '<div class="mg-row" style="margin-top:auto;padding-top:3cqw">' + sp(r.sqm, 'sqm · room') + sp(r.sqm2, 'sqm · apartment') + sp('King', 'single bed') + '</div>' +
           '<div class="mg-row mg-end" style="margin-top:6cqw">' + pr(r) + lk(r) + '</div></div>' + fo(pr_, 'r')]
       };
     },
@@ -75,20 +77,20 @@
     function (r, pl, pr_) {
       return {
         L: ['t-sand', '<div class="hd mg-vert" style="font-size:24cqw;left:5cqw;top:6cqw;color:#24120c">' + r.name + '</div>' +
-          '<div class="mg-col" style="padding-left:34cqw;padding-right:7cqw"><span class="eb">' + r.kind + ' · ' + r.no + '</span><p class="hd" style="font-size:5cqw;line-height:1.2;margin:5cqw 0 0;font-style:italic">“' + r.quote + '”</p><hr class="mg-hr" style="margin:5cqw 0">' +
+          '<div class="mg-col" style="padding-left:34cqw;padding-right:7cqw"><span class="eb">' + r.kind + ' · ' + r.no + '</span>' + pq(r.quote, 5) + '<hr class="mg-hr" style="margin:5cqw 0">' +
           '<span class="eb" style="margin-bottom:2.5cqw;display:block">In the room</span>' + ft(r.feat, 2) + '</div>' + fo(pl, 'l')],
-        R: ['t-pearl', ph(r, 1, 'left:0;right:0;top:0;height:56%') + ph(r, 2, 'left:0;width:49.4%;top:56.8%;height:25%') + ph(r, 3, 'right:0;width:49.4%;top:56.8%;height:25%') +
+        R: ['t-pearl', ph(r, 1, 'left:0;right:0;top:0;height:54%') + ph(r, 2, 'left:0;width:32.4%;top:54.8%;height:26%') + ph(r, 3, 'left:33.8%;width:32.4%;top:54.8%;height:26%') + ph(r, 4, 'right:0;width:32.4%;top:54.8%;height:26%') +
           '<div class="mg-row mg-end" style="position:absolute;left:8cqw;right:8cqw;bottom:11cqw"><div><b class="hd" style="font-size:5cqw;font-weight:400">' + r.full + '</b><small class="mg-sub">Five ensuite bedrooms · 11.8 sqm room · 100.9 sqm apartment</small></div>' + lk(r) + '</div>' + fo(pr_, 'r')]
       };
     },
     // 03 Signature: collage left, chocolate editorial right
     function (r, pl, pr_) {
       return {
-        L: ['t-pearl', ph(r, 1, 'left:9cqw;top:9cqw;width:60cqw;height:80cqw') + ph(r, 2, 'right:7cqw;bottom:14cqw;width:44cqw;height:56cqw;border:1.6cqw solid #f4f2f0;box-shadow:0 2cqw 5cqw rgba(36,18,12,.18)') +
+        L: ['t-pearl', ph(r, 1, 'left:9cqw;top:9cqw;width:60cqw;height:80cqw') + ph(r, 2, 'right:7cqw;bottom:14cqw;width:44cqw;height:56cqw;border:1.6cqw solid #f4f2f0;box-shadow:0 2cqw 5cqw rgba(36,18,12,.18)') + ph(r, 3, 'right:7cqw;top:9cqw;width:21cqw;height:27cqw;border:1.2cqw solid #f4f2f0;box-shadow:0 2cqw 5cqw rgba(36,18,12,.15)') +
           '<div class="hd mg-num" style="left:8cqw;bottom:6cqw;font-size:22cqw;line-height:.7;-webkit-text-stroke:.25cqw #24120c;color:transparent">' + r.no + '</div>' +
           '<p class="eb" style="position:absolute;left:9cqw;top:92cqw;width:50cqw;line-height:1.8">The cornerstone of the collection</p>' + fo(pl, 'l')],
         R: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#d0a77f">' + r.views + '</span><h3 class="hd" style="font-size:14cqw;margin:8cqw 0 0;letter-spacing:-.02em">Signature<br><i>Studio</i></h3>' +
-          '<p class="tx" style="margin-top:7cqw">' + r.desc + '</p>' +
+          '<p class="tx" style="margin-top:7cqw">' + r.desc + '</p>' + ph(r, 4, 'position:relative;width:100%;height:14cqw;flex:none;margin-top:4cqw') +
           '<div class="mg-row" style="margin-top:auto">' + sp(r.sqm, 'sqm') + sp('Double', 'bed') + sp('1–9', 'levels') + '</div>' +
           '<div class="mg-row mg-end" style="margin-top:7cqw">' + pr(r, 7.4) + lk(r) + '</div></div>' + fo(pr_, 'r')]
       };
@@ -98,8 +100,8 @@
       return {
         L: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#d0a77f">Specification · ' + r.no + '</span><div class="hd" style="font-size:44cqw;line-height:.8;margin:5cqw 0 0;color:#d0a77f;letter-spacing:-.04em">' + r.sqm + '</div>' +
           '<div class="eb" style="margin:1cqw 0 6cqw">square metres</div><hr class="mg-hr light"><h3 class="hd" style="font-size:7cqw;margin:4cqw 0 4cqw;font-style:italic">' + r.full + '</h3>' + ft(r.feat, 2) + '</div>' + fo(pl, 'l')],
-        R: ['t-pearl', ph(r, 1, 'inset:0') + ph(r, 2, 'right:7cqw;top:7cqw;width:26cqw;height:34cqw;border:1.2cqw solid #f4f2f0') + '<div class="mg-grad b"></div>' +
-          '<div class="mg-card"><p class="hd" style="font-size:4.2cqw;line-height:1.25;margin:0;font-style:italic">“' + r.quote + '”</p><div class="mg-row mg-end" style="margin-top:4cqw">' + pr(r, 5) + lk(r) + '</div></div>' + fo(pr_, 'r', 'on-ph')]
+        R: ['t-pearl', ph(r, 1, 'inset:0') + ph(r, 2, 'right:7cqw;top:7cqw;width:22cqw;height:20cqw;border:1.2cqw solid #f4f2f0') + ph(r, 3, 'right:7cqw;top:29cqw;width:22cqw;height:20cqw;border:1.2cqw solid #f4f2f0') + ph(r, 4, 'right:7cqw;top:51cqw;width:22cqw;height:20cqw;border:1.2cqw solid #f4f2f0') + '<div class="mg-grad b"></div>' +
+          '<div class="mg-card">' + pq(r.quote, 4.2) + '<div class="mg-row mg-end" style="margin-top:4cqw">' + pr(r, 5) + lk(r) + '</div></div>' + fo(pr_, 'r', 'on-ph')]
       };
     },
     // 05 Aspect: full-bleed left with pull quote, structured page right
@@ -108,7 +110,7 @@
         L: ['t-choc', ph(r, 1, 'inset:0') + '<div class="mg-grad b"></div><div class="mg-cap" style="left:8cqw;right:8cqw;bottom:14cqw"><span class="eb">Every corner, every floor</span>' +
           '<p class="hd" style="font-size:8.4cqw;line-height:1.05;margin:3cqw 0 0">' + r.quote + '</p></div><div class="hd mg-num" style="right:7cqw;top:6cqw;font-size:12cqw">' + r.no + '</div>' + fo(pl, 'l', 'on-ph')],
         R: ['t-pearl', '<div class="mg-col" style="padding-bottom:12cqw"><div class="mg-row mg-end"><span class="eb">' + r.kind + '</span><span class="eb">' + r.sqm + ' sqm</span></div><h3 class="hd" style="font-size:14cqw;margin:5cqw 0 5cqw;letter-spacing:-.02em">Aspect<br><i>Studio</i></h3>' +
-          ph(r, 2, 'position:relative;width:100%;height:30cqw;flex:none') + '<p class="tx" style="margin:5cqw 0 0;column-count:2;column-gap:5cqw;font-size:2.05cqw">' + r.desc + '</p>' +
+          '<div class="mg-row" style="gap:2cqw;flex:none">' + ph(r, 2, 'position:relative;flex:2;height:30cqw') + ph(r, 3, 'position:relative;flex:1;height:30cqw') + ph(r, 4, 'position:relative;flex:1;height:30cqw') + '</div>' + '<p class="tx" style="margin:5cqw 0 0;column-count:2;column-gap:5cqw;font-size:2.05cqw">' + r.desc + '</p>' +
           '<div class="mg-row" style="margin-top:auto;padding-top:5cqw">' + sp(r.sqm, 'sqm', 4.6) + sp('Double', 'bed', 4.6) + sp('Garden · City', 'preferred view', 3.4) + '</div>' +
           '<div class="mg-row mg-end" style="margin-top:5cqw">' + pr(r, 5.2) + lk(r) + '</div></div>' + fo(pr_, 'r')]
       };
@@ -117,7 +119,7 @@
     function (r, pl, pr_) {
       return {
         L: ['t-sand', '<div class="hd mg-big" style="left:-10cqw;top:-4cqw;font-size:128cqw;font-style:italic;color:#24120c;opacity:.1;line-height:.9">E</div>' +
-          '<div class="mg-col"><span class="eb">' + r.kind + ' · ' + r.no + '</span><h3 class="hd" style="font-size:12.4cqw;margin:50cqw 0 0;line-height:.98">Aspect<br>Studio <i>E</i></h3>' +
+          ph(r, 4, 'right:8cqw;top:8cqw;width:30cqw;height:42cqw;border:1.2cqw solid #f4f2f0;box-shadow:0 2cqw 5cqw rgba(36,18,12,.18)') + '<div class="mg-col"><span class="eb">' + r.kind + ' · ' + r.no + '</span><h3 class="hd" style="font-size:12.4cqw;margin:50cqw 0 0;line-height:.98">Aspect<br>Studio <i>E</i></h3>' +
           '<p class="tx" style="margin:5cqw 0 0;max-width:78cqw">' + r.desc + '</p>' +
           '<div style="margin-top:auto"><span class="eb" style="display:block">' + r.views + '</span><small class="mg-sub">' + r.viewsNote + '</small></div></div>' + fo(pl, 'l')],
         R: ['t-pearl', ph(r, 1, 'left:0;top:0;width:58%;height:72%') + ph(r, 2, 'right:0;top:0;width:41.4%;height:36%') + ph(r, 3, 'right:0;top:36.8%;width:41.4%;height:35.2%') +
@@ -127,10 +129,10 @@
     // 07 Empowered: arched photograph left, big quote on chocolate right
     function (r, pl, pr_) {
       return {
-        L: ['t-pearl', ph(r, 1, 'left:14cqw;top:10cqw;width:72cqw;height:84cqw;border-radius:36cqw 36cqw 0 0') +
+        L: ['t-pearl', ph(r, 1, 'left:14cqw;top:10cqw;width:72cqw;height:84cqw;border-radius:36cqw 36cqw 0 0', 'f-r') +
           '<div class="mg-row mg-end" style="position:absolute;left:14cqw;right:14cqw;top:99cqw"><span class="hd" style="font-size:9cqw;line-height:1">' + r.no + '</span><span class="eb" style="text-align:right;line-height:1.7">' + r.views + '<br>' + r.sqm + ' sqm</span></div>' + fo(pl, 'l')],
-        R: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#d0a77f">' + r.kind + '</span><p class="hd" style="font-size:7.2cqw;line-height:1.1;margin:5cqw 0 0;font-style:italic">“' + r.quote + '”</p>' +
-          '<p class="tx" style="margin:5cqw 0 0;font-size:2.05cqw">' + r.desc + '</p>' + ph(r, 3, 'position:relative;width:30cqw;height:18cqw;flex:none;margin:4cqw 0 0 auto') +
+        R: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#d0a77f">' + r.kind + '</span>' + pq(r.quote, 6.6) + '' +
+          '<p class="tx" style="margin:5cqw 0 0;font-size:2.05cqw">' + r.desc + '</p>' + '<div class="mg-row" style="gap:2cqw;margin-top:4cqw;flex:none">' + ph(r, 2, 'position:relative;flex:1;height:17cqw') + ph(r, 3, 'position:relative;flex:1;height:17cqw') + ph(r, 4, 'position:relative;flex:1;height:17cqw') + '</div>' +
           '<div class="mg-row" style="margin-top:auto"><div><b class="hd" style="font-size:4.4cqw;font-weight:400">' + r.full + '</b><small class="mg-sub">' + r.second + '</small></div></div>' +
           '<div class="mg-row mg-end" style="margin-top:5cqw">' + pr(r, 6.6) + lk(r) + '</div></div>' + fo(pr_, 'r')]
       };
@@ -141,7 +143,7 @@
         L: ['t-choc', ph(r, 1, 'inset:0') + '<div class="mg-grad b"></div><div class="mg-chip">DDA compliant</div>' +
           '<div class="mg-cap" style="left:8cqw;bottom:13cqw"><div class="hd" style="font-size:30cqw;line-height:.8;letter-spacing:-.03em">' + r.sqm + '</div><span class="eb">square metres of understated comfort</span></div>' + fo(pl, 'l', 'on-ph')],
         R: ['t-pearl', '<div class="mg-col"><span class="eb">' + r.kind + ' · ' + r.no + '</span><h3 class="hd" style="font-size:10.6cqw;margin:4cqw 0 0;line-height:.98">Premier<br>Empowered<br><i>Studio</i></h3><p class="tx" style="margin:4cqw 0 0;font-size:1.95cqw;line-height:1.6">' + r.desc + '</p>' +
-          '<div class="mg-row" style="margin-top:4cqw;gap:3cqw">' + ph(r, 2, 'position:relative;flex:1;height:22cqw') + ph(r, 3, 'position:relative;flex:1;height:22cqw') + '</div>' +
+          '<div class="mg-row" style="margin-top:4cqw;gap:2cqw">' + ph(r, 2, 'position:relative;flex:1;height:22cqw') + ph(r, 3, 'position:relative;flex:1;height:22cqw') + ph(r, 4, 'position:relative;flex:1;height:22cqw') + '</div>' +
           '<div class="mg-row mg-end" style="margin-top:auto;padding-top:4cqw">' + pr(r, 5) + lk(r) + '</div>' +
           '<div class="mg-closer"><span>Pay in full, save $500 · Up to 2 weeks free on 52-week contracts</span><a class="mg-lk" href="https://epiisod.com/en-au" target="_blank" rel="noopener" draggable="false">All rooms <i>→</i></a></div></div>' + fo(pr_, 'r')]
       };
@@ -153,7 +155,7 @@
   // the cover: a classic interiors-magazine front (full-bleed photograph, big serif masthead, a few large cover lines),
   // every word sized and shaded so it reads over the picture
   function cover() {
-    return ['t-choc cvx', '<figure class="mg-ph cvx-ph" style="inset:0"><img src="' + IMG + 'emp-3.webp" alt="A warm oak desk nook with a vase of dried flowers" draggable="false"></figure>' +
+    return ['t-choc cvx', '<figure class="mg-ph cvx-ph" style="inset:0"><img src="' + IMG + 'cover.webp?v=3" alt="A warm oak desk nook with a vase of dried flowers" draggable="false"></figure>' +
       '<div class="cvx-shade"></div>' +
       '<div class="cvx-top cv-rv" style="--i:0"><span>EPIISOD · Macquarie Park</span><span>Vol. 01</span></div>' +
       '<h2 class="hd cvx-mast cv-rv" style="--i:1">Rooms</h2>' +
@@ -353,7 +355,7 @@
   mobCover.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fbOpen(1); } });
   pin.appendChild(mobCover);
 
-  function mph(r, n, cls, st) { return '<figure class="mp-ph ' + (cls || '') + '"' + (st ? ' style="' + st + '"' : '') + '><img src="' + IMG + r.img + '-' + n + '.webp" alt="' + r.full + '" draggable="false"></figure>'; }
+  function mph(r, n, cls, st) { return '<figure class="mp-ph ' + (cls || '') + '"' + (st ? ' style="' + st + '"' : '') + '><img src="' + IMG + r.img + '-' + n + '.webp?v=3" alt="' + r.full + '" draggable="false"></figure>'; }
   function mlk(r) { return '<a class="mp-lk" href="' + r.url + '" target="_blank" rel="noopener" draggable="false">Explore room <i>→</i></a>'; }
   function mpr(r) { return '<div class="mp-pr"><small>From</small><b class="hd">AU$' + r.price + '</b><small>' + r.unit + '</small></div>'; }
   function msp(a, b) { return '<div class="mp-sp"><b class="hd">' + a + '</b><small>' + b + '</small></div>'; }
@@ -376,8 +378,8 @@
   // one page per room: a photo carousel in the top half, the room's details in the bottom half (the fold runs between them)
   function mRoom(r) {
     var tone = ['t-pearl', 't-sand', 't-choc'][r.i % 3];
-    var slides = [1, 2, 3].map(function (n) { return '<div class="rp-sl">' + mph(r, n) + '</div>'; }).join('');
-    var dots = [0, 1, 2].map(function (i) { return '<i' + (i ? '' : ' class="on"') + '></i>'; }).join('');
+    var slides = [1, 2, 3, 4].map(function (n) { return '<div class="rp-sl">' + mph(r, n) + '</div>'; }).join('');
+    var dots = [0, 1, 2, 3].map(function (i) { return '<i' + (i ? '' : ' class="on"') + '></i>'; }).join('');
     return [tone, '<div class="rp-car" data-i="0"><div class="rp-trk">' + slides + '</div><div class="rp-top"><span class="mp-eb">' + r.kind + '</span><span class="hd mp-no">' + r.no + '</span></div><div class="rp-dots">' + dots + '</div></div>' +
       '<div class="rp-body"><h3 class="hd rp-name">' + r.full + '</h3><div class="rp-meta"><span>' + r.sqm + ' sqm</span><span>' + r.bed + '</span><span>' + r.views + '</span></div>' +
       '<p class="rp-tx">' + r.desc + '</p><p class="rp-ft">' + r.feat.slice(0, 7).join(' · ') + '</p><div class="rp-foot">' + mpr(r) + mlk(r) + '</div></div>'];
