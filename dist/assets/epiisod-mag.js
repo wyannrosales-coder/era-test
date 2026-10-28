@@ -336,7 +336,7 @@
   tPrev.type = tNext.type = tOpen.type = 'button';
   tPrev.className = 'ep-mag_tbtn ep-mag_tprev'; tPrev.setAttribute('aria-label', 'Previous page'); tPrev.innerHTML = chev(-1);
   tNext.className = 'ep-mag_tbtn ep-mag_tnext'; tNext.setAttribute('aria-label', 'Next page'); tNext.innerHTML = chev(1);
-  tOpen.className = 'ep-mag_topen'; tOpen.innerHTML = '<span>Open the rooms magazine</span>' + chev(1);
+  tOpen.className = 'ep-mag_topen'; tOpen.innerHTML = '<span>View the rooms</span>' + chev(1);
   idx.parentNode.insertBefore(tPrev, idx); idx.parentNode.insertBefore(tNext, idx.nextSibling); idx.parentNode.insertBefore(tOpen, idx);
   tPrev.addEventListener('click', function () { setCur(cur - 1); });
   tNext.addEventListener('click', function () { setCur(cur + 1); });
@@ -383,10 +383,11 @@
   var PEEK = [[0, 0], [0.2, 0.085], [0.4, 0.014], [0.6, 0.052], [0.8, 0], [1, 0]];
   function peekRun() {
     var t0 = performance.now(), D = 2400;
+    stage.classList.add('is-peeking');                       // the "View the rooms" button and its arrow join in
     (function step(now) {
       var u = (now - t0) / D;
-      if (!peekCan()) { peek *= 0.72; if (peek < 0.002) { peek = 0; peekRaf = 0; render(); peekNext(); return; } render(); peekRaf = requestAnimationFrame(step); return; }
-      if (u >= 1) { peek = 0; peekRaf = 0; render(); peekNext(); return; }
+      if (!peekCan()) { peek *= 0.72; if (peek < 0.002) { peek = 0; peekRaf = 0; stage.classList.remove('is-peeking'); render(); peekNext(); return; } render(); peekRaf = requestAnimationFrame(step); return; }
+      if (u >= 1) { peek = 0; peekRaf = 0; stage.classList.remove('is-peeking'); render(); peekNext(); return; }
       for (var i = 1; i < PEEK.length; i++) if (u <= PEEK[i][0]) { var a = PEEK[i - 1], b = PEEK[i], q = ease((u - a[0]) / (b[0] - a[0])); peek = a[1] + (b[1] - a[1]) * q; break; }
       render(); peekRaf = requestAnimationFrame(step);
     })(t0);
@@ -436,7 +437,7 @@
   R.forEach(function (r) { MP.push(mRoom(r)); });
   var MN = MP.length, MT = ['Rooms'].concat(R.map(function (r) { return r.full; }));
   var cv = mCover(true);
-  mobCover.innerHTML = '<div class="ep-mcover_head"><span>The residence edit</span><h2>Flip through the rooms</h2><p>Eight ways to live well. Tap the cover to open it.</p></div><div class="ep-mcover_card"><div class="mp ' + cv[0] + '">' + cv[1] + '</div></div><span class="ep-mcover_tap"><i></i>Tap to open</span>';
+  mobCover.innerHTML = '<div class="ep-mcover_head"><span>The residence edit</span><h2>Flip through the rooms</h2><p>Eight ways to live well. Tap the cover to open it.</p></div><div class="ep-mcover_card"><div class="mp ' + cv[0] + '">' + cv[1] + '</div></div><span class="ep-mcover_tap"><span>View the rooms</span><svg viewBox="0 0 16 16" width="15" height="15" fill="none" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
   if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { es.forEach(function (e) { mobCover.classList.toggle('is-in', e.intersectionRatio > 0.3); }); }, { threshold: [0, 0.15, 0.3, 0.5] }).observe(mobCover);
 
   var fb = null, fbn = 0, fbRaf = 0, fbDrag = null, fbBusy = false, fbPool = {}, slots = {}, fbT = 0, fbK = 0, fbOpener = null;

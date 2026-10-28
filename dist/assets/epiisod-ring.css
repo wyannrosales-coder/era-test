@@ -70,3 +70,5 @@ html.ep-in-ring .ep-nav_btns { opacity: 0 !important; pointer-events: none !impo
 
 /* phones on their side and tablets (landscape): the permission pill sits at the left, over the picture, not the app panel */
 @media (max-width: 991px) and (min-aspect-ratio: 101/100) { .ep-gyro_pill { left: 16px; transform: none; top: calc(16px + env(safe-area-inset-top)); } }
+/* motion-permission pill: white label on the sand / bronze button */
+.ep-gyro_pill b, html[data-ep-ver="2"] .ep-gyro_pill b { color: #fff !important; }

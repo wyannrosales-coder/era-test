@@ -448,3 +448,31 @@
   .ep-mcover_card::before { content: ""; position: absolute; z-index: -1; left: 2%; right: -2.4%; top: 1.2%; bottom: 1.2%; border-radius: 0 4px 4px 0; background: repeating-linear-gradient(90deg, #f1eadf 0 2px, #d8cdbb 2px 3px); box-shadow: 0 1.4vh 3.4vh rgba(0, 0, 0, .28); }
   .ep-mcover.is-in .ep-mcover_card > .mp { transform-origin: 0 50%; animation: mcv-peek 5.4s ease-in-out 1.8s infinite; will-change: transform; }
 }
+
+/* "View the rooms" call to action under the closed magazine (every desktop / tablet screen), its arrow joins the cover's idle lift */
+@media (min-width: 992px) {
+  .ep-mag_topen { position: absolute; left: 50%; bottom: calc(3.2vh - 8px); transform: translateX(-50%); z-index: 6; align-items: center; gap: 12px; padding: 15px 24px; border: 0; border-radius: 99px; background: #24120c; color: #f4f2f0; font: 600 12px/1 "Albert Sans", sans-serif; letter-spacing: .18em; text-transform: uppercase; cursor: pointer; box-shadow: 0 10px 28px rgba(var(--fly-tint), .3); white-space: nowrap; transition: background-color .25s, box-shadow .4s; }
+  .ep-mag_topen svg { width: 14px; height: 14px; color: #d0a77f; }
+  .is-cover .ep-mag_topen { display: inline-flex; }
+  .ep-mag_topen:hover { background: #3a2218; }
+  .ep-mag.is-peeking .ep-mag_topen { box-shadow: 0 10px 28px rgba(var(--fly-tint), .3), 0 0 0 7px rgba(208, 167, 127, .22); }
+  .ep-mag.is-peeking .ep-mag_topen svg { animation: ep-cta-nudge 1.2s ease-in-out 2; }
+  @keyframes ep-cta-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+}
+@media (prefers-reduced-motion: reduce) { .ep-mag.is-peeking .ep-mag_topen svg { animation: none; } }
+
+/* phones: the "View the rooms" prompt under the cover nudges its arrow in time with the cover's swing (same 5.4 s cycle) */
+@media (max-width: 991px) {
+  .ep-mcover_tap { gap: 10px; padding: 12px 20px; border: 1px solid rgba(208, 167, 127, .65); border-radius: 99px; width: max-content; margin-left: auto; margin-right: auto; background: rgba(36, 18, 12, .35); }
+  .ep-mcover_tap svg { color: #d0a77f; flex: none; }
+}
+@media (max-width: 991px) and (prefers-reduced-motion: no-preference) {
+  @keyframes mcv-cta {
+    0%, 14%, 100% { transform: translateX(0); }
+    27% { transform: translateX(7px); }
+    38% { transform: translateX(0); }
+    49% { transform: translateX(5px); }
+    62% { transform: translateX(0); }
+  }
+  .ep-mcover.is-in .ep-mcover_tap svg { animation: mcv-cta 5.4s ease-in-out 1.8s infinite; }
+}

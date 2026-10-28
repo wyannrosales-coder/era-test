@@ -2,6 +2,9 @@
 
 ## 3.14.0
 
+- **"View the rooms" call to action with the magazine hint.** A pill with an arrow now sits under the closed magazine on every desktop and tablet screen (it glows and its arrow nudges whenever the cover does its idle lift, and clicking it opens the book). On phones the prompt under the cover is now a "View the rooms →" pill whose arrow nudges in time with the cover's swing.
+- **Colour fixes.** "Make it yours." is now the site sand (#d0a77f, with a soft shadow) in both versions, and the label on the motion-permission "Enable" button is white.
+
 - **Magazine: it now invites you to open it.** On desktop and tablets the closed cover lifts and settles a couple of times every few seconds (it pauses while the pointer is on it, once it is open, off-screen, or with reduced motion). On phones the cover card swings open a little on its spine every ~5 s with a page stack showing behind it.
 - **Hold and drag to turn pages** (mouse, finger or stylus, so it works on tablets too): the page follows your hand, and on letting go it turns if you dragged more than about a third of the way or flicked, otherwise it settles back. Drag left to go forward, right to go back. The next / previous buttons, arrow keys and clicking the page still work, and an up / down swipe on a touch screen still scrolls the page.
 

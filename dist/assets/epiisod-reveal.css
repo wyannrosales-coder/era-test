@@ -192,3 +192,5 @@
 /* the video window is taller than the section and its dark circle hung over the top of the section below as a curve: the section now
    cuts it off at its own bottom edge. The top stays open, because the circle is born above the section (over the hero). */
 #reveal.ep-rv { clip-path: inset(-200vh 0 0 0); }
+/* "Make it yours." in the sand used across the site, in both versions, with a soft shadow so it holds over the photo */
+.ep-rv_accent, html[data-ep-ver="2"] .ep-rv_accent { color: #d0a77f !important; text-shadow: 0 1px 14px rgba(20, 12, 8, .55); }
