@@ -2,6 +2,8 @@
 
 ## 3.14.0
 
+- **Phone chapter navigation: smaller and neutral.** The touch area is now just the strip of lines (about 48 x 176 px, no invisible extension), and the open list sits on a soft neutral gradient (an eased fade with a light blur, strongest at the right edge and melting into the page to the left, above and below, with no hard edge) instead of the chocolate overlay; names carry a soft shadow so they stay readable on light sections. The chosen chapter is white and the others a clear grey-white, in both the dark and light versions (the light version no longer turns the chosen one bronze).
+
 - **Phone chapter list is readable on any section.** The panel behind the open list is now a deep, softly blurred dark layer (it used to fade to nothing partway across, so headlines and grid lines showed through the names). Names are a touch brighter with a stronger shadow, the chosen one is a warmer gold, and names never drop below 55% opacity.
 
 - **Phone chapter jump reworked.** The list now opens only by pressing and holding the right-edge lines, or by dragging up / down on them (which opens it right away); a plain tap does nothing. While dragging, letting go on a chapter jumps there, and letting go above or below the list, or well off to the left, closes it without moving (the names dim while your finger is away). A hold with no drag keeps the list open: tap a chapter to go, or tap anywhere else to close.
