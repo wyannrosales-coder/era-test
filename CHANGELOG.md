@@ -2,6 +2,8 @@
 
 ## 3.14.0
 
+- **Build number on the loading screen.** A tiny "v3.14.0" now sits in the bottom-right corner of the loading frame (faint, follows the dark or light colours) so you can tell which build you are looking at after a deploy. Update the number in `dist/index.html` (`.ep-ld_ver`) when the version changes.
+
 - **Phone chapter navigation: no more selecting.** Touching the right-edge strip now cancels the browser's own touch handling (so iOS and Android never start their press-and-hold text / image selection or callout menu), clears any selection that does start, and blocks the selection, context-menu and drag events while a finger is down. The touch area reaches 22 px further left.
 
 - **Phone chapter navigation: touch and drag.** Put a finger on the right-edge lines and drag up or down: the chapter list now opens straight away (after an 8 px move) and you scrub to a chapter and let go to jump. Press-and-hold (0.5 s) still opens it too. While a finger is on the strip, text and image selection, the callout menu and image dragging are switched off, so holding no longer selects photos; the touch area is also a little taller.

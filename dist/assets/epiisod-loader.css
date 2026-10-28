@@ -25,3 +25,5 @@
 html.ep-ld-hide .ep-fly_intro, html.ep-ld-hide .ep-fly_cards, html.ep-ld-hide .ep-fly_story, html.ep-ld-hide .ep-fly_nav, html.ep-ld-hide .ep-fly_hint, html.ep-ld-hide .ep-fly_rail, html.ep-ld-hide .ep-gh { opacity: 0 !important; }
 html.ep-ld-in .ep-fly_intro, html.ep-ld-in .ep-fly_cards, html.ep-ld-in .ep-fly_story, html.ep-ld-in .ep-fly_nav, html.ep-ld-in .ep-fly_hint, html.ep-ld-in .ep-fly_rail, html.ep-ld-in .ep-gh { animation: ep-ld-fade .8s ease both; }
 @keyframes ep-ld-fade { from { opacity: 0; } }
+/* build number, tucked small into the bottom-right corner of the frame */
+.ep-ld_ver { position: absolute; right: calc(var(--ld-m) + clamp(12px, 1.6vw, 22px)); bottom: calc(var(--ld-m) + clamp(10px, 1.6vh, 18px)); font: 500 10px/1 "Albert Sans", system-ui, sans-serif; letter-spacing: .14em; color: currentColor; opacity: .42; pointer-events: none; user-select: none; }
