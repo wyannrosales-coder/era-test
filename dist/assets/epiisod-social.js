@@ -1,7 +1,7 @@
-/* "Life beyond the classroom": the EPIISOD Instagram posts lie around the headline like a loose pile of prints. When the section
+/* "Life beyond the classroom": photos of EPIISOD life lie around the headline like a loose pile of prints. When the section
    first comes into view they spill out from behind the headline (each on its own curve, with its own spin). Afterwards, on a mouse,
    any print can be picked up, thrown and left where it lands: it slides on with friction and bounces off the edges of the section.
-   On touch screens a print is picked up by holding it for a moment (a quick swipe still scrolls the page). Reduced motion gets the scatter without the spill or the dragging (the posts are links to Instagram). */
+   On touch screens a print is picked up by holding it for a moment (a quick swipe still scrolls the page). Reduced motion gets the scatter without the spill or the dragging (the photos are the community's own). */
 (function () {
   var track = document.querySelector('[data-sc-track]');
   if (!track) return;
@@ -13,6 +13,11 @@
   var BLEED = 0.16;                                                       // on phones a print may hang this far past the screen edge
   var ROT = [-8, 6, -4, 9, 12, -11, -5, 7, 7, -9, 5, -7, 4, -6];       // each print's resting angle
   var bl = function (w) { return sw < 768 ? w * BLEED : 0; };
+  // the room a tilted print needs so that no corner, white edge or shadow is ever cut off: worst tilt 12 degrees; a shadow may fall past the section's edge, so the bottom limit is the tilt alone
+  function bounds(w, h) {
+    var r = 12 * Math.PI / 180, c = Math.cos(r), n = Math.sin(r), ex = Math.ceil((w * c + h * n - w) / 2) + 6, ey = Math.ceil((w * n + h * c - h) / 2) + 2;
+    return { x0: sw < 768 ? -bl(w) : ex, x1: sw < 768 ? sw - w + bl(w) : sw - w - ex, y0: TOP + ey, y1: sh - h - ey };
+  }
   var geo = [], st = [], sw = 0, sh = 0, raf = 0, played = false, t0 = 0, zTop = 10, drag = null, spilling = false, t1 = 0;
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
   function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
@@ -22,9 +27,9 @@
     cards.forEach(function (c) { c.style.setProperty('--fx', 0); c.style.setProperty('--fy', 0); });
     geo = cards.map(function (c, i) {
       var cs = getComputedStyle(c), w = c.offsetWidth, h = c.offsetHeight;
-      var b = bl(w), x = clamp(parseFloat(cs.getPropertyValue('--x')) / 100 * sw, sw < 768 ? -b : 10, sw - w + (sw < 768 ? b : -10)), y = clamp(TOP + parseFloat(cs.getPropertyValue('--y')) / 100 * (sh - TOP), TOP, sh - h - 12);
+      var bd = bounds(w, h), x = clamp(parseFloat(cs.getPropertyValue('--x')) / 100 * sw, bd.x0, Math.max(bd.x0, bd.x1)), y = clamp(TOP + parseFloat(cs.getPropertyValue('--y')) / 100 * (sh - TOP), bd.y0, Math.max(bd.y0, bd.y1));
       c.style.left = x.toFixed(1) + 'px'; c.style.top = y.toFixed(1) + 'px';       // the kept-clear, kept-whole position
-      return { x: x, y: y, w: w, h: h, cx: x + w / 2, cy: y + h / 2, rot: ROT[i % ROT.length] };
+      return { x: x, y: y, w: w, h: h, cx: x + w / 2, cy: y + h / 2, rot: ROT[i % ROT.length], bd: bd };
     });
     st = cards.map(function (c, i) {
       var g = geo[i];
@@ -63,7 +68,7 @@
     cards.forEach(function (c, i) {
       var s = st[i], g = geo[i]; if (!s.free || (drag && drag.i === i)) return;
       s.x += s.vx; s.y += s.vy; s.r += s.vr; s.vx *= 0.955; s.vy *= 0.955; s.vr *= 0.94;
-      var minX = -g.x - bl(g.w), maxX = sw - g.w - g.x + bl(g.w), minY = TOP - g.y, maxY = sh - g.h - g.y;
+      var minX = g.bd.x0 - g.x, maxX = g.bd.x1 - g.x, minY = g.bd.y0 - g.y, maxY = g.bd.y1 - g.y;
       if (s.x < minX) { s.x = minX; s.vx = Math.abs(s.vx) * 0.55; s.vr *= -0.6; } else if (s.x > maxX) { s.x = maxX; s.vx = -Math.abs(s.vx) * 0.55; s.vr *= -0.6; }
       if (s.y < minY) { s.y = minY; s.vy = Math.abs(s.vy) * 0.55; s.vr *= -0.6; } else if (s.y > maxY) { s.y = maxY; s.vy = -Math.abs(s.vy) * 0.55; s.vr *= -0.6; }
       s.s += ((drag && drag.i === i ? 1.06 : 1) - s.s) * 0.2;
@@ -118,7 +123,7 @@
         var s = st[i], g = geo[i], dx = e.clientX - drag.px, dy = e.clientY - drag.py;
         if (!drag.moved && Math.hypot(dx, dy) < 5) return;
         drag.moved = true;
-        s.x = clamp(drag.sx + dx, -g.x - bl(g.w), sw - g.w - g.x + bl(g.w)); s.y = clamp(drag.sy + dy, TOP - g.y, sh - g.h - g.y);
+        s.x = clamp(drag.sx + dx, g.bd.x0 - g.x, g.bd.x1 - g.x); s.y = clamp(drag.sy + dy, g.bd.y0 - g.y, g.bd.y1 - g.y);
         s.r += (clamp(dx - (drag.lastdx || 0), -20, 20) * 0.35 - (s.r - g.rot) * 0.05); drag.lastdx = dx;
         var now = performance.now(); drag.hist.push({ t: now, x: e.clientX, y: e.clientY });
         while (drag.hist.length > 2 && now - drag.hist[0].t > 90) drag.hist.shift();

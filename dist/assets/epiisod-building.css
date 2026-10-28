@@ -43,8 +43,9 @@
 .bd_stat b { display: block; font-family: var(--_fonts---font-display, "Playfair Display", serif); font-weight: 400; font-size: clamp(15px, 1.35vw, 21px); line-height: 1.1; white-space: nowrap; }
 .bd_stat span { display: block; margin: 0; text-align: right; letter-spacing: .04em; font-size: clamp(10px, .75vw, 12px); opacity: .8; }
 /* progress along the board */
-.bd_prog { position: absolute; left: 6vw; right: 6vw; bottom: 26px; height: 1px; background: rgba(36, 18, 12, .18); }
-.bd_prog i { position: absolute; left: 0; top: -1px; height: 3px; width: 100%; background: #896d42; transform-origin: 0 50%; transform: scaleX(var(--bd-p, 0)); }
+.bd_prog { position: fixed; left: 0; right: 0; top: 0; height: 3px; z-index: 1500; background: rgba(36, 18, 12, .1); opacity: 0; pointer-events: none; transition: opacity .35s; }
+.bd_prog.is-live { opacity: 1; }
+.bd_prog i { position: absolute; left: 0; top: 0; height: 100%; width: 100%; background: #896d42; transform-origin: 0 50%; transform: scaleX(var(--bd-p, 0)); }
 /* the entrance, once per panel */
 .bd_eb, .bd_h, .bd_sub, .bd_stats { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform 1s cubic-bezier(.16, 1, .3, 1); }
 .bd_stat { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .9s cubic-bezier(.16, 1, .3, 1); }

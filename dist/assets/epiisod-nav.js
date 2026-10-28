@@ -206,7 +206,7 @@
     function closeArch() { rn.classList.remove('is-arch', 'is-sticky'); veil.classList.remove('is-on'); sticky = false; hot = -1; }
     function mobileOn() { return window.matchMedia('(max-width: 991px)').matches; }
     // the list only opens after a deliberate hold (about 1.1 s on a phone, 1.2 s of hover on a desktop), so passing the line does nothing
-    var HOLD = 1100, HOVER = 1200, holdT = 0, hoverT = 0, lastY = 0;
+    var HOLD = 500, HOVER = 700, holdT = 0, hoverT = 0, lastY = 0;
     rn.addEventListener('pointerdown', function (e) {
       if (!mobileOn()) return;
       var rb = rn.getBoundingClientRect();

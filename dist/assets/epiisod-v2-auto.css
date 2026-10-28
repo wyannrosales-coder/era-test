@@ -50,7 +50,7 @@ html[data-ep-ver="2"] .ep-nav_card { background: #212529; }
   html[data-ep-ver="2"] .ep-rnav.is-light { color: #212529; }
 }
 @media (min-width: 992px) {
-  html[data-ep-ver="2"] .ep-rnav_pct { color: #212529; }
+  html[data-ep-ver="2"] .ep-rnav_pct { color: #fff; }
   html[data-ep-ver="2"] .ep-rnav.is-light .ep-rnav_pct { background: #212529; }
 }
 @media (max-width: 991px) {
@@ -175,3 +175,5 @@ html[data-ep-ver="2"] .loc-info-w .ep-sf_cta { background: #212529; }
 html[data-ep-ver="2"] body { --_global-colors---base-1000--0: #21252900; --_global-colors---base-1000--5: #2125290d; --_global-colors---base-1000--10: #2125291a; --_global-colors---base-1000--30: #2125294d; --_global-colors---base-1000--60: #21252999; --_global-colors---base-1000--100: #212529; --_global-colors---brand-500--powder-sky: #896d42; --_global-colors---brand-500--blush-bloom: #dcd7d3; }
 html[data-ep-ver="2"] .ep-fan_cap { color: var(--ep-choc-700, #212529); }
 html[data-ep-ver="2"] .ep-preload_u { color: #896d42; }
+
+html[data-ep-ver="2"] .ep-rnav .ep-rnav_pct, html[data-ep-ver="2"] .ep-rnav.is-light .ep-rnav_pct { color: #fff; background: #212529; }

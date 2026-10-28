@@ -2,6 +2,27 @@
 
 ## 3.14.0
 
+- **Glass top bar.** Once you scroll, the header becomes iOS-style frosted glass: a strong blur with boosted colour, a soft white edge highlight and shadow, slightly bolder nav text and a lightly filled Book a Tour button so it stays readable over photos and video. The dark version gets a tinted-brown glass. The open mega menu stays solid, and browsers without blur support fall back to a near-solid bar.
+
+- **Flythrough clips about 40% smaller** (desktop 27.7 MB to 17.7 MB, mobile 15.2 MB to 8.9 MB), re-encoded with ffmpeg (H.264, CRF 30, a keyframe every 6 frames so scroll-scrubbing stays smooth). Similarity to the originals is 96–98% (SSIM), and the side-by-side frame check looked the same.
+
+- **Site optimisation pass.** Original Webflow files (names starting with a 10-character hash) are now cached for a year; our own files keep the 1-day cache with background refresh. All 723 images across the pages decode off the main thread (`decoding="async"`), and `nosniff` is sent on every response. Images were re-checked for further compression and are already tight, and the scroll-scrubbed flythrough clips need their short-keyframe encoding, so both are left alone.
+
+- **Branded page scrollbar.** The browser scrollbar is now a slim gold pill on a track that matches the dark or light version, with a lighter gold on hover (Firefox gets a thin gold bar; phones keep their native overlay bar).
+
+- **Chapter navigation appears faster.** Hovering the right-hand scroll line now opens the chapter list after 0.7 s (was 1.2 s), and on phones a press-and-hold opens it after 0.5 s (was 1.1 s).
+
+- **Life beyond the classroom photos are 50% bigger** (30% bigger on phones). To keep them clear of the headline, desktop now shows 11 of the 16 photos and phones show 6; none cross the headline and all stay whole inside the section.
+
+- **Progress bar and photo travel.** The Design-led progress bar is now a thin full-width bar on the very top edge of the screen, above the header, and appears only while the sideways board is moving. In Life beyond the classroom the photos can now be dragged to within a few pixels of the section's top and bottom edges, and their shadows are no longer cut off at the edge (they fall onto the section below).
+
+- **The Design-led film is 7x smaller.** The film is now played as a small looping picture, so it no longer needs a keyframe every 3 frames for scrubbing: re-encoded at 1280x720 (12.9 MB to 1.9 MB) and 960x540 for phones (6.5 MB to 0.9 MB). Measured against the original, the picture is nearly identical (PSNR 41 dB; pencil lines checked by eye at three moments). The four flythrough clips were tried too but are already tightly encoded for scrubbing (re-encoding made them bigger), so they are unchanged.
+
+- **Life beyond the classroom uses your own photos, and nothing is cut off any more.** The Instagram posts are replaced by 16 of your photos (`assets/life/`, 8 on phones; they are no longer links to Instagram). The section is now truly full width on desktop too (a 38 px gutter was cutting both sides), and every photo is kept whole: the room a tilted photo needs, including its white edge and shadow, is reserved at the top, bottom and (on desktop) the sides, so a photo can be dragged or thrown only as far as that limit. On phones the outer photos may still hang a little past the screen edge. On desktop a photo now lifts, grows slightly and the picture leans in when you hover it.
+- **Navigation tidy-up.** The percentage beside the line column is readable again in the light version (it was dark text on a dark pill). The round up and down buttons beside "Scroll" are gone. The "Design-led" progress line is now at the top of the section, under the header, instead of the bottom.
+
+- **The footer's resident pass and strap are redesigned from the Figma ("V5 DESIGN").** Both faces are redrawn to the design (`epiisod-badge.js`, pieces in `assets/badge/`): the front is a dark chocolate card with the large italic E, the EPIISOD wordmark and "Macquarie Park", "Welcome home" with your name (now in Albert Sans), "Resident since 2027", the skyline, the barcode and "Tap to flip"; the back is a cream card with "Book your stay / Your room is waiting.", the two buttons (Book a tour and View rooms still work), the address and the flip cue. The gold clip sits over the slot, and the card is the design's taller shape. The lanyard is the design's: a dark ribbon with sand lettering while the front faces you, sand with dark lettering once the back does (it blends as the card turns), stitched along both edges and lettered "EPIISOD · MACQUARIE PARK". The pass is the same on the light and dark versions; the light version's footer now has the design's cream wash.
+
 - **Mobile and light-version fixes, navigation review, and a lighter site.**
   - The "Design-led student living" card on phones now has the three figures in one row (8 room types, 12 week stays, AU$615 from per week) with a larger headline.
   - Light version: the "EPIISOD Macquarie Park" map label is white on charcoal (it was bronze on charcoal), and the "from AU$615 per week" tag on the magazine cover is pearl with dark text (it was dark on bronze).

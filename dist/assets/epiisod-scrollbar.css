@@ -1,0 +1,22 @@
+/* Branded page scrollbar: slim gold thumb on a track that follows the dark / light version. */
+html { --ep-sb-track: #1c1511; --ep-sb-thumb: #896d42; --ep-sb-hover: #b08c55; --ep-sb-w: 10px; }
+html[data-ep-ver="2"] { --ep-sb-track: #efe7da; --ep-sb-thumb: #a68857; --ep-sb-hover: #896d42; }
+
+@supports (scrollbar-color: auto) {
+  html { scrollbar-width: thin; scrollbar-color: var(--ep-sb-thumb) var(--ep-sb-track); }
+}
+@supports selector(::-webkit-scrollbar) {
+  html { scrollbar-width: auto; scrollbar-color: auto; }
+  ::-webkit-scrollbar { width: var(--ep-sb-w); height: var(--ep-sb-w); background: var(--ep-sb-track); }
+  ::-webkit-scrollbar-track { background: var(--ep-sb-track); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--ep-sb-thumb); border-radius: 999px;
+    border: 2px solid var(--ep-sb-track); min-height: 48px;
+    transition: background-color .25s;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ep-sb-hover); }
+  ::-webkit-scrollbar-thumb:active { background: var(--ep-sb-hover); }
+  ::-webkit-scrollbar-corner { background: var(--ep-sb-track); }
+}
+/* inner scrollers that hide their own bar keep doing so */
+.ep-ap_screen { scrollbar-width: none; }

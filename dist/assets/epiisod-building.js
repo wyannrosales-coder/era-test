@@ -6,6 +6,7 @@
   if (!sec) return;
   var track = sec.querySelector('.bd_track'), stick = sec.querySelector('.bd_stick'), rail = sec.querySelector('.bd_rail');
   var pns = [].slice.call(sec.querySelectorAll('.bd_pn'));
+  var prog = sec.querySelector('.bd_prog'); if (prog) document.body.appendChild(prog);     // on the body, so it sits above the header
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var wide = window.matchMedia('(min-width: 768px)');
   var side = false, dist = 0, active = false, raf = 0, curX = 0;
@@ -14,7 +15,7 @@
   // sideways scroll
   function measure() {
     side = wide.matches && !reduce;
-    if (!side) { track.style.removeProperty('--bd-track'); rail.style.transform = ''; sec.style.removeProperty('--bd-p'); return; }
+    if (!side) { track.style.removeProperty('--bd-track'); rail.style.transform = ''; return; }
     dist = Math.max(0, rail.scrollWidth - window.innerWidth);
     track.style.setProperty('--bd-track', (window.innerHeight + dist) + 'px');
   }
@@ -22,7 +23,7 @@
     raf = 0; if (!active || !side) return;
     var r = track.getBoundingClientRect(), p = clamp(-r.top / Math.max(1, r.height - window.innerHeight));
     curX = -p * dist; rail.style.transform = 'translate3d(' + curX.toFixed(1) + 'px,0,0)';
-    stick.style.setProperty('--bd-p', p.toFixed(4));
+    if (prog) { prog.style.setProperty('--bd-p', p.toFixed(4)); prog.classList.toggle('is-live', p > 0.002 && p < 0.998); }
     // depth: each sheet's picture and card drift a little against the board as it passes
     var vw = window.innerWidth;
     for (var i = 0; i < pns.length; i++) {
@@ -33,7 +34,7 @@
     }
     raf = requestAnimationFrame(step);
   }
-  function run(v) { active = v; if (v && !raf) raf = requestAnimationFrame(step); }
+  function run(v) { active = v; if (!v && prog) prog.classList.remove('is-live'); if (v && !raf) raf = requestAnimationFrame(step); }
   measure(); window.addEventListener('resize', measure); if (wide.addEventListener) wide.addEventListener('change', measure);
   window.addEventListener('load', measure);
 

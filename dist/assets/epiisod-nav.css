@@ -265,3 +265,6 @@
   .ep-rnav.is-moving .ep-rnav_pct { opacity: 1; }
   .ep-rnav.is-arch .ep-rnav_pct, .ep-rnav.is-arch .ep-rnav_track, .ep-rnav.is-arch .ep-rnav_fill { opacity: 0; }
 }
+
+/* the round previous / next buttons beside "Scroll" are retired; the line column and the phone pill do the navigating */
+.ep-nav_btns { display: none !important; }

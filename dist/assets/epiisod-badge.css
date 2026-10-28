@@ -67,3 +67,7 @@
 /* the footer's own fade-in (a scroll-linked opacity on the whole column) would dim the pass: the footer is simply there */
 .ep-footer .footer-s { opacity: 1 !important; transform: none !important; scale: none !important; }   /* the page's scroll-linked zoom of this column (from 75%) would resize and shift the pass */
 .ep-badge_still ~ .ep-badge_hint { display: none; }
+
+/* the light version's footer: the cream wash from the design (the pass itself is the same on both) */
+html[data-ep-ver="2"] section.ep-footer { background: linear-gradient(180deg, #fbfaf7 0%, #f1eadf 55%, #e9dfd0 100%); }
+html[data-ep-ver="2"] .ep-badge_hint { color: rgba(57, 29, 19, .6); }

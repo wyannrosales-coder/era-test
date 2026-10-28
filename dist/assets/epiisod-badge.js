@@ -50,118 +50,109 @@
   }
   form.querySelector('[data-ep-badge-book]').addEventListener('click', function (e) { e.preventDefault(); bookTour(); });
 
-  // ---- the two faces, drawn once on canvases (design units 360 x 504, drawn at 2x) ----
-  var FW = 360, FH = 504, TS = 2;
+  // ---- the two faces, drawn once on canvases. The front is drawn in the design's own units (a 408.32 x 647.68 card), the back in its
+  // units (357.28 x 566.72) scaled up to match; both end up 408 x 648, drawn at 2x ----
+  var FW = 408, FH = 648, TS = 2, SF = FW / 408.32, SB = FW / 357.28;
   var cvF = document.createElement('canvas'), cvB = document.createElement('canvas');
   cvF.width = cvB.width = FW * TS; cvF.height = cvB.height = FH * TS;
-  var emblem = null, stillRefresh = null, stillMode = false;
-  (function loadEmblem() {
-    var svg = document.querySelector('[data-ep-emblem]');
-    if (!svg) return;
-    try {
-      var src = new XMLSerializer().serializeToString(svg).replace(/currentColor/g, '#d0a77f');
-      if (!/xmlns=/.test(src)) src = src.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-      src = src.replace(/<svg([^>]*?)width="[^"]*"/, '<svg$1width="158"').replace(/<svg([^>]*?)height="[^"]*"/, '<svg$1height="158"');
-      var im = new Image();
-      im.onload = function () { emblem = im; drawFront(); upload(0); if (stillRefresh) stillRefresh(); };
-      im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(src);
-    } catch (e) {}
-  })();
+  var stillRefresh = null, stillMode = false;
+  var IM = {}, IMN = ['skyline', 'barcode', 'front-logo-a', 'front-logo-b', 'front-arrow', 'back-logo-a', 'back-logo-b', 'back-arrow', 'icon-location'], imLeft = IMN.length;
+  IMN.forEach(function (k) {
+    var im = new Image();
+    im.onload = im.onerror = function () { if (--imLeft === 0) { drawFaces(); if (typeof upload === 'function') { upload(0); upload(1); } if (stillRefresh) stillRefresh(); } };
+    im.src = '/assets/badge/' + k + '.svg?v=1'; IM[k] = im;
+  });
+  function img(g, k, x, y, w, h) { var im = IM[k]; if (im && im.complete && im.naturalWidth) { try { g.drawImage(im, x, y, w, h); } catch (e) {} } }
 
   function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
   function spaced(g, text, x, y, sp, align, font, color) {
-    g.font = font; g.fillStyle = color; g.textBaseline = 'alphabetic'; g.textAlign = 'left';
+    g.font = font; g.fillStyle = color; g.textBaseline = 'middle'; g.textAlign = 'left';
     var w = 0, ws = [];
     for (var i = 0; i < text.length; i++) { var cw = g.measureText(text[i]).width; ws.push(cw); w += cw + (i < text.length - 1 ? sp : 0); }
     var cx = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
     for (var j = 0; j < text.length; j++) { g.fillText(text[j], cx, y); cx += ws[j] + sp; }
     return w;
   }
-  function clasp(g, light) {
-    var m = g.createLinearGradient(0, 8, 0, 40);
-    if (light) { m.addColorStop(0, '#b9a98f'); m.addColorStop(.5, '#7e6f58'); m.addColorStop(1, '#a89878'); } else { m.addColorStop(0, '#e1cfae'); m.addColorStop(.5, '#a58b62'); m.addColorStop(1, '#d4bd94'); }
-    g.fillStyle = m; rr(g, 150, 6, 60, 32, 9); g.fill();
-    g.fillStyle = 'rgba(20,10,6,.62)'; rr(g, 166, 16, 28, 11, 5.5); g.fill();
-    g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 1; rr(g, 150.5, 6.5, 59, 31, 8.5); g.stroke();
+  // the gold clip over the card's slot
+  function clip(g, x, y, w, h, back) {
+    g.fillStyle = back ? 'rgba(36,18,12,.28)' : 'rgba(0,0,0,.5)'; rr(g, x - 5, y + 2, w + 10, h - 4, (h - 4) / 2); g.fill();
+    var m = g.createLinearGradient(0, y, 0, y + h); m.addColorStop(0, '#eadfc6'); m.addColorStop(.45, '#b99f72'); m.addColorStop(1, '#d9c6a2');
+    g.fillStyle = m; rr(g, x, y, w, h, h / 2); g.fill();
+    g.strokeStyle = 'rgba(255,255,255,.4)'; g.lineWidth = .8; rr(g, x + .4, y + .4, w - .8, h - .8, h / 2); g.stroke();
+    var hl = g.createLinearGradient(0, y, 0, y + h * .55); hl.addColorStop(0, 'rgba(255,255,255,.5)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = hl; rr(g, x + 3, y + 2, w - 6, h * .45, h * .22); g.fill();
   }
-  function fins(g, light) {
-    var seed = 7;
-    for (var x = 14; x < FW - 14; x += 9) {
-      seed = (seed * 9301 + 49297) % 233280; var h = 10 + (seed / 233280) * 26;
-      var gr = g.createLinearGradient(0, FH - 14 - h, 0, FH - 14);
-      if (light) { gr.addColorStop(0, 'rgba(176,96,40,.0)'); gr.addColorStop(1, 'rgba(176,96,40,.55)'); } else { gr.addColorStop(0, 'rgba(214,120,48,0)'); gr.addColorStop(1, 'rgba(214,120,48,.85)'); }
-      g.fillStyle = gr; g.fillRect(x, FH - 14 - h, 4, h);
-    }
+  function bigE(g, x, base, size, alpha) {
+    g.save(); g.globalAlpha = alpha; g.fillStyle = '#896d42'; g.font = 'italic 400 ' + size + 'px "Playfair Display", serif'; g.textBaseline = 'alphabetic'; g.textAlign = 'left'; g.fillText('E', x, base); g.restore();
   }
   function drawFront() {
-    var g = cvF.getContext('2d'); g.setTransform(TS, 0, 0, TS, 0, 0); g.clearRect(0, 0, FW, FH);
-    var bg = g.createLinearGradient(0, 0, FW, FH); bg.addColorStop(0, '#3a1d11'); bg.addColorStop(.55, '#24120c'); bg.addColorStop(1, '#1a0c07');
-    g.fillStyle = bg; g.fillRect(0, 0, FW, FH);
-    var rg = g.createRadialGradient(180, 140, 8, 180, 140, 250); rg.addColorStop(0, 'rgba(208,167,127,.2)'); rg.addColorStop(1, 'rgba(208,167,127,0)'); g.fillStyle = rg; g.fillRect(0, 0, FW, FH);
-    fins(g, false);
-    g.strokeStyle = 'rgba(208,167,127,.5)'; g.lineWidth = 1; rr(g, 12, 12, FW - 24, FH - 24, 20); g.stroke();
-    clasp(g, false);
-    if (emblem) g.drawImage(emblem, 150, 60, 60, 60);
-    spaced(g, 'EPIISOD', 180, 160, 7, 'center', '500 21px "Playfair Display", serif', '#e3cfae');
-    spaced(g, 'RESIDENT PASS', 180, 184, 3.4, 'center', '600 10px "Albert Sans", sans-serif', 'rgba(246,241,234,.72)');
-    g.fillStyle = 'rgba(208,167,127,.45)'; g.fillRect(70, 208, 220, 1);
-    spaced(g, 'WELCOME HOME,', 180, 246, 3.4, 'center', '600 10px "Albert Sans", sans-serif', '#d0a77f');
-    g.textAlign = 'center';
+    var g = cvF.getContext('2d'); g.setTransform(TS * SF, 0, 0, TS * SF, 0, 0); g.clearRect(0, 0, 408.32, 647.68);
+    var bg = g.createLinearGradient(424.96, -40.64, 37.12, 647.68); bg.addColorStop(0, '#3A1F15'); bg.addColorStop(.4547, '#24120C'); bg.addColorStop(1, '#170A05');
+    g.fillStyle = bg; g.fillRect(0, 0, 408.32, 647.68);
+    g.save(); g.beginPath(); g.rect(0, 0, 408.32, 647.68); g.clip(); bigE(g, 173.44, 280.3, 358.4, .28); g.restore();
+    img(g, 'skyline', 180.48, 474.88, 213.76, 156.16);
+    clip(g, 164.16, 32.68, 80, 30, false);
+    // logo and label
+    img(g, 'front-logo-a', 29.44 + 156.16 * .1033, 300.16, 120.82, 25.6); img(g, 'front-logo-b', 29.44, 300.16 + 25.6 * .2121, 156.16, 14.78);
+    g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillStyle = '#d7c5a9'; g.font = '300 9.6px "Albert Sans", sans-serif'; g.fillText('MACQUARIE PARK', 291.2, 312.6);
+    g.fillStyle = '#896d42'; g.fillRect(29.44, 338.24, 350.08, .64);
+    g.fillRect(29.44, 351.36, .64, 99);
+    g.font = '300 12.8px "Albert Sans", sans-serif'; g.fillText('WELCOME HOME', 37.76, 365.3);
     if (name) {
-      var size = 42; g.font = '400 ' + size + 'px "Playfair Display", serif';
-      while (g.measureText(name).width > 292 && size > 18) { size -= 2; g.font = '400 ' + size + 'px "Playfair Display", serif'; }
-      g.fillStyle = '#f6f1ea'; g.fillText(name, 180, 298);
+      var size = 32; g.font = '400 ' + size + 'px "Albert Sans", sans-serif';
+      while (g.measureText(name).width > 336 && size > 14) { size -= 1; g.font = '400 ' + size + 'px "Albert Sans", sans-serif'; }
+      g.fillStyle = '#fbfaf7'; g.fillText(name, 36.48, 404.6);
     } else {
-      g.font = 'italic 400 32px "Playfair Display", serif'; g.fillStyle = 'rgba(246,241,234,.34)'; g.fillText('Your name', 180, 296);
+      g.font = '400 32px "Albert Sans", sans-serif'; g.fillStyle = 'rgba(251,250,247,.34)'; g.fillText('Your name', 36.48, 404.6);
     }
-    spaced(g, 'MACQUARIE PARK · SYDNEY', 180, 338, 3, 'center', '600 9.5px "Albert Sans", sans-serif', 'rgba(246,241,234,.6)');
-    spaced(g, 'RESIDENT SINCE 2027', 180, 358, 3, 'center', '600 9.5px "Albert Sans", sans-serif', 'rgba(246,241,234,.6)');
-    // barcode
-    var seed = 3, bx = 34; g.fillStyle = 'rgba(246,241,234,.78)';
-    for (var i = 0; i < 38; i++) { seed = (seed * 9301 + 49297) % 233280; var bw = 1 + Math.floor((seed / 233280) * 3); g.fillRect(bx, 396, bw, 26); bx += bw + 1.6; }
-    spaced(g, 'EPI-MQP-2027', 34, 440, 2.6, 'left', '600 8.5px "Albert Sans", sans-serif', 'rgba(246,241,234,.55)');
-    if (!stillMode) spaced(g, 'TAP TO FLIP', FW - 34, 440, 2.6, 'right', '600 8.5px "Albert Sans", sans-serif', 'rgba(208,167,127,.85)');
+    g.font = '400 11.52px "Albert Sans", sans-serif'; g.fillStyle = '#a39a8e'; g.fillText('Resident Since 2027', 36.48, 437);
+    if (!stillMode) { spaced(g, 'TAP TO FLIP', 22.4, 592.6, 2.15, 'left', '500 7.68px "Albert Sans", sans-serif', '#e9dfd0'); img(g, 'front-arrow', 95.8, 586.88, 11.52, 11.52); }
+    img(g, 'barcode', 22.4, 602.24, 108.8, 34.56);
   }
-  // the back's buttons, in design units as drawn (hit-testing mirrors them, because the back is seen flipped)
-  var BTN = { book: [36, 292, 288, 48], rooms: [36, 350, 288, 48] };
+  // the back's buttons, in canvas units as drawn (hit-testing mirrors them, because the back is seen flipped)
+  var BTN = { book: [25.76 * SB, 428.96 * SB, 306.32 * SB, 32 * SB], rooms: [25.76 * SB, 464.8 * SB, 306.32 * SB, 34 * SB] };
   function drawBack() {
-    var g = cvB.getContext('2d'); g.setTransform(TS, 0, 0, TS, 0, 0); g.clearRect(0, 0, FW, FH);
-    var bg = g.createLinearGradient(0, 0, FW, FH); bg.addColorStop(0, '#f8f4ee'); bg.addColorStop(1, '#e8dccb');
-    g.fillStyle = bg; g.fillRect(0, 0, FW, FH);
-    fins(g, true);
-    g.strokeStyle = 'rgba(36,18,12,.35)'; g.lineWidth = 1; rr(g, 12, 12, FW - 24, FH - 24, 20); g.stroke();
-    clasp(g, true);
-    spaced(g, 'EPIISOD · MACQUARIE PARK', 180, 82, 3.2, 'center', '600 9.5px "Albert Sans", sans-serif', '#896d42');
-    g.textAlign = 'center'; g.fillStyle = '#24120c';
-    g.font = '400 34px "Playfair Display", serif'; g.fillText('Your room', 180, 136);
-    g.font = 'italic 400 34px "Playfair Display", serif'; g.fillText('is waiting.', 180, 178);
-    g.font = '400 13px "Albert Sans", sans-serif'; g.fillStyle = 'rgba(36,18,12,.78)';
-    g.fillText('Studios, ensuites and shared apartments,', 180, 214); g.fillText('minutes from Macquarie University.', 180, 233);
+    var g = cvB.getContext('2d'); g.setTransform(TS * SB, 0, 0, TS * SB, 0, 0); g.clearRect(0, 0, 357.28, 566.72);
+    var bg = g.createLinearGradient(371.84, -35.56, 32.48, 566.72); bg.addColorStop(0, '#FBFAF7'); bg.addColorStop(.4547, '#E9DFD0'); bg.addColorStop(1, '#D7C5A9');
+    g.fillStyle = bg; g.fillRect(0, 0, 357.28, 566.72);
+    g.save(); g.beginPath(); g.rect(0, 0, 357.28, 566.72); g.clip(); bigE(g, 14, 232.9, 313.6, .22); g.restore();
+    clip(g, 142.64, 26.72, 72, 30, true);
+    img(g, 'back-logo-a', 25.76 + 136.64 * .1033, 252, 105.72, 22.4); img(g, 'back-logo-b', 25.76, 252 + 22.4 * .2121, 136.64, 12.93);
+    g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillStyle = '#391d13'; g.font = '300 8.4px "Albert Sans", sans-serif'; g.fillText('MACQUARIE PARK', 254.8, 262.6);
+    g.fillStyle = '#896d42'; g.fillRect(25.76, 285.32, 306.32, .56);
+    g.fillRect(25.76, 297.92, .56, 110.88);
+    g.font = '300 11.2px "Albert Sans", sans-serif'; g.fillText('BOOK YOUR STAY', 32.48, 307.8);
+    g.fillStyle = '#24120c'; g.font = '400 24.64px "Albert Sans", sans-serif'; g.fillText('Your room', 32.48, 335.4); g.fillText('is waiting.', 32.48, 363.4);
+    g.fillStyle = '#776a5d'; g.font = '400 10.08px "Albert Sans", sans-serif'; g.fillText('Studios, ensuites and shared apartments, minutes from', 32.48, 390.2); g.fillText('Macquarie University.', 32.48, 402.6);
     // buttons
-    var b = BTN.book; g.fillStyle = '#24120c'; rr(g, b[0], b[1], b[2], b[3], 24); g.fill();
-    spaced(g, 'BOOK A TOUR  →', 180, b[1] + 29, 3, 'center', '700 11px "Albert Sans", sans-serif', '#e3cfae');
-    b = BTN.rooms; g.strokeStyle = '#24120c'; g.lineWidth = 1.4; rr(g, b[0], b[1], b[2], b[3], 24); g.stroke();
-    spaced(g, 'VIEW ROOMS', 180, b[1] + 29, 3, 'center', '700 11px "Albert Sans", sans-serif', '#24120c');
-    spaced(g, '17 LACHLAN AVE, MACQUARIE PARK', 180, 432, 2.4, 'center', '600 8.5px "Albert Sans", sans-serif', 'rgba(36,18,12,.6)');
-    spaced(g, '#EPIISODLIVING', 180, 448, 3, 'center', '600 8.5px "Albert Sans", sans-serif', '#896d42');
+    g.fillStyle = '#391d13'; rr(g, 25.76, 428.96, 306.32, 32, 16); g.fill();
+    spaced(g, 'BOOK A TOUR', 25.76 + 153.16, 444.96, 1.0, 'center', '500 8.4px "Albert Sans", sans-serif', '#fbfaf7');
+    g.strokeStyle = '#896d42'; g.lineWidth = .56; rr(g, 26.04, 465.08, 305.76, 33.44, 16.7); g.stroke();
+    spaced(g, 'VIEW ROOMS', 25.76 + 153.16, 481.8, 1.0, 'center', '500 8.4px "Albert Sans", sans-serif', '#24120c');
+    img(g, 'icon-location', 19.6, 511.84, 13.44, 13.44);
+    g.textAlign = 'left'; g.fillStyle = '#24120c'; g.font = '400 8.96px "Albert Sans", sans-serif'; g.fillText('17 Lachlan Ave, Macquarie Park NSW 2113', 36.96, 519);
+    if (!stillMode) {
+      spaced(g, 'TAP TO FLIP', 263.76, 518.6, 1.88, 'left', '500 6.72px "Albert Sans", sans-serif', '#391d13');
+      var im = IM['back-arrow']; if (im && im.complete && im.naturalWidth) { g.save(); g.translate(263.76 + 73.68 + 10.08, 513.52); g.scale(-1, 1); try { g.drawImage(im, 0, 0, 10.08, 10.08); } catch (e) {} g.restore(); }
+    }
   }
   function drawFaces() { drawFront(); drawBack(); }
   var fontsReady = false;
   function whenFonts(cb) {
     if (!document.fonts || !document.fonts.load) { cb(); return; }
-    Promise.all([document.fonts.load('500 21px "Playfair Display"'), document.fonts.load('italic 400 34px "Playfair Display"'), document.fonts.load('600 10px "Albert Sans"'), document.fonts.load('700 11px "Albert Sans"')]).then(cb, cb);
+    Promise.all([document.fonts.load('italic 400 40px "Playfair Display"'), document.fonts.load('300 12px "Albert Sans"'), document.fonts.load('400 12px "Albert Sans"'), document.fonts.load('500 12px "Albert Sans"')]).then(cb, cb);
   }
 
   // ---- a still card when motion is reduced or WebGL is missing ----
   function still() {
     stillMode = true;
-    var dpr = 2, c = document.createElement('canvas'); c.width = FW * dpr; c.height = FH * dpr;
+    var dpr = 2;
     whenFonts(function () {
       drawFaces();
       var img = new Image(); img.alt = 'EPIISOD resident pass'; img.className = 'ep-badge_still'; img.src = cvF.toDataURL('image/png');
       stage.insertBefore(img, stage.firstChild); cv.style.display = 'none';
       stillRefresh = function () { img.src = cvF.toDataURL('image/png'); };
-      if (emblem) stillRefresh();
+      if (imLeft === 0) stillRefresh();
       input.addEventListener('input', function () { name = input.value.trim(); drawFront(); stillRefresh(); });
     });
   }
@@ -181,33 +172,39 @@
     'float band=smoothstep(0.0,1.0,sin((vUv.x*1.3+vUv.y*0.8+n.x*1.7-n.y*0.8)*7.0)*0.5+0.5);' +
     'vec3 col=c*df+vec3(0.84,0.66,0.5)*band*0.05+sp*vec3(1.0,0.95,0.86);' +
     'float edge=smoothstep(0.0,0.018,-d);col*=0.9+0.1*edge;gl_FragColor=vec4(col,a);}';
-  var FS_RIB = 'precision mediump float;varying vec2 vUv;uniform sampler2D uT;void main(){vec3 c=texture2D(uT,vUv).rgb;float e=abs(vUv.x-0.5)*2.0;c*=0.86+0.14*(1.0-e*e);gl_FragColor=vec4(c,1.0);}';
+  var FS_RIB = 'precision mediump float;varying vec2 vUv;uniform sampler2D uT;uniform sampler2D uT2;uniform float uMix;void main(){vec3 c=mix(texture2D(uT,vUv).rgb,texture2D(uT2,vUv).rgb,uMix);float e=abs(vUv.x-0.5)*2.0;c*=0.9+0.1*(1.0-e*e);gl_FragColor=vec4(c,1.0);}';
   function prog(fsSrc) {
     function sh(t, s) { var o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return o; }
     var p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fsSrc)); gl.linkProgram(p);
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) return null;
     p.aPos = gl.getAttribLocation(p, 'aPos'); p.aUv = gl.getAttribLocation(p, 'aUv');
-    ['uRes', 'uD', 'uF', 'uB', 'uN', 'uAsp', 'uRad', 'uRim', 'uRimC', 'uT'].forEach(function (n) { p[n] = gl.getUniformLocation(p, n); });
+    ['uRes', 'uD', 'uF', 'uB', 'uN', 'uAsp', 'uRad', 'uRim', 'uRimC', 'uT', 'uT2', 'uMix'].forEach(function (n) { p[n] = gl.getUniformLocation(p, n); });
     return p;
   }
   var pCard = prog(FS_CARD), pRib = prog(FS_RIB);
   if (!pCard || !pRib) { gl = null; still(); return; }
-  function mkTex(source) {
+  function mkTex(source, rep) {
     var t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, rep ? gl.REPEAT : gl.CLAMP_TO_EDGE);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source); return t;
   }
-  var texF, texB, texR;
+  var texF, texB, texR, texR2;
   function upload(which) { if (!texF) return; gl.bindTexture(gl.TEXTURE_2D, which === 0 ? texF : texB); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, which === 0 ? cvF : cvB); }
-  // the ribbon's strip: sand, stitched edges, the word repeated along it (64 x 256, repeating)
-  function ribbonCanvas() {
-    var c = document.createElement('canvas'); c.width = 64; c.height = 256; var g = c.getContext('2d');
-    g.fillStyle = '#d0a77f'; g.fillRect(0, 0, 64, 256);
-    g.fillStyle = '#bd9265'; g.fillRect(0, 0, 4, 256); g.fillRect(60, 0, 4, 256);
-    g.strokeStyle = 'rgba(36,18,12,.35)'; g.setLineDash([5, 4]); g.lineWidth = 1.2; g.beginPath(); g.moveTo(8, 0); g.lineTo(8, 256); g.moveTo(56, 0); g.lineTo(56, 256); g.stroke();
-    g.save(); g.translate(32, 128); g.rotate(-Math.PI / 2); g.fillStyle = 'rgba(36,18,12,.62)'; g.font = '600 15px "Albert Sans", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
-    var t = 'EPIISOD', x = -50; for (var i = 0; i < t.length; i++) { g.fillText(t[i], x, 0); x += 17; } g.restore();
+  // the lanyard's strip, as designed: a dark ribbon with sand lettering for the front, sand with dark lettering for the back, stitched
+  // down both edges and the words repeated along it. 64 x 512 (one repeat is 304 design units of the 38-wide strap), tiling
+  var RIB_REP = 304;
+  function ribbonCanvas(bg, ink, stitch) {
+    var c = document.createElement('canvas'); c.width = 64; c.height = 512; var g = c.getContext('2d'), k = 64 / 38;
+    g.fillStyle = bg; g.fillRect(0, 0, 64, 512);
+    g.fillStyle = stitch; g.fillRect(5 * k, 0, 1.4, 512); g.fillRect(32 * k, 0, 1.4, 512);
+    var t = 'EPIISOD  ·  MACQUARIE PARK  ·  ', fs = 11 * k, i, w = 0, ws = [];
+    g.font = '500 ' + fs + 'px "Albert Sans", sans-serif'; g.textBaseline = 'middle'; g.textAlign = 'left'; g.fillStyle = ink;
+    for (i = 0; i < t.length; i++) { ws.push(g.measureText(t[i]).width); w += ws[i]; }
+    var sp = (512 - w) / t.length;                        // letter-spacing chosen so the phrase fills one repeat exactly
+    g.save(); g.translate(32, 0); g.rotate(Math.PI / 2);
+    var x = 0; for (i = 0; i < t.length; i++) { g.fillText(t[i], x, 0); x += ws[i] + sp; }
+    g.restore();
     return c;
   }
 
@@ -219,7 +216,7 @@
   function cons(a, b, len) { C.push([a, b, len]); }
   function reset(intro) {
     P.length = 0; C.length = 0;
-    cw = Math.min(300, SW * 0.7, SH * 0.52); ch = cw * 1.4;
+    cw = Math.min(300, SW * 0.7, SH * 0.72 / 1.5864); ch = cw * 1.5864;
     var Ty = ch / 2 + SH * 0.025; topY = H / 2 + 26; L = Math.max(22, (topY - Ty) / 4);
     addP(ax, topY, 0);
     for (var i = 1; i <= 3; i++) addP(ax, topY - L * i, 2.2);
@@ -388,16 +385,18 @@
     return out;
   }
   function drawRibbon() {
-    var pts = ribbonPts(), n = Math.min(pts.length, 40), hw = Math.max(7, cw * 0.028), len = 0, o = 0;
+    var pts = ribbonPts(), n = Math.min(pts.length, 40), hw = Math.max(9, cw * 0.0465), len = 0, o = 0, per = RIB_REP * cw / 408.32;
     for (var i = 0; i < n; i++) {
       var a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)], tx = b[0] - a[0], ty = b[1] - a[1], tl = Math.hypot(tx, ty) || 1, nx = -ty / tl * hw, ny = tx / tl * hw;
       if (i > 0) len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
-      var v = len / 230;
+      var v = len / per;
       rib[o++] = pts[i][0] - nx; rib[o++] = pts[i][1] - ny; rib[o++] = pts[i][2] - 1; rib[o++] = 0; rib[o++] = v;
       rib[o++] = pts[i][0] + nx; rib[o++] = pts[i][1] + ny; rib[o++] = pts[i][2] - 1; rib[o++] = 1; rib[o++] = v;
     }
     gl.useProgram(pRib); bindCommon(pRib);
+    var nz = normal()[2], mx = Math.max(0, Math.min(1, 0.5 - nz * 1.6));     // dark strap while the front faces you, sand once the back does
     gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, texR); gl.uniform1i(pRib.uT, 2);
+    gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, texR2); gl.uniform1i(pRib.uT2, 3); gl.uniform1f(pRib.uMix, mx);
     gl.bufferData(gl.ARRAY_BUFFER, rib.subarray(0, o), gl.DYNAMIC_DRAW); attribs(pRib);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, n * 2);
   }
@@ -409,11 +408,11 @@
     drawRibbon();
     var n = normal();
     gl.useProgram(pCard); bindCommon(pCard);
-    gl.uniform1f(pCard.uAsp, cw / ch); gl.uniform1f(pCard.uRad, 0.075); gl.uniform3f(pCard.uN, n[0], n[1], n[2]);
+    gl.uniform1f(pCard.uAsp, cw / ch); gl.uniform1f(pCard.uRad, 0.0376); gl.uniform3f(pCard.uN, n[0], n[1], n[2]);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, texF); gl.uniform1i(pCard.uF, 0);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, texB); gl.uniform1i(pCard.uB, 1);
     // the card's edge: a slightly larger, darker copy a hair behind, so a turned card has thickness
-    setQuad(rim, 0, 1.012, -1.6, n); gl.uniform1f(pCard.uRim, 1); gl.uniform3f(pCard.uRimC, 0.26, 0.18, 0.12);
+    setQuad(rim, 0, 1.012, -1.6, n); gl.uniform1f(pCard.uRim, 1); gl.uniform3f(pCard.uRimC, 0.2, 0.12, 0.08);
     gl.bufferData(gl.ARRAY_BUFFER, rim, gl.DYNAMIC_DRAW); attribs(pCard); gl.drawArrays(gl.TRIANGLES, 0, 6);
     setQuad(quad, 0, 1, 0, n); gl.uniform1f(pCard.uRim, 0);
     gl.bufferData(gl.ARRAY_BUFFER, quad, gl.DYNAMIC_DRAW); attribs(pCard); gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -433,7 +432,7 @@
     running = true; last = 0; requestAnimationFrame(loop);
   }
   function init() {
-    texR = mkTex(ribbonCanvas());
+    texR = mkTex(ribbonCanvas('#24120c', '#d7c5a9', 'rgba(215,197,169,.35)'), true); texR2 = mkTex(ribbonCanvas('#d7c5a9', '#24120c', 'rgba(36,18,12,.35)'), true);
     drawFaces(); texF = mkTex(cvF); texB = mkTex(cvB);
     size(); ready = true; fontsReady = true;
     if ('IntersectionObserver' in window) {
