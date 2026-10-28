@@ -233,13 +233,14 @@
 
   // ---- desktop: pages turn on click (or the arrow keys); scrolling just passes the section ----
   var mq = window.matchMedia('(min-width: 992px)');
-  var TURNS = N - 1, cur = 0, cs = 0, raf = 0, lastT = 0, spread = -1;
+  var TURNS = N - 1, cur = 0, cs = 0, raf = 0, lastT = 0, spread = -1, peek = 0, dragging = false;
   function clamp(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function ease(t) { return t * t * (3 - 2 * t); }
   function setCur(s) { cur = Math.max(0, Math.min(TURNS, s)); kick(); }
   function kick() { if (!raf) { lastT = performance.now(); raf = requestAnimationFrame(frame); } }
   function frame(now) {
     raf = 0;
+    if (dragging) { render(); return; }                     // a finger / mouse is turning the page by hand
     var dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
     var d = cur - cs;
     if (Math.abs(d) > 0.0005) {
@@ -254,6 +255,7 @@
     var turned = 0, peak = 0;
     leaves.forEach(function (lf, k) {
       var t = k < TURNS ? ease(clamp(cs - k)) : 0;
+      if (k === 0 && cs < 0.002 && peek > 0) t = peek;        // the idle "peek": the closed cover lifts a little
       if (t < 0.002) t = 0; else if (t > 0.998) t = 1;
       if (t >= 0.5) turned++;
       var s = Math.sin(Math.PI * t);
@@ -339,13 +341,58 @@
   tPrev.addEventListener('click', function () { setCur(cur - 1); });
   tNext.addEventListener('click', function () { setCur(cur + 1); });
   tOpen.addEventListener('click', function () { setCur(1); });
-  var sw = null;
-  book.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') sw = { x: e.clientX, y: e.clientY }; });
-  book.addEventListener('pointerup', function (e) {
-    if (!sw || !mq.matches) { sw = null; return; }
-    var dx = e.clientX - sw.x, dy = e.clientY - sw.y; sw = null;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) { e.preventDefault(); setCur(cur + (dx < 0 ? 1 : -1)); book.__swiped = performance.now(); }
+  // hold and drag the page to turn it (mouse, finger or stylus): the page follows your hand, and lets go either way
+  var dr = null;
+  book.addEventListener('pointerdown', function (e) {
+    if (!mq.matches || e.button > 0 || (e.target.closest && e.target.closest('a, button'))) return;
+    var now = performance.now();
+    dr = { x: e.clientX, y: e.clientY, id: e.pointerId, on: false, dir: 0, p: 0, lx: e.clientX, lt: now, v: 0 };
   });
+  book.addEventListener('pointermove', function (e) {
+    if (!dr || e.pointerId !== dr.id) return;
+    var dx = e.clientX - dr.x, dy = e.clientY - dr.y;
+    if (!dr.on) {
+      if (Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(dy)) { if (e.pointerType !== 'mouse' && Math.abs(dy) > 12) dr = null; return; }
+      dr.dir = dx < 0 ? 1 : -1;                              // drag left to go forward, right to go back
+      if ((dr.dir > 0 && cur >= TURNS) || (dr.dir < 0 && cur <= 0)) { dr = null; return; }
+      dr.on = true; dragging = true; peekReset();
+      try { book.setPointerCapture(dr.id); } catch (err) {}
+      book.classList.add('is-drag'); cursor.classList.remove('is-on');
+    }
+    var w = Math.max(220, book.getBoundingClientRect().width * 0.5);          // half the book's width turns a whole page
+    var p = clamp((dr.dir > 0 ? -dx : dx) / w);
+    cs = cur + dr.dir * p; dr.p = p;
+    var now = performance.now(), dt = Math.max(1, now - dr.lt);
+    dr.v = dr.v * 0.6 + ((e.clientX - dr.lx) / dt * 1000) * 0.4; dr.lx = e.clientX; dr.lt = now;
+    render();
+  });
+  function endDrag(e) {
+    if (!dr || (e && dr.id !== e.pointerId)) return;
+    var d = dr; dr = null;
+    if (!d.on) return;
+    dragging = false; book.classList.remove('is-drag'); book.__swiped = performance.now();
+    var fast = d.dir > 0 ? d.v < -500 : d.v > 500;                              // a quick flick turns it too
+    setCur(cur + (d.p > 0.3 || fast ? d.dir : 0));                              // otherwise it settles back
+  }
+  book.addEventListener('pointerup', endDrag); book.addEventListener('pointercancel', endDrag);
+
+  // idle hint: while the cover is closed and nobody is touching it, it lifts and settles a couple of times, every few seconds
+  var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches, peekRaf = 0, peekTimer = 0;
+  function peekCan() { return mq.matches && !REDUCED && cur === 0 && cs < 0.002 && !dragging && !pt && !document.hidden && stage.classList.contains('is-in'); }
+  function peekReset() { cancelAnimationFrame(peekRaf); peekRaf = 0; if (peek) { peek = 0; render(); } }
+  var PEEK = [[0, 0], [0.2, 0.085], [0.4, 0.014], [0.6, 0.052], [0.8, 0], [1, 0]];
+  function peekRun() {
+    var t0 = performance.now(), D = 2400;
+    (function step(now) {
+      var u = (now - t0) / D;
+      if (!peekCan()) { peek *= 0.72; if (peek < 0.002) { peek = 0; peekRaf = 0; render(); peekNext(); return; } render(); peekRaf = requestAnimationFrame(step); return; }
+      if (u >= 1) { peek = 0; peekRaf = 0; render(); peekNext(); return; }
+      for (var i = 1; i < PEEK.length; i++) if (u <= PEEK[i][0]) { var a = PEEK[i - 1], b = PEEK[i], q = ease((u - a[0]) / (b[0] - a[0])); peek = a[1] + (b[1] - a[1]) * q; break; }
+      render(); peekRaf = requestAnimationFrame(step);
+    })(t0);
+  }
+  function peekNext() { clearTimeout(peekTimer); peekTimer = setTimeout(function () { if (peekCan() && !peekRaf) peekRun(); else peekNext(); }, 3400); }
+  peekTimer = setTimeout(function () { if (peekCan() && !peekRaf) peekRun(); else peekNext(); }, 2200);
   if (mq.addEventListener) mq.addEventListener('change', function () { refreshCur(); });
   render();
 

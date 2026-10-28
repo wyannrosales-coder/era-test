@@ -429,3 +429,22 @@
 .mg-ph.f-arch img { object-position: 74.16% 50%; }
 .mg-spill { position: absolute; left: 86cqw; top: 10cqw; width: 30cqw; height: 84cqw; pointer-events: none; filter: drop-shadow(0 1.2cqw 2.2cqw rgba(36, 18, 12, .35)); clip-path: inset(-12cqw -12cqw -12cqw 0); }
 .mg-spill img { position: absolute; left: -112.03cqw; top: 0; width: 126cqw; height: 84cqw; max-width: none; display: block; user-select: none; -webkit-user-drag: none; }
+
+/* hold and drag to turn pages; vertical swipes still scroll the page on touch screens */
+.ep-mag_book { touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.ep-mag_book.has-cur.is-drag, .ep-mag_book.is-drag { cursor: grabbing; }
+@media (min-width: 992px) { .ep-mag_book:not(.has-cur):not(.is-drag) { cursor: grab; } }
+
+/* phones: the closed magazine swings its cover open a little now and then, to show that it opens */
+@media (max-width: 991px) and (prefers-reduced-motion: no-preference) {
+  @keyframes mcv-peek {
+    0%, 14%, 100% { transform: perspective(1100px) rotateY(0deg); }
+    27% { transform: perspective(1100px) rotateY(-17deg); }
+    38% { transform: perspective(1100px) rotateY(-3deg); }
+    49% { transform: perspective(1100px) rotateY(-10deg); }
+    62% { transform: perspective(1100px) rotateY(0deg); }
+  }
+  .ep-mcover_card { isolation: isolate; }
+  .ep-mcover_card::before { content: ""; position: absolute; z-index: -1; left: 2%; right: -2.4%; top: 1.2%; bottom: 1.2%; border-radius: 0 4px 4px 0; background: repeating-linear-gradient(90deg, #f1eadf 0 2px, #d8cdbb 2px 3px); box-shadow: 0 1.4vh 3.4vh rgba(0, 0, 0, .28); }
+  .ep-mcover.is-in .ep-mcover_card > .mp { transform-origin: 0 50%; animation: mcv-peek 5.4s ease-in-out 1.8s infinite; will-change: transform; }
+}

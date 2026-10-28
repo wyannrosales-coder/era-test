@@ -2,6 +2,9 @@
 
 ## 3.14.0
 
+- **Magazine: it now invites you to open it.** On desktop and tablets the closed cover lifts and settles a couple of times every few seconds (it pauses while the pointer is on it, once it is open, off-screen, or with reduced motion). On phones the cover card swings open a little on its spine every ~5 s with a page stack showing behind it.
+- **Hold and drag to turn pages** (mouse, finger or stylus, so it works on tablets too): the page follows your hand, and on letting go it turns if you dragged more than about a third of the way or flicked, otherwise it settles back. Drag left to go forward, right to go back. The next / previous buttons, arrow keys and clicking the page still work, and an up / down swipe on a touch screen still scrolls the page.
+
 - **Hero tour controls trimmed.** The restart button is gone from the chevrons on desktop and phones (the end card still has "Watch the tour again"). On phones the count reads "1/4" instead of "01 / 04" to save room; desktop keeps "01 / 04".
 - **Empowered Studio: the reader steps out of the arch.** The arch now ends at the woman's shoulder, and a second copy of the photo cut round her (head, hair, jumper, book and cushion) carries on past the arch's right edge with a soft shadow, so she looks to be stepping out of the frame. The outline is hand-traced and only shows where it leaves the arch.
 
