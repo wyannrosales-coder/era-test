@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Hand-drawn ink layer for the "Life beyond the classroom" section.
 
-Writes three SVGs into dist/assets/ink/ : ink-d.svg (landscape), ink-m.svg (portrait) and secret.svg (a sticky note that
-fades in once enough photos have been dragged away). Everything is drawn from a tiny single-stroke handwriting font and a
+Writes twelve small SVG clusters (ink-l1..l6 landscape, ink-p1..p6 portrait) into dist/assets/ink/. Each lies under one
+photo of the collage and is positioned by epiisod-social.js. Everything is drawn from a tiny single-stroke handwriting font and a
 handful of doodles, with a seeded wobble so each line looks pen-drawn. Re-run after editing the layouts:
 
     python3 tools/make-ink.py
@@ -269,90 +269,48 @@ class Page:
 
 def r_(p): return p.r.uniform(-2, 2)
 
-# ---------------------------------------------------------------- layout helpers
-def hit(a, b, pad=4):
-    return a[0] - pad < b[2] and b[0] - pad < a[2] and a[1] - pad < b[3] and b[1] - pad < a[3]
+# ---------------------------------------------------------------- per-photo ink
+# Each print lies on top of a little cluster of notes and doodles that stays on the desk when the print is dragged off.
+# Landscape clusters are 600x400, portrait ones 400x600; everything sits well inside the middle of the card so that a
+# resting print covers it completely. Sizes and densities differ on purpose.
 
-def place(p, kind, arg, size, rot=0, underline=False, avoid=(), tries=500, region=None):
-    """Drop a note or doodle at a random free spot; first candidate wins."""
-    r = p.r; x0, y0, x1, y1 = region or (30, 40, p.w - 30, p.h - 30)
-    for _ in range(tries):
-        x, y = r.uniform(x0, x1), r.uniform(y0, y1)
-        if kind == 'text':
-            w = p.width(arg, size); box = (x - 4, y - 19 * size - (w * abs(math.sin(math.radians(rot))) if rot < 0 else 0), x + w + 4, y + 8 * size + (w * abs(math.sin(math.radians(rot))) if rot > 0 else 0))
-        else:
-            box = (x - 22 * size, y - 28 * size, x + 46 * size, y + 38 * size)
-        if box[2] > p.w - 8 or box[3] > p.h - 8 or box[0] < 8 or box[1] < 8: continue
-        if any(hit(box, o) for o in p.boxes2) or any(hit(box, o, 0) for o in avoid): continue
-        p.boxes2.append(box)
-        if kind == 'text': p.text(arg, x, y, size, rot, underline=underline)
-        else: getattr(p, arg)(x, y, size, rot)
-        return (x, y, box)
-    print('could not place', arg); return None
-
-def build(p, items, avoid):
-    items = sorted(items, key=lambda it: 0 if it[0] == 'text' else 1)
-    for it in items:
-        kind, arg, size, rot = it[:4]; opt = it[4] if len(it) > 4 else {}
-        place(p, kind, arg, size, rot, avoid=avoid, **opt)
-
-# ---------------------------------------------------------------- desktop (1600 x 900)
-def desktop():
-    p = Page(1600, 900, 11); p.boxes2 = []
-    avoid = [(480, 320, 1120, 580)]                    # the headline sits here
-    T = lambda s, z, r_, **o: ('text', s, z, r_, o)
-    D = lambda f, z, r_: ('doodle', f, z, r_)
-    items = [
-        T('study group 3pm', 2.6, -4, underline=True), T('pool day??', 3.0, 4), T('coffee run', 3.0, -3), T('movie night fri!', 2.7, 3, underline=True),
-        T("don't forget: laundry!", 2.4, -3), T('4 min walk to uni', 2.5, 2), T('gym 6am (lol no)', 2.5, -2), T('exam week = survival mode', 2.3, 1.5, underline=True),
-        T('rooftop sunset?', 3.0, -6), T('ask mum for $$', 2.7, 5), T('flatmates: 5', 2.5, -2), T('gelato after?', 2.8, -4), T('who has the aux cord', 2.3, 3),
-        T('b-day on sat!!', 2.9, -7), T('trivia tues', 2.9, -4), T('book club?', 2.7, 4), T('4 mins', 2.5, -3), T('shops!', 2.7, -3), T('8 min ride', 2.4, -5),
-        T('roomie wanted lol', 2.3, 3), T('pasta night', 2.7, -5), T('library > everything', 2.3, 2), T('late night maccas', 2.6, -3),
-        D('train', 1.3, -3), D('tree', 1.6, 3), D('mall', 1.4, -3), D('bike', 1.3, -6), D('cup', 1.3, -6), D('sun', 1.6, 0), D('sun', 1.2, 0),
-        D('star', 1.3, 12), D('star', 0.9, -10), D('star', 1.2, 8), D('heart', 1.1, -8), D('heart', 1.3, 10), D('heart', 1.0, -12),
-        D('spiral', 1.5, 0), D('spiral', 1.3, 0), D('spiral', 1.1, 0), D('plane', 1.2, -15), D('plane', 1.3, 14), D('ball', 1.4, 10), D('notes', 1.4, 6),
-        D('bulb', 1.3, -5), D('smile', 1.4, 6), D('cat', 1.4, -4), D('spark', 1.1, 0), D('spark', 0.9, 20), D('spark', 1.2, 0), D('spark', 1.0, 0),
-        D('xmark', 1.0, 0), D('xmark', 1.1, 20), D('check', 1.1, 0), D('check', 1.0, 0),
-    ]
-    build(p, items, avoid)
+def L1():
+    p = Page(600, 400, 101); p.text('study group', 85, 180, 3.5, -4, underline=True); p.text('3pm!!', 215, 285, 3.6, -4); return p
+def L2():
+    p = Page(600, 400, 102); p.train(150, 150, 2.4, -3); p.text('4 mins', 380, 300, 2.4, -3); return p
+def L3():
+    p = Page(600, 400, 103); p.text('gelato after?', 110, 170, 2.6, -3); p.star(500, 95, 0.8, 12); p.text('(my shout)', 220, 250, 2.1, 3); p.heart(120, 290, 0.8, -10); return p
+def L4():
+    p = Page(600, 400, 104); p.cat(300, 220, 3.2, -5); p.heart(470, 130, 0.8, 8); return p
+def L5():
+    p = Page(600, 400, 105); p.sun(160, 200, 2.6, 0); p.text('pool day??', 240, 240, 2.6, 3); return p
+def L6():
+    p = Page(600, 400, 106); p.spark(160, 130, 1.1); p.spiral(300, 230, 1.0); p.check(440, 150, 1.0); p.xmark(420, 280, 0.8); return p
+def P1():
+    p = Page(400, 600, 201); p.tree(200, 270, 3.0, 2); p.text('shady spot', 90, 470, 2.4, -3); return p
+def P2():
+    p = Page(400, 600, 202); p.text('coffee', 70, 220, 3.5, -4); p.text('run', 130, 310, 3.5, -4); p.cup(190, 400, 1.6, -5); return p
+def P3():
+    p = Page(400, 600, 203); p.bike(90, 330, 2.4, -5); p.text('8 min ride', 100, 450, 2.2, -4); return p
+def P4():
+    p = Page(400, 600, 204); p.text('to do:', 90, 175, 3.0, -3, underline=True)
+    for i, (t, ok) in enumerate((('laundry', 0), ('library', 1), ('pool', 0), ('call mum', 0))):
+        y = 255 + i * 54; p.box(88, y - 22, 22, 22, -2, 2.2); p.text(t, 132, y, 2.2, -2)
+        if ok: p.check(99, y - 11, 1.0)
     return p
+def P5():
+    p = Page(400, 600, 205); p.heart(200, 260, 3.4, -6); p.text('ask mum $$', 90, 430, 2.2, 4); return p
+def P6():
+    p = Page(400, 600, 206); p.plane(160, 260, 2.2, -14); p.star(280, 400, 1.2, 10); p.star(110, 440, 0.7, -8); p.spark(290, 170, 1.0); return p
 
-# ---------------------------------------------------------------- phone (600 x 1000)
-def phone():
-    p = Page(600, 1000, 23); p.boxes2 = []
-    avoid = [(40, 380, 560, 640)]
-    T = lambda s, z, r_, **o: ('text', s, z, r_, o)
-    D = lambda f, z, r_: ('doodle', f, z, r_)
-    items = [
-        T('study group 3pm', 1.9, -4, underline=True), T('pool day??', 2.2, 5), T('coffee run', 2.2, -3), T('movie night fri!', 2.0, 3, underline=True),
-        T("don't forget: laundry!", 1.8, -3), T('4 min walk to uni', 1.8, 2), T('exam week = survival mode', 1.6, 1.5), T('rooftop sunset?', 2.1, -6),
-        T('gelato after?', 2.0, -4), T('b-day on sat!!', 2.1, -6), T('pasta night', 2.0, -5), T('ask mum for $$', 1.9, 5),
-        D('train', 0.85, -3), D('tree', 0.95, 4), D('mall', 0.9, -3), D('bike', 0.9, -5), D('cup', 0.9, -5), D('sun', 0.95, 0),
-        D('star', 0.8, 12), D('heart', 0.85, -8), D('heart', 0.9, 10), D('spiral', 0.9, 0), D('plane', 0.85, -12), D('ball', 0.9, 8),
-        D('notes', 0.9, 6), D('bulb', 0.8, 0), D('smile', 0.9, 0), D('cat', 0.9, -4), D('spark', 0.8, 0), D('xmark', 0.8, 0),
-    ]
-    build(p, items, avoid)
-    return p
-
-# ---------------------------------------------------------------- the sticky note (revealed by moving enough photos)
-def secret():
-    p = Page(560, 300, 5)
-    note = ('<g transform="rotate(-3 280 150)"><rect x="14" y="14" width="532" height="272" rx="3" fill="#f7e9a8" stroke="none"/>'
-            '<rect x="14" y="14" width="532" height="272" rx="3" fill="none" stroke="#c9b76a" stroke-width="1.4" opacity=".6"/>'
-            '<path d="M200 6 L360 6 L352 40 L206 40 Z" fill="#fff" opacity=".55" stroke="none"/></g>')
-    fit = lambda t, maxw=420: min(3.6, maxw / p.width(t, 1))
-    t1, t2, t3 = 'psst... you found', 'the secret spot', 'tag us @epiisod.au'
-    p.text(t1, 62, 112, fit(t1), -3, sw=fit(t1) * 0.9)
-    p.text(t2, 62, 176, fit(t2), -3, sw=fit(t2) * 0.9)
-    p.text(t3, 66, 244, fit(t3, 340), -3, sw=fit(t3, 340) * 0.9, underline=True)
-    p.star(486, 232, 1.4, 12, 2.8)
-    return p, note
+VARIANTS = {'l1': L1, 'l2': L2, 'l3': L3, 'l4': L4, 'l5': L5, 'l6': L6, 'p1': P1, 'p2': P2, 'p3': P3, 'p4': P4, 'p5': P5, 'p6': P6}
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
-    open(os.path.join(OUT, 'ink-d.svg'), 'w').write(desktop().svg())
-    open(os.path.join(OUT, 'ink-m.svg'), 'w').write(phone().svg())
-    sp, note = secret()
-    open(os.path.join(OUT, 'secret.svg'), 'w').write(sp.svg(note))
-    for n in ('ink-d.svg', 'ink-m.svg', 'secret.svg'):
-        print(n, os.path.getsize(os.path.join(OUT, n)) // 1024, 'KB')
+    for f in os.listdir(OUT):
+        if f.endswith('.svg'): os.remove(os.path.join(OUT, f))
+    total = 0
+    for name, fn in VARIANTS.items():
+        path = os.path.join(OUT, 'ink-%s.svg' % name)
+        open(path, 'w').write(fn().svg()); total += os.path.getsize(path)
+    print(len(VARIANTS), 'clusters,', total // 1024, 'KB')

@@ -16,7 +16,8 @@
   // the room a tilted print needs so that no corner, white edge or shadow is ever cut off: worst tilt 12 degrees; a shadow may fall past the section's edge, so the bottom limit is the tilt alone
   function bounds(w, h) {
     var r = 12 * Math.PI / 180, c = Math.cos(r), n = Math.sin(r), ex = Math.ceil((w * c + h * n - w) / 2) + 6, ey = Math.ceil((w * n + h * c - h) / 2) + 2;
-    return { x0: sw < 768 ? -bl(w) : ex, x1: sw < 768 ? sw - w + bl(w) : sw - w - ex, y0: TOP + ey, y1: sh - h - ey };
+    // y0 / y1 keep a resting print whole inside the section; ymin / ymax are how far it can be carried (up past the top, down past the bottom), always leaving 40% of it in view to grab
+    return { x0: sw < 768 ? -bl(w) : ex, x1: sw < 768 ? sw - w + bl(w) : sw - w - ex, y0: TOP + ey, y1: sh - h - ey, ymin: Math.round(-0.6 * h), ymax: Math.round(sh - 0.4 * h) };
   }
   var geo = [], st = [], sw = 0, sh = 0, raf = 0, played = false, t0 = 0, zTop = 10, drag = null, spilling = false, t1 = 0;
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
@@ -35,8 +36,29 @@
       var g = geo[i];
       return { x: 0, y: 0, r: g.rot, s: 1, vx: 0, vy: 0, vr: 0, free: false, arc: (rnd(i, 1) - 0.5) * 260, spin: (rnd(i, 2) - 0.5) * 150, delay: i * 55 + rnd(i, 3) * 90, dur: 950 + rnd(i, 4) * 450 };
     });
-    paint();
+    paint(); placeInk();
   }
+  // ink under some of the prints: a small cluster of handwriting / doodles per print, put exactly where the print rests (so it is
+  // covered completely) and switched on once the prints have landed; drag a print away and the ink is there
+  var INKED = { 1: 1, 3: 1, 4: 1, 7: 1, 8: 1, 9: 1, 11: 1, 12: 1, 13: 1, 15: 1, 16: 1 }, inks = [], inkOnce = false;
+  (function () {
+    var n = { l: 0, p: 0 };
+    cards.forEach(function (c, i) {
+      var id = +c.getAttribute('data-i'); if (!INKED[id]) { inks[i] = null; return; }
+      var o = c.getAttribute('style') && /--ar:\s*2\s*\/\s*3/.test(c.getAttribute('style')) ? 'p' : 'l', k = (n[o]++ * 5 + id) % 6 + 1;
+      var im = document.createElement('img'); im.className = 'sc_ink'; im.alt = ''; im.setAttribute('aria-hidden', 'true'); im.draggable = false; im.decoding = 'async';
+      im.src = '/assets/ink/ink-' + o + k + '.svg?v=1'; stage.insertBefore(im, stage.firstChild); inks[i] = im;
+    });
+  })();
+  function placeInk() {
+    cards.forEach(function (c, i) {
+      var im = inks[i], g = geo[i]; if (!im || !g) return;
+      im.style.display = g.w ? '' : 'none';
+      im.style.left = g.x.toFixed(1) + 'px'; im.style.top = g.y.toFixed(1) + 'px'; im.style.width = g.w + 'px'; im.style.height = g.h + 'px';
+      im.style.transform = 'scale(.84)';
+    });
+  }
+  function inkShow() { if (inkOnce) return; inkOnce = true; inks.forEach(function (im) { if (im) im.classList.add('is-on'); }); }
   function paint(intro) {
     cards.forEach(function (c, i) {
       var s = st[i]; if (!s) return;
@@ -68,7 +90,7 @@
     cards.forEach(function (c, i) {
       var s = st[i], g = geo[i]; if (!s.free || (drag && drag.i === i)) return;
       s.x += s.vx; s.y += s.vy; s.r += s.vr; s.vx *= 0.955; s.vy *= 0.955; s.vr *= 0.94;
-      var minX = g.bd.x0 - g.x, maxX = g.bd.x1 - g.x, minY = g.bd.y0 - g.y, maxY = g.bd.y1 - g.y;
+      var minX = g.bd.x0 - g.x, maxX = g.bd.x1 - g.x, minY = g.bd.ymin - g.y, maxY = g.bd.ymax - g.y;
       if (s.x < minX) { s.x = minX; s.vx = Math.abs(s.vx) * 0.55; s.vr *= -0.6; } else if (s.x > maxX) { s.x = maxX; s.vx = -Math.abs(s.vx) * 0.55; s.vr *= -0.6; }
       if (s.y < minY) { s.y = minY; s.vy = Math.abs(s.vy) * 0.55; s.vr *= -0.6; } else if (s.y > maxY) { s.y = maxY; s.vy = -Math.abs(s.vy) * 0.55; s.vr *= -0.6; }
       s.s += ((drag && drag.i === i ? 1.06 : 1) - s.s) * 0.2;
@@ -80,22 +102,14 @@
     raf = 0; var more = false;
     if (!played) return;
     // the spill runs until every print has landed, however long the browser paused the frames
-    if (spilling) { if (spill(now)) more = true; else spilling = false; }
+    if (spilling) { if (spill(now)) more = true; else { spilling = false; inkShow(); } }
     if (slide() || drag) more = true;
-    if (more) raf = requestAnimationFrame(step); else checkFound();
-  }
-  // easter egg: clear enough prints off the desk and a sticky note in ink is waiting underneath
-  var secret = track.querySelector('.sc_secret'), found = false;
-  function checkFound() {
-    if (found || !secret || drag) return;
-    var n = 0, need = 0.12 * Math.min(sw, 1100);
-    cards.forEach(function (c, i) { var s = st[i]; if (s && Math.hypot(s.x || 0, s.y || 0) > need) n++; });
-    if (n >= 4) { found = true; secret.classList.add('is-found'); }
+    if (more) raf = requestAnimationFrame(step);
   }
   function kick() { if (!raf) raf = requestAnimationFrame(step); }
   function play() {
     if (played) return; played = true;
-    if (reduce) { head.style.opacity = 1; head.style.transform = 'translate(-50%, -50%)'; paint(); return; }
+    if (reduce) { head.style.opacity = 1; head.style.transform = 'translate(-50%, -50%)'; paint(); inkShow(); return; }
     t0 = performance.now(); spilling = true; kick();
   }
   // dragging: a mouse picks a print up at once; a finger holds it for a moment first, so a quick swipe still scrolls the page
@@ -131,7 +145,7 @@
         var s = st[i], g = geo[i], dx = e.clientX - drag.px, dy = e.clientY - drag.py;
         if (!drag.moved && Math.hypot(dx, dy) < 5) return;
         drag.moved = true;
-        s.x = clamp(drag.sx + dx, g.bd.x0 - g.x, g.bd.x1 - g.x); s.y = clamp(drag.sy + dy, g.bd.y0 - g.y, g.bd.y1 - g.y);
+        s.x = clamp(drag.sx + dx, g.bd.x0 - g.x, g.bd.x1 - g.x); s.y = clamp(drag.sy + dy, g.bd.ymin - g.y, g.bd.ymax - g.y);
         s.r += (clamp(dx - (drag.lastdx || 0), -20, 20) * 0.35 - (s.r - g.rot) * 0.05); drag.lastdx = dx;
         var now = performance.now(); drag.hist.push({ t: now, x: e.clientX, y: e.clientY });
         while (drag.hist.length > 2 && now - drag.hist[0].t > 90) drag.hist.shift();
