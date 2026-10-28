@@ -181,9 +181,9 @@
     }
     ang = drag.a0 + dx / pxPerStep() * STEP;
     // tilt: pulling up / down tips the ring towards or away from you; sideways speed makes it lean into the turn
-    if (!drag.touch) tilt.tp = Math.max(-1, Math.min(1, dy / (vh * 0.55))) * 0.34;
+    if (!drag.touch) tilt.tp = Math.max(-1, Math.min(1, dy / (vh * 0.55))) * 0.07;
     var dt = Math.max(1, now - drag.lt); drag.v = 0.8 * drag.v + 0.2 * ((e.clientX - drag.last) / pxPerStep() * STEP) / (dt / 1000); drag.last = e.clientX; drag.lt = now;
-    tilt.tl = Math.max(-0.3, Math.min(0.3, drag.v * 0.07));
+    tilt.tl = Math.max(-0.09, Math.min(0.09, drag.v * 0.02));
     var k = nearest(ang); if (k !== cur) { cur = k; sync(); }
   });
   function release(e) {
@@ -272,7 +272,9 @@
     var dtf = Math.min(0.05, Math.max(0.001, (now - (frame.__t || now)) / 1000)); frame.__t = now;
     var kf = 1 - Math.exp(-dtf / (drag && drag.on ? 0.08 : 0.35));                // quick while dragging, a slow settle after
     var G = window.__epGyro, gx = G && G.on ? G.gx : 0, gy = G && G.on ? G.gy : 0;                  // phone tilt (gyro), when allowed
-    var pitchT = (drag && drag.on ? tilt.tp : 0) + (drag ? 0 : -tilt.hy * 0.09) + gy * 0.17, leanT = (drag && drag.on ? tilt.tl : 0) + (drag ? 0 : tilt.hx * 0.14) + gx * 0.17;
+    var pitchT = (drag && drag.on ? tilt.tp : 0) + (drag ? 0 : -tilt.hy * 0.04) + gy * 0.06, leanT = (drag && drag.on ? tilt.tl : 0) + (drag ? 0 : tilt.hx * 0.07) + gx * 0.08;
+    // however the pointer or phone moves, the ring only ever tips a few degrees: the camera sits close, so more would show the inside of the ring
+    pitchT = Math.max(-0.1, Math.min(0.1, pitchT)); leanT = Math.max(-0.1, Math.min(0.1, leanT));
     tilt.p += (pitchT - tilt.p) * kf; tilt.l += (leanT - tilt.l) * kf;
     var t3 = sm(clamp((t - 0.8) / 0.2));                                            // no tilt while the video is still arriving
     var ce = [cam.e[0] + gx * 0.2 * t3, cam.e[1] - gy * 0.12 * t3, cam.e[2]];                  // parallax: the camera drifts with the phone

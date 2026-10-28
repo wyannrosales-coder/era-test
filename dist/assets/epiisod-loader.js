@@ -52,7 +52,7 @@
 
   // the border: a dim outline all the way round, with the gold running clockwise from the top centre as the count climbs
   function borderLine(a) {
-    var x = M, y = M, w = W - 2 * M, h = H - 2 * M, r = Math.min(R, w / 2, h / 2);
+    var x = M, y = M, w = Math.max(0, W - 2 * M), h = Math.max(0, H - 2 * M), r = Math.max(0, Math.min(R, w / 2, h / 2));   // a not-yet-sized window (zero width) must not throw
     function path() {
       ctx.beginPath(); ctx.moveTo(x + w / 2, y); ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
       ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
@@ -66,6 +66,10 @@
 
   // where the I is, and how big the opening starts: a stem the width and height of the letter
   function measure() {
+    // the middle I (the one that opens) sits in the exact middle of the screen: the letters either side of it are not the same
+    // width, so the word as a whole is shifted until the I is centred
+    var c0 = wi.getBoundingClientRect(), cur = parseFloat(mark.style.marginLeft) || 0, off = innerWidth / 2 - (c0.left + c0.width / 2);
+    if (Math.abs(off) > 0.4) { var mv = cur + off; mark.style.marginLeft = mv.toFixed(1) + 'px'; sub.style.left = (-mv).toFixed(1) + 'px'; sub.style.right = mv.toFixed(1) + 'px'; }   // the line beneath stays centred on the screen
     var wr_ = wi.getBoundingClientRect(), fs = parseFloat(getComputedStyle(word).fontSize) || 80;
     var cap = fs * 0.7;
     var g = document.createElement('canvas').getContext('2d'); g.font = getComputedStyle(word).font;

@@ -45,3 +45,6 @@ html[data-ep-ver="2"] .section.arch { --sc-sheet: #ece8e5; }
 .ep-cr_h { margin: 0; font-family: var(--_fonts---font-display, "Playfair Display", serif); font-weight: 400; font-size: clamp(30px, 3.8vw, 64px); line-height: .96; letter-spacing: -.01em; text-transform: uppercase; text-wrap: balance; }
 .ep-cr_h em { display: block; margin-top: -.06em; font: italic 400 1.25em/1 var(--_fonts---font-display, "Playfair Display", serif); text-transform: none; }
 .ep-cr_p { margin: clamp(12px, 2vh, 22px) auto 0; max-width: 46ch; font-size: clamp(13px, 1.1vw, 16px); line-height: 1.55; color: var(--_colors---base-1000--gray-text, rgba(36, 18, 12, .72)); }
+
+/* the gap between the collage and the Resi-Life title */
+.section.arch .interior-w + .u-272 { height: 40px; }
