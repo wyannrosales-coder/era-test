@@ -1,0 +1,8 @@
+/* Contrast pass: small text that was too faint for its background. Values chosen to reach at least 4.5:1 (3:1 for large text). */
+.ep-ap_eye, .ep-ap_mno { color: #7a5d38; }                                   /* app section: bronze label and counter on pearl */
+.bd_eb { color: #765b34; }                                                   /* drawing board sheet label */
+.ep-cr_p { color: rgba(33, 37, 41, .78); }                                   /* community card copy */
+.sm_panel span { color: #8a6c43; }                                           /* "Smart panel" tag in the smart-room demo */
+.sm_chev { color: rgba(44, 29, 20, .72); }                                   /* ">>" slide hint */
+html[data-ep-ver="2"] .ep-badge_hint { color: rgba(57, 29, 19, .8); }        /* light footer: hint under the pass */
+html[data-ep-ver="2"] .ep-badge_eb { color: #6b5230; }                       /* light footer: "Your resident pass" label */

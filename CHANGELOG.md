@@ -2,6 +2,9 @@
 
 ## 3.14.0
 
+- **Contrast pass.** The "E" on the map pin is now a sand-coloured E on a dark charcoal disc (it was a dark brown E on tan). Scrolling the whole page in both the dark and light versions and measuring every piece of text against its background found a handful of faint labels, now darkened to pass 4.5:1: the app section label and counter, the drawing-board sheet label, community card copy, the smart-panel tag and ">>" hint, and the light-footer hint and "Your resident pass" label (new `epiisod-contrast.css`). Text sitting on photos and video was not measured, only text on solid or gradient backgrounds.
+- **Chapter list: the chosen name is sand** (`#d0a77f`, the same sand used elsewhere) instead of white on phones, in both versions.
+
 - **Phone chapter navigation: smaller and neutral.** The touch area is now just the strip of lines (about 48 x 176 px, no invisible extension), and the open list sits on a soft neutral gradient (an eased fade with a light blur, strongest at the right edge and melting into the page to the left, above and below, with no hard edge) instead of the chocolate overlay; names carry a soft shadow so they stay readable on light sections. The chosen chapter is white and the others a clear grey-white, in both the dark and light versions (the light version no longer turns the chosen one bronze).
 
 - **Phone chapter list is readable on any section.** The panel behind the open list is now a deep, softly blurred dark layer (it used to fade to nothing partway across, so headlines and grid lines showed through the names). Names are a touch brighter with a stronger shadow, the chosen one is a warmer gold, and names never drop below 55% opacity.

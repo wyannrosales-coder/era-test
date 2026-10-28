@@ -280,7 +280,7 @@
 /* phones: finger is away from the list, so nothing is picked */
 @media (max-width: 991px) { .ep-rnav.is-arch.is-off .ep-rnav_arch button { opacity: .26; } }
 
-/* phones: the open chapter list sits on a neutral gradient that fades out leftwards, up and down; the chosen name is white, the rest a clear grey-white */
+/* phones: the open chapter list sits on a neutral gradient that fades out leftwards, up and down; the chosen name is sand, the rest a clear grey-white */
 @media (max-width: 991px) {
   .ep-rnav_veil {
     inset: 0; width: auto; height: auto; border-radius: 0; box-shadow: none; transform: translateX(12%);
@@ -295,7 +295,7 @@
   .ep-rnav_veil.is-on { transform: none; }
   .ep-rnav.is-arch { color: #f4f2f0 !important; }
   .ep-rnav.is-arch .ep-rnav_arch button { color: rgba(255, 255, 255, .6) !important; opacity: max(var(--op, .5), .72); text-shadow: 0 1px 10px rgba(0, 0, 0, .6), 0 0 2px rgba(0, 0, 0, .35); }
-  .ep-rnav.is-arch .ep-rnav_arch button.is-hot { color: #fff !important; font-weight: 500; opacity: 1; }
+  .ep-rnav.is-arch .ep-rnav_arch button.is-hot { color: #d0a77f !important; font-weight: 500; opacity: 1; }
   .ep-rnav.is-arch.is-off .ep-rnav_arch button { opacity: .36; }
   .ep-rnav.is-arch.is-off .ep-rnav_arch button.is-hot { color: rgba(255, 255, 255, .6) !important; }
   /* a smaller touch target: just the strip of lines */
