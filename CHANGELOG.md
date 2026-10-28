@@ -2,6 +2,8 @@
 
 ## 3.14.0
 
+- **Phone chapter navigation: touch and drag.** Put a finger on the right-edge lines and drag up or down: the chapter list now opens straight away (after an 8 px move) and you scrub to a chapter and let go to jump. Press-and-hold (0.5 s) still opens it too. While a finger is on the strip, text and image selection, the callout menu and image dragging are switched off, so holding no longer selects photos; the touch area is also a little taller.
+
 - **Glass top bar.** Once you scroll, the header becomes iOS-style frosted glass: a strong blur with boosted colour, a soft white edge highlight and shadow, slightly bolder nav text and a lightly filled Book a Tour button so it stays readable over photos and video. The dark version gets a tinted-brown glass. The open mega menu stays solid, and browsers without blur support fall back to a near-solid bar.
 
 - **Flythrough clips about 40% smaller** (desktop 27.7 MB to 17.7 MB, mobile 15.2 MB to 8.9 MB), re-encoded with ffmpeg (H.264, CRF 30, a keyframe every 6 frames so scroll-scrubbing stays smooth). Similarity to the originals is 96–98% (SSIM), and the side-by-side frame check looked the same.

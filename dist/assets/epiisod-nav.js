@@ -207,29 +207,34 @@
     function mobileOn() { return window.matchMedia('(max-width: 991px)').matches; }
     // the list only opens after a deliberate hold (about 1.1 s on a phone, 1.2 s of hover on a desktop), so passing the line does nothing
     var HOLD = 500, HOVER = 700, holdT = 0, hoverT = 0, lastY = 0;
+    var root = document.documentElement;
+    function lock(on) { root.classList.toggle('ep-arch-lock', on); }
+    function openArch(vib) {
+      if (!dg || dg.open) return;
+      dg.open = true; dg.t = performance.now() - 400;                    // counts as held, so letting go jumps to the chosen name
+      var c = idxAt(lastY, dg.cy); fan(c); hot = c; rn.classList.add('is-arch'); veil.classList.add('is-on');
+      if (vib && navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive && matchMedia('(pointer: coarse)').matches) { try { navigator.vibrate(14); } catch (err) {} }
+    }
     rn.addEventListener('pointerdown', function (e) {
       if (!mobileOn()) return;
       var rb = rn.getBoundingClientRect();
       dg = { y: e.clientY, t: performance.now(), moved: false, id: e.pointerId, cy: rb.top + rb.height / 2, open: false };
-      lastY = e.clientY;
+      lastY = e.clientY; lock(true);
       try { rn.setPointerCapture(e.pointerId); } catch (err) {}
       clearTimeout(holdT);
-      holdT = setTimeout(function () {
-        if (!dg || dg.moved) return;
-        dg.open = true; dg.t = performance.now() - 400;                  // counts as held, so letting go jumps to the chosen name
-        var c = idxAt(lastY, dg.cy); fan(c); hot = c; rn.classList.add('is-arch'); veil.classList.add('is-on');
-        if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive && matchMedia('(pointer: coarse)').matches) { try { navigator.vibrate(14); } catch (err) {} }
-      }, HOLD);
+      holdT = setTimeout(function () { openArch(true); }, HOLD);        // hold, or just drag up / down (below), either opens the list
     });
     rn.addEventListener('pointermove', function (e) {
       if (!dg || !mobileOn()) return;
       lastY = e.clientY;
-      if (!dg.open) { if (Math.abs(e.clientY - dg.y) > 10) { dg.moved = true; clearTimeout(holdT); } return; }
+      if (!dg.open) { if (Math.abs(e.clientY - dg.y) > 8) { clearTimeout(holdT); dg.moved = true; openArch(true); } return; }
       if (Math.abs(e.clientY - dg.y) > 6) dg.moved = true;
       setHot(idxAt(e.clientY, dg.cy));
     });
+    rn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    rn.addEventListener('selectstart', function (e) { e.preventDefault(); });
     function endArch(e) {
-      clearTimeout(holdT);
+      clearTimeout(holdT); lock(false);
       if (!dg) return;
       var d = dg; dg = null;
       if (!d.open) return;                                               // a tap or a quick swipe: nothing opens
@@ -267,7 +272,7 @@
       var h = hot; dClose(); if (h >= 0) go(h, dstops);
     }, true);
     rn.addEventListener('pointerup', endArch);
-    rn.addEventListener('pointercancel', function () { clearTimeout(holdT); dg = null; closeArch(); });
+    rn.addEventListener('pointercancel', function () { clearTimeout(holdT); lock(false); dg = null; closeArch(); });
     document.addEventListener('pointerdown', function (e) { if (sticky && !rn.contains(e.target)) closeArch(); });
 
     // lines near the pointer stretch a little, like a ruler
