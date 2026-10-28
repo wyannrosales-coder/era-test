@@ -412,3 +412,15 @@
 .mg .mg-card .mg-pq { margin-top: 0; }
 
 .mg-ph.f-r img { object-position: 86% 50%; }
+
+/* crops chosen by hand */
+.mg-ph.f-sig4 img { object-position: 50% 61%; }   /* the lit desk, lamp and mug across the slim strip */
+.mg-ph.f-ae4 img { object-position: 78% 50%; }    /* the bed and window */
+.mg-ph.f-ae3 img { object-position: 64% 50%; }    /* door edge, grab rails and toilet */
+
+/* cover, article-magazine style: ornamented subtitle, issue meta line, accent bar on the cover line */
+.cvx-sub::before, .cvx-sub::after { content: ""; display: inline-block; width: 9cqw; height: 1px; background: currentColor; opacity: .7; vertical-align: middle; }
+.cvx-sub::before { margin-right: 3cqw; } .cvx-sub::after { margin-left: 3cqw; }
+.cvx-meta { position: absolute; left: 0; right: 0; top: 45cqw; margin: 0; text-align: center; font-size: max(8.5px, 1.9cqw); font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: rgba(246, 241, 234, .9); text-shadow: 0 .3cqw 1.6cqw rgba(var(--fly-tint2), .7); }
+.cvx-meta b { font-weight: 400; color: #d0a77f; margin: 0 1.2cqw; font-size: .8em; }
+.cvx-feat { padding-left: 3.4cqw; border-left: .8cqw solid #d0a77f; }
