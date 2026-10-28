@@ -462,14 +462,12 @@
   var arrow = function (d) { return '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="' + (d < 0 ? 'M10 3 5 8l5 5' : 'M6 3l5 5-5 5') + '" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'; };
   var navEl = document.createElement('div');
   navEl.className = 'ep-fly_nav';
-  var restartIcon = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.9-4.15M2.5 2.5v3h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  navEl.innerHTML = '<button type="button" class="ep-fly_navbtn ep-fly_navre" data-re aria-label="Restart the tour" title="Restart the tour">' + restartIcon + '</button>' +
-    '<button type="button" class="ep-fly_navbtn" data-go="-1" aria-label="Previous space">' + arrow(-1) + '</button>' +
+  navEl.innerHTML = '<button type="button" class="ep-fly_navbtn" data-go="-1" aria-label="Previous space">' + arrow(-1) + '</button>' +
     '<span class="ep-fly_count" aria-live="polite"></span>' +
     '<button type="button" class="ep-fly_navbtn" data-go="1" aria-label="Next space">' + arrow(1) + '</button>';
   pin.appendChild(navEl);
-  var reBtn = navEl.querySelector('[data-re]'), countEl = navEl.querySelector('.ep-fly_count'), prevBtn = navEl.querySelector('[data-go="-1"]'), nextBtn = navEl.querySelector('[data-go="1"]');
-  navEl.addEventListener('click', function (e) { if (e.target.closest('[data-re]')) { restartTour(); return; } var b = e.target.closest('[data-go]'); if (b) goTo(state + +b.getAttribute('data-go')); });
+  var countEl = navEl.querySelector('.ep-fly_count'), prevBtn = navEl.querySelector('[data-go="-1"]'), nextBtn = navEl.querySelector('[data-go="1"]');
+  navEl.addEventListener('click', function (e) { var b = e.target.closest('[data-go]'); if (b) goTo(state + +b.getAttribute('data-go')); });
   var hint = root.querySelector('.ep-fly_hint');
   // the opening screen offers a clear choice: start the tour, or carry on down the page
   var startEl = document.createElement('div');
@@ -537,7 +535,7 @@
   pin.appendChild(cards);
   // desktop / tablet: the chevrons and count sit just above the last chapter card, in the lower-right corner
   function placeNav() { if (window.innerWidth >= 768) navEl.style.setProperty('--fly-navb', (cards.offsetHeight + 24 + 14) + 'px'); }
-  placeNav(); window.addEventListener('resize', placeNav, { passive: true }); window.addEventListener('load', placeNav);
+  placeNav(); window.addEventListener('resize', function () { placeNav(); syncNav(); }, { passive: true }); window.addEventListener('load', placeNav);
   var fills = [].slice.call(story.querySelectorAll('b')).concat([].slice.call(cards.querySelectorAll('b')));
   var cardEls = [].slice.call(cards.querySelectorAll('.ep-fly_card')).concat([].slice.call(story.querySelectorAll('.ep-fly_sbar')));
   [story, cards].forEach(function (el) { el.addEventListener('click', function (e) { var b = e.target.closest('[data-chap]'); if (b) goTo(+b.getAttribute('data-chap')); }); });
@@ -557,9 +555,8 @@
 
   function syncNav() {
     var shown = Math.min(state, N);
-    countEl.textContent = pad(shown) + ' / ' + pad(N);
+    countEl.textContent = window.matchMedia('(max-width: 767px)').matches ? shown + '/' + N : pad(shown) + ' / ' + pad(N);   // phones: 1/4 to save room
     prevBtn.disabled = state === 0; nextBtn.disabled = state === END;
-    reBtn.disabled = state === 0;
     root.classList.toggle('is-first', state === 0);
     root.classList.toggle('is-end', state === END);
     endEl.setAttribute('aria-hidden', state === END ? 'false' : 'true');

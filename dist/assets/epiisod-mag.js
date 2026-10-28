@@ -129,7 +129,8 @@
     // 07 Empowered: arched photograph left, big quote on chocolate right
     function (r, pl, pr_) {
       return {
-        L: ['t-pearl', ph(r, 1, 'left:14cqw;top:10cqw;width:72cqw;height:84cqw;border-radius:36cqw 36cqw 0 0', 'f-r') +
+        L: ['t-pearl', ph(r, 1, 'left:14cqw;top:10cqw;width:72cqw;height:84cqw;border-radius:36cqw 36cqw 0 0', 'f-arch') +
+          '<div class="mg-spill" aria-hidden="true"><img src="' + IMG + r.img + '-1.webp?v=4" alt="" draggable="false" style="clip-path:polygon(89.00% 58.98%,89.45% 56.64%,90.23% 54.98%,91.54% 53.37%,93.16% 52.05%,95.12% 51.17%,97.40% 51.17%,100.00% 52.25%,100.00% 100.00%,88.93% 100.00%,88.93% 70.70%,88.61% 66.80%,88.87% 62.89%)"></div>' +
           '<div class="mg-row mg-end" style="position:absolute;left:14cqw;right:14cqw;top:99cqw"><span class="hd" style="font-size:9cqw;line-height:1">' + r.no + '</span><span class="eb" style="text-align:right;line-height:1.7">' + r.views + '<br>' + r.sqm + ' sqm</span></div>' + fo(pl, 'l')],
         R: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#d0a77f">' + r.kind + '</span>' + pq(r.quote, 6.6) + '' +
           '<p class="tx" style="margin:5cqw 0 0;font-size:2.05cqw">' + r.desc + '</p>' + '<div class="mg-row" style="gap:2cqw;margin-top:4cqw;flex:none">' + ph(r, 2, 'position:relative;flex:1;height:17cqw') + ph(r, 3, 'position:relative;flex:1;height:17cqw') + ph(r, 4, 'position:relative;flex:1;height:17cqw') + '</div>' +

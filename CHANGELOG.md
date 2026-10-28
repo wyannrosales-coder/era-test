@@ -2,6 +2,9 @@
 
 ## 3.14.0
 
+- **Hero tour controls trimmed.** The restart button is gone from the chevrons on desktop and phones (the end card still has "Watch the tour again"). On phones the count reads "1/4" instead of "01 / 04" to save room; desktop keeps "01 / 04".
+- **Empowered Studio: the reader steps out of the arch.** The arch now ends at the woman's shoulder, and a second copy of the photo cut round her (head, hair, jumper, book and cushion) carries on past the arch's right edge with a soft shadow, so she looks to be stepping out of the frame. The outline is hand-traced and only shows where it leaves the arch.
+
 - **Magazine tweaks from review.** Aspect Studio E: the bathroom photo is replaced with your supplied shot (room through the door beside the grab-railed toilet), and the two big photos on that spread are swapped, so the tall page now carries the desk-and-croissant portrait and the small inset shows the bed and window. Signature Studio: the slim strip under the description now holds your Flex bed-and-desk photo, cropped to the lit desk, lamp and mug. The cover gets the same article-magazine treatment: ornamented subtitle, issue line ("Vol. 01 · 2026") and an accent bar on the cover line.
 
 - **Rooms magazine: new photography and an editorial refresh.** Every room now uses four hand-picked photos from the final shoot (cover shot, bedroom or desk life, kitchen / living, bathroom or storage), replacing the old three; the Quad and Quint no longer share any photo. The cover, the room cards and the phone flipbook (now four slides per room) use the new shots too. Spreads were re-composed to carry the fourth photo, and the pages take on the article-magazine style: accent-bar italic pull quotes, small diamond ornament dividers in place of plain rules, diamond bullets in the feature lists, and the Empowered arch is framed on the reader so she is no longer cropped out. All images are webp, cache-busted with ?v=3.

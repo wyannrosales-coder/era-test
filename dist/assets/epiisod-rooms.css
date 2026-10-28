@@ -424,3 +424,8 @@
 .cvx-meta { position: absolute; left: 0; right: 0; top: 45cqw; margin: 0; text-align: center; font-size: max(8.5px, 1.9cqw); font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: rgba(246, 241, 234, .9); text-shadow: 0 .3cqw 1.6cqw rgba(var(--fly-tint2), .7); }
 .cvx-meta b { font-weight: 400; color: #d0a77f; margin: 0 1.2cqw; font-size: .8em; }
 .cvx-feat { padding-left: 3.4cqw; border-left: .8cqw solid #d0a77f; }
+
+/* Empowered: the reader steps out of the arch. The arch shows the photo up to x = 86cqw; this copy of the same photo, cut round her (clip-path), carries on past the arch edge with a soft shadow. */
+.mg-ph.f-arch img { object-position: 74.16% 50%; }
+.mg-spill { position: absolute; left: 86cqw; top: 10cqw; width: 30cqw; height: 84cqw; pointer-events: none; filter: drop-shadow(0 1.2cqw 2.2cqw rgba(36, 18, 12, .35)); clip-path: inset(-12cqw -12cqw -12cqw 0); }
+.mg-spill img { position: absolute; left: -112.03cqw; top: 0; width: 126cqw; height: 84cqw; max-width: none; display: block; user-select: none; -webkit-user-drag: none; }
