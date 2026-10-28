@@ -231,8 +231,14 @@
       if (Math.abs(e.clientY - dg.y) > 6) dg.moved = true;
       setHot(idxAt(e.clientY, dg.cy));
     });
-    rn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
-    rn.addEventListener('selectstart', function (e) { e.preventDefault(); });
+    // phones: stop the browser's own press-and-hold (text / image selection, callout menu) from ever starting on or near the strip
+    function noSel() { try { var g = window.getSelection && window.getSelection(); if (g && g.rangeCount) g.removeAllRanges(); } catch (err) {} }
+    rn.addEventListener('touchstart', function (e) { if (mobileOn() && e.cancelable) e.preventDefault(); }, { passive: false });
+    rn.addEventListener('touchmove', function (e) { if (mobileOn() && e.cancelable) e.preventDefault(); }, { passive: false });
+    ['contextmenu', 'selectstart', 'dragstart'].forEach(function (t) {
+      document.addEventListener(t, function (e) { if (mobileOn() && (dg || root.classList.contains('ep-arch-lock') || rn.contains(e.target))) { e.preventDefault(); noSel(); } }, true);
+    });
+    document.addEventListener('selectionchange', function () { if (dg || root.classList.contains('ep-arch-lock')) noSel(); });
     function endArch(e) {
       clearTimeout(holdT); lock(false);
       if (!dg) return;

@@ -272,7 +272,7 @@
 /* phones: touch and drag on the right edge (or hold) opens the chapter list; nothing under the finger gets selected */
 @media (max-width: 991px) {
   .ep-rnav { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-  .ep-rnav::after { content: ""; position: absolute; top: -26px; bottom: -26px; left: -8px; right: 0; }
+  .ep-rnav::after { content: ""; position: absolute; top: -26px; bottom: -26px; left: -22px; right: 0; }
   html.ep-arch-lock, html.ep-arch-lock * { -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important; }
   html.ep-arch-lock img { -webkit-user-drag: none; pointer-events: none; }
 }
