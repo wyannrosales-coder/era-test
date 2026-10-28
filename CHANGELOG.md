@@ -2,6 +2,11 @@
 
 ## 3.14.0
 
+- **Hero chevrons and count on every screen size.** The left / right chevrons and a "00 / 04" count now sit in the lower-right corner, just above the 04 chapter card on desktop and tablet and in the bottom-right corner on phones, and they are there from the start screen onward. On segment one the left chevron flies back to the start screen, and a small restart button appears beside the chevrons (the end card still has "Watch the tour again").
+- **Smart demo finger icon is fully filled.** The hand was drawn as several open line segments (with breaks between the knuckles), so the cream fill came out in pieces. It now has its own solid closed silhouette underneath, with the outline drawn on top.
+- **Smoother chapter-list gradient on phones.** The overlay is now an eased 15-stop fade (no visible banding or edge), stays dark under the names and melts into the page to the left, above and below; the chosen name gets a soft shadow so the sand stays readable over light areas. The blur layer was dropped as it made the edge harsher.
+- **"Your residence, in your pocket" is steadier when you click.** A click now always wins over a half-finished swipe, the slide is restarted cleanly, the pop-out animation starts when the phone has actually finished sliding (not a fixed guess), the pop-outs are re-measured from the phone as it is at that moment (and whenever it changes size), and clicking the screen you are already on repairs it if it is out of step. Ran 10 random rapid-click sequences before and after; I could not reproduce a failure before the change, so this is hardening against the likely causes.
+
 - **Contrast pass.** The "E" on the map pin is now a sand-coloured E on a dark charcoal disc (it was a dark brown E on tan). Scrolling the whole page in both the dark and light versions and measuring every piece of text against its background found a handful of faint labels, now darkened to pass 4.5:1: the app section label and counter, the drawing-board sheet label, community card copy, the smart-panel tag and ">>" hint, and the light-footer hint and "Your resident pass" label (new `epiisod-contrast.css`). Text sitting on photos and video was not measured, only text on solid or gradient backgrounds.
 - **Chapter list: the chosen name is sand** (`#d0a77f`, the same sand used elsewhere) instead of white on phones, in both versions.
 

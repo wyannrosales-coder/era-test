@@ -56,8 +56,21 @@
   stage.appendChild(mt);
   var cur = -1, fxT = 0;
 
+  function play(i) {                                  // this screen's own animation: the screen rises, the pop-out piece pops
+    layoutPops();                                     // sized from the phone as it is right now, not as it was at load
+    [].forEach.call(track.children, function (sl) { sl.classList.remove('is-up'); });
+    [].forEach.call(fx.children, function (d) { d.classList.remove('is-pop', 'is-on'); });
+    track.children[i].classList.add('is-up');
+    var d = fx.querySelector('[data-i="' + i + '"]');
+    if (d) { d.classList.add('is-on'); void d.offsetWidth; d.classList.add('is-pop'); }
+  }
   function show(i) {
-    if (i === cur) return;
+    if (drag) { try { if (drag.on) screen.releasePointerCapture(drag.id); } catch (err) {} drag = null; }   // a click always wins over a half-finished swipe
+    if (i === cur) {                                  // same screen: make sure it is in place and its animation is up
+      place(0, true);
+      if (!track.children[i].classList.contains('is-up')) play(i);
+      return;
+    }
     cur = i;
     [].forEach.call(tabs.children, function (li, k) { li.firstChild.classList.toggle('is-on', k === i); });
     [].forEach.call(dots.children, function (d, k) { d.classList.toggle('is-on', k === i); });
@@ -67,25 +80,25 @@
     mt.querySelector('.ep-ap_mt').textContent = F[i].t;
     mt.querySelector('.ep-ap_md').textContent = F[i].d;
     void mt.offsetWidth; mt.classList.add('is-in');
-    // the animation for this screen starts once it has slid into place
-    clearTimeout(fxT);
+    // the animation for this screen starts once it has slid into place (when the slide ends, or after a fallback delay)
+    clearTimeout(fxT); track.removeEventListener('transitionend', onSlid);
     [].forEach.call(track.children, function (sl) { sl.classList.remove('is-up'); });
     [].forEach.call(fx.children, function (d) { d.classList.remove('is-pop', 'is-on'); });
-    fxT = setTimeout(function () {
-      if (cur !== i) return;
-      track.children[i].classList.add('is-up');
-      var d = fx.querySelector('[data-i="' + i + '"]');
-      if (d) { d.classList.add('is-on'); void d.offsetWidth; d.classList.add('is-pop'); }
-    }, 750);
+    var go = function () { if (cur !== i || track.children[i].classList.contains('is-up')) return; clearTimeout(fxT); track.removeEventListener('transitionend', onSlid); play(i); };
+    onSlid = function (e) { if (e.target === track && e.propertyName === 'transform') setTimeout(go, 60); };
+    track.addEventListener('transitionend', onSlid);
+    fxT = setTimeout(go, 900);
   }
+  var onSlid = null;
   // the track sits at the current screen, plus however far a finger has dragged it
   function place(dx, anim) {
-    track.style.transition = anim ? '' : 'none';
+    if (anim) { track.style.transition = ''; void track.offsetWidth; } else track.style.transition = 'none';
     track.style.transform = 'translate3d(calc(' + (-Math.max(cur, 0) * 100 / N) + '% + ' + (dx || 0) + 'px),0,0)';
   }
   function measure() { layoutPops(); place(0, false); }
   window.addEventListener('resize', measure);
   window.addEventListener('load', measure);
+  if (window.ResizeObserver) new ResizeObserver(function () { measure(); }).observe(screen);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
 
   tabs.addEventListener('click', function (e) { var b = e.target.closest('[data-i]'); if (b) show(+b.getAttribute('data-i')); });

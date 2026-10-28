@@ -17,7 +17,7 @@
   var veil = document.createElement('div'); veil.className = 'sm-veil'; veil.setAttribute('aria-hidden', 'true');
   var cap = document.createElement('div'); cap.className = 'sm-cap'; cap.setAttribute('role', 'status'); cap.setAttribute('aria-live', 'polite');
   var finger = document.createElement('div'); finger.className = 'sm-finger'; finger.setAttribute('aria-hidden', 'true');
-  finger.innerHTML = '<svg viewBox="0 0 48 48" fill="none"><path d="M18 22V9.5a3.5 3.5 0 0 1 7 0V20m0-3a3.5 3.5 0 0 1 7 0v4m0-1.5a3.5 3.5 0 0 1 7 0V30a13 13 0 0 1-13 13h-2.5a13 13 0 0 1-10-4.7L7.6 31.4a3.4 3.4 0 0 1 5.1-4.5L18 32" stroke="#24120c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#f6efe6"/></svg>';
+  finger.innerHTML = '<svg viewBox="0 0 48 48" fill="none"><path d="M18 22V9.5a3.5 3.5 0 0 1 7 0V17a3.5 3.5 0 0 1 7 0v2.5a3.5 3.5 0 0 1 7 0V30a13 13 0 0 1-13 13h-2.5a13 13 0 0 1-10-4.7L7.6 31.4a3.4 3.4 0 0 1 5.1-4.5L18 32Z" fill="#f6efe6" stroke="#f6efe6" stroke-width="2" stroke-linejoin="round"/><path d="M18 22V9.5a3.5 3.5 0 0 1 7 0V20m0-3a3.5 3.5 0 0 1 7 0v4m0-1.5a3.5 3.5 0 0 1 7 0V30a13 13 0 0 1-13 13h-2.5a13 13 0 0 1-10-4.7L7.6 31.4a3.4 3.4 0 0 1 5.1-4.5L18 32" stroke="#24120c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   document.body.appendChild(veil); document.body.appendChild(cap); document.body.appendChild(finger);
 
   function btn(k) { return phone.querySelector('[data-sw="' + k + '"]'); }
