@@ -18,7 +18,7 @@
   stage.className = 'ep-badge';
   stage.setAttribute('role', 'group');
   stage.setAttribute('aria-label', 'Your EPIISOD resident pass. Drag it to swing it, tap it to flip it.');
-  stage.innerHTML = '<p class="ep-badge_hint" aria-hidden="true"><i></i>' + (coarse ? 'Swipe the pass sideways. Tap to flip.' : 'Drag the pass. Click it to flip.') + '</p>';
+  stage.innerHTML = '<p class="ep-badge_hint" aria-hidden="true"><i></i>' + (coarse ? 'Swipe the pass sideways, or hold and drag. Tap to flip.' : 'Drag the pass. Click it to flip.') + '</p>';
   fs.appendChild(stage);
   // the canvas is not limited to the stage: on landscape screens it covers the whole footer (and ignores the pointer, which
   // is read from the footer instead), so a swinging, dragged or flicked pass is never cut off at the edge of its column
@@ -313,21 +313,43 @@
   function toWorld(e) { var r = cv.getBoundingClientRect(); return { x: e.clientX - r.left - W / 2, y: H / 2 - (e.clientY - r.top) }; }
 
   // ---- pointer ----
-  var down = null;
-  stage.style.touchAction = coarse ? 'pan-y' : 'none';
+  // mouse: grab straight away. touch: the page must keep scrolling, so the pass is only picked up by a sideways swipe or a short hold
+  // on it; an up / down swipe that starts on the pass is left to the browser to scroll.
+  var down = null, pend = null, holdT2 = 0;
+  if (coarse) { stage.style.touchAction = 'pan-y'; fs.style.touchAction = 'pan-y'; cv.style.touchAction = 'pan-y'; }
+  else stage.style.touchAction = 'none';
+  function engage(e0) {
+    if (!pend) return;
+    var p = pend, w = p.w, h = p.h; pend = null; clearTimeout(holdT2);
+    down = { x: p.x, y: p.y, t: p.t, h: h, id: p.id };
+    var s = (D - P[4].z) / D;
+    drag = { u: Math.max(0, Math.min(1, h.u)), v: Math.max(0, Math.min(1, h.v)), tx: w.x * s, ty: w.y * s };
+    lastPtr = { x: p.cx, y: p.cy, t: performance.now(), vx: 0, vy: 0 };
+    try { fs.setPointerCapture(p.id); } catch (x) {}
+    fs.style.cursor = 'grabbing';
+  }
+  function tapAt(h) {                                   // a tap or click: a button on the back, or flip the card
+    var k = regionAt(h);
+    if (k === 'book') bookTour(); else if (k === 'rooms') viewRooms();
+    else impulseSpin(h && h.back ? -9 : 9);
+  }
   fs.addEventListener('pointerdown', function (e) {
     if (e.button > 0 || (e.target.closest && e.target.closest('input, a, button, label, textarea'))) return;
     var w = toWorld(e), h = rayCard(w.x, w.y);
     if (!h || !h.inside) return;
-    down = { x: e.clientX, y: e.clientY, t: performance.now(), h: h, id: e.pointerId };
-    var s = (D - P[4].z) / D;
-    drag = { u: Math.max(0, Math.min(1, h.u)), v: Math.max(0, Math.min(1, h.v)), tx: w.x * s, ty: w.y * s };
-    lastPtr = { x: e.clientX, y: e.clientY, t: performance.now(), vx: 0, vy: 0 };
-    try { fs.setPointerCapture(e.pointerId); } catch (x) {}
-    fs.style.cursor = 'grabbing';
+    pend = { x: e.clientX, y: e.clientY, cx: e.clientX, cy: e.clientY, t: performance.now(), h: h, w: w, id: e.pointerId, touch: e.pointerType !== 'mouse' };
+    if (!pend.touch) { engage(); return; }
+    clearTimeout(holdT2); holdT2 = setTimeout(function () { engage(); }, 220);        // a short hold picks it up
   });
   fs.addEventListener('pointermove', function (e) {
     var w = toWorld(e);
+    if (pend && pend.touch) {
+      var dx = e.clientX - pend.x, dy = e.clientY - pend.y;
+      if (Math.hypot(dx, dy) > 8) {
+        if (Math.abs(dx) >= Math.abs(dy) * 0.8) { pend.cx = e.clientX; pend.cy = e.clientY; pend.w = w; engage(); }
+        else { pend = null; clearTimeout(holdT2); }       // mostly vertical: it is a scroll
+      }
+    }
     if (drag) {
       var s = (D - P[4].z) / D; drag.tx = w.x * s; drag.ty = w.y * s;
       var now = performance.now(), dt = Math.max(1, now - lastPtr.t);
@@ -338,17 +360,20 @@
       fs.style.cursor = regionAt(h) ? 'pointer' : (h && h.inside ? 'grab' : '');
     }
   });
+  fs.addEventListener('touchmove', function (e) { if (drag && e.cancelable) e.preventDefault(); }, { passive: false });
   function release(e) {
-    if (!drag) return;
+    clearTimeout(holdT2);
+    if (!drag) {
+      var p = pend; pend = null;
+      if (p && e.type !== 'pointercancel' && Math.hypot(e.clientX - p.x, e.clientY - p.y) < 7 && performance.now() - p.t < 420) tapAt(p.h);
+      return;
+    }
     var moved = down ? Math.hypot(e.clientX - down.x, e.clientY - down.y) : 99, quick = down ? performance.now() - down.t < 420 : false;
     var vx = lastPtr.vx, h = down && down.h;
-    drag = null; fs.style.cursor = '';
+    drag = null; pend = null; fs.style.cursor = '';
     if (e.type === 'pointercancel') return;
-    if (moved < 7 && quick) {                           // a tap or click: a button on the back, or flip the card
-      var k = regionAt(h);
-      if (k === 'book') bookTour(); else if (k === 'rooms') viewRooms();
-      else impulseSpin(h && h.back ? -9 : 9);
-    } else if (Math.abs(vx) > 700) {                    // a flick: spin it
+    if (moved < 7 && quick) tapAt(h);
+    else if (Math.abs(vx) > 700) {                      // a flick: spin it
       impulseSpin(Math.max(-13, Math.min(13, vx * 0.0085)));
     }
     down = null;

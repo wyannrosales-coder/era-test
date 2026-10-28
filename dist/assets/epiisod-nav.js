@@ -202,8 +202,20 @@
       });
     }
     function idxAt(y, cy) { return Math.max(0, Math.min(archBtns.length - 1, Math.round((y - cy) / STEP + (archBtns.length - 1) / 2))); }
-    function setHot(i) { if (i === hot) return; hot = i; if (i >= 0) { fan(i); if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive && matchMedia('(pointer: coarse)').matches) { try { navigator.vibrate(8); } catch (err) {} } } }
-    function closeArch() { rn.classList.remove('is-arch', 'is-sticky'); veil.classList.remove('is-on'); sticky = false; hot = -1; }
+    function setHot(i) {
+      if (i === hot) return; hot = i;
+      rn.classList.toggle('is-off', i < 0);
+      if (i < 0) { archBtns.forEach(function (b) { b.classList.remove('is-hot'); }); return; }
+      fan(i);
+      if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive && matchMedia('(pointer: coarse)').matches) { try { navigator.vibrate(8); } catch (err) {} }
+    }
+    // phones: a finger that has left the list (above or below it, or well off to the left) is "away": nothing is chosen, and letting go closes it
+    function pickAt(e, cy) {
+      var r = (e.clientY - cy) / STEP + (archBtns.length - 1) / 2, i = Math.round(r);
+      if (i < 0 || i > archBtns.length - 1 || e.clientX < window.innerWidth * 0.22) return -1;
+      return i;
+    }
+    function closeArch() { rn.classList.remove('is-arch', 'is-sticky', 'is-off'); veil.classList.remove('is-on'); sticky = false; hot = -1; }
     function mobileOn() { return window.matchMedia('(max-width: 991px)').matches; }
     // the list only opens after a deliberate hold (about 1.1 s on a phone, 1.2 s of hover on a desktop), so passing the line does nothing
     var HOLD = 500, HOVER = 700, holdT = 0, hoverT = 0, lastY = 0;
@@ -229,7 +241,7 @@
       lastY = e.clientY;
       if (!dg.open) { if (Math.abs(e.clientY - dg.y) > 8) { clearTimeout(holdT); dg.moved = true; openArch(true); } return; }
       if (Math.abs(e.clientY - dg.y) > 6) dg.moved = true;
-      setHot(idxAt(e.clientY, dg.cy));
+      setHot(pickAt(e, dg.cy));
     });
     // phones: stop the browser's own press-and-hold (text / image selection, callout menu) from ever starting on or near the strip
     function noSel() { try { var g = window.getSelection && window.getSelection(); if (g && g.rangeCount) g.removeAllRanges(); } catch (err) {} }
@@ -243,17 +255,14 @@
       clearTimeout(holdT); lock(false);
       if (!dg) return;
       var d = dg; dg = null;
-      if (sticky) {                                                       // list is already open: tap a chapter to go, tap anywhere else to close
+      if (d.open && d.moved) { var h = hot; closeArch(); if (h >= 0) go(h, dstops); return; }   // dragged: let go on a chapter to jump, or away from the list to close it
+      if (sticky) {                                                       // a held list that stayed open: tap a chapter to go, tap anywhere else to close
         var el = document.elementFromPoint(e.clientX, e.clientY), lab = el && el.closest && el.closest('[data-arch]');
-        if (d.open && d.moved) { var h0 = hot; closeArch(); if (h0 >= 0) go(h0, dstops); return; }
         if (lab) { var k = +lab.getAttribute('data-arch'); closeArch(); go(k, dstops); } else closeArch();
         return;
       }
-      if (d.open && d.moved) { var h = hot; closeArch(); if (h >= 0) go(h, dstops); return; }   // dragged along the strip: let go on a chapter to jump
-      if (d.moved) return;                                                // a quick swipe that never opened the list
-      // a tap (or a still hold): open the chapter list and keep it open
-      var c = idxAt(e.clientY, d.cy); fan(c); hot = c; sticky = true;
-      rn.classList.add('is-arch', 'is-sticky'); veil.classList.add('is-on');
+      if (d.open) { sticky = true; rn.classList.add('is-sticky'); return; }                       // held without dragging: the list stays up
+      // a plain tap or a quick swipe does nothing: the list needs a hold, or a drag up / down
     }
     // desktop: hover the line to open the fan, move the mouse up and down to choose, click to go
     var hv = null;

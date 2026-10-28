@@ -276,3 +276,6 @@
   html.ep-arch-lock, html.ep-arch-lock * { -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important; }
   html.ep-arch-lock img { -webkit-user-drag: none; pointer-events: none; }
 }
+
+/* phones: finger is away from the list, so nothing is picked */
+@media (max-width: 991px) { .ep-rnav.is-arch.is-off .ep-rnav_arch button { opacity: .26; } }

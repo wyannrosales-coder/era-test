@@ -2,6 +2,9 @@
 
 ## 3.14.0
 
+- **Phone chapter jump reworked.** The list now opens only by pressing and holding the right-edge lines, or by dragging up / down on them (which opens it right away); a plain tap does nothing. While dragging, letting go on a chapter jumps there, and letting go above or below the list, or well off to the left, closes it without moving (the names dim while your finger is away). A hold with no drag keeps the list open: tap a chapter to go, or tap anywhere else to close.
+- **Footer ID card no longer fights the scroll on phones.** Up / down swipes that start on the pass now scroll the page as normal; the pass is picked up by a sideways swipe or a short hold (about 0.2 s) and then follows your finger without the page moving. A tap still flips it, and the mouse behaviour on desktop is unchanged. The touch area is set to vertical-pan only so iOS and Android no longer cancel the drag mid-swipe.
+
 - **Phone chapter navigation: tap to open.** Tapping the right-edge lines now opens the chapter list and keeps it open; tap a chapter to jump there, or tap anywhere else to close it. Dragging along the strip and press-and-hold still work too (drag, then let go on a chapter to jump).
 
 - **Build number is easier to see on phones.** On screens under 768 px the "v3.14.0" label moves to the top-right of the loading frame (below the status bar), a little bigger and darker, because the bottom is often covered by the browser toolbar.
