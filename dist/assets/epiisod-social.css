@@ -54,3 +54,12 @@ html[data-ep-ver="2"] .section.arch { --sc-sheet: #ece8e5; }
 
 /* the gap between the collage and the Resi-Life title */
 .section.arch .interior-w + .u-272 { height: 40px; }
+
+/* hand-written notes and doodles on the "desk" behind the prints (partly or wholly covered until a print is moved) */
+.sc_ink { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; z-index: 1; pointer-events: none; user-select: none; mix-blend-mode: multiply; opacity: .86; }
+.sc_ink--m { display: none; }
+@media (max-width: 767px) { .sc_ink--d { display: none; } .sc_ink--m { display: block; } }
+/* the secret sticky note: shown once enough prints have been dragged away */
+.sc_secret { position: absolute; z-index: 500; left: 50%; bottom: 6%; width: min(460px, 78vw); transform: translateX(-50%) rotate(-2deg) scale(.86); opacity: 0; pointer-events: none; user-select: none; filter: drop-shadow(0 10px 22px rgba(36, 18, 12, .28)); transition: opacity .7s ease, transform .9s cubic-bezier(.2, .9, .25, 1.15); }
+.sc_secret.is-found { opacity: 1; transform: translateX(-50%) rotate(-2deg) scale(1); }
+@media (prefers-reduced-motion: reduce) { .sc_secret { transition: opacity .3s; } }

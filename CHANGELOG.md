@@ -2,6 +2,8 @@
 
 ## 3.14.0
 
+- **Life beyond the classroom: a hand-inked desk under the photos, with an easter egg.** The background now carries black-ink handwriting and doodles (study group 3pm, pool day??, 4 min walk to uni, coffee run, plus little sketches of the train, a tree, the mall, a bike, a cup, stars, hearts, spirals, a cat and more), drawn from my own single-stroke handwriting font so no font file is downloaded. Most of it sits under the prints, so moving a print uncovers what was behind it. Clear four or more prints off the desk and a sticky note in ink ("psst... you found the secret spot, tag us @epiisod.au") appears. There is a portrait layout for phones, and `tools/make-ink.py` regenerates the three SVGs (about 140 KB in all).
+
 - **"View the rooms" call to action with the magazine hint.** A pill with an arrow now sits under the closed magazine on every desktop and tablet screen (it glows and its arrow nudges whenever the cover does its idle lift, and clicking it opens the book). On phones the prompt under the cover is now a "View the rooms →" pill whose arrow nudges in time with the cover's swing.
 - **Colour fixes.** "Make it yours." is now the site sand (#d0a77f, with a soft shadow) in both versions, and the label on the motion-permission "Enable" button is white.
 

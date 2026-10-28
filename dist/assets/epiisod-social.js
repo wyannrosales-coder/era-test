@@ -82,7 +82,15 @@
     // the spill runs until every print has landed, however long the browser paused the frames
     if (spilling) { if (spill(now)) more = true; else spilling = false; }
     if (slide() || drag) more = true;
-    if (more) raf = requestAnimationFrame(step);
+    if (more) raf = requestAnimationFrame(step); else checkFound();
+  }
+  // easter egg: clear enough prints off the desk and a sticky note in ink is waiting underneath
+  var secret = track.querySelector('.sc_secret'), found = false;
+  function checkFound() {
+    if (found || !secret || drag) return;
+    var n = 0, need = 0.12 * Math.min(sw, 1100);
+    cards.forEach(function (c, i) { var s = st[i]; if (s && Math.hypot(s.x || 0, s.y || 0) > need) n++; });
+    if (n >= 4) { found = true; secret.classList.add('is-found'); }
   }
   function kick() { if (!raf) raf = requestAnimationFrame(step); }
   function play() {
