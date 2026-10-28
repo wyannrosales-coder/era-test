@@ -16,7 +16,7 @@
 
 - **Flythrough clips about 40% smaller** (desktop 27.7 MB to 17.7 MB, mobile 15.2 MB to 8.9 MB), re-encoded with ffmpeg (H.264, CRF 30, a keyframe every 6 frames so scroll-scrubbing stays smooth). Similarity to the originals is 96–98% (SSIM), and the side-by-side frame check looked the same.
 
-- **Site optimisation pass.** Original Webflow files (names starting with a 10-character hash) are now cached for a year; our own files keep the 1-day cache with background refresh. All 723 images across the pages decode off the main thread (`decoding="async"`), and `nosniff` is sent on every response. Images were re-checked for further compression and are already tight, and the scroll-scrubbed flythrough clips need their short-keyframe encoding, so both are left alone.
+- **Site optimisation pass.** Assets keep the 1-day cache with background refresh (a longer cache for the hashed Webflow files was tried and dropped, because Vercel rejected its URL pattern and blocked the deploy). All 723 images across the pages decode off the main thread (`decoding="async"`), and `nosniff` is sent on every response. Images were re-checked for further compression and are already tight, and the scroll-scrubbed flythrough clips need their short-keyframe encoding, so both are left alone.
 
 - **Branded page scrollbar.** The browser scrollbar is now a slim gold pill on a track that matches the dark or light version, with a lighter gold on hover (Firefox gets a thin gold bar; phones keep their native overlay bar).
 
