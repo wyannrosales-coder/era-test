@@ -222,7 +222,7 @@
       lastY = e.clientY; lock(true);
       try { rn.setPointerCapture(e.pointerId); } catch (err) {}
       clearTimeout(holdT);
-      holdT = setTimeout(function () { openArch(true); }, HOLD);        // hold, or just drag up / down (below), either opens the list
+      if (!sticky) holdT = setTimeout(function () { openArch(true); }, HOLD);        // hold, or just drag up / down (below), either opens the list
     });
     rn.addEventListener('pointermove', function (e) {
       if (!dg || !mobileOn()) return;
@@ -243,13 +243,17 @@
       clearTimeout(holdT); lock(false);
       if (!dg) return;
       var d = dg; dg = null;
-      if (!d.open) return;                                               // a tap or a quick swipe: nothing opens
-      var held = performance.now() - d.t > 280;
-      if (d.moved || held) { var h = hot; closeArch(); if (h >= 0) go(h, dstops); return; }
-      var lab = e.target && e.target.closest && e.target.closest('[data-arch]');
-      if (lab && sticky) { var k = +lab.getAttribute('data-arch'); closeArch(); go(k, dstops); return; }
-      if (sticky) { closeArch(); return; }
-      sticky = true; rn.classList.add('is-sticky');
+      if (sticky) {                                                       // list is already open: tap a chapter to go, tap anywhere else to close
+        var el = document.elementFromPoint(e.clientX, e.clientY), lab = el && el.closest && el.closest('[data-arch]');
+        if (d.open && d.moved) { var h0 = hot; closeArch(); if (h0 >= 0) go(h0, dstops); return; }
+        if (lab) { var k = +lab.getAttribute('data-arch'); closeArch(); go(k, dstops); } else closeArch();
+        return;
+      }
+      if (d.open && d.moved) { var h = hot; closeArch(); if (h >= 0) go(h, dstops); return; }   // dragged along the strip: let go on a chapter to jump
+      if (d.moved) return;                                                // a quick swipe that never opened the list
+      // a tap (or a still hold): open the chapter list and keep it open
+      var c = idxAt(e.clientY, d.cy); fan(c); hot = c; sticky = true;
+      rn.classList.add('is-arch', 'is-sticky'); veil.classList.add('is-on');
     }
     // desktop: hover the line to open the fan, move the mouse up and down to choose, click to go
     var hv = null;

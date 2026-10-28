@@ -2,6 +2,8 @@
 
 ## 3.14.0
 
+- **Phone chapter navigation: tap to open.** Tapping the right-edge lines now opens the chapter list and keeps it open; tap a chapter to jump there, or tap anywhere else to close it. Dragging along the strip and press-and-hold still work too (drag, then let go on a chapter to jump).
+
 - **Build number is easier to see on phones.** On screens under 768 px the "v3.14.0" label moves to the top-right of the loading frame (below the status bar), a little bigger and darker, because the bottom is often covered by the browser toolbar.
 
 - **Build number on the loading screen.** A tiny "v3.14.0" now sits in the bottom-right corner of the loading frame (faint, follows the dark or light colours) so you can tell which build you are looking at after a deploy. Update the number in `dist/index.html` (`.ep-ld_ver`) when the version changes.
