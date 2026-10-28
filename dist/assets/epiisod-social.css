@@ -6,7 +6,7 @@ html[data-ep-ver="2"] .section.arch { --sc-sheet: #ece8e5; }
 .sc { position: relative; height: 100vh; min-height: 640px; }
 .sc_stick { position: relative; height: 100%; overflow: hidden; }
 .sc_stage { position: absolute; inset: 0; }
-.sc_head { position: absolute; z-index: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(50vw, 700px); text-align: center; pointer-events: none; color: var(--_colors---base-1000--primary, #24120c); }
+.sc_head { position: absolute; z-index: 3; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(50vw, 700px); text-align: center; pointer-events: none; color: var(--_colors---base-1000--primary, #24120c); }
 .sc_h { margin: 0; font-family: var(--_fonts---font-display, "Playfair Display", serif); font-weight: 400; font-size: clamp(30px, 3.8vw, 64px); line-height: .96; letter-spacing: -.01em; text-transform: uppercase; text-wrap: balance; }
 .sc_a { display: block; margin-top: -.12em; font: italic 400 clamp(38px, 4.8vw, 80px)/1 var(--_fonts---font-display, "Playfair Display", serif); text-transform: none; transform: rotate(-4deg); }
 .sc_p { margin: clamp(16px, 2.6vh, 28px) auto 0; max-width: 40ch; font-size: clamp(13px, 1.1vw, 16px); line-height: 1.55; color: var(--_colors---base-1000--gray-text, rgba(36,18,12,.72)); }
@@ -28,12 +28,14 @@ html[data-ep-ver="2"] .section.arch { --sc-sheet: #ece8e5; }
 .sc_card[data-i="13"] { --x: 46; --y: 74; --w: 11.5; } .sc_card[data-i="14"] { --x: 61; --y: 71; --w: 10.5; }
 .sc_card.is-drag { cursor: grabbing; box-shadow: 0 0 0 5px #fff, 0 36px 70px -18px rgba(0, 0, 0, .6); transition: none; }
 @media (hover: hover) and (pointer: fine) { .sc_card { cursor: grab; touch-action: none; } }
+.sc_card { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
 @media (max-width: 767px) {
-  .sc { height: 100vh; }
+  .sc { height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); }
   .sc_card { --wh: 15; max-width: 150px; }
-  .sc_card[data-i="1"] { --x: 3; --y: 5; --w: 26; } .sc_card[data-i="2"] { --x: 58; --y: 2; --w: 24; } .sc_card[data-i="3"] { --x: 71; --y: 22; --w: 22; }
-  .sc_card[data-i="4"] { --x: 1; --y: 24; --w: 21; } .sc_card[data-i="7"] { --x: 5; --y: 70; --w: 27; } .sc_card[data-i="8"] { --x: 60; --y: 74; --w: 25; }
-  .sc_card[data-i="9"] { --x: 34; --y: 80; --w: 21; } .sc_card[data-i="10"] { --x: 74; --y: 55; --w: 21; }
+  /* three prints above the headline, five below it; the outer ones hang a little past the screen edge, and none cross the headline */
+  .sc_card[data-i="1"] { --x: -3; --y: 6; --w: 28; } .sc_card[data-i="2"] { --x: 36; --y: 14; --w: 25; } .sc_card[data-i="3"] { --x: 71; --y: 5; --w: 28; }
+  .sc_card[data-i="4"] { --x: -5; --y: 60; --w: 26; } .sc_card[data-i="10"] { --x: 77; --y: 60; --w: 26; }
+  .sc_card[data-i="7"] { --x: 3; --y: 79; --w: 27; } .sc_card[data-i="9"] { --x: 39; --y: 82; --w: 23; } .sc_card[data-i="8"] { --x: 70; --y: 79; --w: 28; }
   .sc_card[data-i="5"], .sc_card[data-i="6"], .sc_card[data-i="11"], .sc_card[data-i="12"], .sc_card[data-i="13"], .sc_card[data-i="14"] { display: none; }
   .sc_head { width: 92vw; }
   .sc_h { font-size: clamp(30px, 9.4vw, 48px); } .sc_a { font-size: clamp(38px, 12vw, 60px); }

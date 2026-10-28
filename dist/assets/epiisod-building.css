@@ -88,8 +88,14 @@
   .bd_dim span:last-child { display: none; }
   .bd_pn1 .bd_frame { aspect-ratio: 4 / 5; }
   .bd_card { position: relative; left: auto; right: auto; bottom: auto; width: 100%; min-width: 0; margin-top: 18px; padding: 20px 20px 16px; box-shadow: 0 18px 44px -26px rgba(36, 18, 12, .4); }
-  .bd_h { font-size: 21px; }
-  .bd_stat b { font-size: 14px; }
+  .bd_h { font-size: 24px; }
+  .bd_sub { font-size: 13px; max-width: none; margin-top: 10px; }
+  .bd_stats { grid-template-columns: repeat(3, 1fr); margin-top: 18px; padding-top: 14px; }
+  .bd_stat { display: block; padding: 0 0 0 12px; border-bottom: 0; border-left: 1px solid var(--_colors---base-1000--line, rgba(36,18,12,.16)); }
+  .bd_stat:first-child { padding-left: 0; border-left: 0; }
+  .bd_stat:last-child { padding-bottom: 0; }
+  .bd_stat b { font-size: 20px; }
+  .bd_stat span { text-align: left; margin-top: 4px; font-size: 11px; line-height: 1.3; }
   .bd_prog { display: none; }
   .bd_pn5 { padding: 40px 0 56px; }
   .bd_pn5 .ep-nearby_w { padding-top: 40px; }

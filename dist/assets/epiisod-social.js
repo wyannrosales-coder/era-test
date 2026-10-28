@@ -1,7 +1,7 @@
 /* "Life beyond the classroom": the EPIISOD Instagram posts lie around the headline like a loose pile of prints. When the section
    first comes into view they spill out from behind the headline (each on its own curve, with its own spin). Afterwards, on a mouse,
    any print can be picked up, thrown and left where it lands: it slides on with friction and bounces off the edges of the section.
-   Touch screens and reduced motion get the same scatter without the spill or the dragging (the posts are links to Instagram). */
+   On touch screens a print is picked up by holding it for a moment (a quick swipe still scrolls the page). Reduced motion gets the scatter without the spill or the dragging (the posts are links to Instagram). */
 (function () {
   var track = document.querySelector('[data-sc-track]');
   if (!track) return;
@@ -10,7 +10,9 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   var TOP = 84;                                                           // clear of the header bar at the top of the sheet
+  var BLEED = 0.16;                                                       // on phones a print may hang this far past the screen edge
   var ROT = [-8, 6, -4, 9, 12, -11, -5, 7, 7, -9, 5, -7, 4, -6];       // each print's resting angle
+  var bl = function (w) { return sw < 768 ? w * BLEED : 0; };
   var geo = [], st = [], sw = 0, sh = 0, raf = 0, played = false, t0 = 0, zTop = 10, drag = null, spilling = false, t1 = 0;
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
   function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
@@ -20,7 +22,7 @@
     cards.forEach(function (c) { c.style.setProperty('--fx', 0); c.style.setProperty('--fy', 0); });
     geo = cards.map(function (c, i) {
       var cs = getComputedStyle(c), w = c.offsetWidth, h = c.offsetHeight;
-      var x = clamp(parseFloat(cs.getPropertyValue('--x')) / 100 * sw, 10, sw - w - 10), y = clamp(TOP + parseFloat(cs.getPropertyValue('--y')) / 100 * (sh - TOP), TOP, sh - h - 12);
+      var b = bl(w), x = clamp(parseFloat(cs.getPropertyValue('--x')) / 100 * sw, sw < 768 ? -b : 10, sw - w + (sw < 768 ? b : -10)), y = clamp(TOP + parseFloat(cs.getPropertyValue('--y')) / 100 * (sh - TOP), TOP, sh - h - 12);
       c.style.left = x.toFixed(1) + 'px'; c.style.top = y.toFixed(1) + 'px';       // the kept-clear, kept-whole position
       return { x: x, y: y, w: w, h: h, cx: x + w / 2, cy: y + h / 2, rot: ROT[i % ROT.length] };
     });
@@ -61,7 +63,7 @@
     cards.forEach(function (c, i) {
       var s = st[i], g = geo[i]; if (!s.free || (drag && drag.i === i)) return;
       s.x += s.vx; s.y += s.vy; s.r += s.vr; s.vx *= 0.955; s.vy *= 0.955; s.vr *= 0.94;
-      var minX = -g.x, maxX = sw - g.w - g.x, minY = TOP - g.y, maxY = sh - g.h - g.y;
+      var minX = -g.x - bl(g.w), maxX = sw - g.w - g.x + bl(g.w), minY = TOP - g.y, maxY = sh - g.h - g.y;
       if (s.x < minX) { s.x = minX; s.vx = Math.abs(s.vx) * 0.55; s.vr *= -0.6; } else if (s.x > maxX) { s.x = maxX; s.vx = -Math.abs(s.vx) * 0.55; s.vr *= -0.6; }
       if (s.y < minY) { s.y = minY; s.vy = Math.abs(s.vy) * 0.55; s.vr *= -0.6; } else if (s.y > maxY) { s.y = maxY; s.vy = -Math.abs(s.vy) * 0.55; s.vr *= -0.6; }
       s.s += ((drag && drag.i === i ? 1.06 : 1) - s.s) * 0.2;
@@ -83,39 +85,56 @@
     if (reduce) { head.style.opacity = 1; head.style.transform = 'translate(-50%, -50%)'; paint(); return; }
     t0 = performance.now(); spilling = true; kick();
   }
-  // dragging (mouse only; touch keeps scrolling and the links)
-  if (fine && !reduce) {
+  // dragging: a mouse picks a print up at once; a finger holds it for a moment first, so a quick swipe still scrolls the page
+  if (!reduce) {
+    var HOLD = 230;
     cards.forEach(function (c, i) {
+      var pend = null;
       c.addEventListener('dragstart', function (e) { e.preventDefault(); });
-      c.addEventListener('pointerdown', function (e) {
-        if (e.button !== 0 || !played || spilling) return;
+      c.addEventListener('contextmenu', function (e) { if (drag || pend) e.preventDefault(); });
+      function begin(x, y, id, armed) {
         var s = st[i]; s.free = true; s.vx = s.vy = s.vr = 0;
-        drag = { i: i, px: e.clientX, py: e.clientY, sx: s.x, sy: s.y, moved: false, hist: [{ t: performance.now(), x: e.clientX, y: e.clientY }] };
+        drag = { i: i, px: x, py: y, sx: s.x, sy: s.y, moved: false, armed: armed, hist: [{ t: performance.now(), x: x, y: y }] };
         c.style.zIndex = ++zTop; c.classList.add('is-drag');
-        try { c.setPointerCapture(e.pointerId); } catch (err) {}
+        try { c.setPointerCapture(id); } catch (err) {}
         kick();
+      }
+      c.addEventListener('pointerdown', function (e) {
+        if (!played || spilling) return;
+        if (e.pointerType === 'mouse') { if (e.button !== 0) return; begin(e.clientX, e.clientY, e.pointerId, false); return; }
+        pend = { x: e.clientX, y: e.clientY, id: e.pointerId };
+        clearTimeout(pend.t);
+        pend.t = setTimeout(function () {
+          if (!pend) return; var p = pend; pend = null;
+          begin(p.x, p.y, p.id, true);
+          if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive) { try { navigator.vibrate(10); } catch (err) {} }
+        }, HOLD);
       });
+      // once a print is held, the page must not scroll under the finger
+      c.addEventListener('touchmove', function (e) { if (drag && drag.i === i && drag.armed && e.cancelable) e.preventDefault(); }, { passive: false });
       c.addEventListener('pointermove', function (e) {
+        if (pend) { if (Math.hypot(e.clientX - pend.x, e.clientY - pend.y) > 8) { clearTimeout(pend.t); pend = null; } return; }
         if (!drag || drag.i !== i) return;
         var s = st[i], g = geo[i], dx = e.clientX - drag.px, dy = e.clientY - drag.py;
         if (!drag.moved && Math.hypot(dx, dy) < 5) return;
         drag.moved = true;
-        s.x = clamp(drag.sx + dx, -g.x, sw - g.w - g.x); s.y = clamp(drag.sy + dy, TOP - g.y, sh - g.h - g.y);
+        s.x = clamp(drag.sx + dx, -g.x - bl(g.w), sw - g.w - g.x + bl(g.w)); s.y = clamp(drag.sy + dy, TOP - g.y, sh - g.h - g.y);
         s.r += (clamp(dx - (drag.lastdx || 0), -20, 20) * 0.35 - (s.r - g.rot) * 0.05); drag.lastdx = dx;
         var now = performance.now(); drag.hist.push({ t: now, x: e.clientX, y: e.clientY });
         while (drag.hist.length > 2 && now - drag.hist[0].t > 90) drag.hist.shift();
         kick();
       });
-      function release(e) {
+      function release() {
+        if (pend) { clearTimeout(pend.t); pend = null; }
         if (!drag || drag.i !== i) return;
         var s = st[i], h = drag.hist, a = h[0], b = h[h.length - 1], dt = Math.max(16, b.t - a.t);
         if (drag.moved && performance.now() - b.t < 120) {
           s.vx = clamp((b.x - a.x) / dt * 16, -45, 45); s.vy = clamp((b.y - a.y) / dt * 16, -45, 45); s.vr = clamp(s.vx * 0.12, -6, 6);
         }
-        c.classList.remove('is-drag'); c._moved = drag.moved; drag = null; kick();
+        c.classList.remove('is-drag'); c._moved = drag.moved || drag.armed; drag = null; kick();
       }
       c.addEventListener('pointerup', release); c.addEventListener('pointercancel', release);
-      // a throw must not open Instagram
+      // a throw (or a hold) must not open Instagram
       c.addEventListener('click', function (e) { if (c._moved) { e.preventDefault(); c._moved = false; } });
     });
   }

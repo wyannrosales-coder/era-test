@@ -14,10 +14,11 @@
     var revealEnd = function () { return top(reveal) + parseFloat(reveal.style.getPropertyValue('--rv-len') || 0) + 24; };
     var smart = function () { var m = q('.ep-msm'); return m && m.offsetParent !== null && getComputedStyle(m).display !== 'none' ? m : (q('.arch-scroll-area:not(.amen-scroll-area)') || q('.arch-scroll-area')); };
     var lastSec = [].slice.call(document.querySelectorAll('body section')).pop();
-    // the six places on the desktop line nav, then the same plus the app and the footer on phones
+    // the seven places on the desktop line nav, then the same plus the app and the footer on phones
     var S = {
       hero:   { label: 'Hero',                 find: function () { return fly; }, at: function () { return 0; } },
       well:   { label: 'Wellness amenities',   find: function () { return document.querySelector('#reveal[data-ep-ring]') || amen(); }, at: revealEnd },
+      design: { label: 'Design-led living',   find: function () { return q('#building'); } },
       nearby: { label: 'Nearby locations',     find: function () { return q('#location'); } },
       rooms:  { label: 'The rooms',            find: function () { return q('#rooms'); } },
       life:   { label: 'Life beyond',          find: function () { return q('section.section.arch'); } },
@@ -26,8 +27,8 @@
       end:    { label: 'Contact',              find: function () { return lastSec; } }
     };
     function build(keys) { return keys.map(function (k) { var x = S[k]; return { label: x.label, at: x.at, find: x.find, el: x.find() }; }).filter(function (x) { return x.el; }); }
-    var dstops = build(['hero', 'well', 'nearby', 'rooms', 'life', 'smart']);
-    var stops = build(['hero', 'well', 'nearby', 'rooms', 'life', 'smart', 'app', 'end']);
+    var dstops = build(['hero', 'well', 'design', 'nearby', 'rooms', 'life', 'smart']);
+    var stops = build(['hero', 'well', 'design', 'nearby', 'rooms', 'life', 'smart', 'app', 'end']);
 
     function top(el) { return el.getBoundingClientRect().top + window.pageYOffset; }
     function target(s) {
@@ -204,21 +205,34 @@
     function setHot(i) { if (i === hot) return; hot = i; if (i >= 0) { fan(i); if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive && matchMedia('(pointer: coarse)').matches) { try { navigator.vibrate(8); } catch (err) {} } } }
     function closeArch() { rn.classList.remove('is-arch', 'is-sticky'); veil.classList.remove('is-on'); sticky = false; hot = -1; }
     function mobileOn() { return window.matchMedia('(max-width: 991px)').matches; }
+    // the list only opens after a deliberate hold (about 1.1 s on a phone, 1.2 s of hover on a desktop), so passing the line does nothing
+    var HOLD = 1100, HOVER = 1200, holdT = 0, hoverT = 0, lastY = 0;
     rn.addEventListener('pointerdown', function (e) {
       if (!mobileOn()) return;
-      var rb = rn.getBoundingClientRect(), c = idxAt(e.clientY, rb.top + rb.height / 2);
-      dg = { y: e.clientY, t: performance.now(), moved: false, id: e.pointerId, cy: rb.top + rb.height / 2 };
-      fan(c); hot = c; rn.classList.add('is-arch'); veil.classList.add('is-on');
+      var rb = rn.getBoundingClientRect();
+      dg = { y: e.clientY, t: performance.now(), moved: false, id: e.pointerId, cy: rb.top + rb.height / 2, open: false };
+      lastY = e.clientY;
       try { rn.setPointerCapture(e.pointerId); } catch (err) {}
+      clearTimeout(holdT);
+      holdT = setTimeout(function () {
+        if (!dg || dg.moved) return;
+        dg.open = true; dg.t = performance.now() - 400;                  // counts as held, so letting go jumps to the chosen name
+        var c = idxAt(lastY, dg.cy); fan(c); hot = c; rn.classList.add('is-arch'); veil.classList.add('is-on');
+        if (navigator.vibrate && navigator.userActivation && navigator.userActivation.hasBeenActive && matchMedia('(pointer: coarse)').matches) { try { navigator.vibrate(14); } catch (err) {} }
+      }, HOLD);
     });
     rn.addEventListener('pointermove', function (e) {
       if (!dg || !mobileOn()) return;
+      lastY = e.clientY;
+      if (!dg.open) { if (Math.abs(e.clientY - dg.y) > 10) { dg.moved = true; clearTimeout(holdT); } return; }
       if (Math.abs(e.clientY - dg.y) > 6) dg.moved = true;
       setHot(idxAt(e.clientY, dg.cy));
     });
     function endArch(e) {
+      clearTimeout(holdT);
       if (!dg) return;
       var d = dg; dg = null;
+      if (!d.open) return;                                               // a tap or a quick swipe: nothing opens
       var held = performance.now() - d.t > 280;
       if (d.moved || held) { var h = hot; closeArch(); if (h >= 0) go(h, dstops); return; }
       var lab = e.target && e.target.closest && e.target.closest('[data-arch]');
@@ -235,7 +249,14 @@
       fan(c); hot = c; rn.classList.add('is-arch'); veil.classList.add('is-on');
     }
     function dClose() { hv = null; closeArch(); }
-    rn.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') dOpen(e); });
+    rn.addEventListener('pointerenter', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      var ev = { clientY: e.clientY }; rn.classList.add('is-wait');
+      rn.addEventListener('pointermove', function mv(m) { ev.clientY = m.clientY; if (!rn.classList.contains('is-wait')) rn.removeEventListener('pointermove', mv); });
+      clearTimeout(hoverT);
+      hoverT = setTimeout(function () { rn.classList.remove('is-wait'); dOpen(ev); }, HOVER);
+    });
+    rn.addEventListener('pointerleave', function () { clearTimeout(hoverT); rn.classList.remove('is-wait'); });
     window.addEventListener('pointermove', function (e) {
       if (!hv || mobileOn()) return;
       if (e.clientX < window.innerWidth - 300) { dClose(); return; }
@@ -246,7 +267,7 @@
       var h = hot; dClose(); if (h >= 0) go(h, dstops);
     }, true);
     rn.addEventListener('pointerup', endArch);
-    rn.addEventListener('pointercancel', function () { dg = null; closeArch(); });
+    rn.addEventListener('pointercancel', function () { clearTimeout(holdT); dg = null; closeArch(); });
     document.addEventListener('pointerdown', function (e) { if (sticky && !rn.contains(e.target)) closeArch(); });
 
     // lines near the pointer stretch a little, like a ruler

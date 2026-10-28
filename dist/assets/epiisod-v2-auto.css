@@ -18,6 +18,7 @@ html[data-ep-ver="2"] .ep-badge_book { color: #212529; }
 html[data-ep-ver="2"] .ep-facade { background: #212529; }
 /* epiisod-location.css */
 html[data-ep-ver="2"] .ep-loc { --ep-choc: #212529; --ep-sand: #896d42; }
+html[data-ep-ver="2"] .ep-loc_pt[data-loc-pt="home"] .ep-loc_label { color: #fff; font-weight: 700; }
 html[data-ep-ver="2"] .ep-loc_pt[data-loc-pt="home"] .ep-loc_core { box-shadow: 0 0 0 4px rgba(137,109,66,.35), 0 6px 20px rgba(var(--fly-tint),.5); }
 /* epiisod-nav.css */
 html[data-ep-ver="2"] .ep-nav_btn:hover { background: rgba(137,109,66, .28); }
@@ -127,7 +128,7 @@ html[data-ep-ver="2"] .ep-rooms { --ep-sand: #dcd7d3; --ep-choc: #212529; --ep-s
   html[data-ep-ver="2"] .ep-mag_tbtn { border: 1px solid rgba(33,37,41,.3); color: #212529; }
   html[data-ep-ver="2"] .ep-mag_topen { background: #212529; }
 }
-html[data-ep-ver="2"] .cvx-tag { background: #896d42; color: #212529; }
+html[data-ep-ver="2"] .cvx-tag { background: #f4f2f0; color: #5e4a2c; }
 html[data-ep-ver="2"] .cvx-tag b { color: #212529; }
 /* epiisod-smart-demo.css */
 html[data-ep-ver="2"] .sm-cap_eb { color: #896d42; }
