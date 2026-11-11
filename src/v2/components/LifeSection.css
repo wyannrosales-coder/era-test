@@ -1,7 +1,7 @@
 .life {
   position: relative;
   overflow-x: clip;
-  background: var(--white);
+  background: var(--paper);
 }
 
 /* Intro stays pinned while the card expands and the Student Life fold scrolls over it */
@@ -44,7 +44,7 @@
 .life__card {
   position: absolute;
   inset: 0;
-  background: var(--white);
+  background: var(--paper);
   clip-path: inset(calc(50% - 128px) calc(50% - 182px));
   will-change: clip-path;
 }
@@ -64,5 +64,5 @@
   left: 0;
   z-index: 1;
   width: 100%;
-  background: var(--white);
+  background: var(--paper);
 }

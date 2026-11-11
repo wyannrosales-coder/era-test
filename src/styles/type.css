@@ -10,7 +10,8 @@
   margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
-  line-height: 1.2;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
   color: var(--royal-chocolate-700);
 }
 
@@ -20,7 +21,7 @@
 
 :where(.type-h1) em {
   font-style: italic;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 /* .display-title is the original name for H2 */
@@ -61,9 +62,9 @@
 
 :where(.type-h6) {
   font-weight: 400;
-  font-size: 16px;
-  line-height: 1.25;
-  letter-spacing: 1.6px;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.2em;
   color: var(--royal-chocolate-600);
 }
 

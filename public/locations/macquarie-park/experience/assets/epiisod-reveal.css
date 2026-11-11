@@ -6,7 +6,7 @@
   position: relative;
   z-index: 3;
   background: transparent !important;
-  color: #f4f2f0;
+  color: #f4f0e6;
   /* the arch window rises over the last viewport of the flythrough */
   margin-top: calc(var(--_special-units---100vh, 100vh) * -1);
   height: calc(var(--rv-len, 160vh) + var(--_special-units---100vh, 100vh));
@@ -19,7 +19,7 @@
   /* stops where the next photo begins, so the photo shows behind the narrowing arch */
   bottom: 0;
   top: calc(var(--_special-units---100vh, 100vh) * -1);
-  background: #24120c;
+  background: #04070e;
   opacity: var(--rv-dim);
   pointer-events: none;
 }
@@ -31,7 +31,7 @@
 .ep-rv_win {
   position: absolute;
   inset: 0 0 calc(var(--_special-units---100vh, 100vh) * -.5) 0;
-  background: #24120c;
+  background: #04070e;
   clip-path: circle(var(--rv-cr, 0px) at 50% var(--rv-cy, 50vh));   /* a true circle, centred on the screen */
   transform: translateY(var(--rv-ty, 0px));
   will-change: clip-path, transform;
@@ -66,29 +66,29 @@
 }
 .ep-rv_title {
   margin: 0;
-  font-family: var(--_fonts---heading, "Playfair Display", serif);
+  font-family: var(--_fonts---heading, "Libre Baskerville", serif);
   font-weight: 400;
   font-size: var(--rv-fs);
   line-height: 1.04;
   letter-spacing: -.01em;
-  color: #f4f2f0;
+  color: #f4f0e6;
 }
-.ep-rv_dots { color: #d0a77f; }
+.ep-rv_dots { color: #b8966e; }
 .ep-rv_accent {
   margin: .5em 0 0;
-  font-family: var(--_fonts---heading, "Playfair Display", serif);
+  font-family: var(--_fonts---heading, "Libre Baskerville", serif);
   font-style: italic;
   font-size: calc(var(--rv-fs) * .9);
   line-height: 1.1;
-  color: #d0a77f;
+  color: #b8966e;
 }
 .ep-rv_sub {
   margin: 1.6em 0 0;
   max-width: 30ch;
-  font-family: var(--_fonts---body, "Albert Sans", sans-serif);
+  font-family: var(--_fonts---body, "DM Sans", sans-serif);
   font-size: clamp(14px, 1.15vw, 18px);
   line-height: 1.5;
-  color: rgba(244,242,240,.88);
+  color: rgba(244,240,230,.88);
   opacity: var(--rv-copy);
   transform: translateY(calc((1 - var(--rv-copy)) * 14px));
 }
@@ -97,9 +97,9 @@
 .ep-rv_btn {
   display: inline-block;
   padding: 14px 30px;
-  background: #d0a77f;
-  color: #24120c;
-  font-family: var(--_fonts---body, "Albert Sans", sans-serif);
+  background: #b8966e;
+  color: #04070e;
+  font-family: var(--_fonts---body, "DM Sans", sans-serif);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: .12em;
@@ -107,7 +107,7 @@
   text-decoration: none;
   transition: background .25s;
 }
-.ep-rv_btn:hover { background: #d7c5a9; }
+.ep-rv_btn:hover { background: #d4b896; }
 @media (max-width: 767px) {
   .ep-rv_sub { max-width: 26ch; }
 }
@@ -193,4 +193,4 @@
    cuts it off at its own bottom edge. The top stays open, because the circle is born above the section (over the hero). */
 #reveal.ep-rv { clip-path: inset(-200vh 0 0 0); }
 /* "Make it yours." in the sand used across the site, in both versions, with a soft shadow so it holds over the photo */
-.ep-rv_accent, html[data-ep-ver="2"] .ep-rv_accent { color: #d0a77f !important; text-shadow: 0 1px 14px rgba(20, 12, 8, .55); }
+.ep-rv_accent, html[data-ep-ver="2"] .ep-rv_accent { color: #b8966e !important; text-shadow: 0 1px 14px rgba(20, 12, 8, .55); }

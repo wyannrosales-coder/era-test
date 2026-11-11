@@ -9,7 +9,7 @@
   height: 100vh;
   height: 100svh;
   overflow: hidden;
-  background: var(--white);
+  background: var(--paper);
 }
 
 .hero__image,

@@ -5,7 +5,7 @@
   --column-gap: 24px;
   padding: 200px var(--page-gutter);
   overflow-x: clip;
-  background: var(--white);
+  background: var(--paper);
 }
 
 .locations__overview {
@@ -33,7 +33,7 @@
   width: 464px;
   padding-right: 48px;
   align-self: stretch;
-  background: var(--white);
+  background: var(--paper);
   /* Shadow fades in as cards start sliding beneath the column */
   box-shadow: 72px 0 60px -60px rgba(0, 0, 0, calc(0.2 * min(1, var(--progress, 0) * 5)));
 }

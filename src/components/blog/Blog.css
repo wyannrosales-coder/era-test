@@ -43,7 +43,7 @@
   align-items: center;
   gap: 120px;
   padding: calc(88px + 80px) var(--page-gutter) 200px;
-  background: var(--white);
+  background: var(--paper);
 }
 
 /* Title, blog name and a 100px gold line, 32px apart (Figma 1119:43365) */
@@ -165,7 +165,7 @@
   flex-direction: column;
   gap: 80px;
   padding: calc(88px + 80px) var(--page-gutter) 200px;
-  background: var(--white);
+  background: var(--paper);
 }
 
 .blog-post > * {
@@ -507,7 +507,7 @@
     display: flex;
     gap: 8px;
     padding: 8px var(--page-gutter);
-    background: var(--white);
+    background: var(--paper);
     visibility: hidden;
     opacity: 0;
     transform: translateY(-100%);

@@ -22,7 +22,7 @@
   padding: 8px 0;
   list-style: none;
   border: 1px solid var(--bronze-300);
-  background: var(--white);
+  background: var(--paper);
   box-shadow: 0 8px 24px rgba(36, 18, 12, 0.14);
   opacity: 0;
   visibility: hidden;

@@ -1,31 +1,31 @@
 /* The app section: a phone with the app's screens, and a tab for every feature. */
-.ep-ap { position: relative; background: #f4f2f0; color: #24120c; font-family: var(--_fonts---body, "Albert Sans", sans-serif); }
+.ep-ap { position: relative; background: #f4f0e6; color: #04070e; font-family: var(--_fonts---body, "DM Sans", sans-serif); }
 .ep-ap_pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .ep-ap_in { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 4vw; padding: 0 7vw; box-sizing: border-box; }
 .ep-ap_stage { display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
 .ep-ap_phone { --h: min(80vh, 760px); height: var(--h); aspect-ratio: 717 / 1535; filter: drop-shadow(0 34px 50px rgba(var(--fly-tint), .28)); }
 .ep-ap_body { position: relative; height: 100%; padding: 11px; border-radius: 46px; background: #0d0705; box-shadow: inset 0 0 0 2px #7a6657; box-sizing: border-box; }
 .ep-ap_notch { display: none; }
-.ep-ap_screen { position: relative; height: 100%; overflow: hidden; border-radius: 36px; background: #f4f2f0; }
+.ep-ap_screen { position: relative; height: 100%; overflow: hidden; border-radius: 36px; background: #f4f0e6; }
 .ep-ap_track { display: flex; height: 100%; width: 100%; transition: transform .75s cubic-bezier(.65, 0, .25, 1); will-change: transform; }
 .ep-ap_slide { flex: 0 0 100%; height: 100%; }
 .ep-ap_slide img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
 .ep-ap_dots, .ep-ap_mtxt { display: none; }
 .ep-ap_side { max-width: 520px; }
 .ep-ap_eye { margin: 0 0 14px; font-size: 12px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: #a98462; }
-.ep-ap_h { margin: 0 0 34px; font-family: var(--_fonts---heading, "Playfair Display", serif); font-weight: 400; font-size: clamp(30px, 3.4vw, 54px); line-height: 1.04; }
-.ep-ap_tabs { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(36, 18, 12, .2); }
-.ep-ap_tabs li { border-bottom: 1px solid rgba(36, 18, 12, .2); }
+.ep-ap_h { margin: 0 0 34px; font-family: var(--_fonts---heading, "Libre Baskerville", serif); font-weight: 400; font-size: clamp(30px, 3.4vw, 54px); line-height: 1.04; }
+.ep-ap_tabs { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(4, 7, 14, .2); }
+.ep-ap_tabs li { border-bottom: 1px solid rgba(4, 7, 14, .2); }
 .ep-ap_tab { position: relative; display: grid; grid-template-columns: 46px 1fr; align-items: baseline; width: 100%; padding: 16px 0; border: 0; background: none; color: inherit; text-align: left; cursor: pointer; opacity: .5; transition: opacity .35s; font-family: inherit; }
 .ep-ap_tab:hover, .ep-ap_tab.is-on { opacity: 1; }
 .ep-ap_no { font-size: 11px; letter-spacing: .14em; color: #a98462; }
-.ep-ap_nm { font-family: var(--_fonts---heading, "Playfair Display", serif); font-size: clamp(20px, 1.9vw, 28px); line-height: 1.1; }
+.ep-ap_nm { font-family: var(--_fonts---heading, "Libre Baskerville", serif); font-size: clamp(20px, 1.9vw, 28px); line-height: 1.1; }
 .ep-ap_more { grid-column: 2; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.2, .7, .2, 1); }
 .ep-ap_tab.is-on .ep-ap_more { grid-template-rows: 1fr; }
 .ep-ap_more > span { overflow: hidden; min-height: 0; }
 .ep-ap_more b { display: block; margin-top: 12px; font-size: 14px; font-weight: 600; }
 .ep-ap_more em { display: block; margin: 6px 0 4px; max-width: 46ch; font-style: normal; font-size: 14px; line-height: 1.55; opacity: .8; }
-.ep-ap_tab::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: #d0a77f; transition: width .7s cubic-bezier(.65, 0, .25, 1); }
+.ep-ap_tab::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: #b8966e; transition: width .7s cubic-bezier(.65, 0, .25, 1); }
 .ep-ap_tab.is-on::after { width: 100%; }
 .ep-ap_note { margin: 20px 0 0; font-size: 11px; opacity: .55; }
 
@@ -46,10 +46,10 @@
   .ep-ap_track { width: calc(var(--n, 6) * 100%); }
   .ep-ap_dots { grid-column: 1 / -1; display: flex; justify-content: center; gap: 8px; margin-top: 22px; }
   .ep-ap_dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(var(--fly-tint), .25); cursor: pointer; transition: width .3s, background-color .3s; }
-  .ep-ap_dots button.is-on { width: 24px; border-radius: 4px; background: #24120c; }
+  .ep-ap_dots button.is-on { width: 24px; border-radius: 4px; background: #04070e; }
   .ep-ap_mtxt { display: block; min-width: 0; }
   .ep-ap_mno { margin: 0 0 12px; font-size: 11px; letter-spacing: .14em; color: #a98462; }
-  .ep-ap_mt { margin: 0 0 12px; font-family: var(--_fonts---heading, "Playfair Display", serif); font-weight: 400; font-size: 22px; line-height: 1.12; }
+  .ep-ap_mt { margin: 0 0 12px; font-family: var(--_fonts---heading, "Libre Baskerville", serif); font-weight: 400; font-size: 22px; line-height: 1.12; }
   .ep-ap_md { margin: 0; font-size: 13px; line-height: 1.5; opacity: .78; }
   .ep-ap_mtxt.is-in { animation: ep-ap-in .5s cubic-bezier(.2, .7, .2, 1); }
   @keyframes ep-ap-in { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
@@ -70,7 +70,7 @@
 /* ---- screen animations ---- */
 .ep-ap_screen { container-type: inline-size; }
 .ep-ap_slide { position: relative; overflow: hidden; }
-.ep-ap_pic { position: absolute; inset: 0; background: top / 100% auto no-repeat #f4f2f0; transition: filter .9s ease; }
+.ep-ap_pic { position: absolute; inset: 0; background: top / 100% auto no-repeat #f4f0e6; transition: filter .9s ease; }
 .ep-ap_pic.is-dimmed { filter: brightness(2.05); }
 .is-up .ep-ap_pic.is-dimmed { filter: none; }
 .ep-ap_dim { position: absolute; inset: 0; background: #000; opacity: 0; transition: opacity .8s ease; }
@@ -109,10 +109,10 @@
 }
 /* the travelling phone (smart room to app) */
 .ep-trv { position: fixed; z-index: 60; display: none; pointer-events: none; box-sizing: border-box; background: #0d0705; box-shadow: inset 0 0 0 2px #7a6657; filter: drop-shadow(0 30px 50px rgba(var(--fly-tint), .3)); }
-.ep-trv_in { position: relative; width: 100%; height: 100%; overflow: hidden; background: #f4f2f0; }
+.ep-trv_in { position: relative; width: 100%; height: 100%; overflow: hidden; background: #f4f0e6; }
 .ep-trv_a, .ep-trv_b { position: absolute; inset: 0; }
 .ep-trv_a { overflow: hidden; }
-.ep-trv_b { background: top / 100% auto no-repeat #f4f2f0; opacity: 0; }
+.ep-trv_b { background: top / 100% auto no-repeat #f4f0e6; opacity: 0; }
 @media (max-width: 991px) { .ep-trv { display: none !important; } }
 @media (max-width: 991px) {
   .ep-ap_phone { order: 1; }

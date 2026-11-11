@@ -49,13 +49,13 @@
 .nav.is-scrolled,
 .nav.is-open {
   --nav-text: var(--royal-chocolate-600);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(251, 248, 241, 0.92);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 /* Mega menu open: solid white (Figma 539:18628) */
 .nav.is-open {
-  background: var(--white);
+  background: var(--paper);
 }
 
 /* Icons in both colourways, cross-fading */
@@ -218,7 +218,7 @@ button.nav__link.nav__caret {
 }
 
 .nav__cta:hover {
-  background: var(--white);
+  background: var(--paper);
   color: var(--royal-chocolate-700);
 }
 

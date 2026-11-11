@@ -1,25 +1,25 @@
-/* Design tokens from the EPIISOD Figma file */
+/* Design tokens. Palette and type follow the Student Luxe system: ink navy, paper cream, muted gold; Baskerville display + DM Sans. Token names are kept from the old Figma file so components don't change. */
 :root {
   --white: #ffffff;
-  --bronze-100: #fbfaf7;
-  --bronze-200: #f8f5ef;
-  --bronze-300: #e9dfd0;
-  --bronze-400: #d7c5a9;
-  --bronze-500: #d0a77f;
-  --bronze-600: #c8a977;
-  --bronze-700: #896d42;
-  --royal-chocolate-200: #ebe8e7;
-  --royal-chocolate-300: #dcd7d3;
-  --royal-chocolate-400: #a59994;
-  --royal-chocolate-500: #74615a;
-  --royal-chocolate-600: #391d13;
-  --royal-chocolate-700: #24120c;
+  --bronze-100: #fbf8f1;
+  --bronze-200: #f4f0e6;
+  --bronze-300: #eadfce;
+  --bronze-400: #e3d2b2;
+  --bronze-500: #d4b896;
+  --bronze-600: #b8966e;
+  --bronze-700: #8b6e4e;
+  --royal-chocolate-200: #e9e8e6;
+  --royal-chocolate-300: #d6d5d4;
+  --royal-chocolate-400: #8e939d;
+  --royal-chocolate-500: #505a6b;
+  --royal-chocolate-600: #121a2a;
+  --royal-chocolate-700: #04070e;
   --deep-olive-200: #e1e3d2;
   --deep-olive-500: #71785c;
   --deep-olive-700: #202a0f;
   --deep-sapphire-700: #0b2237;
-  --line-in-white: #d7c5a9;
-  --menu-text: #e9dfd0;
+  --line-in-white: #d4b896;
+  --menu-text: #eadfce;
   --grey-200: #e9ecef;
   --grey-400: #a9afb5;
   --grey-600: #6c757d;
@@ -28,8 +28,13 @@
   --grey-900: #212529;
   --error-500: #ea5826;
 
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body: 'Albert Sans', system-ui, sans-serif;
+  --font-display: 'Libre Baskerville', Baskerville, Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  --ink: #04070e;
+  --paper: #fbf8f1;
+  --gold: #b8966e;
+  --ease-lux: cubic-bezier(0.22, 0.8, 0.28, 1);
 
   --page-gutter: 72px;
   --content-max: 1368px;

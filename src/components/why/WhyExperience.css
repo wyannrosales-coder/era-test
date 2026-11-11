@@ -1,7 +1,7 @@
 .why-experience {
   /* Deep at the foot, so the last cards stay clear of the reviews as they slide over */
   padding: 140px var(--page-gutter) 380px;
-  background: var(--white);
+  background: var(--paper);
 }
 
 /* The layer that lags as the reviews slide over (useExitParallax) */
@@ -49,7 +49,7 @@
   height: 500px;
   overflow: hidden;
   border: 1px solid var(--bronze-100);
-  background: var(--white);
+  background: var(--paper);
   box-shadow: 0 48px 20px -32px rgba(0, 0, 0, 0.18);
 }
 

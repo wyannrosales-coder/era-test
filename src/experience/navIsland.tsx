@@ -1,8 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import Nav from '../components/Nav';
+import EnquiryPill from '../components/EnquiryPill';
 import '../styles/tokens.css';
 import '../styles/type.css';
+import '../styles/lux.css';
 import './navIsland.css';
 
 /**
@@ -20,4 +22,8 @@ if (mount) {
       <Nav />
     </StrictMode>,
   );
+  // The floating enquiry pill, same as every other page
+  const pillRoot = document.createElement('div');
+  document.body.appendChild(pillRoot);
+  createRoot(pillRoot).render(<EnquiryPill />);
 }

@@ -15,8 +15,8 @@
   var W = 0, H = 0, dpr = 1, M = 16, R = 6, sheen = null, geo = null, prog = 0;
   // version 1: dark chocolate edge to edge, the gold fills the border as the count climbs. Version 2: pearl, bronze.
   var V2 = document.documentElement.getAttribute('data-ep-ver') === '2';
-  var PAL = V2 ? { bg: '#f4f2f0', track: 'rgba(33,37,41,.14)', fill: '#896d42', spot: '#896d42' }
-               : { bg: null, track: 'rgba(208,167,127,.24)', fill: '#d0a77f', spot: '#d0a77f' };
+  var PAL = V2 ? { bg: '#f4f0e6', track: 'rgba(33,37,41,.14)', fill: '#8b6e4e', spot: '#8b6e4e' }
+               : { bg: null, track: 'rgba(184,150,110,.24)', fill: '#b8966e', spot: '#b8966e' };
 
   function clamp(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -31,7 +31,7 @@
     var cs = getComputedStyle(el); M = parseFloat(cs.getPropertyValue('--ld-m')) || 16; R = parseFloat(cs.getPropertyValue('--ld-r')) || 6;
     if (!M || isNaN(M)) M = Math.max(10, Math.min(30, W * 0.022));
     sheen = ctx.createRadialGradient(W / 2, H * 0.45, 0, W / 2, H * 0.45, Math.max(W, H) * 0.7);
-    sheen.addColorStop(0, '#33190f'); sheen.addColorStop(0.6, '#24120c'); sheen.addColorStop(1, '#1c0e09');
+    sheen.addColorStop(0, '#33190f'); sheen.addColorStop(0.6, '#04070e'); sheen.addColorStop(1, '#1c0e09');
   }
   // frame, card and (optionally) the opening, punched out so the page shows through
   var borderA = 1;

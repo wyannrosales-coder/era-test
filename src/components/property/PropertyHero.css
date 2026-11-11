@@ -169,7 +169,7 @@
 
 .property-hero__cta--experience:hover {
   border-color: var(--white);
-  background: var(--white);
+  background: var(--paper);
 }
 
 .property-hero__cta--experience:hover img {

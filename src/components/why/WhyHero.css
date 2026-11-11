@@ -6,7 +6,7 @@
   min-height: calc(88px + 700px);
   padding: calc(88px + 120px) var(--page-gutter) 120px;
   overflow: clip;
-  background: var(--white);
+  background: var(--paper);
 }
 
 .why-hero__copy {

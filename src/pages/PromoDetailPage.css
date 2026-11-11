@@ -75,7 +75,7 @@ ol.promo-detail__list {
   gap: 48px;
   padding: 0 var(--page-gutter) 200px;
   overflow: hidden;
-  background: var(--white);
+  background: var(--paper);
 }
 
 /* Stretches the row so it can scroll out to the page edges */

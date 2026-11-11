@@ -3,7 +3,7 @@
   /* 120px under the 88px nav; deep at the foot, so the list has settled before
      "Stay connected" slides over it */
   padding: 208px var(--page-gutter) 400px;
-  background: var(--white);
+  background: var(--paper);
   overflow-x: clip; /* the intro's photos run off the page's sides */
 }
 
@@ -113,7 +113,7 @@
   position: absolute;
   inset: 0 calc(50% - 50vw);
   z-index: -1;
-  background: var(--white);
+  background: var(--paper);
   box-shadow: 0 24px 40px -28px rgba(0, 0, 0, 0.18);
   opacity: 0;
   transition: opacity 300ms var(--ease-in-out);
@@ -224,7 +224,7 @@
 .loc-field.is-open,
 .loc-field:focus-within {
   border-color: var(--bronze-700);
-  background: var(--white);
+  background: var(--paper);
 }
 
 .loc-field__button {
@@ -279,7 +279,7 @@
   flex-direction: column;
   padding: 8px 0;
   border: 1px solid var(--line-in-white);
-  background: var(--white);
+  background: var(--paper);
   box-shadow:
     0 5px 10px rgba(0, 0, 0, 0.12),
     0 19px 19px rgba(0, 0, 0, 0.1),
@@ -617,7 +617,7 @@ a.loc-card:focus-visible {
     padding: 16px 0 20px;
     border-right: 0;
     border-bottom: 1px solid var(--bronze-500);
-    background: var(--white);
+    background: var(--paper);
     transition:
       top 400ms var(--ease-in-out),
       opacity 400ms var(--ease-in-out),
@@ -643,7 +643,7 @@ a.loc-card:focus-visible {
     position: absolute;
     inset: 0 calc(50% - 50vw);
     z-index: -1;
-    background: var(--white);
+    background: var(--paper);
     box-shadow: 0 24px 40px -28px rgba(0, 0, 0, 0.18);
   }
 
@@ -818,7 +818,7 @@ a.loc-card:focus-visible {
 .loc-card__experience:hover,
 .loc-card__experience:focus-visible {
   border-color: var(--white);
-  background: var(--white);
+  background: var(--paper);
   color: var(--royal-chocolate-700);
   outline: none;
 }

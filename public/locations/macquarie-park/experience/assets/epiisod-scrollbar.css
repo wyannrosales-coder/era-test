@@ -1,6 +1,6 @@
 /* Branded page scrollbar: slim gold thumb on a track that follows the dark / light version. */
-html { --ep-sb-track: #1c1511; --ep-sb-thumb: #896d42; --ep-sb-hover: #b08c55; --ep-sb-w: 10px; }
-html[data-ep-ver="2"] { --ep-sb-track: #efe7da; --ep-sb-thumb: #a68857; --ep-sb-hover: #896d42; }
+html { --ep-sb-track: #1c1511; --ep-sb-thumb: #8b6e4e; --ep-sb-hover: #b08c55; --ep-sb-w: 10px; }
+html[data-ep-ver="2"] { --ep-sb-track: #efe7da; --ep-sb-thumb: #a68857; --ep-sb-hover: #8b6e4e; }
 
 @supports (scrollbar-color: auto) {
   html { scrollbar-width: thin; scrollbar-color: var(--ep-sb-thumb) var(--ep-sb-track); }

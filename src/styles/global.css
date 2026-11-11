@@ -15,7 +15,7 @@ body {
 }
 
 body {
-  background: var(--white);
+  background: var(--paper);
   color: var(--royal-chocolate-700);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -54,8 +54,9 @@ p {
 /* Shared section heading: eyebrow + serif title */
 .eyebrow {
   font-family: var(--font-body);
-  font-size: 24px;
-  line-height: 1;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.22em;
   color: var(--bronze-700);
   text-transform: uppercase;
 }
@@ -91,7 +92,7 @@ p {
 
 @media (max-width: 900px) {
   .eyebrow {
-    font-size: 18px;
+    font-size: 11px;
   }
 }
 

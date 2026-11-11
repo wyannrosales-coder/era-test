@@ -51,7 +51,7 @@
   padding: 0 72px 48px 48px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  background: var(--white);
+  background: var(--paper);
 }
 
 .menu-panel--main {

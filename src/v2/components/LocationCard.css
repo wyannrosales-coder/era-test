@@ -6,7 +6,7 @@
   flex-shrink: 0;
   width: 556px;
   padding: 16px;
-  background: var(--white);
+  background: var(--paper);
   box-shadow: 0 96px 80px -72px rgba(57, 29, 19, 0.2);
 }
 

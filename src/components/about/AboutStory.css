@@ -1,6 +1,6 @@
 .about-story {
   padding: 120px var(--page-gutter);
-  background: var(--white);
+  background: var(--paper);
 }
 
 .about-story__content {

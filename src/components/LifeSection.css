@@ -1,14 +1,14 @@
 .life {
   position: relative;
   overflow-x: clip;
-  background: var(--white);
+  background: var(--paper);
 }
 
 /* Intro stays pinned underneath while the wellness fold scrolls up over it */
 .life__intro {
   position: sticky;
   top: 0;
-  background: var(--white);
+  background: var(--paper);
 }
 
 /* Drifts up and dims as it's covered — animated by GSAP in LifeSection.tsx */
@@ -33,5 +33,5 @@
   left: 0;
   z-index: 1;
   width: 100%;
-  background: var(--white);
+  background: var(--paper);
 }

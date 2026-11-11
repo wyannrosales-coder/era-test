@@ -4,5 +4,5 @@
 .ep-cr_p { color: rgba(33, 37, 41, .78); }                                   /* community card copy */
 .sm_panel span { color: #8a6c43; }                                           /* "Smart panel" tag in the smart-room demo */
 .sm_chev { color: rgba(44, 29, 20, .72); }                                   /* ">>" slide hint */
-html[data-ep-ver="2"] .ep-badge_hint { color: rgba(57, 29, 19, .8); }        /* light footer: hint under the pass */
+html[data-ep-ver="2"] .ep-badge_hint { color: rgba(18, 26, 42, .8); }        /* light footer: hint under the pass */
 html[data-ep-ver="2"] .ep-badge_eb { color: #6b5230; }                       /* light footer: "Your resident pass" label */

@@ -64,7 +64,7 @@
     // 01 Quad: photograph left, classic title page right
     function (r, pl, pr_) {
       return {
-        L: ['t-choc', ph(r, 1, 'inset:0') + '<div class="mg-grad"></div>' + ph(r, 2, 'right:7cqw;top:8cqw;width:28cqw;height:36cqw;border:1.2cqw solid #f4f2f0;box-shadow:0 2cqw 5cqw rgba(0,0,0,.25)') + '<div class="hd mg-num" style="left:6cqw;top:6cqw;font-size:40cqw;color:#f4f2f0">' + r.no + '</div>' +
+        L: ['t-choc', ph(r, 1, 'inset:0') + '<div class="mg-grad"></div>' + ph(r, 2, 'right:7cqw;top:8cqw;width:28cqw;height:36cqw;border:1.2cqw solid #f4f0e6;box-shadow:0 2cqw 5cqw rgba(0,0,0,.25)') + '<div class="hd mg-num" style="left:6cqw;top:6cqw;font-size:40cqw;color:#f4f0e6">' + r.no + '</div>' +
           '<div class="mg-cap" style="left:8cqw;bottom:13cqw;width:70cqw"><span class="eb">' + r.kind + '</span><p class="hd" style="font-size:4.6cqw;line-height:1.2;margin:2cqw 0 0;font-style:italic">' + r.quote + '</p></div>' + fo(pl, 'l', 'on-ph')],
         R: ['t-pearl', '<div class="mg-col"><span class="eb">' + r.kind + ' · 4 bedrooms</span><h3 class="hd" style="font-size:30cqw;margin:5cqw 0 0;letter-spacing:-.03em">' + r.name + '</h3>' +
           '<div class="hd" style="font-size:5.2cqw;font-style:italic;margin:1cqw 0 0">4 Bedroom Ensuite</div><hr class="mg-hr"><p class="tx mg-drop">' + r.desc + '</p>' +
@@ -76,7 +76,7 @@
     // 02 Quint: sand typographic page, photo mosaic right
     function (r, pl, pr_) {
       return {
-        L: ['t-sand', '<div class="hd mg-vert" style="font-size:24cqw;left:5cqw;top:6cqw;color:#24120c">' + r.name + '</div>' +
+        L: ['t-sand', '<div class="hd mg-vert" style="font-size:24cqw;left:5cqw;top:6cqw;color:#04070e">' + r.name + '</div>' +
           '<div class="mg-col" style="padding-left:34cqw;padding-right:7cqw"><span class="eb">' + r.kind + ' · ' + r.no + '</span>' + pq(r.quote, 5) + '<hr class="mg-hr" style="margin:5cqw 0">' +
           '<span class="eb" style="margin-bottom:2.5cqw;display:block">In the room</span>' + ft(r.feat, 2) + '</div>' + fo(pl, 'l')],
         R: ['t-pearl', ph(r, 1, 'left:0;right:0;top:0;height:54%') + ph(r, 2, 'left:0;width:32.4%;top:54.8%;height:26%') + ph(r, 3, 'left:33.8%;width:32.4%;top:54.8%;height:26%') + ph(r, 4, 'right:0;width:32.4%;top:54.8%;height:26%') +
@@ -86,10 +86,10 @@
     // 03 Signature: collage left, chocolate editorial right
     function (r, pl, pr_) {
       return {
-        L: ['t-pearl', ph(r, 1, 'left:9cqw;top:9cqw;width:60cqw;height:80cqw') + ph(r, 2, 'right:7cqw;bottom:14cqw;width:44cqw;height:56cqw;border:1.6cqw solid #f4f2f0;box-shadow:0 2cqw 5cqw rgba(36,18,12,.18)') + ph(r, 3, 'right:7cqw;top:9cqw;width:21cqw;height:27cqw;border:1.2cqw solid #f4f2f0;box-shadow:0 2cqw 5cqw rgba(36,18,12,.15)') +
-          '<div class="hd mg-num" style="left:8cqw;bottom:6cqw;font-size:22cqw;line-height:.7;-webkit-text-stroke:.25cqw #24120c;color:transparent">' + r.no + '</div>' +
+        L: ['t-pearl', ph(r, 1, 'left:9cqw;top:9cqw;width:60cqw;height:80cqw') + ph(r, 2, 'right:7cqw;bottom:14cqw;width:44cqw;height:56cqw;border:1.6cqw solid #f4f0e6;box-shadow:0 2cqw 5cqw rgba(4,7,14,.18)') + ph(r, 3, 'right:7cqw;top:9cqw;width:21cqw;height:27cqw;border:1.2cqw solid #f4f0e6;box-shadow:0 2cqw 5cqw rgba(4,7,14,.15)') +
+          '<div class="hd mg-num" style="left:8cqw;bottom:6cqw;font-size:22cqw;line-height:.7;-webkit-text-stroke:.25cqw #04070e;color:transparent">' + r.no + '</div>' +
           '<p class="eb" style="position:absolute;left:9cqw;top:92cqw;width:50cqw;line-height:1.8">The cornerstone of the collection</p>' + fo(pl, 'l')],
-        R: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#d0a77f">' + r.views + '</span><h3 class="hd" style="font-size:14cqw;margin:8cqw 0 0;letter-spacing:-.02em">Signature<br><i>Studio</i></h3>' +
+        R: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#b8966e">' + r.views + '</span><h3 class="hd" style="font-size:14cqw;margin:8cqw 0 0;letter-spacing:-.02em">Signature<br><i>Studio</i></h3>' +
           '<p class="tx" style="margin-top:7cqw">' + r.desc + '</p>' + ph(r, 4, 'position:relative;width:100%;height:14cqw;flex:none;margin-top:4cqw', 'f-sig4') +
           '<div class="mg-row" style="margin-top:auto">' + sp(r.sqm, 'sqm') + sp('Double', 'bed') + sp('1–9', 'levels') + '</div>' +
           '<div class="mg-row mg-end" style="margin-top:7cqw">' + pr(r, 7.4) + lk(r) + '</div></div>' + fo(pr_, 'r')]
@@ -98,9 +98,9 @@
     // 04 Flex: spec sheet left (giant numerals), full photograph right
     function (r, pl, pr_) {
       return {
-        L: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#d0a77f">Specification · ' + r.no + '</span><div class="hd" style="font-size:44cqw;line-height:.8;margin:5cqw 0 0;color:#d0a77f;letter-spacing:-.04em">' + r.sqm + '</div>' +
+        L: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#b8966e">Specification · ' + r.no + '</span><div class="hd" style="font-size:44cqw;line-height:.8;margin:5cqw 0 0;color:#b8966e;letter-spacing:-.04em">' + r.sqm + '</div>' +
           '<div class="eb" style="margin:1cqw 0 6cqw">square metres</div><hr class="mg-hr light"><h3 class="hd" style="font-size:7cqw;margin:4cqw 0 4cqw;font-style:italic">' + r.full + '</h3>' + ft(r.feat, 2) + '</div>' + fo(pl, 'l')],
-        R: ['t-pearl', ph(r, 1, 'inset:0') + ph(r, 2, 'right:7cqw;top:7cqw;width:22cqw;height:20cqw;border:1.2cqw solid #f4f2f0') + ph(r, 3, 'right:7cqw;top:29cqw;width:22cqw;height:20cqw;border:1.2cqw solid #f4f2f0') + ph(r, 4, 'right:7cqw;top:51cqw;width:22cqw;height:20cqw;border:1.2cqw solid #f4f2f0') + '<div class="mg-grad b"></div>' +
+        R: ['t-pearl', ph(r, 1, 'inset:0') + ph(r, 2, 'right:7cqw;top:7cqw;width:22cqw;height:20cqw;border:1.2cqw solid #f4f0e6') + ph(r, 3, 'right:7cqw;top:29cqw;width:22cqw;height:20cqw;border:1.2cqw solid #f4f0e6') + ph(r, 4, 'right:7cqw;top:51cqw;width:22cqw;height:20cqw;border:1.2cqw solid #f4f0e6') + '<div class="mg-grad b"></div>' +
           '<div class="mg-card">' + pq(r.quote, 4.2) + '<div class="mg-row mg-end" style="margin-top:4cqw">' + pr(r, 5) + lk(r) + '</div></div>' + fo(pr_, 'r', 'on-ph')]
       };
     },
@@ -118,8 +118,8 @@
     // 06 Aspect E: oversize letter on golden sand, three-photo mosaic right
     function (r, pl, pr_) {
       return {
-        L: ['t-sand', '<div class="hd mg-big" style="left:-10cqw;top:-4cqw;font-size:128cqw;font-style:italic;color:#24120c;opacity:.1;line-height:.9">E</div>' +
-          ph(r, 4, 'right:8cqw;top:8cqw;width:30cqw;height:42cqw;border:1.2cqw solid #f4f2f0;box-shadow:0 2cqw 5cqw rgba(36,18,12,.18)', 'f-ae4') + '<div class="mg-col"><span class="eb">' + r.kind + ' · ' + r.no + '</span><h3 class="hd" style="font-size:12.4cqw;margin:50cqw 0 0;line-height:.98">Aspect<br>Studio <i>E</i></h3>' +
+        L: ['t-sand', '<div class="hd mg-big" style="left:-10cqw;top:-4cqw;font-size:128cqw;font-style:italic;color:#04070e;opacity:.1;line-height:.9">E</div>' +
+          ph(r, 4, 'right:8cqw;top:8cqw;width:30cqw;height:42cqw;border:1.2cqw solid #f4f0e6;box-shadow:0 2cqw 5cqw rgba(4,7,14,.18)', 'f-ae4') + '<div class="mg-col"><span class="eb">' + r.kind + ' · ' + r.no + '</span><h3 class="hd" style="font-size:12.4cqw;margin:50cqw 0 0;line-height:.98">Aspect<br>Studio <i>E</i></h3>' +
           '<p class="tx" style="margin:5cqw 0 0;max-width:78cqw">' + r.desc + '</p>' +
           '<div style="margin-top:auto"><span class="eb" style="display:block">' + r.views + '</span><small class="mg-sub">' + r.viewsNote + '</small></div></div>' + fo(pl, 'l')],
         R: ['t-pearl', ph(r, 1, 'left:0;top:0;width:58%;height:72%') + ph(r, 2, 'right:0;top:0;width:41.4%;height:36%') + ph(r, 3, 'right:0;top:36.8%;width:41.4%;height:35.2%', 'f-ae3') +
@@ -132,7 +132,7 @@
         L: ['t-pearl', ph(r, 1, 'left:14cqw;top:10cqw;width:72cqw;height:84cqw;border-radius:36cqw 36cqw 0 0', 'f-arch') +
           '<div class="mg-spill" aria-hidden="true"><img src="' + IMG + r.img + '-1.webp?v=4" alt="" draggable="false" style="clip-path:polygon(89.00% 58.98%,89.45% 56.64%,90.23% 54.98%,91.54% 53.37%,93.16% 52.05%,95.12% 51.17%,97.40% 51.17%,100.00% 52.25%,100.00% 100.00%,88.93% 100.00%,88.93% 70.70%,88.61% 66.80%,88.87% 62.89%)"></div>' +
           '<div class="mg-row mg-end" style="position:absolute;left:14cqw;right:14cqw;top:99cqw"><span class="hd" style="font-size:9cqw;line-height:1">' + r.no + '</span><span class="eb" style="text-align:right;line-height:1.7">' + r.views + '<br>' + r.sqm + ' sqm</span></div>' + fo(pl, 'l')],
-        R: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#d0a77f">' + r.kind + '</span>' + pq(r.quote, 6.6) + '' +
+        R: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#b8966e">' + r.kind + '</span>' + pq(r.quote, 6.6) + '' +
           '<p class="tx" style="margin:5cqw 0 0;font-size:2.05cqw">' + r.desc + '</p>' + '<div class="mg-row" style="gap:2cqw;margin-top:4cqw;flex:none">' + ph(r, 2, 'position:relative;flex:1;height:17cqw') + ph(r, 3, 'position:relative;flex:1;height:17cqw') + ph(r, 4, 'position:relative;flex:1;height:17cqw') + '</div>' +
           '<div class="mg-row" style="margin-top:auto"><div><b class="hd" style="font-size:4.4cqw;font-weight:400">' + r.full + '</b><small class="mg-sub">' + r.second + '</small></div></div>' +
           '<div class="mg-row mg-end" style="margin-top:5cqw">' + pr(r, 6.6) + lk(r) + '</div></div>' + fo(pr_, 'r')]

@@ -1,7 +1,7 @@
 .brand-video {
   position: relative;
   padding: 140px var(--page-gutter);
-  background: var(--white);
+  background: var(--paper);
 }
 
 /* drift = exit parallax (GSAP); lift = the heading-and-frame column */

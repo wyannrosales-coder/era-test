@@ -75,7 +75,7 @@
   }
   // the gold clip over the card's slot
   function clip(g, x, y, w, h, back) {
-    g.fillStyle = back ? 'rgba(36,18,12,.28)' : 'rgba(0,0,0,.5)'; rr(g, x - 5, y + 2, w + 10, h - 4, (h - 4) / 2); g.fill();
+    g.fillStyle = back ? 'rgba(4,7,14,.28)' : 'rgba(0,0,0,.5)'; rr(g, x - 5, y + 2, w + 10, h - 4, (h - 4) / 2); g.fill();
     var m = g.createLinearGradient(0, y, 0, y + h); m.addColorStop(0, '#eadfc6'); m.addColorStop(.45, '#b99f72'); m.addColorStop(1, '#d9c6a2');
     g.fillStyle = m; rr(g, x, y, w, h, h / 2); g.fill();
     g.strokeStyle = 'rgba(255,255,255,.4)'; g.lineWidth = .8; rr(g, x + .4, y + .4, w - .8, h - .8, h / 2); g.stroke();
@@ -83,56 +83,56 @@
     g.fillStyle = hl; rr(g, x + 3, y + 2, w - 6, h * .45, h * .22); g.fill();
   }
   function bigE(g, x, base, size, alpha) {
-    g.save(); g.globalAlpha = alpha; g.fillStyle = '#896d42'; g.font = 'italic 400 ' + size + 'px "Playfair Display", serif'; g.textBaseline = 'alphabetic'; g.textAlign = 'left'; g.fillText('E', x, base); g.restore();
+    g.save(); g.globalAlpha = alpha; g.fillStyle = '#8b6e4e'; g.font = 'italic 400 ' + size + 'px "Libre Baskerville", serif'; g.textBaseline = 'alphabetic'; g.textAlign = 'left'; g.fillText('E', x, base); g.restore();
   }
   function drawFront() {
     var g = cvF.getContext('2d'); g.setTransform(TS * SF, 0, 0, TS * SF, 0, 0); g.clearRect(0, 0, 408.32, 647.68);
-    var bg = g.createLinearGradient(424.96, -40.64, 37.12, 647.68); bg.addColorStop(0, '#3A1F15'); bg.addColorStop(.4547, '#24120C'); bg.addColorStop(1, '#170A05');
+    var bg = g.createLinearGradient(424.96, -40.64, 37.12, 647.68); bg.addColorStop(0, '#3A1F15'); bg.addColorStop(.4547, '#04070e'); bg.addColorStop(1, '#170A05');
     g.fillStyle = bg; g.fillRect(0, 0, 408.32, 647.68);
     g.save(); g.beginPath(); g.rect(0, 0, 408.32, 647.68); g.clip(); bigE(g, 173.44, 280.3, 358.4, .28); g.restore();
     img(g, 'skyline', 180.48, 474.88, 213.76, 156.16);
     clip(g, 164.16, 32.68, 80, 30, false);
     // logo and label
     img(g, 'front-logo-a', 29.44 + 156.16 * .1033, 300.16, 120.82, 25.6); img(g, 'front-logo-b', 29.44, 300.16 + 25.6 * .2121, 156.16, 14.78);
-    g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillStyle = '#d7c5a9'; g.font = '300 9.6px "Albert Sans", sans-serif'; g.fillText('MACQUARIE PARK', 291.2, 312.6);
-    g.fillStyle = '#896d42'; g.fillRect(29.44, 338.24, 350.08, .64);
+    g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillStyle = '#d4b896'; g.font = '300 9.6px "DM Sans", sans-serif'; g.fillText('MACQUARIE PARK', 291.2, 312.6);
+    g.fillStyle = '#8b6e4e'; g.fillRect(29.44, 338.24, 350.08, .64);
     g.fillRect(29.44, 351.36, .64, 99);
-    g.font = '300 12.8px "Albert Sans", sans-serif'; g.fillText('WELCOME HOME', 37.76, 365.3);
+    g.font = '300 12.8px "DM Sans", sans-serif'; g.fillText('WELCOME HOME', 37.76, 365.3);
     if (name) {
-      var size = 32; g.font = '400 ' + size + 'px "Albert Sans", sans-serif';
-      while (g.measureText(name).width > 336 && size > 14) { size -= 1; g.font = '400 ' + size + 'px "Albert Sans", sans-serif'; }
-      g.fillStyle = '#fbfaf7'; g.fillText(name, 36.48, 404.6);
+      var size = 32; g.font = '400 ' + size + 'px "DM Sans", sans-serif';
+      while (g.measureText(name).width > 336 && size > 14) { size -= 1; g.font = '400 ' + size + 'px "DM Sans", sans-serif'; }
+      g.fillStyle = '#fbf8f1'; g.fillText(name, 36.48, 404.6);
     } else {
-      g.font = '400 32px "Albert Sans", sans-serif'; g.fillStyle = 'rgba(251,250,247,.34)'; g.fillText('Your name', 36.48, 404.6);
+      g.font = '400 32px "DM Sans", sans-serif'; g.fillStyle = 'rgba(251,250,247,.34)'; g.fillText('Your name', 36.48, 404.6);
     }
-    g.font = '400 11.52px "Albert Sans", sans-serif'; g.fillStyle = '#a39a8e'; g.fillText('Resident Since 2027', 36.48, 437);
-    if (!stillMode) { spaced(g, 'TAP TO FLIP', 22.4, 592.6, 2.15, 'left', '500 7.68px "Albert Sans", sans-serif', '#e9dfd0'); img(g, 'front-arrow', 95.8, 586.88, 11.52, 11.52); }
+    g.font = '400 11.52px "DM Sans", sans-serif'; g.fillStyle = '#a39a8e'; g.fillText('Resident Since 2027', 36.48, 437);
+    if (!stillMode) { spaced(g, 'TAP TO FLIP', 22.4, 592.6, 2.15, 'left', '500 7.68px "DM Sans", sans-serif', '#eadfce'); img(g, 'front-arrow', 95.8, 586.88, 11.52, 11.52); }
     img(g, 'barcode', 22.4, 602.24, 108.8, 34.56);
   }
   // the back's buttons, in canvas units as drawn (hit-testing mirrors them, because the back is seen flipped)
   var BTN = { book: [25.76 * SB, 428.96 * SB, 306.32 * SB, 32 * SB], rooms: [25.76 * SB, 464.8 * SB, 306.32 * SB, 34 * SB] };
   function drawBack() {
     var g = cvB.getContext('2d'); g.setTransform(TS * SB, 0, 0, TS * SB, 0, 0); g.clearRect(0, 0, 357.28, 566.72);
-    var bg = g.createLinearGradient(371.84, -35.56, 32.48, 566.72); bg.addColorStop(0, '#FBFAF7'); bg.addColorStop(.4547, '#E9DFD0'); bg.addColorStop(1, '#D7C5A9');
+    var bg = g.createLinearGradient(371.84, -35.56, 32.48, 566.72); bg.addColorStop(0, '#fbf8f1'); bg.addColorStop(.4547, '#eadfce'); bg.addColorStop(1, '#d4b896');
     g.fillStyle = bg; g.fillRect(0, 0, 357.28, 566.72);
     g.save(); g.beginPath(); g.rect(0, 0, 357.28, 566.72); g.clip(); bigE(g, 14, 232.9, 313.6, .22); g.restore();
     clip(g, 142.64, 26.72, 72, 30, true);
     img(g, 'back-logo-a', 25.76 + 136.64 * .1033, 252, 105.72, 22.4); img(g, 'back-logo-b', 25.76, 252 + 22.4 * .2121, 136.64, 12.93);
-    g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillStyle = '#391d13'; g.font = '300 8.4px "Albert Sans", sans-serif'; g.fillText('MACQUARIE PARK', 254.8, 262.6);
-    g.fillStyle = '#896d42'; g.fillRect(25.76, 285.32, 306.32, .56);
+    g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillStyle = '#121a2a'; g.font = '300 8.4px "DM Sans", sans-serif'; g.fillText('MACQUARIE PARK', 254.8, 262.6);
+    g.fillStyle = '#8b6e4e'; g.fillRect(25.76, 285.32, 306.32, .56);
     g.fillRect(25.76, 297.92, .56, 110.88);
-    g.font = '300 11.2px "Albert Sans", sans-serif'; g.fillText('BOOK YOUR STAY', 32.48, 307.8);
-    g.fillStyle = '#24120c'; g.font = '400 24.64px "Albert Sans", sans-serif'; g.fillText('Your room', 32.48, 335.4); g.fillText('is waiting.', 32.48, 363.4);
-    g.fillStyle = '#776a5d'; g.font = '400 10.08px "Albert Sans", sans-serif'; g.fillText('Studios, ensuites and shared apartments, minutes from', 32.48, 390.2); g.fillText('Macquarie University.', 32.48, 402.6);
+    g.font = '300 11.2px "DM Sans", sans-serif'; g.fillText('BOOK YOUR STAY', 32.48, 307.8);
+    g.fillStyle = '#04070e'; g.font = '400 24.64px "DM Sans", sans-serif'; g.fillText('Your room', 32.48, 335.4); g.fillText('is waiting.', 32.48, 363.4);
+    g.fillStyle = '#776a5d'; g.font = '400 10.08px "DM Sans", sans-serif'; g.fillText('Studios, ensuites and shared apartments, minutes from', 32.48, 390.2); g.fillText('Macquarie University.', 32.48, 402.6);
     // buttons
-    g.fillStyle = '#391d13'; rr(g, 25.76, 428.96, 306.32, 32, 16); g.fill();
-    spaced(g, 'BOOK A TOUR', 25.76 + 153.16, 444.96, 1.0, 'center', '500 8.4px "Albert Sans", sans-serif', '#fbfaf7');
-    g.strokeStyle = '#896d42'; g.lineWidth = .56; rr(g, 26.04, 465.08, 305.76, 33.44, 16.7); g.stroke();
-    spaced(g, 'VIEW ROOMS', 25.76 + 153.16, 481.8, 1.0, 'center', '500 8.4px "Albert Sans", sans-serif', '#24120c');
+    g.fillStyle = '#121a2a'; rr(g, 25.76, 428.96, 306.32, 32, 16); g.fill();
+    spaced(g, 'BOOK A TOUR', 25.76 + 153.16, 444.96, 1.0, 'center', '500 8.4px "DM Sans", sans-serif', '#fbf8f1');
+    g.strokeStyle = '#8b6e4e'; g.lineWidth = .56; rr(g, 26.04, 465.08, 305.76, 33.44, 16.7); g.stroke();
+    spaced(g, 'VIEW ROOMS', 25.76 + 153.16, 481.8, 1.0, 'center', '500 8.4px "DM Sans", sans-serif', '#04070e');
     img(g, 'icon-location', 19.6, 511.84, 13.44, 13.44);
-    g.textAlign = 'left'; g.fillStyle = '#24120c'; g.font = '400 8.96px "Albert Sans", sans-serif'; g.fillText('17 Lachlan Ave, Macquarie Park NSW 2113', 36.96, 519);
+    g.textAlign = 'left'; g.fillStyle = '#04070e'; g.font = '400 8.96px "DM Sans", sans-serif'; g.fillText('17 Lachlan Ave, Macquarie Park NSW 2113', 36.96, 519);
     if (!stillMode) {
-      spaced(g, 'TAP TO FLIP', 263.76, 518.6, 1.88, 'left', '500 6.72px "Albert Sans", sans-serif', '#391d13');
+      spaced(g, 'TAP TO FLIP', 263.76, 518.6, 1.88, 'left', '500 6.72px "DM Sans", sans-serif', '#121a2a');
       var im = IM['back-arrow']; if (im && im.complete && im.naturalWidth) { g.save(); g.translate(263.76 + 73.68 + 10.08, 513.52); g.scale(-1, 1); try { g.drawImage(im, 0, 0, 10.08, 10.08); } catch (e) {} g.restore(); }
     }
   }
@@ -140,7 +140,7 @@
   var fontsReady = false;
   function whenFonts(cb) {
     if (!document.fonts || !document.fonts.load) { cb(); return; }
-    Promise.all([document.fonts.load('italic 400 40px "Playfair Display"'), document.fonts.load('300 12px "Albert Sans"'), document.fonts.load('400 12px "Albert Sans"'), document.fonts.load('500 12px "Albert Sans"')]).then(cb, cb);
+    Promise.all([document.fonts.load('italic 400 40px "Libre Baskerville"'), document.fonts.load('300 12px "DM Sans"'), document.fonts.load('400 12px "DM Sans"'), document.fonts.load('500 12px "DM Sans"')]).then(cb, cb);
   }
 
   // ---- a still card when motion is reduced or WebGL is missing ----
@@ -199,7 +199,7 @@
     g.fillStyle = bg; g.fillRect(0, 0, 64, 512);
     g.fillStyle = stitch; g.fillRect(5 * k, 0, 1.4, 512); g.fillRect(32 * k, 0, 1.4, 512);
     var t = 'EPIISOD  ·  MACQUARIE PARK  ·  ', fs = 11 * k, i, w = 0, ws = [];
-    g.font = '500 ' + fs + 'px "Albert Sans", sans-serif'; g.textBaseline = 'middle'; g.textAlign = 'left'; g.fillStyle = ink;
+    g.font = '500 ' + fs + 'px "DM Sans", sans-serif'; g.textBaseline = 'middle'; g.textAlign = 'left'; g.fillStyle = ink;
     for (i = 0; i < t.length; i++) { ws.push(g.measureText(t[i]).width); w += ws[i]; }
     var sp = (512 - w) / t.length;                        // letter-spacing chosen so the phrase fills one repeat exactly
     g.save(); g.translate(32, 0); g.rotate(Math.PI / 2);
@@ -457,7 +457,7 @@
     running = true; last = 0; requestAnimationFrame(loop);
   }
   function init() {
-    texR = mkTex(ribbonCanvas('#24120c', '#d7c5a9', 'rgba(215,197,169,.35)'), true); texR2 = mkTex(ribbonCanvas('#d7c5a9', '#24120c', 'rgba(36,18,12,.35)'), true);
+    texR = mkTex(ribbonCanvas('#04070e', '#d4b896', 'rgba(212,184,150,.35)'), true); texR2 = mkTex(ribbonCanvas('#d4b896', '#04070e', 'rgba(4,7,14,.35)'), true);
     drawFaces(); texF = mkTex(cvF); texB = mkTex(cvB);
     size(); ready = true; fontsReady = true;
     if ('IntersectionObserver' in window) {
@@ -468,7 +468,7 @@
   }
   window.__epBadge = { corners: function () { return [5, 6, 7, 8].map(function (i) { return [P[i].x, P[i].y, P[i].z]; }); }, size: function () { return [W, H, D]; }, flip: function (r) { impulseSpin(r || 9); } };   // read-only helpers for testing
   gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  // fonts first, so the faces are drawn in Playfair and Albert Sans
+  // fonts first, so the faces are drawn in Playfair and DM Sans
   whenFonts(function () { init(); });
   window.addEventListener('resize', function () { if (ready) size(); });
   if ('ResizeObserver' in window) new ResizeObserver(function () { if (ready) size(); }).observe(fs);

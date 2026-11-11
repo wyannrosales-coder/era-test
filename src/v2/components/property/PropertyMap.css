@@ -53,7 +53,7 @@
   width: 322px;
   padding: 16px;
   border: 1px solid var(--bronze-400);
-  background: var(--white);
+  background: var(--paper);
   box-shadow:
     0 5px 5px rgba(0, 0, 0, 0.15),
     0 19px 9.5px rgba(0, 0, 0, 0.13),

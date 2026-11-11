@@ -5,31 +5,31 @@
 :root,
 html body {
   /* base-0: page / light text  ->  Prime Pearl */
-  --_global-colors---base-0--0: #f4f2f000;
-  --_global-colors---base-0--5: #f4f2f00d;
-  --_global-colors---base-0--10: #f4f2f01a;
-  --_global-colors---base-0--30: #f4f2f04d;
-  --_global-colors---base-0--60: #f4f2f099;
-  --_global-colors---base-0--100: #f4f2f0;
+  --_global-colors---base-0--0: #f4f0e600;
+  --_global-colors---base-0--5: #f4f0e60d;
+  --_global-colors---base-0--10: #f4f0e61a;
+  --_global-colors---base-0--30: #f4f0e64d;
+  --_global-colors---base-0--60: #f4f0e699;
+  --_global-colors---base-0--100: #f4f0e6;
   /* base-1000: ink  ->  Dark Chocolate */
-  --_global-colors---base-1000--0: #24120c00;
-  --_global-colors---base-1000--5: #24120c0d;
-  --_global-colors---base-1000--10: #24120c1a;
-  --_global-colors---base-1000--30: #24120c4d;
-  --_global-colors---base-1000--60: #24120c99;
-  --_global-colors---base-1000--100: #24120c;
+  --_global-colors---base-1000--0: #04070e00;
+  --_global-colors---base-1000--5: #04070e0d;
+  --_global-colors---base-1000--10: #04070e1a;
+  --_global-colors---base-1000--30: #04070e4d;
+  --_global-colors---base-1000--60: #04070e99;
+  --_global-colors---base-1000--100: #04070e;
   /* brand surfaces */
-  --_global-colors---brand-500--velvet-plum: #391d13;  /* dark surface  -> Royal Chocolate */
-  --_global-colors---brand-500--powder-sky: #d0a77f;   /* brand surface -> Saf Sand */
-  --_global-colors---brand-500--blush-bloom: #d7c5a9;  /* accent        -> Golden Sand */
+  --_global-colors---brand-500--velvet-plum: #121a2a;  /* dark surface  -> Royal Chocolate */
+  --_global-colors---brand-500--powder-sky: #b8966e;   /* brand surface -> Saf Sand */
+  --_global-colors---brand-500--blush-bloom: #d4b896;  /* accent        -> Golden Sand */
 
-  /* type: Playfair Display for titles, Albert Sans for everything else */
-  --_fonts---font-display: "Playfair Display", ui-serif, Georgia, "Times New Roman", serif;
-  --_fonts---font-body: "Albert Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  --_fonts---font-accent: "Playfair Display", ui-serif, Georgia, serif;
+  /* type: Libre Baskerville for titles, DM Sans for everything else */
+  --_fonts---font-display: "Libre Baskerville", ui-serif, Georgia, "Times New Roman", serif;
+  --_fonts---font-body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --_fonts---font-accent: "Libre Baskerville", ui-serif, Georgia, serif;
 }
 
-/* Playfair Display sets wider than the condensed face this layout was drawn for,
+/* Libre Baskerville sets wider than the condensed face this layout was drawn for,
    so the display sizes are scaled to keep the same line breaks and column widths. */
 .h1, .h2, .h3, .h4 { font-size: calc(var(--_fonts---h1--size) * .64); letter-spacing: .005em; font-weight: 400; }
 .h1 { font-size: calc(var(--_fonts---h1--size) * .64); line-height: 100%; }
@@ -124,8 +124,8 @@ html body {
 .ep-fan_img { aspect-ratio: 4 / 5; overflow: hidden; background: var(--_colors---base-1000--bg); }
 .ep-fan_img img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; -webkit-user-drag: none; }
 .ep-fan_card figcaption { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .35em; min-height: calc(var(--w) * .21); padding: .9em .5em 1em; text-align: center; }
-.ep-fan_cap { font-family: "Playfair Display", ui-serif, Georgia, serif; font-size: calc(var(--w) * .066); line-height: 1.15; color: var(--ep-choc-700, #24120c); }
-.ep-fan_sub { font-family: "Albert Sans", sans-serif; font-size: calc(var(--w) * .033); font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #896d42; }
+.ep-fan_cap { font-family: "Libre Baskerville", ui-serif, Georgia, serif; font-size: calc(var(--w) * .066); line-height: 1.15; color: var(--ep-choc-700, #04070e); }
+.ep-fan_sub { font-family: "DM Sans", sans-serif; font-size: calc(var(--w) * .033); font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #8b6e4e; }
 
 .ep-carousel_pag { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 2.2em auto 0; }
 .ep-carousel_btn { appearance: none; flex: none; width: 46px; height: 46px; display: grid; place-items: center; border: 1px solid var(--_colors---base-1000--primary); border-radius: 50%; background: transparent; color: var(--_colors---base-1000--primary); cursor: pointer; padding: 0; transition: background-color 180ms cubic-bezier(.4,0,.2,1), color 180ms cubic-bezier(.4,0,.2,1), transform 180ms; }
@@ -170,8 +170,8 @@ html body {
 .ep-preload_pct {
   display: flex; align-items: baseline; justify-content: center; gap: 4px;
   margin: 0 0 22px;
-  font-family: "Playfair Display", ui-serif, Georgia, serif;
-  color: var(--_colors---base-1000--primary, #f4f2f0);
+  font-family: "Libre Baskerville", ui-serif, Georgia, serif;
+  color: var(--_colors---base-1000--primary, #f4f0e6);
   font-variant-numeric: tabular-nums lining-nums;
   opacity: 0; transform: translateY(12px);
   transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
@@ -179,7 +179,7 @@ html body {
 .ep-preload_pct.is-on { opacity: 1; transform: none; }
 .ep-preload_pct.is-done { opacity: 0; transition-duration: .3s; }
 .ep-preload_n { font-size: clamp(44px, 5.4vw, 84px); line-height: 1; letter-spacing: -.01em; min-width: 2.1ch; text-align: right; }
-.ep-preload_u { font-size: clamp(16px, 1.6vw, 24px); color: #d0a77f; }
+.ep-preload_u { font-size: clamp(16px, 1.6vw, 24px); color: #b8966e; }
 
 /* the design is light-only: stop browsers' automatic dark mode (Chrome/Samsung "auto dark") from inverting it */
 :root { color-scheme: only light; }

@@ -1,0 +1,133 @@
+/*
+ * Student Luxe system layer. Loaded after the component CSS, so these rules sit on top of it:
+ * pill buttons, tracked uppercase labels, the section pill-nav. Colours and fonts come from
+ * tokens.css; this file only changes shape and type.
+ * Selectors start with `html body` so they beat the single-class component rules.
+ */
+
+/* ---------- Pill buttons: one shape and one label style everywhere ---------- */
+html body :is(
+  .nav__cta,
+  .menu-panel__cta,
+  .stay-connected__submit,
+  .about-location__button,
+  .about-button,
+  .blog-button,
+  .contact-form__submit,
+  .xp-mosaic__button,
+  .xp-mosaic__cta,
+  .amenities__button,
+  .faqs__cta,
+  .promo-banner__button,
+  .promotions__all,
+  .property-hero__cta,
+  .why-living__button,
+  .room-book__submit,
+  .room-button
+) {
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  transition:
+    background-color 300ms var(--ease-lux),
+    border-color 300ms var(--ease-lux),
+    color 300ms var(--ease-lux),
+    transform 300ms var(--ease-lux);
+}
+
+html body :is(.nav__cta, .property-hero__cta, .room-button, .xp-mosaic__cta, .amenities__button):hover {
+  transform: translateY(-1px);
+}
+
+/* The main nav's links get the same small tracked caps */
+html body .nav__link {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  font-weight: 400;
+}
+
+html body .nav__link.is-active {
+  font-weight: 500;
+}
+
+/* ---------- Section pill-nav (property pages): the sub-navigation floats as a pill ---------- */
+@media (min-width: 1101px) {
+  /* A bar of its own under the main bar's hairline, not a full-width strip */
+  html body .nav--sub .nav__sub {
+    width: auto;
+    max-width: calc(100vw - 2 * var(--page-gutter));
+    gap: 2px;
+    margin: 12px 0 14px;
+    padding: 5px;
+    border-radius: 999px;
+    background: rgba(251, 248, 241, 0.94);
+    box-shadow:
+      0 10px 30px rgba(4, 7, 14, 0.22),
+      inset 0 0 0 1px rgba(139, 110, 78, 0.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    --nav-text: var(--royal-chocolate-600);
+    transition:
+      opacity 250ms var(--ease-lux),
+      max-height 400ms var(--ease-lux),
+      margin 400ms var(--ease-lux);
+  }
+
+  html body .nav--sub.is-scrolled .nav__sub {
+    background: rgba(251, 248, 241, 0.94);
+  }
+
+  html body .nav--sub .nav__sub-link {
+    height: 32px;
+    padding: 0 16px;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    box-shadow: none;
+    transition:
+      background-color 300ms var(--ease-lux),
+      color 300ms var(--ease-lux);
+  }
+
+  html body .nav--sub .nav__sub-link:hover {
+    opacity: 1;
+    background: rgba(4, 7, 14, 0.06);
+  }
+
+  /* The section in view: a dark ink chip, as in the reference's active tab */
+  html body .nav--sub .nav__sub-link.is-current {
+    background: var(--ink);
+    color: var(--bronze-300);
+    box-shadow: none;
+  }
+
+  /* Once scrolled, the main bar's full-width tint goes; only the pill (and the bar when it returns) show */
+  html body .nav--sub.is-scrolled:not(.is-open) {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  html body .nav--sub.is-scrolled:not(.is-open) .nav__inner {
+    background: rgba(251, 248, 241, 0.92);
+    box-shadow:
+      0 0 0 100vmax rgba(251, 248, 241, 0.92),
+      0 2px 8px rgba(4, 7, 14, 0.12);
+    clip-path: inset(0 -100vmax);
+  }
+
+  /* While the main bar is tucked away, only the pill is left */
+  html body .nav--sub.is-condensed:not(.is-open) .nav__sub {
+    box-shadow:
+      0 12px 34px rgba(4, 7, 14, 0.3),
+      inset 0 0 0 1px rgba(139, 110, 78, 0.22);
+  }
+}
+
+/* The back-to-top button sits above the floating enquiry pill, not under it */
+html body .to-top {
+  bottom: calc(clamp(16px, 2vw, 28px) + 64px);
+  right: clamp(16px, 2vw, 32px);
+}

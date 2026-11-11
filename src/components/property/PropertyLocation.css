@@ -107,7 +107,7 @@
   margin: 0;
   padding: 16px;
   border: 1px solid var(--line-in-white);
-  background: var(--white);
+  background: var(--paper);
   box-shadow: var(--finder-shadow);
   list-style: none;
   animation: finder-in 280ms var(--ease-in-out);
@@ -564,7 +564,7 @@
     height: 40px;
     padding: 0;
     border: 0;
-    background: var(--white);
+    background: var(--paper);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     cursor: pointer;
   }

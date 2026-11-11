@@ -59,7 +59,7 @@
 /* Focused / typing: white field with a bronze-700 border (Figma 539:11773) */
 .stay-connected__field input:focus {
   border-color: var(--bronze-700);
-  background: var(--white);
+  background: var(--paper);
 }
 
 /* Submitted: fields keep their values in the resting style */

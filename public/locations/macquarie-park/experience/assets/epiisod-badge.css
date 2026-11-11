@@ -1,25 +1,25 @@
 /* Footer with the resident pass (epiisod-badge.js). Desktop and landscape: details on the left, the pass hanging on the right.
    Portrait (phones, portrait tablets): the pass first, the details beneath. Only applies once the script has built the stage
    (it adds .ep-footer), so the footer is unchanged if the script can't run. */
-.ep-footer { --bd-pearl: #f6f1ea; --bd-sand: #d0a77f; --bd-sand-2: #e3cfae; }
+.ep-footer { --bd-pearl: #f6f1ea; --bd-sand: #b8966e; --bd-sand-2: #e3cfae; }
 .ep-badge { position: relative; min-height: 0; z-index: 2; }
 .ep-badge_cv { position: absolute; left: 0; top: 0; z-index: 3; display: block; pointer-events: none; -webkit-tap-highlight-color: transparent; }
 .ep-footer .footer-s { position: relative; }
 .ep-badge_still { position: absolute; left: 50%; top: 50%; width: min(300px, 64%); transform: translate(-50%, -50%); border-radius: 22px; box-shadow: 0 30px 60px rgba(var(--fly-tint2), .5); }
 .ep-badge_hint { position: absolute; left: 0; right: 0; bottom: clamp(18px, 4vh, 40px); margin: 0; text-align: center; pointer-events: none; color: rgba(246, 241, 234, .6);
-  font: 600 10.5px/1 "Albert Sans", sans-serif; letter-spacing: .22em; text-transform: uppercase; }
+  font: 600 10.5px/1 "DM Sans", sans-serif; letter-spacing: .22em; text-transform: uppercase; }
 .ep-badge_hint i { display: inline-block; width: 18px; height: 1px; margin: 0 12px 3px 0; background: var(--bd-sand); vertical-align: middle; }
 
 .ep-badge_form { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; max-width: 420px; margin: 0 0 clamp(22px, 4vh, 40px); }
-.ep-badge_eb { font: 700 10.5px/1 "Albert Sans", sans-serif; letter-spacing: .24em; text-transform: uppercase; color: var(--bd-sand); }
-.ep-badge_h { font: 400 clamp(26px, 2.6vw, 38px)/1.08 "Playfair Display", serif; color: var(--bd-pearl); }
-.ep-badge_in { width: 100%; box-sizing: border-box; padding: 12px 2px 12px; border: 0; border-bottom: 1px solid rgba(208, 167, 127, .6); background: transparent; color: var(--bd-pearl);
-  font: 400 22px/1.2 "Playfair Display", serif; outline: none; border-radius: 0; transition: border-color .2s; }
+.ep-badge_eb { font: 700 10.5px/1 "DM Sans", sans-serif; letter-spacing: .24em; text-transform: uppercase; color: var(--bd-sand); }
+.ep-badge_h { font: 400 clamp(26px, 2.6vw, 38px)/1.08 "Libre Baskerville", serif; color: var(--bd-pearl); }
+.ep-badge_in { width: 100%; box-sizing: border-box; padding: 12px 2px 12px; border: 0; border-bottom: 1px solid rgba(184, 150, 110, .6); background: transparent; color: var(--bd-pearl);
+  font: 400 22px/1.2 "Libre Baskerville", serif; outline: none; border-radius: 0; transition: border-color .2s; }
 .ep-badge_in::placeholder { color: rgba(246, 241, 234, .38); font-style: italic; }
 .ep-badge_in:focus { border-bottom-color: var(--bd-sand-2); }
-.ep-badge_note { font: 400 13px/1.5 "Albert Sans", sans-serif; color: rgba(246, 241, 234, .65); }
-.ep-badge_book { display: inline-flex; align-items: center; gap: 10px; margin-top: 4px; padding: 13px 22px; border-radius: 99px; background: var(--bd-sand); color: #24120c; text-decoration: none;
-  font: 700 11px/1 "Albert Sans", sans-serif; letter-spacing: .16em; text-transform: uppercase; transition: background .2s, transform .2s; }
+.ep-badge_note { font: 400 13px/1.5 "DM Sans", sans-serif; color: rgba(246, 241, 234, .65); }
+.ep-badge_book { display: inline-flex; align-items: center; gap: 10px; margin-top: 4px; padding: 13px 22px; border-radius: 99px; background: var(--bd-sand); color: #04070e; text-decoration: none;
+  font: 700 11px/1 "DM Sans", sans-serif; letter-spacing: .16em; text-transform: uppercase; transition: background .2s, transform .2s; }
 .ep-badge_book i { font-style: normal; }
 .ep-badge_book:hover, .ep-badge_book:focus-visible { background: var(--bd-sand-2); outline: none; transform: translateY(-1px); }
 
@@ -69,5 +69,5 @@
 .ep-badge_still ~ .ep-badge_hint { display: none; }
 
 /* the light version's footer: the cream wash from the design (the pass itself is the same on both) */
-html[data-ep-ver="2"] section.ep-footer { background: linear-gradient(180deg, #fbfaf7 0%, #f1eadf 55%, #e9dfd0 100%); }
-html[data-ep-ver="2"] .ep-badge_hint { color: rgba(57, 29, 19, .6); }
+html[data-ep-ver="2"] section.ep-footer { background: linear-gradient(180deg, #fbf8f1 0%, #f1eadf 55%, #eadfce 100%); }
+html[data-ep-ver="2"] .ep-badge_hint { color: rgba(18, 26, 42, .6); }

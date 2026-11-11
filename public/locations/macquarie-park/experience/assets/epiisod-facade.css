@@ -4,7 +4,7 @@
    - Portrait screens (phones, portrait tablets): the picture takes the top of the screen, cropped to the tower, fading into
      the chocolate backdrop, and the words sit below it, so nothing is written over the building.
    The picture is no longer parallaxed: it is sized to the screen so the sign is always in view. */
-.ep-facade { --fc-pearl: #f6f1ea; --fc-sand: #e3cfae; --foot: calc(var(--_special-units---offset-l, 16px) + var(--_special-units---1-cell-v, 60px) * 2 + var(--_special-units---grid-gap, 16px)); background: #24120c; color: var(--fc-pearl); }
+.ep-facade { --fc-pearl: #f6f1ea; --fc-sand: #e3cfae; --foot: calc(var(--_special-units---offset-l, 16px) + var(--_special-units---1-cell-v, 60px) * 2 + var(--_special-units---grid-gap, 16px)); background: #04070e; color: var(--fc-pearl); }
 /* the footer is pulled up over the end of this section by --foot (its own margin); the words keep clear of that */
 .ep-facade .cta-w { padding-bottom: var(--foot); }
 .ep-facade .w_bg .img-w { height: 100%; }

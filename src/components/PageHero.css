@@ -3,7 +3,7 @@
   /* Clips the photos that bleed off the edges */
   overflow: clip;
   padding: calc(88px + 120px) var(--page-gutter) 120px;
-  background: var(--white);
+  background: var(--paper);
 }
 
 .page-hero--cream {
