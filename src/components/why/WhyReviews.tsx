@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
 import VLine from '../VLine';
+import CarouselArrows from '../ui/CarouselArrows';
+import { gsap, useGSAP } from '../../lib/smoothScroll';
 import line from '../../assets/make-it-yours-line.svg';
 import quotes from '../../assets/why/quotes.svg';
 import millicent from '../../assets/why/review-millicent.jpg';
@@ -142,6 +144,19 @@ export default function WhyReviews() {
   const phone = usePhoneLayout();
 
   const sectionRef = useRef<HTMLElement>(null);
+
+  // Parallax: the heading drifts up slowly while the row rises faster, so they close in as it scrolls past
+  useGSAP(
+    () => {
+      gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+        const scrollTrigger = { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 0.6 };
+        gsap.fromTo('.why-reviews__header', { y: 70 }, { y: -50, ease: 'none', scrollTrigger });
+        gsap.fromTo('.why-reviews__track', { y: 110 }, { y: -40, ease: 'none', scrollTrigger });
+      });
+    },
+    { scope: sectionRef },
+  );
+
   const trackRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
   const scrubberRef = useRef<HTMLDivElement>(null);
@@ -395,6 +410,13 @@ export default function WhyReviews() {
           <div ref={thumbRef} className="why-reviews__progress-bar" />
         </div>
       </div>
+
+      <CarouselArrows
+        className="why-reviews__arrows"
+        label="Browse reviews"
+        onPrev={() => scrollRowTo(Math.max(0, (trackRef.current?.scrollLeft ?? 0) - cardStep()))}
+        onNext={() => scrollRowTo((trackRef.current?.scrollLeft ?? 0) + cardStep())}
+      />
     </section>
   );
 }

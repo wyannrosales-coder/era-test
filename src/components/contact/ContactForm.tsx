@@ -6,6 +6,8 @@ import flagAu from '../../assets/contact/flag-au.png';
 import arrowRight from '../../assets/arrow-right-white.svg';
 import { PROPERTIES } from '../locationData';
 import './ContactForm.css';
+import Select from '../ui/Select';
+import DateField from '../ui/DateField';
 
 const PROPERTY_OPTIONS = ['General Inquiry', ...PROPERTIES.map((p) => p.name)];
 const ROLES = ['Student', 'Parent / Guardian', 'Agent', 'Other'];
@@ -110,11 +112,11 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
             <div className="contact-form__property">
               <Field label="Property inquiring for">
                 <span className="contact-field__box contact-field__box--strong">
-                  <select name="property" defaultValue={PROPERTY_OPTIONS[0]}>
+                  <Select name="property" defaultValue={PROPERTY_OPTIONS[0]}>
                     {PROPERTY_OPTIONS.map((p) => (
                       <option key={p}>{p}</option>
                     ))}
-                  </select>
+                  </Select>
                   <img src={caretDown} width={24} height={24} alt="" />
                 </span>
               </Field>
@@ -152,7 +154,8 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
                   <span className="contact-field__dial">
                     {dial.flag && <img src={dial.flag} width={33} height={22} alt="" />}
                     <img src={caretDown} width={24} height={24} alt="" />
-                    <select
+                    <Select
+                      bare
                       aria-label="Country calling code"
                       value={dial.code}
                       onChange={(e) => setDial(DIAL_CODES.find((d) => d.code === e.target.value) ?? DIAL_CODES[0])}
@@ -162,7 +165,7 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
                           {d.country} ({d.code})
                         </option>
                       ))}
-                    </select>
+                    </Select>
                   </span>
                   <span className="contact-field__code">{dial.code}</span>
                   <input type="tel" name="phone" autoComplete="tel-national" required />
@@ -185,27 +188,20 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
               <div className="contact-form__row">
                 <Field label="Preferred Room Type" required>
                   <span className="contact-field__box">
-                    <select name="roomType" defaultValue="" required>
+                    <Select name="roomType" defaultValue="" required>
                       <option value="" disabled>
                         Select
                       </option>
                       {ROOM_TYPES.map((t) => (
                         <option key={t}>{t}</option>
                       ))}
-                    </select>
+                    </Select>
                     <img src={caretDown} width={24} height={24} alt="" />
                   </span>
                 </Field>
                 <Field label="Preferred check in date" required>
                   <span className="contact-field__box">
-                    <input
-                      type="text"
-                      name="checkIn"
-                      placeholder="Check in date"
-                      required
-                      onFocus={(e) => (e.currentTarget.type = 'date')}
-                      onBlur={(e) => !e.currentTarget.value && (e.currentTarget.type = 'text')}
-                    />
+                    <DateField name="checkIn" placeholder="Check in date" required min={new Date().toISOString().slice(0, 10)} />
                     <img src={caretDown} width={24} height={24} alt="" />
                   </span>
                 </Field>
@@ -214,21 +210,21 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
               <div className="contact-form__row">
                 <Field label="I am a" required>
                   <span className="contact-field__box">
-                    <select name="role" defaultValue={ROLES[0]} required>
+                    <Select name="role" defaultValue={ROLES[0]} required>
                       {ROLES.map((r) => (
                         <option key={r}>{r}</option>
                       ))}
-                    </select>
+                    </Select>
                     <img src={caretDown} width={24} height={24} alt="" />
                   </span>
                 </Field>
                 <Field label="Enquiry Type" required>
                   <span className="contact-field__box">
-                    <select name="enquiry" defaultValue={ENQUIRY_TYPES[0]} required>
+                    <Select name="enquiry" defaultValue={ENQUIRY_TYPES[0]} required>
                       {ENQUIRY_TYPES.map((t) => (
                         <option key={t}>{t}</option>
                       ))}
-                    </select>
+                    </Select>
                     <img src={caretDown} width={24} height={24} alt="" />
                   </span>
                 </Field>

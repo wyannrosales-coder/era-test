@@ -1,0 +1,306 @@
+/*
+ * Shared form UI in the Student Luxe system: custom select list, calendar, carousel arrows.
+ * Popups are portalled to <body>, so they're never clipped by a section.
+ */
+
+/* ----- Select trigger (replaces the native control; the real <select> stays hidden) ----- */
+.ui-select {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+}
+
+.ui-select__native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ui-select__button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+}
+
+.ui-select__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-select__button:focus-visible {
+  outline: 1px solid var(--bronze-600);
+  outline-offset: 4px;
+}
+
+/* Bare: only the hit area, laid over an icon (phone country code) */
+.ui-select--bare {
+  position: absolute;
+  inset: 0;
+}
+
+.ui-select--bare .ui-select__button {
+  position: absolute;
+  inset: 0;
+}
+
+/* ----- Option list ----- */
+.ui-list {
+  position: fixed;
+  z-index: 3000;
+  max-height: min(300px, 50vh);
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid rgba(139, 110, 78, 0.28);
+  border-radius: 16px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  box-shadow: 0 18px 48px rgba(4, 7, 14, 0.22);
+  animation: ui-pop 220ms var(--ease-lux);
+  overscroll-behavior: contain;
+}
+
+.ui-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ui-list__label {
+  display: block;
+  padding: 10px 12px 4px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.ui-list__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+  transition: background-color 150ms var(--ease-lux);
+}
+
+.ui-list__option[data-active='true'] {
+  background: var(--bronze-200);
+}
+
+.ui-list__option.is-selected {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.ui-list__option.is-selected::after {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bronze-600);
+}
+
+.ui-list__option.is-disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@keyframes ui-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.ui-list.is-flipped,
+.ui-cal.is-flipped {
+  animation-name: ui-pop-up;
+}
+
+@keyframes ui-pop-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* ----- Calendar ----- */
+.ui-cal {
+  position: fixed;
+  z-index: 3000;
+  width: 320px;
+  max-width: calc(100vw - 16px);
+  padding: 16px;
+  border: 1px solid rgba(139, 110, 78, 0.28);
+  border-radius: 20px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  box-shadow: 0 18px 48px rgba(4, 7, 14, 0.22);
+  animation: ui-pop 220ms var(--ease-lux);
+}
+
+.ui-cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.ui-cal__title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: -0.03em;
+}
+
+.ui-cal__nav,
+.locations__arrow,
+.carousel-arrow {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line-in-white);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background-color 300ms var(--ease-lux),
+    border-color 300ms var(--ease-lux),
+    color 300ms var(--ease-lux),
+    opacity 300ms var(--ease-lux);
+}
+
+.ui-cal__nav {
+  width: 32px;
+  height: 32px;
+}
+
+.ui-cal__nav:hover:not(:disabled) {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bronze-300);
+}
+
+.ui-cal__nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.ui-cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+}
+
+.ui-cal__dow {
+  padding: 6px 0;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.ui-cal__day {
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 150ms var(--ease-lux);
+}
+
+.ui-cal__day:hover:not(:disabled) {
+  background: var(--bronze-300);
+}
+
+.ui-cal__day.is-today {
+  box-shadow: inset 0 0 0 1px var(--bronze-600);
+}
+
+.ui-cal__day.is-selected {
+  background: var(--ink);
+  color: var(--bronze-300);
+}
+
+.ui-cal__day:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+
+.ui-cal__day:focus-visible {
+  outline: 1px solid var(--bronze-700);
+  outline-offset: 2px;
+}
+
+/* ----- Carousel arrows (circular chevron buttons) ----- */
+.carousel-arrows {
+  display: flex;
+  gap: 12px;
+}
+
+.carousel-arrow,
+.locations__arrow {
+  width: 44px;
+  height: 44px;
+}
+
+.carousel-arrow:hover:not(:disabled) {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bronze-300);
+}
+
+.carousel-arrow:focus-visible {
+  outline: 1px solid var(--bronze-600);
+  outline-offset: 3px;
+}
+
+.carousel-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.carousel-arrows--light .carousel-arrow {
+  border-color: rgba(251, 248, 241, 0.5);
+  color: var(--bronze-100);
+}
+
+.carousel-arrows--light .carousel-arrow:hover:not(:disabled) {
+  border-color: var(--bronze-100);
+  background: var(--bronze-100);
+  color: var(--ink);
+}

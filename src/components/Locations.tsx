@@ -228,6 +228,15 @@ export default function Locations() {
     viewport.scrollTo({ left: moves[e.key], behavior: 'smooth' });
   };
 
+  /** Chevron buttons: one card back or forward. */
+  const stepCards = (dir: 1 | -1) => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const max = viewport.scrollWidth - viewport.clientWidth;
+    const left = Math.min(Math.max(Math.round(viewport.scrollLeft / cardStep()) * cardStep() + dir * cardStep(), 0), max);
+    glideTo(viewport, left);
+  };
+
   const onClickCapture = (e: MouseEvent) => {
     if (suppressClick.current) e.preventDefault();
   };
@@ -278,6 +287,19 @@ export default function Locations() {
           </ul>
           {/* Phones show the regions as tabs, so the active one's summary sits below them */}
           <p className="locations__summary">{region.summary}</p>
+
+          <div className="locations__arrows" role="group" aria-label="Browse properties">
+            <button type="button" className="locations__arrow" aria-label="Previous property" disabled={!scrollable} onClick={() => stepCards(-1)}>
+              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10 3L5 8l5 5" />
+              </svg>
+            </button>
+            <button type="button" className="locations__arrow" aria-label="Next property" disabled={!scrollable} onClick={() => stepCards(1)}>
+              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 3l5 5-5 5" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div className="locations__showcase">

@@ -25,7 +25,7 @@
 .why-living__tint {
   position: absolute;
   inset: 0;
-  background: rgba(57, 29, 19, 0.9);
+  background: rgba(18, 26, 42, 0.9);
   mix-blend-mode: overlay;
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);

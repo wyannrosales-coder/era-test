@@ -140,8 +140,8 @@
  */
 .promotions__viewport {
   --edge: max(var(--page-gutter), (100vw - var(--content-max)) / 2);
-  margin: -24px calc(-1 * var(--edge)) -72px;
-  padding: 24px var(--edge) 72px;
+  margin: -24px calc(-1 * var(--edge)) -112px;
+  padding: 24px var(--edge) 112px;
   scroll-padding-inline: var(--edge);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -185,7 +185,7 @@
   overflow: hidden;
   border: 1px solid var(--royal-chocolate-200);
   background: var(--paper);
-  box-shadow: 0 96px 80px -72px rgba(57, 29, 19, 0.2);
+  box-shadow: 0 96px 80px -72px rgba(18, 26, 42, 0.2);
   scroll-snap-align: start;
 }
 
@@ -381,5 +381,17 @@
 
   .promo-card {
     width: min(300px, 80vw);
+  }
+}
+
+.promotions__header-end {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+@media (max-width: 700px) {
+  .promotions__arrows {
+    display: none;
   }
 }

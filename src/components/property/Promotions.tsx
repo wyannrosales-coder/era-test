@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import PromoCard from '../promotions/PromoCard';
+import CarouselArrows from '../ui/CarouselArrows';
 import { usePromoCarousel } from '../promotions/usePromoCarousel';
 import type { PropertyContent } from './propertyContent';
 import './Promotions.css';
@@ -12,6 +13,16 @@ export default function Promotions({ id, content }: { id: string; content: Prope
   const sectionRef = useRef<HTMLElement>(null);
   const { trackRef, thumbRef, viewportProps, scrubberProps } = usePromoCarousel(sectionRef);
   const { promotion } = content;
+
+  /** One card back or forward. */
+  const stepPromos = (dir: 1 | -1) => {
+    const track = trackRef.current;
+    const viewport = track?.parentElement;
+    const first = track?.children[0] as HTMLElement | undefined;
+    if (!track || !viewport || !first) return;
+    const step = first.offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0);
+    viewport.scrollBy({ left: dir * step, behavior: 'smooth' });
+  };
 
   return (
     <section ref={sectionRef} className="promotions" id={id}>
@@ -39,9 +50,17 @@ export default function Promotions({ id, content }: { id: string; content: Prope
           <h2 className="type-h2 promotions__title">
             Latest <em>promotion</em>
           </h2>
-          <a href="/promotions" className="promotions__all">
-            View Promotions
-          </a>
+          <div className="promotions__header-end">
+            <CarouselArrows
+              className="promotions__arrows"
+              label="Browse promotions"
+              onPrev={() => stepPromos(-1)}
+              onNext={() => stepPromos(1)}
+            />
+            <a href="/promotions" className="promotions__all">
+              View Promotions
+            </a>
+          </div>
         </div>
 
         <div {...viewportProps} role="region" aria-label="Latest promotions">

@@ -33,7 +33,7 @@
   overflow: clip;
   border: 1px solid var(--royal-chocolate-200);
   background: var(--paper);
-  box-shadow: 0 96px 80px -72px rgba(57, 29, 19, 0.2);
+  box-shadow: 0 96px 80px -72px rgba(18, 26, 42, 0.2);
   transition: top 400ms var(--ease-in-out);
 }
 
@@ -165,7 +165,8 @@
     display: block;
   }
 
-  .faq-page__jump select {
+  .faq-page__jump select,
+  .faq-page__jump .ui-select__button {
     width: 100%;
     height: 44px;
     padding: 0 48px 0 16px;

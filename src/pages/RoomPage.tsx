@@ -33,6 +33,8 @@ import calendarIcon from '../assets/property/room-details/icons/calendar.svg';
 import infoIcon from '../assets/property/room-details/icons/info.svg';
 import closeIcon from '../assets/menu/close.svg';
 import './RoomPage.css';
+import Select from '../components/ui/Select';
+import DateField from '../components/ui/DateField';
 
 /** Section ids, shared by the sub-navigation and the sections themselves (Figma 1195:30270). */
 const SECTIONS = {
@@ -276,7 +278,7 @@ function BookingCard({
           Term <span>*</span>
         </span>
         <span className="room-book__control">
-          <select
+          <Select
             value={stayId}
             onChange={(e) => {
               const next = stays.find((s) => s.id === e.target.value);
@@ -299,7 +301,7 @@ function BookingCard({
                   ))}
               </optgroup>
             ))}
-          </select>
+          </Select>
           <img src={dropdownIcon} width={24} height={24} alt="" />
         </span>
         {tried && missing.term && <span className="room-book__error">Please choose a term</span>}
@@ -310,22 +312,14 @@ function BookingCard({
           Check in date <span>*</span>
         </span>
         <span className="room-book__control">
-          <input
-            type="date"
+          <DateField
             value={date}
             min={min}
             max={max}
+            placeholder="Choose your check in date"
             className={date ? '' : 'is-empty'}
-            onChange={(e) => setDate(e.target.value)}
-            onClick={(e) => {
-              try {
-                e.currentTarget.showPicker();
-              } catch {
-                /* the field still takes typing */
-              }
-            }}
+            onChange={setDate}
           />
-          {!date && <span className="room-book__placeholder">Choose your check in date</span>}
           <img src={calendarIcon} width={24} height={24} alt="" />
         </span>
         {stay && (
@@ -342,7 +336,7 @@ function BookingCard({
           Preferred room view <span>*</span>
         </span>
         <span className="room-book__control">
-          <select value={view} onChange={(e) => setView(e.target.value)} className={view ? '' : 'is-empty'}>
+          <Select value={view} onChange={(e) => setView(e.target.value)} className={view ? '' : 'is-empty'}>
             <option value="" disabled>
               Select room view
             </option>
@@ -351,7 +345,7 @@ function BookingCard({
                 {v}
               </option>
             ))}
-          </select>
+          </Select>
           <img src={dropdownIcon} width={24} height={24} alt="" />
         </span>
         {view && <span className="room-book__hint">{VIEWS[view as keyof typeof VIEWS].hint}</span>}

@@ -76,7 +76,7 @@
 .amenities__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(66deg, #24120c 24.77%, rgba(36, 18, 12, 0.85) 47.27%, rgba(36, 18, 12, 0) 96.28%);
+  background: linear-gradient(66deg, #04070e 24.77%, rgba(4, 7, 14, 0.85) 47.27%, rgba(4, 7, 14, 0) 96.28%);
   mix-blend-mode: multiply;
   opacity: 0;
 }

@@ -16,6 +16,7 @@ import instagram from '../assets/blog/share-instagram.svg';
 import dropdownIcon from '../assets/blog/section-dropdown.svg';
 import shareIcon from '../assets/blog/share-network.svg';
 import '../components/blog/Blog.css';
+import Select from '../components/ui/Select';
 
 const sectionId = (i: number) => `section-${i + 1}`;
 
@@ -133,13 +134,13 @@ export default function BlogPostPage({ post, audience }: { post: BlogPost; audie
       >
         <label className="blog-post__jump">
           <span className="visually-hidden">Jump to section</span>
-          <select value={current} onChange={(e) => goTo(Number(e.target.value))}>
+          <Select value={current} onChange={(e) => goTo(Number(e.target.value))}>
             {post.sections.map((s, i) => (
               <option key={s.title} value={i}>
                 {s.title}
               </option>
             ))}
-          </select>
+          </Select>
           <img src={dropdownIcon} width={24} height={24} alt="" />
         </label>
         <button type="button" className="blog-post__bar-share" aria-label="Share" onClick={share}>

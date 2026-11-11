@@ -242,7 +242,7 @@
   .hero__overlay {
     background: #000;
     mix-blend-mode: normal;
-    opacity: 0.7;
+    opacity: 0.38;
   }
 
   .hero__content {

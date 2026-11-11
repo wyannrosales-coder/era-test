@@ -8,6 +8,7 @@ import dropdown from '../assets/dropdown.svg';
 import arrowRight from '../assets/arrow-right-white.svg';
 import { REGIONS } from './locationData';
 import './Hero.css';
+import Select from './ui/Select';
 
 /** Cities per country, in the order of the Locations page. */
 const CITIES: Record<string, string[]> = Object.fromEntries(REGIONS.map((r) => [r.name, r.cities]));
@@ -106,11 +107,11 @@ export default function Hero({
             <div className="hero-search__field">
               <span className="hero-search__label">Country</span>
               <span className="hero-search__select">
-                <select value={country} onChange={(e) => onCountryChange(e.target.value)}>
+                <Select value={country} onChange={(e) => onCountryChange(e.target.value)}>
                   {Object.keys(CITIES).map((c) => (
                     <option key={c}>{c}</option>
                   ))}
-                </select>
+                </Select>
                 <img src={dropdown} width={16} height={16} alt="" />
               </span>
             </div>
@@ -120,11 +121,11 @@ export default function Hero({
             <div className="hero-search__field">
               <span className="hero-search__label">City</span>
               <span className="hero-search__select">
-                <select value={city} onChange={(e) => setCity(e.target.value)}>
+                <Select value={city} onChange={(e) => setCity(e.target.value)}>
                   {CITIES[country].map((c) => (
                     <option key={c}>{c}</option>
                   ))}
-                </select>
+                </Select>
                 <img src={dropdown} width={16} height={16} alt="" />
               </span>
             </div>

@@ -16,7 +16,7 @@
 .hamburger__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(36, 18, 12, 0.3);
+  background: rgba(4, 7, 14, 0.3);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   opacity: 0;

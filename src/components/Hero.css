@@ -27,7 +27,7 @@
 .hero__overlay {
   background: var(--royal-chocolate-700);
   mix-blend-mode: multiply;
-  opacity: 0.7;
+  opacity: 0.38;
 }
 
 .hero__content {
@@ -147,7 +147,8 @@
   gap: 8px;
 }
 
-.hero-search__select select {
+.hero-search__select select,
+.hero-search__select .ui-select__button {
   flex: 1;
   min-width: 0;
   padding: 0;
@@ -160,7 +161,8 @@
   cursor: pointer;
 }
 
-.hero-search__select select:focus-visible {
+.hero-search__select select:focus-visible,
+.hero-search__select .ui-select__button:focus-visible {
   outline: 1px solid var(--bronze-500);
   outline-offset: 4px;
 }
@@ -294,7 +296,8 @@
     font-size: 16px;
   }
 
-  .hero-search__select select {
+  .hero-search__select select,
+  .hero-search__select .ui-select__button {
     font-size: 16px;
   }
 

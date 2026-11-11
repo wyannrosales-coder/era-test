@@ -30,8 +30,7 @@
  * 1182:17149). The padding is cancelled by the margins, so the layout keeps its spacing.
  */
 .rooms__search {
-  position: sticky;
-  top: var(--nav-offset, 0px);
+  position: relative;
   z-index: 3;
   display: flex;
   align-items: flex-start;
@@ -43,11 +42,7 @@
 }
 
 .rooms__search::before {
-  content: '';
-  position: absolute;
-  inset: 0 calc(50% - 50vw);
-  z-index: -1;
-  background: var(--paper);
+  content: none;
 }
 
 .rooms__field {
@@ -361,7 +356,7 @@
   overflow: hidden;
   border: 1px solid var(--bronze-300);
   background: var(--paper);
-  box-shadow: 0 96px 80px -72px rgba(57, 29, 19, 0.2);
+  box-shadow: 0 96px 80px -72px rgba(18, 26, 42, 0.2);
 }
 
 .room-card__image {
@@ -596,8 +591,7 @@
 
   /* Pinned again under the sub-navigation while the rooms scroll (Figma 1314:14421) */
   .rooms__search {
-    position: sticky;
-    top: var(--nav-offset, 0px);
+    position: relative;
     flex-direction: column;
     gap: 8px;
   }

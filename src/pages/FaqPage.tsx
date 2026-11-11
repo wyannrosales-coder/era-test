@@ -9,6 +9,7 @@ import caretDown from '../assets/property/caret-down-grey.svg';
 import dropdownIcon from '../assets/blog/section-dropdown.svg';
 import '../components/property/Faqs.css';
 import './FaqPage.css';
+import Select from '../components/ui/Select';
 
 /** Height of the nav's compact bar (Nav.tsx), which returns as the page scrolls up. */
 const COMPACT_BAR_HEIGHT = 69;
@@ -71,13 +72,13 @@ export default function FaqPage() {
             <div className="faq-page__picker">
               <label className="faq-page__jump">
                 <span className="visually-hidden">Topic</span>
-                <select value={topicId} onChange={(e) => choose(e.target.value)}>
+                <Select value={topicId} onChange={(e) => choose(e.target.value)}>
                   {FAQ_TOPICS.map((t) => (
                     <option key={t.id} value={t.id}>
                       {t.label}
                     </option>
                   ))}
-                </select>
+                </Select>
                 <img src={dropdownIcon} width={24} height={24} alt="" />
               </label>
             </div>

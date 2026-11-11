@@ -10,7 +10,7 @@ import './WhyLiving.css';
 /**
  * EPIISOD living (Figma 912:4530): "Write your story" on a blurred chocolate backdrop,
  * between two photos that bleed off the edges. The backdrop and the pictures inside their
- * frames drift a little as the page scrolls.
+ * frames drift as the page scrolls; the two frames and the copy travel at different speeds.
  */
 export default function WhyLiving({
   bookHref = '/locations/macquarie-park#rooms',
@@ -31,6 +31,11 @@ export default function WhyLiving({
         };
         gsap.fromTo('.why-living__backdrop', { yPercent: -12 }, { yPercent: 12, ease: 'none', scrollTrigger });
         gsap.fromTo('.why-living__photo img', { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger });
+        // The frames themselves travel at different speeds and in opposite directions, and the copy
+        // lags between them, so the section has real depth
+        gsap.fromTo('.why-living__photo--left', { y: 90 }, { y: -90, ease: 'none', scrollTrigger });
+        gsap.fromTo('.why-living__photo--right', { y: -60 }, { y: 120, ease: 'none', scrollTrigger });
+        gsap.fromTo('.why-living__content', { y: 60 }, { y: -60, ease: 'none', scrollTrigger });
       });
     },
     { scope: sectionRef },

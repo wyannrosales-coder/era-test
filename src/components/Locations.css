@@ -483,3 +483,51 @@
     text-transform: uppercase;
   }
 }
+
+/* Chevron buttons, lower left of the component: one card back / forward */
+.locations__arrows {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.locations__arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line-in-white);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--royal-chocolate-700);
+  cursor: pointer;
+  transition:
+    background-color 300ms var(--ease-lux),
+    border-color 300ms var(--ease-lux),
+    color 300ms var(--ease-lux),
+    opacity 300ms var(--ease-lux);
+}
+
+.locations__arrow:hover:not(:disabled) {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bronze-300);
+}
+
+.locations__arrow:focus-visible {
+  outline: 1px solid var(--bronze-600);
+  outline-offset: 3px;
+}
+
+.locations__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Phones swipe; the buttons would crowd the stacked layout */
+@media (max-width: 900px) {
+  .locations__arrows {
+    display: none;
+  }
+}

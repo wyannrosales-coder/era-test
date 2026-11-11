@@ -22,7 +22,7 @@
 .property-hero__overlay {
   background: var(--royal-chocolate-700);
   mix-blend-mode: multiply;
-  opacity: 0.7;
+  opacity: 0.38;
 }
 
 /* Darkens as the hero scrolls away — animated by GSAP */

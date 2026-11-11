@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, ReactNode, RefObject } from 'react';
 import VLine from '../VLine';
 import FilterTabs from './FilterTabs';
+import Calendar from '../ui/Calendar';
 import { useExitParallax } from '../../lib/useExitParallax';
 import { ScrollTrigger, scrollToY } from '../../lib/smoothScroll';
 import roomsLine from '../../assets/property/rooms-line.svg';
@@ -66,6 +67,7 @@ function useDismiss(open: boolean, ref: RefObject<HTMLElement>, close: () => voi
 
 /** A search field (Figma 1080:5725): icon, value or placeholder, then a caret or a clear cross. */
 function Field({
+  anchorRef,
   icon,
   label,
   value,
@@ -74,6 +76,7 @@ function Field({
   onClear,
   children,
 }: {
+  anchorRef?: RefObject<HTMLDivElement>;
   icon: string;
   label: string;
   value: string | null;
@@ -83,7 +86,7 @@ function Field({
   children?: ReactNode;
 }) {
   return (
-    <div className={`rooms__field${value ? ' has-value' : ''}${open ? ' is-open' : ''}`}>
+    <div ref={anchorRef} className={`rooms__field${value ? ' has-value' : ''}${open ? ' is-open' : ''}`}>
       <button type="button" className="rooms__field-button" aria-expanded={open} onClick={onOpen}>
         <img src={icon} width={24} height={24} alt="" />
         <span className="rooms__field-text">
@@ -161,7 +164,8 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
   const sectionRef = useRef<HTMLElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
-  const dateRef = useRef<HTMLInputElement>(null);
+  const dateAnchor = useRef<HTMLDivElement>(null);
+  const [dateOpen, setDateOpen] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
   /** Set when a filter changes while the list is scrolled under the pinned fields. */
   const anchorToList = useRef(false);
@@ -246,14 +250,8 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
   const listKey = rooms.map((r) => `${r.id}:${r.weekly}`).join(',');
 
   const openDate = () => {
-    const input = dateRef.current;
-    if (!input) return;
     setMenu(null);
-    try {
-      input.showPicker();
-    } catch {
-      input.focus();
-    }
+    setDateOpen((o) => !o);
   };
 
   return (
@@ -309,25 +307,21 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
             </Field>
 
             <Field
+              anchorRef={dateAnchor}
               icon={calendarBlank}
               label="Check-in Date"
               value={date && formatDate(date)}
               onOpen={openDate}
               onClear={() => changeFilter(() => setDate(null))}
             >
-              <input
-                ref={dateRef}
-                className="rooms__date-input"
-                type="date"
-                tabIndex={-1}
-                aria-hidden
+              <Calendar
+                open={dateOpen}
+                anchor={dateAnchor}
+                value={date}
                 min={minDate}
                 max={maxDate}
-                value={date ?? ''}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  changeFilter(() => setDate(value && value >= minDate && value <= maxDate ? value : null));
-                }}
+                onPick={(value) => changeFilter(() => setDate(value))}
+                onClose={() => setDateOpen(false)}
               />
             </Field>
           </div>
