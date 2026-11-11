@@ -1,0 +1,168 @@
+.faqs {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 140px var(--page-gutter) 200px;
+  overflow: hidden;
+  background: var(--bronze-100);
+}
+
+/* Photos frame the heading, scaling with the viewport (505×438 at 1512px) */
+.faqs__photo {
+  position: absolute;
+  top: 140px;
+  width: 33.4vw;
+  aspect-ratio: 505 / 438;
+  object-fit: cover;
+}
+
+.faqs__photo--left {
+  left: -7.2vw;
+}
+
+.faqs__photo--right {
+  left: calc(75% - 18px);
+}
+
+.faqs__heading {
+  position: relative;
+  width: min(672px, 100%);
+  padding-top: 200px;
+}
+
+.faqs__lede {
+  position: relative;
+  width: min(672px, 100%);
+  font-weight: 300;
+  text-align: center;
+  color: var(--royal-chocolate-600);
+}
+
+.faqs__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(672px, 100%);
+}
+
+.faqs__item {
+  border-bottom: 1px solid var(--line-in-white);
+}
+
+.faqs__question {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 32px 0;
+  border: 0;
+  background: none;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 20px;
+  text-align: left;
+  color: var(--royal-chocolate-700);
+  cursor: pointer;
+}
+
+.faqs__question span {
+  flex: 1;
+}
+
+.faqs__question img {
+  flex-shrink: 0;
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.faqs__item.is-open .faqs__question img {
+  transform: rotate(180deg);
+}
+
+.faqs__question:focus-visible {
+  outline: 1px solid var(--bronze-700);
+  outline-offset: 4px;
+}
+
+/* Answer expands by animating its grid row from 0fr to 1fr */
+.faqs__answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 350ms var(--ease-in-out),
+    visibility 0s linear 350ms;
+}
+
+.faqs__item.is-open .faqs__answer {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows 350ms var(--ease-in-out),
+    visibility 0s;
+}
+
+.faqs__answer-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.faqs__answer p {
+  padding: 0 32px 24px 0;
+  font-weight: 300;
+  color: var(--royal-chocolate-600);
+}
+
+.faqs__cta {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--royal-chocolate-600);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+  transition: background-color 300ms var(--ease-in-out);
+}
+
+.faqs__cta:hover {
+  background: var(--bronze-200);
+}
+
+/* Parallax speeds, read by GSAP in Faqs.tsx (as in Partners.css) */
+.faqs__photo {
+  will-change: transform;
+}
+
+.faqs__photo--left {
+  --speed: 0.3;
+}
+
+.faqs__photo--right {
+  --speed: 0.18;
+}
+
+@media (max-width: 1000px) {
+  .faqs__photo {
+    display: none;
+  }
+
+  .faqs__heading {
+    padding-top: 0;
+  }
+
+  .faqs {
+    padding: 120px var(--page-gutter);
+  }
+}
+
+@media (max-width: 700px) {
+  .faqs {
+    gap: 32px;
+    padding: 80px var(--page-gutter);
+  }
+}

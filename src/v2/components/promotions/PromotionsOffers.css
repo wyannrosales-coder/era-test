@@ -1,0 +1,68 @@
+.promotions-offers {
+  padding: 120px var(--page-gutter);
+  background: var(--white);
+}
+
+.promotions-offers__content {
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+/* Two columns, 48px between rows and 24px between columns */
+.promotions-offers__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 24px;
+}
+
+@media (max-width: 900px) {
+  .promotions-offers {
+    padding: 72px var(--page-gutter);
+  }
+
+  .promotions-offers__content {
+    gap: 72px;
+  }
+
+  .promotions-offers__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  /* Unlike the property page, the photo stays below the copy (Figma 786:11456) */
+  .promotions-offers .promo-banner {
+    flex-direction: column;
+  }
+}
+
+/* Phones (Figma 794:4540): a compact banner with stacked full-width buttons */
+@media (max-width: 700px) {
+  .promotions-offers__grid {
+    gap: 24px;
+  }
+
+  .promotions-offers .promo-banner__copy {
+    padding: 24px;
+  }
+
+  .promotions-offers .promo-banner__title {
+    line-height: 1.4;
+  }
+
+  .promotions-offers .promo-banner__actions {
+    flex-direction: column;
+  }
+
+  .promotions-offers .promo-banner__button {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .promotions-offers .promo-banner__image {
+    height: 240px;
+    border-top-left-radius: 180px;
+  }
+}

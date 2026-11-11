@@ -1,0 +1,175 @@
+.partners {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 140px var(--page-gutter) 400px; /* +200px breathing room before the sign-up */
+  overflow: hidden;
+  background: var(--white);
+}
+
+.partners__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+/* Static logo row */
+.partners__logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 48px;
+  width: 100%;
+}
+
+.partner-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 236px;
+  height: 100px;
+}
+
+.partner-logo__split {
+  position: relative;
+  width: 193.733px;
+  height: 36.227px;
+  opacity: 0.7;
+}
+
+.partner-logo__mark {
+  position: absolute;
+  inset: 0 81.78% 0 0;
+  width: 18.22%;
+  height: 100%;
+}
+
+.partner-logo__word {
+  position: absolute;
+  inset: 22.46% 0 2.05% 22.27%;
+  width: 77.73%;
+  height: 75.49%;
+}
+
+/* The frame stays put; the picture is 20% taller so it can drift inside it (Partners.tsx) */
+.partners__photo {
+  position: absolute;
+  top: 80px;
+  width: 505px;
+  height: 438px;
+  overflow: hidden;
+}
+
+.partners__photo img {
+  position: absolute;
+  left: 0;
+  top: -10%;
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.partners__photo--left {
+  left: -109px;
+}
+
+.partners__photo--right {
+  left: calc(75% - 18px);
+}
+
+/*
+ * Parallax speed, read by GSAP in Partners.tsx: the heading and logos barely move.
+ * (The photo frames only get a --speed on phones, below.)
+ */
+.partners__content {
+  --speed: -0.08;
+  will-change: transform;
+}
+
+@media (max-width: 1100px) {
+  .partners__photo {
+    width: 340px;
+    height: 295px;
+  }
+
+  .partners__photo--right {
+    left: auto;
+    right: -109px;
+  }
+
+  .partner-logo {
+    width: 200px;
+  }
+}
+
+/* The single photo is the phone layout's (below) */
+.partners__single {
+  display: none;
+}
+
+/*
+ * Phones (Figma 713:4366): the line, the heading, the logos in a 2 × 2 grid, then one
+ * 342 × 227 photo. The heading and logos hold still; the photo's frame holds still too,
+ * and the picture drifts subtly inside it (Partners.tsx).
+ */
+@media (max-width: 700px) {
+  .partners {
+    padding: 72px var(--page-gutter);
+  }
+
+  .partners__content {
+    gap: 40px;
+    will-change: auto;
+  }
+
+  .partners__photo {
+    display: none;
+  }
+
+  .partners__single {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 342 / 227;
+    overflow: hidden;
+  }
+
+  /* 20% taller than the frame so it can drift; Figma's crop sits a little left of centre */
+  .partners__single img {
+    position: absolute;
+    left: 0;
+    top: -10%;
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    object-position: 39% 50%;
+    will-change: transform;
+  }
+
+  .partners__logos {
+    display: grid;
+    grid-template-columns: repeat(2, 163px);
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .partner-logo {
+    width: 163px;
+    height: 69px;
+  }
+
+  /* 69% of the desktop logos, as in Figma */
+  .partner-logo > img,
+  .partner-logo__split {
+    transform: scale(0.69);
+  }
+}

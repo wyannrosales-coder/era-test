@@ -1,0 +1,188 @@
+.stay-connected {
+  padding: 140px var(--page-gutter) 400px; /* +200px breathing room before what follows */
+  /* Cream into the footer's bronze (Figma 539:11693) */
+  background: linear-gradient(to bottom, var(--bronze-100), var(--bronze-200));
+}
+
+/* On the homepage it follows the white Partners section and hands on to the token fold */
+.stay-connected--from-white {
+  background: linear-gradient(to bottom, var(--white), var(--bronze-100));
+}
+
+.stay-connected__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.stay-connected__title {
+  width: 100%;
+  text-align: center;
+}
+
+.stay-connected__form {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: min(904px, 100%);
+}
+
+.stay-connected__field {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.stay-connected__field input {
+  width: 100%;
+  height: 46px;
+  padding: 0 16px;
+  border: 1px solid var(--line-in-white);
+  background: var(--bronze-100);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--royal-chocolate-700);
+  outline: none;
+  transition:
+    border-color 250ms var(--ease-in-out),
+    background-color 250ms var(--ease-in-out);
+}
+
+.stay-connected__field input::placeholder {
+  color: var(--royal-chocolate-500);
+}
+
+.stay-connected__field input:hover {
+  border-color: var(--bronze-600);
+}
+
+/* Focused / typing: white field with a bronze-700 border (Figma 539:11773) */
+.stay-connected__field input:focus {
+  border-color: var(--bronze-700);
+  background: var(--white);
+}
+
+/* Submitted: fields keep their values in the resting style */
+.stay-connected__form.is-submitted input {
+  border-color: var(--line-in-white);
+  background: var(--bronze-100);
+  cursor: default;
+}
+
+.stay-connected__submit {
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  width: 208px;
+  height: 46px;
+  padding: 0 24px 0 40px;
+  border: 1px solid var(--bronze-600);
+  background: none;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-500);
+  cursor: pointer;
+  transition:
+    background-color 300ms var(--ease-in-out),
+    color 300ms var(--ease-in-out);
+}
+
+.stay-connected__submit:hover {
+  background: var(--bronze-100);
+}
+
+/* Both fields filled: solid bronze-700 with white type and arrow (Figma 539:11875) */
+.stay-connected__submit.is-ready {
+  background: var(--bronze-700);
+  color: var(--white);
+}
+
+.stay-connected__submit.is-ready:hover {
+  background: #7a5f37;
+}
+
+.stay-connected__arrow {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.stay-connected__arrow img {
+  position: absolute;
+  inset: 0;
+  transition: opacity 300ms var(--ease-in-out);
+}
+
+.stay-connected__arrow-ready,
+.stay-connected__submit.is-ready .stay-connected__arrow-default {
+  opacity: 0;
+}
+
+.stay-connected__submit.is-ready .stay-connected__arrow-ready {
+  opacity: 1;
+}
+
+.stay-connected__submit:hover .stay-connected__arrow {
+  transform: translateX(4px);
+}
+
+/* Replaces the button once submitted (Figma 539:21195) */
+.stay-connected__thanks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 208px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--bronze-700);
+  outline: none;
+  animation: stay-connected-thanks 500ms var(--ease-in-out) both;
+}
+
+.stay-connected__thanks em {
+  font-style: italic;
+}
+
+@keyframes stay-connected-thanks {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stay-connected__thanks {
+    animation: none;
+  }
+}
+
+/* Phones (Figma 704:9121): fields stacked 8px apart, then the full-width button 24px below */
+@media (max-width: 700px) {
+  .stay-connected {
+    padding: 72px var(--page-gutter);
+  }
+
+  .stay-connected__form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .stay-connected__submit,
+  .stay-connected__thanks {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .stay-connected__thanks {
+    height: 46px;
+  }
+}

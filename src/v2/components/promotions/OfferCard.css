@@ -1,0 +1,132 @@
+/* Offer card (Figma 786:10998): 672 × 586 with a 300px photo */
+.offer-card {
+  display: flex;
+  flex-direction: column;
+  height: 586px;
+  overflow: hidden;
+  border: 1px solid var(--royal-chocolate-300);
+  background: var(--white);
+  box-shadow: 0 96px 80px -72px rgba(57, 29, 19, 0.2);
+}
+
+.offer-card__image {
+  position: relative;
+  flex-shrink: 0;
+  height: 300px;
+  overflow: hidden;
+  background: #d9d9d9;
+}
+
+.offer-card__image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-in-out);
+}
+
+.offer-card:hover .offer-card__image > img {
+  transform: scale(1.04);
+}
+
+/* Offer tag in the photo's top-left corner */
+.offer-card__tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.offer-card__tag--exclusive {
+  background: var(--royal-chocolate-700);
+  color: var(--white);
+}
+
+.offer-card__tag--direct-debit {
+  background: var(--bronze-500);
+  color: var(--royal-chocolate-700);
+}
+
+.offer-card__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 32px;
+}
+
+.offer-card__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--royal-chocolate-700);
+}
+
+.offer-card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.5;
+}
+
+/* Two lines, then an ellipsis */
+.offer-card__description {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.offer-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.offer-card__link span {
+  padding: 8px 0;
+}
+
+.offer-card__link img {
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.offer-card__link:hover img {
+  transform: translateX(4px);
+}
+
+/* Phones (Figma 786:11598): 440px cards with a 180px photo; min-height so a long
+   title can't push the link out of view */
+@media (max-width: 700px) {
+  .offer-card {
+    height: auto;
+    min-height: 440px;
+  }
+
+  .offer-card__image {
+    height: 180px;
+  }
+
+  .offer-card__body {
+    padding: 32px 16px;
+  }
+
+  .offer-card__title {
+    font-size: 24px;
+  }
+}

@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.0.0
+
+- **The experience page now lives inside the EPIISOD website.** This repo holds the whole site: the React website (home, locations, property pages, rooms, promotions, blog and so on) and the Macquarie Park experience, served at `/locations/macquarie-park/experience`. The old stand-alone layout (`dist/`) is gone; the page is now `locations/macquarie-park/experience/index.html` with its files under `public/locations/macquarie-park/experience/assets/`. See `EXPERIENCE.md`.
+- **The site's own navigation on the experience page.** The experience's separate header (and its glass style) is replaced by the website's real nav, mounted from the same React component as every other page, so the menus always match.
+- **Dark / light switch moved.** The header logo used to switch looks; it is now a round sun / moon button at the bottom left (Shift+B and `?v=1` / `?v=2` still work).
+- **Ways in.** An "Enter the experience" button on the Macquarie Park property page's hero and an Experience link in its sub-navigation; links under Macquarie Park in the Locations menu, the phone menu, the home carousel card and the `/locations` listing; the `/experience` page and the Amenities button now open it in the same tab.
+- **Ways out.** "Explore room" in the magazine opens that room's page on this site, "All rooms" opens the property page's Rooms section, and book-a-tour fallbacks go to `/contact`.
+- **Search engines.** The experience page is indexable (the noindex is gone) with its own title, description and canonical address, and the site has a `sitemap.xml` and `robots.txt`.
+- **Removed.** The leftover Webflow apartment and contact pages that were not part of the experience.
+
 ## 3.14.0
 
 - **Life beyond the classroom: hidden hand-inked notes under the photos.** Under 11 of the prints sits a small cluster of black-ink handwriting and doodles (a big "study group 3pm", a train, a to-do list with ticks, a cat, "coffee run", a tree, a bike, a lone heart and so on), each a different size and density, drawn from my own single-stroke handwriting font so no font file is downloaded. Each cluster is placed exactly where its print rests, so on load the desk looks clean (the ink only switches on once the prints have landed, fully covered); drag a print away and the ink is there. `tools/make-ink.py` regenerates the 12 small SVGs (about 53 KB in all).

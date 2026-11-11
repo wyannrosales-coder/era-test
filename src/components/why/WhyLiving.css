@@ -1,0 +1,162 @@
+.why-living {
+  position: relative;
+  padding: 200px var(--page-gutter);
+  overflow: clip;
+  background: var(--royal-chocolate-700);
+}
+
+/* The photo, blurred and toned chocolate (Figma's "bg" layer) */
+.why-living__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.why-living__backdrop {
+  position: absolute;
+  left: 0;
+  top: -15%;
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.why-living__tint {
+  position: absolute;
+  inset: 0;
+  background: rgba(57, 29, 19, 0.9);
+  mix-blend-mode: overlay;
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.why-living__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
+.why-living__heading {
+  width: min(904px, 100%);
+}
+
+.why-living__heading .eyebrow {
+  color: var(--line-in-white);
+}
+
+.why-living__heading .type-h2 {
+  color: var(--white);
+}
+
+.why-living__button {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 24px;
+  background: var(--line-in-white);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+  transition: background-color 300ms var(--ease-in-out);
+}
+
+.why-living__button:hover {
+  background: var(--bronze-600);
+}
+
+/* 505 × 438 photos, 177px down: 109px past the left edge, and from 75% − 18px */
+.why-living__photo {
+  position: absolute;
+  top: 177px;
+  width: 505px;
+  height: 438px;
+  overflow: hidden;
+}
+
+/* The frame stays put; the picture is 20% taller so it can drift inside it */
+.why-living__photo img {
+  position: absolute;
+  left: 0;
+  top: -10%;
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.why-living__photo--left {
+  left: -109px;
+}
+
+.why-living__photo--right {
+  left: calc(75% - 18px);
+}
+
+/* Figma's crop of the stairs photo: its right side, a little below centre */
+.why-living__photo--right img {
+  object-position: 100% 75%;
+}
+
+/* Narrower screens: the photos shrink and tuck further off the edges */
+@media (max-width: 1300px) {
+  .why-living__photo {
+    top: 50%;
+    width: 340px;
+    height: 295px;
+    margin-top: -148px;
+  }
+
+  .why-living__photo--left {
+    left: -170px;
+  }
+
+  .why-living__photo--right {
+    left: auto;
+    right: -170px;
+  }
+}
+
+/* Tablets and phones: the photos sit above the copy at the edges */
+@media (max-width: 900px) {
+  .why-living {
+    padding: 72px var(--page-gutter);
+  }
+
+  .why-living__content {
+    gap: 32px;
+    padding-top: 180px;
+  }
+
+  .why-living__photo {
+    top: 72px;
+    width: 150px;
+    height: 130px;
+    margin-top: 0;
+  }
+
+  .why-living__photo--left {
+    left: 0;
+  }
+
+  .why-living__photo--right {
+    right: 0;
+  }
+}
+
+/* Phones: no photos, just the line, the heading and the button on the backdrop */
+@media (max-width: 700px) {
+  .why-living__photo {
+    display: none;
+  }
+
+  .why-living__content {
+    padding-top: 0;
+  }
+}

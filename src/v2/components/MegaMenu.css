@@ -1,0 +1,41 @@
+/* Height is set inline to fit the open panel (0 when closed) and eases between them */
+.mega-menu {
+  width: 100%;
+  max-width: var(--content-max);
+  overflow: hidden;
+  transition: height 400ms var(--ease-in-out);
+}
+
+/* All panels share one grid cell; the divider stays put while they crossfade */
+.mega-menu__panels {
+  display: grid;
+  align-items: start;
+}
+
+.mega-menu__panel {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 250ms var(--ease-in-out),
+    visibility 0s linear 250ms;
+}
+
+.mega-menu__panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 300ms var(--ease-in-out) 100ms,
+    visibility 0s;
+}
+
+.mega-menu__heading {
+  padding-right: 32px;
+  color: var(--bronze-700);
+  /* Figma trims the label to its cap height */
+  text-box: trim-both cap alphabetic;
+}

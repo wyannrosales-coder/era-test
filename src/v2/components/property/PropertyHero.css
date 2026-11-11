@@ -1,0 +1,196 @@
+.property-hero {
+  position: relative;
+  /* Always one screen tall; the copy scales with the screen height (as on the homepage hero) */
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--royal-chocolate-700);
+}
+
+.property-hero__image,
+.property-hero__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.property-hero__image {
+  object-fit: cover;
+}
+
+.property-hero__overlay {
+  background: var(--royal-chocolate-700);
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+}
+
+/* Darkens as the hero scrolls away — animated by GSAP */
+.property-hero__shade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.property-hero__content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* v2 (Figma 1455:18319): name, address and buttons 64px apart, 72px off the bottom */
+  gap: clamp(16px, 8svh, 64px);
+  width: min(var(--content-max), calc(100% - 2 * var(--page-gutter)));
+  padding-bottom: clamp(16px, 9svh, 72px);
+}
+
+.property-hero__address {
+  text-wrap: balance;
+  font-size: 18px;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--royal-chocolate-300);
+}
+
+.property-hero__title {
+  font-size: clamp(32px, 8svh, 64px);
+  line-height: 1.2;
+  text-align: center;
+  color: var(--white);
+}
+
+.property-hero__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 5svh, 40px);
+}
+
+/* v2 (Figma 1455:18323): a solid bronze, rounded "Find a room" button */
+.property-hero__cta {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 44px;
+  border: 0;
+  background: var(--bronze-500);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+  transition: background-color 300ms var(--ease-in-out);
+}
+
+.property-hero__cta:hover {
+  background: var(--bronze-600);
+}
+
+.property-hero__media {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 72px;
+}
+
+.property-hero__media-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--grey-600);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--white);
+  transition: border-color 300ms var(--ease-in-out);
+}
+
+.property-hero__media-link:hover {
+  border-bottom-color: var(--white);
+}
+
+/* The 360° mark sits in a 39×24 slot, offset as in Figma */
+.property-hero__icon-360 {
+  position: relative;
+  flex-shrink: 0;
+  width: 39px;
+  height: 24px;
+}
+
+.property-hero__icon-360 img {
+  position: absolute;
+  left: 13.05%;
+  top: 1.59px;
+}
+
+@media (max-width: 900px) {
+  .property-hero__title {
+    font-size: clamp(28px, 5svh, 40px);
+  }
+
+  .property-hero__media {
+    gap: 8px 32px;
+  }
+}
+
+
+
+/* v2 phones and portrait tablets: a full screen, the name, line, button and media links
+   16px apart (Figma 1455:19336) and centred top to bottom, clear of the nav */
+@media (max-width: 700px), (max-width: 1100px) and (orientation: portrait) {
+  /* Figma 1455:19358: name, address, button and links 40px apart, the name wrapping freely */
+  .property-hero__content {
+    top: 64px;
+    bottom: 0;
+    justify-content: center;
+    gap: clamp(16px, 6svh, 40px);
+    padding: 24px 0 clamp(24px, 6svh, 40px);
+  }
+
+  .property-hero__break {
+    display: none;
+  }
+
+  /* The place's name wraps as one: "EPIISOD / Macquarie Park", never "Macquarie / Park" */
+  .property-hero__title em {
+    white-space: nowrap;
+  }
+
+  .property-hero__actions {
+    gap: clamp(16px, 6svh, 40px);
+  }
+
+  /* One column, as wide as the longest link: every link the same width, icons and
+     labels lined up on the left */
+  .property-hero__media {
+    display: grid;
+    grid-template-columns: max-content;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .property-hero__media-link {
+    justify-content: flex-start;
+  }
+
+  /* The 360 icon is wider than the others: give every icon the same slot */
+  .property-hero__media-link > img,
+  .property-hero__icon-360 {
+    flex: 0 0 39px;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  .property-hero__media-link > img {
+    width: 39px;
+  }
+}

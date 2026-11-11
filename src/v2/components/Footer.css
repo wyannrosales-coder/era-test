@@ -1,0 +1,281 @@
+.footer {
+  background: var(--bronze-200);
+  color: var(--royal-chocolate-700);
+}
+
+/*
+ * Giant wordmark, full content width (Figma 539:18091), 100px below the footer's top.
+ * The clip keeps the assembling pieces off the page's sides; the 100px above and below
+ * leave room for the arcs swinging in and the letters rising, so nothing looks cropped.
+ * The negative margin takes the bottom room back, so the links keep their spacing.
+ */
+.footer__brand {
+  display: flex;
+  justify-content: center;
+  padding: 100px var(--page-gutter);
+  margin-bottom: -100px;
+  overflow: clip;
+}
+
+.footer__wordmark {
+  position: relative;
+  width: 100%;
+  max-width: var(--content-max);
+  aspect-ratio: 138 / 22.6043;
+}
+
+.footer__wordmark-part {
+  position: absolute;
+  will-change: transform, opacity;
+}
+
+/* Arcs pivot around their circle's centre: below a top arc, above a bottom arc */
+.footer__wordmark-part--arc-top {
+  transform-origin: 50% 100%;
+}
+
+.footer__wordmark-part--arc-bottom {
+  transform-origin: 50% 0%;
+}
+
+/* Option B (v2): the emblem's lobes as live paths that morph into the wordmark's arcs
+   (Footer.tsx). They take the arcs' place, so the arc images stay hidden. */
+.footer__morph {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.footer--logo-b .footer__wordmark-part--arc-top,
+.footer--logo-b .footer__wordmark-part--arc-bottom {
+  visibility: hidden;
+}
+
+.footer__wordmark-part img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.footer__body {
+  display: flex;
+  justify-content: center;
+  padding: 120px var(--page-gutter) 48px;
+}
+
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+.footer__columns {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  padding-bottom: 48px;
+}
+
+.footer__column {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  align-self: stretch;
+}
+
+.footer__group {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Column titles are h2s (so screen readers can jump between footer sections) */
+.footer__heading {
+  opacity: 0.9;
+}
+
+.footer__locations .footer__links {
+  max-width: 208px;
+}
+
+.footer__locations {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.footer__links li {
+  opacity: 0.9;
+}
+
+.footer__links a {
+  transition: color 200ms ease;
+}
+
+.footer__links a:hover {
+  color: var(--bronze-700);
+}
+
+.footer__city {
+  font-weight: 600;
+}
+
+.footer__socials {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer__socials a {
+  display: block;
+  transition: opacity 200ms ease;
+}
+
+.footer__socials a:hover {
+  opacity: 0.65;
+}
+
+.footer__legal {
+  width: 100%;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  opacity: 0.9;
+}
+
+/* One line on larger screens, separated by bars */
+.footer__legal span + span::before {
+  content: '|';
+  margin: 0 14px;
+}
+
+@media (max-width: 900px) {
+  .footer__body {
+    padding-top: 64px;
+  }
+
+  .footer__columns {
+    flex-wrap: wrap;
+    row-gap: 48px;
+  }
+
+  .footer__column {
+    flex-basis: calc(33.33% - 16px);
+    gap: 48px;
+  }
+
+  .footer__legal {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  .footer__column {
+    flex-basis: 100%;
+  }
+}
+
+/*
+ * Phones (Figma 704:9404): one column of groups 40px apart — EPIISOD, Locations,
+ * Contact, Policies, then Follow us — and the legal links stacked and centred.
+ */
+@media (max-width: 700px), (max-width: 1100px) and (orientation: portrait) {
+  /* 60px above and below the wordmark (Figma 704:9300) */
+  .footer__brand {
+    padding: 60px var(--page-gutter);
+    margin-bottom: 0;
+  }
+
+  .footer__body {
+    padding: 72px var(--page-gutter);
+  }
+
+  /* v2 phones (Figma 1441:17648): one column, the groups in order, a short bronze line
+     between each (48px above and below it) */
+  .footer__columns {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 48px;
+    padding-bottom: 0;
+  }
+
+  .footer__column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: auto;
+    gap: 80px;
+  }
+
+  .footer__column + .footer__column {
+    padding-top: 50px;
+    background: linear-gradient(var(--bronze-500), var(--bronze-500)) 0 0 / 48px 2px no-repeat;
+  }
+
+  .footer__legal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 16px;
+  }
+
+  .footer__legal span + span::before {
+    content: none;
+  }
+}
+
+/*
+ * Option B: extra quiet space (300px; 160px on phones) between the opened-out wordmark
+ * and the links. The wordmark stays near the top of the screen while the links come up
+ * (see Footer.tsx), so the band clips only sideways, never cutting it off as it's held.
+ */
+.footer__drift {
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+.footer--logo-b {
+  /* From the wordmark's foot to the top of the links' area (read by Footer.tsx) */
+  --logo-b-space: 300px;
+}
+
+.footer--logo-b .footer__brand {
+  margin-bottom: calc(var(--logo-b-space) - 100px);
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+@media (max-width: 700px), (max-width: 1100px) and (orientation: portrait) {
+  .footer--logo-b {
+    --logo-b-space: 220px;
+  }
+
+  .footer--logo-b .footer__brand {
+    margin-bottom: calc(var(--logo-b-space) - 60px);
+  }
+}

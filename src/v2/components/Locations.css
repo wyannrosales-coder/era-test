@@ -1,0 +1,360 @@
+.locations {
+  /* Distance from the content edge to the page edge, so the cards bleed off the right */
+  --bleed: max(var(--page-gutter), (100vw - var(--content-max)) / 2);
+  padding: 120px var(--page-gutter);
+  overflow-x: clip;
+  background: var(--bronze-100);
+}
+
+.locations__overview {
+  display: flex;
+  align-items: center;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  isolation: isolate;
+  /* Keep the intro's shadow from bleeding above/below; let the cards run off the right */
+  clip-path: inset(0 -100vw 0 0);
+}
+
+/* ---------- Intro column (Figma 1441:16222) ---------- */
+
+.locations__intro {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-shrink: 0;
+  width: 464px;
+  padding-right: 48px;
+  align-self: stretch;
+  background: var(--bronze-100);
+  /* Figma 1441:16290: shadow fades in as the cards slide beneath the column */
+  box-shadow: 72px 0 60px -60px rgba(0, 0, 0, calc(0.2 * min(1, var(--progress, 0) * 4)));
+}
+
+.locations__intro-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.locations__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.locations__lede {
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--grey-700);
+}
+
+.locations__rule {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--bronze-500);
+}
+
+.locations__soon {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--grey-700);
+}
+
+.locations__soon-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.5;
+  color: var(--bronze-700);
+}
+
+.locations__soon-title em {
+  font-style: italic;
+}
+
+.locations__soon-region {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.locations__soon-name {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.locations__soon-region ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ---------- Cards ---------- */
+
+.locations__showcase {
+  position: relative;
+  z-index: 1;
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
+/*
+ * Native horizontal scroller. It starts at the intro's edge (so cards slide out of view
+ * beneath it) and reaches the page edge, so the second card runs off the screen.
+ */
+.locations__viewport {
+  align-self: stretch;
+  margin-right: calc(-1 * var(--bleed));
+  /* Room for the cards' long soft shadow, which the scroller would otherwise clip */
+  padding-bottom: 112px;
+  margin-bottom: -112px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  /* The last card snaps to the content edge, not the page edge */
+  scroll-padding-right: var(--bleed);
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+  outline: none;
+}
+
+.locations__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.locations__viewport.is-dragging,
+.locations__viewport.is-gliding {
+  scroll-snap-type: none;
+}
+
+.locations__viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.locations__viewport:focus-visible {
+  outline: 1px solid var(--bronze-500);
+  outline-offset: -1px;
+}
+
+.locations__track {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: max-content;
+  /* The last card comes to rest at the content edge */
+  padding-right: var(--bleed);
+}
+
+.locations__track > * {
+  scroll-snap-align: start;
+}
+
+.locations__track > :last-child {
+  scroll-snap-align: end;
+}
+
+/* ---------- Carousel navigation (Figma 1441:16527) ---------- */
+
+.locations__nav {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 352px;
+}
+
+.locations__nav-row {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.locations__arrow {
+  display: flex;
+  padding: 12px;
+  border: 1px solid var(--royal-chocolate-700);
+  border-radius: 24px;
+  background: none;
+  cursor: pointer;
+  transition:
+    background-color 300ms var(--ease-in-out),
+    opacity 300ms var(--ease-in-out);
+}
+
+.locations__arrow:hover:not(:disabled) {
+  background: var(--bronze-200);
+}
+
+.locations__arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.locations__arrow:focus-visible {
+  outline: 1px solid var(--bronze-500);
+  outline-offset: 3px;
+}
+
+.locations__progress {
+  position: relative;
+  width: 188px;
+  height: 2px;
+  background: var(--royal-chocolate-300);
+}
+
+/* Fills from 1/count of the track (first card) to all of it (last card) */
+.locations__progress-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc((1 + var(--progress, 0) * (var(--count) - 1)) / var(--count) * 100%);
+  background: var(--royal-chocolate-600);
+}
+
+.locations__counter {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--royal-chocolate-600);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 1300px) {
+  .locations__intro {
+    width: 38%;
+  }
+}
+
+@media (max-width: 900px) {
+  .locations {
+    padding: 100px var(--page-gutter);
+  }
+
+  .locations__overview {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 48px;
+    clip-path: none;
+  }
+
+  .locations__intro {
+    width: 100%;
+    padding-right: 0;
+    gap: 32px;
+    box-shadow: none;
+  }
+
+  .locations__showcase {
+    gap: 48px;
+  }
+
+  .locations__viewport {
+    margin-left: calc(-1 * var(--page-gutter));
+    padding-left: var(--page-gutter);
+    scroll-padding-left: var(--page-gutter);
+  }
+}
+
+/*
+ * v2 phones (Figma 1441:17350): a centred column — heading, line, the cards, then the
+ * coming-soon list centred below them. The intro box steps aside (display: contents) so
+ * its parts can be ordered around the cards.
+ */
+@media (max-width: 700px), (max-width: 1100px) and (orientation: portrait) {
+  .locations {
+    padding: 72px 24px;
+  }
+
+  .locations__overview {
+    align-items: center;
+    gap: 40px;
+  }
+
+  .locations__intro {
+    display: contents;
+  }
+
+  .locations__intro-copy {
+    order: 1;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .locations__heading {
+    gap: 16px;
+  }
+
+  .locations__lede {
+    font-size: 16px;
+  }
+
+  .locations__rule {
+    order: 2;
+  }
+
+  .locations__showcase {
+    order: 3;
+    align-self: stretch;
+    gap: 40px;
+  }
+
+  .locations__soon {
+    order: 4;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .locations__soon-region {
+    align-items: center;
+  }
+
+  .locations__track {
+    gap: 16px;
+  }
+
+  .locations__viewport {
+    margin-left: -24px;
+    margin-right: -24px;
+    padding-left: 24px;
+    scroll-padding-left: 24px;
+    scroll-padding-right: 24px;
+  }
+
+  .locations__track {
+    padding-right: 24px;
+  }
+
+  /* Arrows at the ends, the progress line taking the space between */
+  .locations__nav {
+    width: 100%;
+    padding: 0 40px;
+  }
+
+  .locations__progress {
+    flex: 1;
+    width: auto;
+  }
+}
+
+/* Portrait tablets: the desktop 24px gap between the full-size cards */
+@media (min-width: 701px) and (max-width: 1100px) and (orientation: portrait) {
+  .locations__track {
+    gap: 24px;
+  }
+}

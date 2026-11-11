@@ -1,0 +1,244 @@
+.instagram {
+  padding: 200px var(--page-gutter);
+  background: var(--royal-chocolate-700);
+}
+
+/*
+ * The photo is blurred directly (filter, not backdrop-filter on the tint): Safari and
+ * some Firefox setups drop backdrop-filter when it's combined with a blend mode.
+ * Oversized on every side so the scroll parallax and the blur's soft edges stay hidden.
+ */
+.instagram__backdrop {
+  position: absolute;
+  inset: -15% -5%;
+  width: 110%;
+  height: 130%;
+  object-fit: cover;
+  filter: blur(40px);
+}
+
+.instagram__tint {
+  position: absolute;
+  inset: 0;
+  background: rgba(57, 29, 19, 0.9);
+  mix-blend-mode: overlay;
+}
+
+.instagram__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+/* Scoped to beat the shared .eyebrow / .display-title colours */
+.instagram .instagram__eyebrow {
+  color: var(--line-in-white);
+}
+
+.instagram .instagram__title {
+  color: var(--white);
+}
+
+.instagram__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 24px;
+  font-size: 24px;
+  line-height: 1.5;
+  color: var(--bronze-200);
+}
+
+.instagram__follow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.instagram__follow ul {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.instagram__follow a {
+  display: block;
+  transition: opacity 200ms ease;
+}
+
+.instagram__follow a:hover {
+  opacity: 0.7;
+}
+
+/* Full-bleed strip of 320×300 posts, looping slowly */
+.instagram__strip {
+  margin: 0 calc(-1 * max(var(--page-gutter), (100vw - var(--content-max)) / 2));
+  overflow: hidden;
+  /* Vertical swipes still scroll the page; horizontal ones move the strip */
+  touch-action: pan-y;
+  cursor: grab;
+  outline: none;
+}
+
+.instagram__track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* Moved by InstagramStrip.tsx: autoplay at 24px/s, plus the visitor's own scrolling */
+  will-change: transform;
+}
+
+.instagram__strip.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.instagram__strip:focus-visible {
+  outline: 1px solid var(--line-in-white);
+  outline-offset: 4px;
+}
+
+.instagram__track li {
+  flex-shrink: 0;
+  width: 320px;
+  height: 300px;
+  overflow: hidden;
+}
+
+.instagram__track a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.instagram__track img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms var(--ease-in-out);
+}
+
+.instagram__track a {
+  position: relative;
+}
+
+.instagram__track a:hover img,
+.instagram__track a:focus-visible img {
+  transform: scale(1.04);
+}
+
+/* Post details on hover / keyboard focus: a chocolate fade, the caption, date and counts */
+.instagram__details {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(36, 18, 12, 0.2) 0%, rgba(36, 18, 12, 0.88) 55%);
+  color: var(--white);
+  opacity: 0;
+  transition: opacity 400ms var(--ease-in-out);
+  pointer-events: none;
+}
+
+.instagram__track a:hover .instagram__details,
+.instagram__track a:focus-visible .instagram__details {
+  opacity: 1;
+}
+
+/* No details mid-drag, and none on touch screens, where a tap opens the post */
+.instagram__strip.is-dragging .instagram__details {
+  opacity: 0;
+}
+
+@media (hover: none) {
+  .instagram__details {
+    display: none;
+  }
+}
+
+.instagram__caption,
+.instagram__meta,
+.instagram__view {
+  transform: translateY(8px);
+  transition: transform 500ms var(--ease-in-out);
+}
+
+.instagram__track a:hover :is(.instagram__caption, .instagram__meta, .instagram__view),
+.instagram__track a:focus-visible :is(.instagram__caption, .instagram__meta, .instagram__view) {
+  transform: none;
+}
+
+/* Up to four lines of the caption */
+.instagram__caption {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.4;
+  white-space: pre-line;
+}
+
+.instagram__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--line-in-white);
+}
+
+.instagram__view {
+  align-self: flex-start;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--line-in-white);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.instagram__track a:focus-visible {
+  outline: 1px solid var(--line-in-white);
+  outline-offset: -1px;
+}
+
+@media (max-width: 700px) {
+  .instagram {
+    padding: 120px var(--page-gutter);
+  }
+
+  /* Hashtag and "Follow Us" stacked and centred */
+  .instagram__bar {
+    flex-direction: column;
+    align-items: center;
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .instagram__follow {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .instagram__track li {
+    width: 240px;
+    height: 225px;
+  }
+}

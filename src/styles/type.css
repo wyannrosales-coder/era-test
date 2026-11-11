@@ -1,0 +1,133 @@
+/* The type scale (the same names as the Figma text styles), shared by the React app and the nav on experience pages. */
+
+/*
+ * Heading scale H1–H6 (the same names as the Figma text styles). The style follows the
+ * look, the tag follows the page outline: a card title is an <h3> styled as H4.
+ * :where() keeps these at zero specificity, so a component can still recolour or
+ * resize one (the heroes scale H1 with the screen height).
+ */
+:where(.type-h1, .type-h2, .type-h3, .type-h4, .display-title) {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--royal-chocolate-700);
+}
+
+:where(.type-h1) {
+  font-size: 64px;
+}
+
+:where(.type-h1) em {
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* .display-title is the original name for H2 */
+:where(.type-h2, .display-title) {
+  font-size: 56px;
+}
+
+:where(.type-h3) {
+  font-size: 40px;
+}
+
+:where(.type-h2, .type-h3, .display-title) em {
+  font-style: italic;
+}
+
+:where(.display-title) em.medium {
+  font-weight: 500;
+}
+
+:where(.type-h4) {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.5;
+}
+
+:where(.type-h5, .type-h6) {
+  margin: 0;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+}
+
+:where(.type-h5) {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--royal-chocolate-700);
+}
+
+:where(.type-h6) {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.25;
+  letter-spacing: 1.6px;
+  color: var(--royal-chocolate-600);
+}
+
+/*
+ * Body copy, Albert Sans. Each style sets size and line height only: the weight follows
+ * the use and emphasis (Light 300, Regular 400, Medium 500), set where it's used.
+ */
+:where(.type-lead) {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+:where(.type-body-l) {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+:where(.type-body-m) {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+:where(.type-body-s) {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+:where(.type-caption) {
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* Vertical hairline drawn from a horizontal SVG rotated 90° */
+.vline {
+  position: relative;
+  width: 1px;
+  flex-shrink: 0;
+}
+
+.vline img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+@media (max-width: 900px) {
+  :where(.type-h1) {
+    font-size: 40px;
+  }
+
+  :where(.type-h2, .display-title) {
+    font-size: 36px;
+  }
+
+  :where(.type-h3) {
+    font-size: 32px;
+  }
+
+  :where(.type-lead) {
+    font-size: 18px;
+  }
+
+  :where(.type-body-l) {
+    font-size: 16px;
+  }
+}

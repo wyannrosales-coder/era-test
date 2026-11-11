@@ -1,0 +1,130 @@
+/* ---- Offer page (Figma 1346:17767); the layout comes from the blog post ---- */
+.promo-detail {
+  padding-bottom: 80px;
+}
+
+.promo-detail__title {
+  margin-top: 0;
+}
+
+/* A section's paragraphs and lists, 24 apart */
+.promo-detail__blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: var(--royal-chocolate-700);
+}
+
+.promo-detail__blocks p {
+  margin: 0;
+}
+
+.promo-detail__blocks strong {
+  font-weight: 700;
+}
+
+.promo-detail__blocks a {
+  font-weight: 700;
+  color: var(--bronze-700);
+  text-decoration: underline;
+}
+
+/* Points 16 apart, the marker hung 27px in (Figma 1346:18161) */
+.promo-detail__list,
+.promo-detail__list ul {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding-left: 27px;
+  line-height: 1.2;
+  list-style: disc;
+}
+
+/* Numbered steps sit further apart, each with its lines 8 apart below (Figma 1346:18375) */
+ol.promo-detail__list {
+  gap: 24px;
+  list-style: decimal;
+}
+
+.promo-detail__list ul {
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.promo-detail__list li > p {
+  margin-top: 8px;
+}
+
+.promo-detail__aside-book {
+  align-self: flex-start;
+}
+
+/* Phones and tablets: Book a room below the terms instead */
+.promo-detail__book {
+  display: none;
+}
+
+/* Other offers: the heading, then the property page's carousel (Figma 1346:18200) */
+.promo-detail__others {
+  --visible: 1;
+  --progress: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  padding: 0 var(--page-gutter) 200px;
+  overflow: hidden;
+  background: var(--white);
+}
+
+/* Stretches the row so it can scroll out to the page edges */
+.promo-detail__row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+@media (max-width: 1100px) {
+  .promo-detail .blog-post__aside {
+    display: none;
+  }
+
+  .promo-detail__book {
+    display: inline-flex;
+    align-self: center;
+  }
+}
+
+/* Phones (Figma 1346:17580): the offer on cream, the other offers on white below */
+@media (max-width: 700px) {
+  .promo-detail {
+    gap: 40px;
+    padding: calc(64px + 72px) var(--page-gutter) 72px;
+    background: var(--bronze-100);
+  }
+
+  .promo-detail .blog-post__main {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .promo-detail .blog-post__article {
+    gap: 48px;
+  }
+
+  .promo-detail .blog-post__image {
+    height: 200px;
+  }
+
+  .promo-detail__list,
+  .promo-detail__list ul {
+    padding-left: 24px;
+  }
+
+  .promo-detail__others {
+    gap: 64px;
+    padding: 72px var(--page-gutter);
+  }
+}

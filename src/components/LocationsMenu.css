@@ -1,0 +1,220 @@
+.locations-menu__row {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px 0;
+}
+
+.locations-menu__region {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 233px;
+  padding-right: 32px;
+  border-right: 1px solid var(--line-in-white);
+}
+
+.locations-menu__region-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-700);
+  white-space: nowrap;
+}
+
+.locations-menu__region-summary {
+  font-size: 14px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.locations-menu__cities {
+  flex: 1 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  min-width: 0;
+  padding: 0 48px;
+}
+
+.locations-menu__city {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.locations-menu__city-name {
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+}
+
+.locations-menu__property {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  transition: background-color 200ms ease;
+}
+
+.locations-menu__property.is-link:hover,
+.locations-menu__property.is-link:focus-visible {
+  background: var(--bronze-200);
+}
+
+.locations-menu__name-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.locations-menu__name {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-700);
+  white-space: nowrap;
+}
+
+.locations-menu__arrow {
+  display: flex;
+  flex-shrink: 0;
+  padding: 4px 0;
+}
+
+.locations-menu__soon {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  background: var(--bronze-600);
+  font-size: 12px;
+  line-height: normal;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.locations-menu__address {
+  font-weight: 300;
+  color: var(--royal-chocolate-500);
+}
+
+/* Option B (Figma 1081:16430): open properties (787px) · coming soon, ruled left */
+.locations-menu-b {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  width: min(var(--content-max), 100%);
+}
+
+.locations-menu-b__open {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 787px;
+}
+
+.locations-menu-b__row {
+  display: flex;
+  align-items: stretch;
+  padding-top: 16px;
+}
+
+.locations-menu-b__cities {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.locations-menu-b__cities .locations-menu__city-name,
+.locations-menu-b__cities .locations-menu__property {
+  padding-inline: 24px;
+}
+
+.locations-menu-b__soon {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px 48px;
+  border-left: 1px solid var(--line-in-white);
+}
+
+.locations-menu-b__soon-title {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.locations-menu-b__soon-summary {
+  padding: 16px 0;
+  font-size: 14px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+}
+
+.locations-menu-b__soon-summary strong {
+  font-weight: 700;
+}
+
+.locations-menu-b__soon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-500);
+}
+
+.locations-menu-b__soon-name {
+  font-weight: 500;
+}
+
+/* A property's experience page, linked under its entry */
+.locations-menu__experience {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 16px 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--bronze-500);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+  transition: color 200ms ease, border-color 200ms ease;
+}
+
+.locations-menu__experience::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-block: 4px solid transparent;
+  border-left: 7px solid currentColor;
+}
+
+.locations-menu__experience:hover,
+.locations-menu__experience:focus-visible {
+  border-bottom-color: var(--royal-chocolate-700);
+  color: var(--royal-chocolate-700);
+}
+
+.locations-menu-b__cities .locations-menu__experience {
+  margin-inline: 24px;
+}

@@ -1,0 +1,244 @@
+.property-map {
+  width: 100%;
+  height: 100%;
+  background: var(--bronze-100);
+  font-family: var(--font-body);
+}
+
+/* Numbered places (Figma 1182:8723): dark circles, white numbers, white edge */
+.map-marker {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--white);
+  border-radius: 50%;
+  background: var(--royal-chocolate-700);
+  box-shadow:
+    0 5px 5px rgba(0, 0, 0, 0.15),
+    0 19px 9.5px rgba(0, 0, 0, 0.13);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--white);
+  transition:
+    transform 250ms var(--ease-in-out),
+    background-color 250ms var(--ease-in-out);
+}
+
+/* Lit from the list, or pointed at */
+.map-marker:hover,
+.map-marker.is-lit {
+  background: var(--bronze-700);
+  transform: scale(1.2);
+}
+
+/* The property (Figma 1182:7901): a point at the EPIISOD marker's centre, with the
+   marker around it and the card 24px above the marker */
+.map-home {
+  overflow: visible;
+}
+
+.map-home__mark {
+  position: absolute;
+  /* The marker's badge (80 × 79.5) sits 30px in and 5px down its shadowed artwork */
+  left: -70px;
+  top: -44.75px;
+  max-width: none;
+  pointer-events: none;
+}
+
+.map-home__card {
+  position: absolute;
+  left: 0;
+  bottom: 63.75px;
+  width: 322px;
+  padding: 16px;
+  border: 1px solid var(--bronze-400);
+  background: var(--white);
+  box-shadow:
+    0 5px 5px rgba(0, 0, 0, 0.15),
+    0 19px 9.5px rgba(0, 0, 0, 0.13),
+    0 43px 13px rgba(0, 0, 0, 0.07);
+  text-align: center;
+  transform: translateX(-50%);
+  cursor: default;
+}
+
+.map-home__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-700);
+}
+
+.map-home__address {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--grey-600);
+}
+
+.map-home__card {
+  transition: opacity 300ms var(--ease-in-out);
+}
+
+.property-map.has-popup .map-home__card {
+  opacity: 0;
+}
+
+/* v2: the EPIISOD marker is clickable; clicked, the map zooms in and its card opens out
+   to show the property's photo */
+.map-home__card,
+.map-home__mark {
+  cursor: pointer;
+}
+
+.map-home__mark {
+  pointer-events: auto;
+}
+
+.map-home__photo {
+  display: block;
+  /* !important: Leaflet sets marker images to width: auto */
+  width: calc(100% + 32px) !important;
+  max-width: none;
+  height: 0;
+  margin: -16px -16px 0;
+  object-fit: cover;
+  opacity: 0;
+  transition:
+    height 450ms var(--ease-in-out),
+    margin 450ms var(--ease-in-out),
+    opacity 350ms var(--ease-in-out);
+}
+
+.property-map.home-open .map-home__photo {
+  height: 160px;
+  margin-bottom: 16px;
+  opacity: 1;
+}
+
+/* The card's point, over its bottom edge */
+.map-home__pointer {
+  position: absolute;
+  left: 50%;
+  bottom: -16px;
+  max-width: none;
+  transform: translateX(-50%);
+}
+
+/* v2 place cards: the place's photo on top, then its serif name and address */
+.map-popup .leaflet-popup-content-wrapper {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--bronze-400);
+  border-radius: 4px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.map-popup .leaflet-popup-content {
+  width: 260px !important;
+  margin: 0;
+  animation: map-card-in 350ms var(--ease-in-out);
+}
+
+.map-popup__photo {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+/* No photo yet: the finder's placeholder pin on a cream panel */
+.map-popup__photo--none {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bronze-200);
+}
+
+.map-popup__body {
+  padding: 12px 36px 14px 16px;
+}
+
+@keyframes map-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.map-popup__title {
+  margin: 0 !important;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--royal-chocolate-700);
+}
+
+.map-popup__address {
+  margin: 4px 0 0 !important;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--grey-600);
+}
+
+.map-popup .leaflet-popup-close-button {
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  color: var(--royal-chocolate-700);
+}
+
+.property-map .leaflet-control-zoom {
+  border: 1px solid var(--line-in-white);
+  border-radius: 0;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.property-map .leaflet-control-zoom a {
+  border-radius: 0 !important;
+  color: var(--royal-chocolate-700);
+}
+
+/* Phones: a smaller property card and place cards */
+@media (max-width: 700px) {
+  .map-home__card {
+    width: 240px;
+    padding: 12px;
+  }
+
+  .map-home__name {
+    font-size: 16px;
+  }
+
+  .map-home__address {
+    font-size: 12px;
+  }
+
+  .map-popup .leaflet-popup-content {
+    width: 220px !important;
+  }
+
+  .map-popup__photo {
+    height: 110px;
+  }
+
+  .map-popup__body {
+    padding: 10px 32px 12px 12px;
+  }
+
+  .map-home__photo {
+    width: calc(100% + 24px) !important;
+    margin: -12px -12px 0;
+  }
+
+  .property-map.home-open .map-home__photo {
+    height: 120px;
+    margin-bottom: 12px;
+  }
+}

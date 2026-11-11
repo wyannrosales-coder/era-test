@@ -1,0 +1,210 @@
+/* Starts below the fixed nav (88px); the photo sits flush with the right edge */
+.why-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: calc(88px + 700px);
+  padding: calc(88px + 120px) var(--page-gutter) 120px;
+  overflow: clip;
+  background: var(--white);
+}
+
+.why-hero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 48px;
+  width: min(556px, 100%);
+}
+
+/* Desktop: the copy starts on the content's left edge, as in Figma */
+@media (min-width: 1513px) {
+  .why-hero__copy {
+    margin-left: calc((100vw - var(--content-max)) / 2 - var(--page-gutter));
+  }
+}
+
+.why-hero__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Figma sets "designed" in Playfair Italic regular, lighter than the shared H1 accent */
+.why-hero__title em {
+  font-weight: 400;
+}
+
+.why-hero__lede {
+  color: var(--grey-700);
+}
+
+/* 768 × 480 at 1512px, centred on the copy (Figma 889:10313) */
+.why-hero__carousel {
+  position: absolute;
+  right: 0;
+  /* Centred on the 700px band below the nav: half the 88px nav further down */
+  top: calc(50% + 44px + 2px);
+  transform: translateY(-50%);
+  width: 50.8%;
+  aspect-ratio: 768 / 480;
+  max-height: 480px;
+  display: flex;
+  overflow: hidden;
+  background: #d9d9d9;
+  color: var(--white);
+}
+
+.why-hero__slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.06);
+  transition:
+    opacity 900ms var(--ease-in-out),
+    transform 4800ms var(--ease-in-out);
+}
+
+.why-hero__slide.is-active {
+  opacity: 1;
+  transform: none;
+}
+
+.why-hero__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(179.39deg, rgba(25, 21, 11, 0.005) 54.46%, rgb(25, 21, 11) 115.82%);
+  pointer-events: none;
+}
+
+.why-hero__overlay {
+  position: relative;
+  align-self: flex-end;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+  padding: 32px 40px;
+}
+
+.why-hero__name {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 36px;
+  line-height: 1.2;
+  color: var(--white);
+  animation: why-hero-name-in 700ms var(--ease-in-out);
+}
+
+@keyframes why-hero-name-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.why-hero__pager {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.why-hero__count {
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: nowrap;
+  word-spacing: 4px;
+}
+
+.why-hero__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--white);
+  background: none;
+  cursor: pointer;
+  transition: background-color 250ms var(--ease-in-out);
+}
+
+.why-hero__arrow:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.why-hero__arrow:focus-visible {
+  outline: 1px solid var(--white);
+  outline-offset: 3px;
+}
+
+/* The Figma caret points down: turn it to point left / right */
+.why-hero__arrow--prev {
+  transform: rotate(90deg);
+}
+
+.why-hero__arrow--next {
+  transform: rotate(-90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-hero__slide,
+  .why-hero__name {
+    transition: opacity 300ms ease;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* Tablets and phones: the copy, then the photo running off the right edge */
+@media (max-width: 1100px) {
+  .why-hero {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 56px;
+    min-height: 0;
+    padding: calc(64px + 72px) var(--page-gutter) 80px;
+  }
+
+  .why-hero__carousel {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: auto;
+    max-height: none;
+    margin-right: calc(-1 * var(--page-gutter));
+  }
+}
+
+@media (max-width: 700px) {
+  .why-hero__copy {
+    gap: 32px;
+  }
+
+  .why-hero__carousel {
+    aspect-ratio: auto;
+    height: 300px;
+  }
+
+  .why-hero__overlay {
+    padding: 24px;
+  }
+
+  .why-hero__name {
+    font-size: 24px;
+  }
+
+  .why-hero__pager {
+    gap: 8px;
+  }
+
+  .why-hero__count {
+    margin-right: 8px;
+  }
+}

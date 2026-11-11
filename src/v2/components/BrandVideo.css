@@ -1,0 +1,127 @@
+.brand-video {
+  position: relative;
+  padding: 140px var(--page-gutter);
+  background: var(--white);
+}
+
+/* drift = exit parallax (GSAP); lift = the heading-and-frame column */
+.brand-video__drift,
+.brand-video__lift {
+  will-change: transform;
+}
+
+.brand-video__lift {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+
+.brand-video__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+
+/* Full-size slot from the start, so the page below doesn't move while the frame grows */
+.brand-video__stage {
+  position: relative;
+  width: min(1136px, 100%);
+  aspect-ratio: 1136 / 639;
+}
+
+/* Revealed from a centred square by GSAP (clip-path + y); defaults to the full frame */
+.brand-video__frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  will-change: clip-path, transform;
+}
+
+.brand-video__thumb,
+.brand-video__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.brand-video__thumb {
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.brand-video__video {
+  opacity: 0;
+  background: #000;
+  transition: opacity 400ms var(--ease-in-out);
+}
+
+.brand-video__tint {
+  position: absolute;
+  inset: 0;
+  /* Figma 1455:18149: black at 50% once the film is open */
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+/* Darkens as the section scrolls away (hero-style exit) */
+.brand-video__shade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Covers the frame and centres the button; GSAP fades and scales it in at the end of
+   the reveal (scaling from the centre), so no transform is set here */
+.brand-video__play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.brand-video__play .play-cta {
+  pointer-events: auto;
+}
+
+/* Once the film starts, it takes over the frame */
+.brand-video.is-started .brand-video__video {
+  opacity: 1;
+}
+
+/* While it plays the button and tint step aside; paused, they return over the frame */
+.brand-video.is-playing .brand-video__tint,
+.brand-video.is-playing .brand-video__play {
+  visibility: hidden;
+}
+
+@media (max-width: 900px) {
+  .brand-video {
+    padding: 100px var(--page-gutter);
+  }
+
+  .brand-video__lift {
+    gap: 56px;
+  }
+
+}
+
+/* Phones (Figma 704:8593): 72px padding, 40px between the heading and the film, 72px play */
+@media (max-width: 700px), (max-width: 1100px) and (orientation: portrait) {
+  .brand-video {
+    padding: 72px var(--page-gutter);
+  }
+
+  .brand-video__lift {
+    gap: 40px;
+  }
+
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Pages of the site. Blog posts are not listed yet. Update the domain here and in robots.txt if it is not www.epiisod.com. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.epiisod.com</loc></url>
+  <url><loc>https://www.epiisod.com/locations</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park/experience</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park/quad-4-bedroom-ensuite</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park/quint-5-bedroom-ensuite</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park/signature-studio</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park/signature-studio-flex</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park/aspect-studio</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park/aspect-studio-e</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park/empowered-studio</loc></url>
+  <url><loc>https://www.epiisod.com/locations/macquarie-park/premier-empowered-studio</loc></url>
+  <url><loc>https://www.epiisod.com/locations/mackenzie</loc></url>
+  <url><loc>https://www.epiisod.com/locations/fairway</loc></url>
+  <url><loc>https://www.epiisod.com/locations/stirling</loc></url>
+  <url><loc>https://www.epiisod.com/locations/euston</loc></url>
+  <url><loc>https://www.epiisod.com/experience</loc></url>
+  <url><loc>https://www.epiisod.com/why-epiisod</loc></url>
+  <url><loc>https://www.epiisod.com/about</loc></url>
+  <url><loc>https://www.epiisod.com/promotions</loc></url>
+  <url><loc>https://www.epiisod.com/promotions/limited-time-free-weeks-offer</loc></url>
+  <url><loc>https://www.epiisod.com/promotions/save-40week-your-commute</loc></url>
+  <url><loc>https://www.epiisod.com/promotions/flexible-short-stay-4-weeks-fit-your-needs</loc></url>
+  <url><loc>https://www.epiisod.com/promotions/refer-friend-double-joy-600-rewards</loc></url>
+  <url><loc>https://www.epiisod.com/promotions/pay-full-save-500</loc></url>
+  <url><loc>https://www.epiisod.com/contact</loc></url>
+  <url><loc>https://www.epiisod.com/join-the-waitlist</loc></url>
+  <url><loc>https://www.epiisod.com/faqs</loc></url>
+  <url><loc>https://www.epiisod.com/blog/for-parents</loc></url>
+  <url><loc>https://www.epiisod.com/blog/for-international-students</loc></url>
+</urlset>

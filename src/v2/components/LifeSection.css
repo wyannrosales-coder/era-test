@@ -1,0 +1,68 @@
+.life {
+  position: relative;
+  overflow-x: clip;
+  background: var(--white);
+}
+
+/* Intro stays pinned while the card expands and the Student Life fold scrolls over it */
+.life__intro {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--royal-chocolate-700);
+}
+
+.life__image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.life__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Figma: black at 50%, multiplied */
+.life__overlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+/* Full-screen white layer, clipped to the card's current size by GSAP. Until the
+   script runs it hugs the heading (≈ Figma's 363 × 255 card). */
+.life__card {
+  position: absolute;
+  inset: 0;
+  background: var(--white);
+  clip-path: inset(calc(50% - 128px) calc(50% - 182px));
+  will-change: clip-path;
+}
+
+.life__heading {
+  position: relative;
+  /* Hug the text: the card is sized from this box */
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--page-gutter));
+  text-align: center;
+}
+
+/* Laid out below the intro (after the expansion), so it scrolls up over it */
+.life__wellness {
+  position: absolute;
+  top: var(--slide, 100vh);
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  background: var(--white);
+}

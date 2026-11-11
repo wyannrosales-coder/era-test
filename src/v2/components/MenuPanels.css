@@ -1,0 +1,232 @@
+/* v2 mega menu panels (Figma 1441:11850): photo on the left, links beside it */
+.menu2 {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+}
+
+.menu2__image {
+  flex-shrink: 0;
+  width: 440px;
+  object-fit: cover;
+}
+
+.menu2__image--locations {
+  height: 278px;
+}
+
+.menu2__image--life {
+  height: 408px;
+  object-position: 50% 100%;
+}
+
+/* Matches the height of the links beside it (Figma: self-stretch) */
+.menu2__image--contact {
+  position: relative;
+  align-self: stretch;
+}
+
+.menu2__image--contact img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 72%;
+}
+
+/* ---------- Headline links (Life @ EPIISOD, Contact us) ---------- */
+
+.menu2__cols {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  align-self: center;
+}
+
+.menu2__cols--top {
+  align-items: flex-start;
+  align-self: flex-start;
+}
+
+.menu2__col {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu2__item {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px;
+  transition: background-color 250ms var(--ease-in-out);
+}
+
+/* Hover (Figma 1441:14943): bronze-200 wash */
+.menu2__item:hover,
+.menu2__item:focus-visible {
+  background: var(--bronze-200);
+  outline: none;
+}
+
+.menu2__item-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-700);
+}
+
+.menu2__item-text {
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--royal-chocolate-500);
+}
+
+/* ---------- Locations ---------- */
+
+.menu2__regions {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.menu2__region {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.menu2__region-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 32px;
+}
+
+.menu2__region-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-700);
+}
+
+.menu2__region-meta {
+  font-size: 14px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.menu2__properties {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--royal-chocolate-300);
+}
+
+.menu2__property {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px;
+  transition: background-color 250ms var(--ease-in-out);
+}
+
+.menu2__property:hover,
+.menu2__property:focus-visible {
+  background: var(--bronze-200);
+  outline: none;
+}
+
+.menu2__property-city {
+  font-size: 14px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+}
+
+.menu2__property-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-700);
+}
+
+.menu2__property-name img {
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.menu2__property:hover .menu2__property-name img {
+  transform: translateX(4px);
+}
+
+.menu2__property-address {
+  margin-top: 4px;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-500);
+}
+
+.menu2__soon {
+  flex-shrink: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 324px;
+  padding: 24px;
+  background: #fafafa; /* grey-50 */
+}
+
+.menu2__soon-title {
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--bronze-700);
+}
+
+.menu2__soon-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menu2__soon-region {
+  font-size: 14px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+}
+
+.menu2__soon-region b {
+  font-weight: 600;
+}
+
+.menu2__soon-list {
+  margin: 0;
+  padding: 0 0 0 16px;
+  list-style: none;
+  border-left: 1px solid var(--royal-chocolate-300);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-500);
+  white-space: nowrap;
+}
+
+.menu2__soon-list span {
+  font-weight: 300;
+}
+

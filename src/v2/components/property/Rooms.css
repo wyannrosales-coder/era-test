@@ -1,0 +1,808 @@
+.rooms {
+  /* Deep at the foot, so the hand-over's dimming waits until the last cards have risen */
+  padding: 120px var(--page-gutter) 200px;
+  background: var(--white);
+}
+
+/* The hand-over shade also dims the pinned controls (they sit at z-index 3–4) */
+.rooms .exit-shade {
+  z-index: 5;
+}
+
+/* The line, the heading and the search fields 48px apart (Figma 1080:5711), then the
+   results 80px below */
+.rooms__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
+/* No box of its own: the search must sit directly in the section's column to stay
+   pinned all the way down the results */
+.rooms__overview {
+  display: contents;
+}
+
+/*
+ * Search: two fields (Figma 1080:5717), pinned below the sub-navigation while the rooms
+ * scroll, on a full-width white band (::before) with 16px above and below (Figma
+ * 1182:17149). The padding is cancelled by the margins, so the layout keeps its spacing.
+ */
+.rooms__search {
+  position: sticky;
+  top: var(--nav-offset, 0px);
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: min(672px, 100%);
+  margin: -16px 0;
+  padding: 16px 0;
+  transition: top 400ms var(--ease-in-out);
+}
+
+.rooms__search::before {
+  content: '';
+  position: absolute;
+  inset: 0 calc(50% - 50vw);
+  z-index: -1;
+  background: var(--white);
+}
+
+.rooms__field {
+  position: relative;
+  flex: 1 0 0;
+  min-width: 0;
+  height: 46px;
+  border: 1px solid var(--line-in-white);
+  /* v2: rounded fields (Figma 1455:18357) */
+  border-radius: 4px;
+  background: var(--bronze-100);
+  transition:
+    border-color 250ms var(--ease-in-out),
+    background-color 250ms var(--ease-in-out);
+}
+
+.rooms__field:hover {
+  border-color: var(--bronze-600);
+}
+
+.rooms__field.is-open,
+.rooms__field:focus-within {
+  border-color: var(--bronze-700);
+  background: var(--white);
+}
+
+.rooms__field-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: left;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+}
+
+.rooms__field.has-value .rooms__field-button {
+  padding-right: 48px;
+}
+
+.rooms__field-button:focus-visible {
+  outline: none;
+}
+
+.rooms__field-text {
+  flex: 1 0 0;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.rooms__field-button img {
+  flex-shrink: 0;
+}
+
+/* Clears a chosen value, in the caret's place */
+.rooms__field-clear {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: opacity 200ms ease;
+}
+
+.rooms__field-clear:hover {
+  opacity: 0.6;
+}
+
+/* The native date picker opens from the field; its own input stays out of sight */
+.rooms__date-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Lists opening below a field or Sort: white, soft shadow, fading down into place */
+.rooms__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: -1px;
+  right: -1px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  border: 1px solid var(--line-in-white);
+  border-radius: 4px;
+  background: var(--white);
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.12),
+    0 19px 19px rgba(0, 0, 0, 0.1),
+    0 43px 26px rgba(0, 0, 0, 0.05);
+  animation: rooms-menu-in 240ms var(--ease-in-out);
+}
+
+@keyframes rooms-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.rooms__stays {
+  max-height: min(480px, 70vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-in-white) transparent;
+}
+
+/* v2 (Figma 1461:9876): bronze year headings, the lengths indented beneath */
+.rooms__stays {
+  gap: 32px;
+  padding: 16px 0;
+}
+
+.rooms__stay-heading {
+  padding: 0 24px 4px;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--bronze-700);
+}
+
+.rooms__option {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 4px 24px 4px 48px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 18px;
+  line-height: 1.2;
+  text-align: left;
+  color: var(--royal-chocolate-700);
+  cursor: pointer;
+}
+
+.rooms__option:hover,
+.rooms__option:focus-visible {
+  outline: none;
+  background: var(--bronze-100);
+}
+
+.rooms__option.is-current {
+  font-weight: 600;
+  color: var(--royal-chocolate-700);
+}
+
+.rooms__sorts .rooms__option {
+  padding-left: 24px;
+}
+
+/* The chosen stay's check-in window, under the fields */
+.rooms__window {
+  margin-top: -32px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--royal-chocolate-500);
+}
+
+.rooms__results {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+/* Availability and Sort on the left (Figma 1080:5762); room types on the right */
+.rooms__toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.rooms__controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.rooms__sort {
+  position: relative;
+}
+
+.rooms__sort-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+}
+
+.rooms__sorts {
+  right: auto;
+  width: 220px;
+}
+
+.rooms__available {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  line-height: 20px;
+  white-space: nowrap;
+  color: var(--royal-chocolate-700);
+  cursor: pointer;
+}
+
+.rooms__available input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 40×24 toggle: grey and off, sand with the knob on the right when on */
+.rooms__switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 24px;
+  border-radius: 48px;
+  background: var(--grey-400);
+  transition: background-color 200ms ease;
+}
+
+.rooms__switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--white);
+  transition: transform 200ms var(--ease-in-out);
+}
+
+.rooms__available input:checked + .rooms__switch {
+  background: var(--bronze-500);
+}
+
+.rooms__available input:checked + .rooms__switch::after {
+  transform: translateX(16px);
+  background: #fafafa;
+}
+
+.rooms__available input:focus-visible + .rooms__switch {
+  outline: 1px solid var(--bronze-700);
+  outline-offset: 2px;
+}
+
+.rooms__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px 24px;
+}
+
+/* Cards rise softly into place whenever the list changes, a beat apart */
+.room-card {
+  animation: room-in 520ms var(--ease-in-out) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+@keyframes room-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-card,
+  .rooms__menu {
+    animation: none;
+  }
+}
+
+.rooms__empty {
+  font-size: 18px;
+  text-align: center;
+  color: var(--royal-chocolate-500);
+}
+
+/* Room card (Figma 539:30859) */
+.room-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--bronze-300);
+  background: var(--white);
+  box-shadow: 0 96px 80px -72px rgba(57, 29, 19, 0.2);
+}
+
+.room-card__image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  background: #d9d9d9;
+}
+
+.room-card__image > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms var(--ease-in-out);
+}
+
+.room-card:hover .room-card__image > img {
+  transform: scale(1.03);
+}
+
+.room-card__tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.room-card__tag--offer {
+  background: var(--royal-chocolate-700);
+  color: var(--white);
+}
+
+.room-card__tag--popular {
+  background: #396680;
+  color: #fafafa;
+}
+
+.room-card__tag--promotion {
+  background: #d2e0d8;
+  color: #002c1c;
+}
+
+.room-card__tag--soldOut {
+  background: var(--grey-200);
+  color: var(--grey-600);
+}
+
+.room-card__tag--value {
+  background: var(--error-500);
+  color: #fff9f7;
+}
+
+/* Sold out: faded photo on grey, greyed price */
+.room-card.is-sold-out .room-card__image {
+  background: var(--grey-200);
+}
+
+.room-card.is-sold-out .room-card__image > img {
+  opacity: 0.5;
+}
+
+.room-card.is-sold-out .room-card__price,
+.room-card.is-sold-out .room-card__amount {
+  color: var(--grey-600);
+}
+
+.room-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 12px 16px;
+}
+
+.room-card__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1.5;
+}
+
+.room-card__type {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+
+/* Playfair Medium 18 (Figma 1080:5790), smaller than the shared H4 */
+.room-card__name {
+  font-size: 18px;
+}
+
+.room-card__features {
+  font-size: 16px;
+  color: var(--royal-chocolate-500);
+}
+
+.room-card__price {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--grey-800);
+}
+
+.room-card__amount {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: normal;
+  color: var(--royal-chocolate-700);
+}
+
+@media (max-width: 1100px) {
+  /* The fields stack here, so they scroll normally */
+  .rooms__search {
+    position: relative;
+    top: auto;
+  }
+
+  .rooms__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rooms__toolbar {
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 1101px) and (max-width: 1300px) {
+  .rooms__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .rooms__toolbar {
+    flex-direction: column;
+  }
+
+  .rooms__controls {
+    flex-wrap: wrap;
+    gap: 16px 24px;
+  }
+
+  .rooms__types {
+    justify-content: flex-start;
+  }
+
+  .rooms__search {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rooms__field {
+    flex: none;
+  }
+
+  .rooms__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .room-card__image {
+    height: 220px;
+  }
+}
+
+/* Phones: tighter section and cards, so the list reads as a list */
+@media (max-width: 700px) {
+  .rooms {
+    padding: 80px var(--page-gutter) 120px;
+  }
+
+  .rooms__content {
+    gap: 32px;
+  }
+
+  .rooms__search {
+    gap: 12px;
+  }
+
+  .rooms__window {
+    margin-top: -16px;
+  }
+
+  .rooms__results {
+    gap: 32px;
+  }
+
+  .rooms__toolbar {
+    gap: 20px;
+  }
+
+  .rooms__sort-button,
+  .rooms__available {
+    font-size: 16px;
+  }
+
+  .rooms__grid {
+    gap: 24px;
+  }
+
+  /* Cards as on larger screens (Figma 1314:14223): 180px photo, the views line kept
+     even when empty, so every price sits at the same height */
+  .room-card__image {
+    height: 180px;
+  }
+
+  /* Filters (Figma 1314:14208): the type tabs centred first, then the switch and Sort
+     across the width */
+  .rooms__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 32px;
+  }
+
+  .rooms__types {
+    order: -1;
+    align-self: center;
+  }
+
+  .rooms__controls {
+    justify-content: space-between;
+  }
+
+  /* Pinned again under the sub-navigation while the rooms scroll (Figma 1314:14421) */
+  .rooms__search {
+    position: sticky;
+    top: var(--nav-offset, 0px);
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .rooms__search > .rooms__field {
+    width: 100%;
+  }
+}
+
+/* Cards open their room's page */
+a.room-card {
+  color: inherit;
+}
+
+a.room-card:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: 3px;
+}
+
+
+/* ---------- v2 phone filter (Figma 1455:20384) ---------- */
+.rooms__filter {
+  display: none;
+}
+
+.rooms__filter-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid var(--bronze-700);
+  border-radius: 4px;
+  background: var(--bronze-200);
+  cursor: pointer;
+}
+
+.rooms__filter-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 16px 24px 24px;
+  border-radius: 4px;
+  background: var(--white);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15), 0 19px 19px rgba(0, 0, 0, 0.13), 0 43px 26px rgba(0, 0, 0, 0.07);
+  animation: rooms-panel-in 250ms var(--ease-in-out);
+}
+
+@keyframes rooms-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.rooms__filter-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 44px;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+}
+
+.rooms__filter-head span {
+  flex: 1;
+}
+
+.rooms__filter-close {
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.rooms__filter-row {
+  justify-content: space-between;
+  font-size: 18px;
+}
+
+.rooms__filter-rule {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--royal-chocolate-200);
+}
+
+.rooms__filter-sort {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--royal-chocolate-600);
+}
+
+.rooms__filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: -16px;
+}
+
+.rooms__filter-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--royal-chocolate-500);
+  cursor: pointer;
+}
+
+.rooms__filter-option input {
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  border: 1px solid #212529;
+  border-radius: 2px;
+  accent-color: var(--bronze-700);
+}
+
+.rooms__filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.rooms__filter-clear,
+.rooms__filter-apply {
+  height: 44px;
+  padding: 0 24px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+}
+
+.rooms__filter-clear {
+  border: 1px solid var(--bronze-700);
+  background: none;
+}
+
+.rooms__filter-apply {
+  border: 0;
+  background: var(--bronze-500);
+}
+
+@media (max-width: 700px), (max-width: 1100px) and (orientation: portrait) {
+  /* Types on the left, the filter button on the right; the panel drops beneath */
+  .rooms__toolbar {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .rooms__types {
+    order: 0;
+    align-self: auto;
+  }
+
+  .rooms__controls {
+    display: none;
+  }
+
+  .rooms__filter {
+    display: block;
+  }
+}
+
+/* Before bookings open (Bedford): the opening date, then "Register interest" in place of
+   the price, on one line spread across the card */
+.room-card__price--opening {
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.room-card__register {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+  border-bottom: 1px solid var(--bronze-700);
+}
+
+/* The opening date and "Register interest" stack where the card is too narrow for both */
+.room-card__price--opening {
+  flex-wrap: wrap;
+  white-space: normal;
+}

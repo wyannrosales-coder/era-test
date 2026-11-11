@@ -1,0 +1,332 @@
+.hero {
+  position: relative;
+  /*
+   * Always exactly one screen tall. svh = the viewport with mobile browser bars shown,
+   * so the height doesn't jump as they collapse; vh is the fallback. Instead of a
+   * minimum height, the copy's size and spacing scale with the screen height (Figma
+   * values at 800px tall), so it always fits below the nav.
+   */
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--white);
+}
+
+.hero__image,
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__image {
+  object-fit: cover;
+}
+
+.hero__overlay {
+  /* Figma 1441:15721: chocolate → black, multiplied at 75% */
+  background: linear-gradient(to bottom, var(--royal-chocolate-700), #000 97.625%);
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+}
+
+.hero__content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 4svh, 32px);
+  width: min(1136px, calc(100% - 2 * var(--page-gutter)));
+  /* Figma 1441:15752: 80px below the search bar (less on short screens) */
+  padding: clamp(16px, 9svh, 80px) 0;
+}
+
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 4svh, 32px);
+  width: 100%;
+  text-align: center;
+}
+
+/* Locations: title and subtitle sit straight in the column, with the line between them */
+.hero__content > .hero__title,
+.hero__content > .hero__subtitle {
+  width: 100%;
+  text-align: center;
+}
+
+.hero__title {
+  font-size: clamp(32px, 8svh, 64px);
+  color: var(--white);
+}
+
+.hero__subtitle {
+  font-weight: 300;
+  font-size: clamp(16px, 2.5svh, 20px);
+  line-height: 1.5;
+  color: var(--royal-chocolate-300);
+}
+
+/* Darkens as the hero scrolls away — animated by GSAP in Hero.tsx */
+.hero__shade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Search bar */
+.hero-search {
+  display: flex;
+  align-items: stretch;
+  width: min(952px, 100%);
+  border: 0.5px solid var(--royal-chocolate-500);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.hero-search__cell {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  padding: 20px 0;
+  cursor: pointer;
+}
+
+/* Hover (Figma 451:1263): the whole cell lifts with a 10% white fill */
+.hero-search__cell--action {
+  transition: background-color 300ms var(--ease-in-out);
+}
+
+.hero-search__cell--action:hover,
+.hero-search__cell--action:focus-within {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hero-search__field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 40px;
+  border-right: 1px solid var(--royal-chocolate-500);
+}
+
+.hero-search__field--intro {
+  align-items: center;
+  justify-content: center;
+  padding: 12px 40px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  color: var(--white);
+  white-space: nowrap;
+  cursor: default;
+}
+
+.hero-search__label {
+  font-size: 14px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.hero-search__select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-search__select select {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  appearance: none;
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--royal-chocolate-300);
+  cursor: pointer;
+}
+
+.hero-search__select select:focus-visible {
+  outline: 1px solid var(--bronze-500);
+  outline-offset: 4px;
+}
+
+.hero-search__select option {
+  color: var(--royal-chocolate-700);
+}
+
+.hero-search__select img {
+  pointer-events: none;
+}
+
+.hero-search__submit {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 40px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.hero-search__cell--action:hover .hero-search__submit {
+  transform: translateX(6px);
+}
+
+@media (max-width: 900px) {
+  .hero__title {
+    font-size: clamp(28px, 5svh, 40px);
+  }
+
+  .hero__subtitle {
+    font-size: clamp(15px, 2.4svh, 18px);
+  }
+
+  .hero-search {
+    flex-wrap: wrap;
+  }
+
+  .hero-search__cell {
+    flex-basis: 50%;
+    padding: 14px 0;
+  }
+
+  .hero-search__field {
+    padding: 0 20px;
+  }
+
+  .hero-search__cell:first-child {
+    display: none;
+  }
+
+  .hero-search__cell:nth-child(3) .hero-search__field {
+    border-right: 0;
+  }
+
+  .hero-search__cell:last-child {
+    flex-basis: 100%;
+    border-top: 0.5px solid var(--royal-chocolate-500);
+  }
+}
+
+/*
+ * Phones (Figma 704:7486): copy aligned left at the bottom of the photo, and the search
+ * stacked as four rows (intro, country, city, arrow), each with an underline inset 24px.
+ * The title scales with the screen height (40px on a 390 × 660 view) so it fits an SE.
+ */
+@media (max-width: 700px), (max-width: 1100px) and (orientation: portrait) {
+  /* v2 phones (Figma 1441:17272): 660px tall rather than a full screen, under a plain
+     70% black overlay */
+  .hero {
+    height: min(660px, 100svh);
+  }
+
+  .hero__overlay {
+    background: #000;
+    mix-blend-mode: normal;
+    opacity: 0.7;
+  }
+
+  .hero__content {
+    align-items: stretch;
+    gap: 24px;
+    padding: 24px 0;
+  }
+
+  .hero__content .vline {
+    display: none;
+  }
+
+  .hero__copy,
+  .hero__content > .hero__title,
+  .hero__content > .hero__subtitle {
+    gap: 16px;
+    text-align: left;
+  }
+
+  .hero__title {
+    font-size: clamp(28px, 6svh, 40px);
+  }
+
+  .hero__subtitle {
+    font-size: clamp(15px, 2.8svh, 18px);
+  }
+
+  .hero-search {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .hero-search__cell,
+  .hero-search__cell:last-child {
+    flex: none;
+    flex-basis: auto;
+    align-items: stretch;
+    height: 64px;
+    padding: 0 24px;
+    border-top: 0;
+  }
+
+  .hero-search__cell:first-child {
+    display: flex;
+    height: 56px;
+  }
+
+  .hero-search__cell:last-child {
+    height: 56px;
+  }
+
+  .hero-search__field,
+  .hero-search__cell:nth-child(3) .hero-search__field {
+    justify-content: center;
+    padding: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--royal-chocolate-500);
+  }
+
+  .hero-search__field--intro {
+    align-items: flex-start;
+    font-size: 16px;
+  }
+
+  .hero-search__select select {
+    font-size: 16px;
+  }
+
+  .hero-search__submit {
+    padding: 0;
+  }
+}
+
+/* Very short screens: drop the decorative line so the copy stays clear of the nav */
+@media (max-height: 600px) {
+  .hero__content .vline {
+    display: none;
+  }
+}
+
+/* Short phones (an iPhone SE in the browser): the search starts at Country */
+@media (max-width: 700px) and (max-height: 600px) {
+  .hero-search__cell:first-child {
+    display: none;
+  }
+}

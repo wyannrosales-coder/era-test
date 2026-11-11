@@ -1,0 +1,79 @@
+.language-select {
+  position: relative;
+}
+
+.language-select__caret {
+  transition: transform 200ms var(--ease-in-out);
+}
+
+.language-select.is-open .language-select__caret {
+  transform: rotate(180deg);
+}
+
+/* Small white card under the button: fades in with a transition (a keyframe animation
+   here left the card painted half-transparent in Chrome, under the nav's text shadow) */
+.language-select__menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  z-index: 10;
+  min-width: 144px;
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
+  border: 1px solid var(--bronze-300);
+  background: var(--white);
+  box-shadow: 0 8px 24px rgba(36, 18, 12, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -4px);
+  transition:
+    opacity 180ms var(--ease-in-out),
+    transform 180ms var(--ease-in-out),
+    visibility 0s linear 180ms;
+}
+
+.language-select.is-open .language-select__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition:
+    opacity 180ms var(--ease-in-out),
+    transform 180ms var(--ease-in-out),
+    visibility 0s;
+}
+
+.language-select__option {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 20px;
+  border: 0;
+  background: none;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: left;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.language-select__option:hover,
+.language-select__option:focus-visible {
+  outline: none;
+  background: var(--bronze-200);
+}
+
+.language-select__option.is-current .language-select__label {
+  font-weight: 700;
+}
+
+.language-select__label {
+  font-weight: 600;
+}
+
+.language-select__name {
+  font-weight: 300;
+  color: var(--royal-chocolate-500);
+}

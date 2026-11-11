@@ -1,0 +1,485 @@
+.locations {
+  /* Distance from the content edge to the page edge, used to let cards bleed right */
+  --bleed: max(var(--page-gutter), (100vw - var(--content-max)) / 2);
+  /* Gap between the intro and showcase columns; the scroller reaches back across it */
+  --column-gap: 24px;
+  padding: 200px var(--page-gutter);
+  overflow-x: clip;
+  background: var(--white);
+}
+
+.locations__overview {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  /* 24px between the columns (464 + 24 + 880 = 1368); --column-gap also sets how far
+     the cards slide back beneath the intro */
+  gap: var(--column-gap);
+  max-width: var(--content-max);
+  margin: 0 auto;
+  isolation: isolate;
+  /* Keep the intro's shadow from bleeding above/below; allow the cards to run off the right */
+  clip-path: inset(0 -100vw 0 0);
+}
+
+/* Left column */
+.locations__intro {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  flex-shrink: 0;
+  width: 464px;
+  padding-right: 48px;
+  align-self: stretch;
+  background: var(--white);
+  /* Shadow fades in as cards start sliding beneath the column */
+  box-shadow: 72px 0 60px -60px rgba(0, 0, 0, calc(0.2 * min(1, var(--progress, 0) * 5)));
+}
+
+.locations__intro-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.locations__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.locations__lede {
+  color: var(--grey-700);
+}
+
+.locations__regions {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.locations__region {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid var(--bronze-500);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.locations__region-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.locations__region-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+}
+
+.locations__region-header img {
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.locations__region:hover .locations__region-header img,
+.locations__region.is-active .locations__region-header img {
+  transform: translateX(4px);
+}
+
+.locations__region-summary {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+/* Right column */
+.locations__showcase {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  flex: 1;
+  min-width: 0;
+}
+
+.locations__showcase-header {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.locations__region-title {
+  flex: 1;
+}
+
+.locations__filters {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  height: 20px;
+}
+
+.locations__filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.locations__filter:hover {
+  opacity: 1;
+}
+
+.locations__filter img {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.locations__filter.is-active {
+  font-weight: 700;
+  opacity: 1;
+}
+
+.locations__filter.is-active img {
+  opacity: 1;
+}
+
+/*
+ * Native horizontal scroller. It starts at the intro's edge (so cards slide out of
+ * view beneath it) and extends to the page edge so the next card peeks in.
+ */
+.locations__viewport {
+  position: relative;
+  min-height: 520px;
+  margin-left: calc(-1 * var(--column-gap));
+  margin-right: calc(-1 * var(--bleed));
+  scroll-padding-left: var(--column-gap);
+  /* Room for the card shadows, which the scroller would otherwise clip */
+  margin-top: -8px;
+  margin-bottom: -16px;
+  padding: 8px 0 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+  outline: none;
+}
+
+.locations__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.locations__viewport.is-dragging,
+.locations__viewport.is-scrubbing {
+  scroll-snap-type: none;
+}
+
+.locations__viewport.is-dragging {
+  cursor: grabbing;
+}
+
+.locations__viewport:focus-visible {
+  outline: 1px solid var(--bronze-500);
+  outline-offset: 8px;
+}
+
+/* Cards stretch to the tallest one, so their links line up (LocationCard.css) */
+.locations__track {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  width: max-content;
+  /* Cards start at the showcase edge and the last one rests at the content edge */
+  padding-left: var(--column-gap);
+  padding-right: var(--bleed);
+}
+
+.locations__track > * {
+  scroll-snap-align: start;
+}
+
+/* A single card sits in the middle of the showcase column (between the paddings) */
+.locations__track:has(> :only-child) {
+  width: 100%;
+  justify-content: center;
+}
+
+.locations__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 24px;
+  color: var(--royal-chocolate-500);
+}
+
+/*
+ * Scrubber: the progress bar doubles as a scrollbar. The wrapper gives the 4px bar
+ * a comfortable 24px hit area; the bar thickens while hovered or dragged.
+ */
+.locations__scrubber {
+  /* The track stays 788px within the wider showcase (Figma 539:10885) */
+  width: min(788px, 100%);
+  padding: 10px 0;
+  /* Only pull the top padding up; the bottom must stay inside the overview's clip-path */
+  margin-top: -10px;
+  cursor: pointer;
+  touch-action: none;
+  outline: none;
+}
+
+.locations__scrubber.is-disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.locations__scrubber .locations__progress-bar {
+  cursor: grab;
+}
+
+.locations__scrubber:active .locations__progress-bar {
+  cursor: grabbing;
+}
+
+.locations__scrubber .locations__progress {
+  transition: transform 200ms var(--ease-in-out);
+}
+
+.locations__scrubber:hover .locations__progress,
+.locations__scrubber:active .locations__progress,
+.locations__scrubber:focus-visible .locations__progress {
+  transform: scaleY(2);
+}
+
+.locations__scrubber:focus-visible {
+  outline: 1px solid var(--bronze-500);
+  outline-offset: 4px;
+}
+
+/* Progress: 348px bronze bar travels 0 → 440px across the 788px track */
+.locations__progress {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: var(--grey-200);
+}
+
+.locations__progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 348px;
+  height: 100%;
+  background: var(--bronze-500);
+  transform: translateX(calc(var(--progress, 0) * (788px - 348px)));
+  transition: width 300ms var(--ease-in-out);
+}
+
+.locations__progress-bar.is-full {
+  width: 100%;
+}
+
+.locations__summary {
+  display: none;
+}
+
+@media (max-width: 1300px) {
+  .locations__overview {
+    gap: var(--column-gap);
+  }
+
+  .locations__intro {
+    width: 40%;
+    padding-right: 48px;
+  }
+
+  .locations__showcase {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  .locations__progress-bar {
+    width: 44%;
+    transform: translateX(calc(var(--progress, 0) * 127.27%));
+  }
+}
+
+@media (max-width: 900px) {
+  .locations {
+    /* Stacked: cards slide off the left edge of the screen */
+    --column-gap: var(--page-gutter);
+    padding: 120px var(--page-gutter);
+  }
+
+  .locations__overview {
+    flex-direction: column;
+    gap: 48px;
+    clip-path: none;
+  }
+
+  .locations__intro {
+    width: 100%;
+    padding-right: 0;
+    gap: 40px;
+    box-shadow: none;
+  }
+
+  .locations__showcase {
+    width: 100%;
+    gap: 32px;
+  }
+
+  .locations__showcase-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .locations__filters {
+    gap: 16px;
+  }
+
+  .locations__filter {
+    font-size: 15px;
+  }
+}
+
+/*
+ * Phones (Figma 704:7663): the regions become two tabs (the active one underlined) with
+ * its summary on its own line, the region title gives way to full-width city filters,
+ * and the cards shrink to 253px with a 180px photo so the next one peeks in.
+ */
+@media (max-width: 700px) {
+  .locations {
+    padding: 72px var(--page-gutter);
+  }
+
+  .locations__overview,
+  .locations__intro {
+    gap: 32px;
+  }
+
+  .locations__intro-copy {
+    gap: 24px;
+  }
+
+  .locations__regions {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .locations__regions li {
+    flex: 1 0 0;
+    min-width: 0;
+  }
+
+  .locations__region {
+    padding: 8px 0;
+    border-bottom-color: transparent;
+    text-align: center;
+    transition: border-color 300ms var(--ease-in-out);
+  }
+
+  .locations__region.is-active {
+    border-bottom-color: var(--bronze-500);
+  }
+
+  .locations__region-header {
+    justify-content: center;
+  }
+
+  .locations__region-header img,
+  .locations__region .locations__region-summary,
+  .locations__region-title {
+    display: none;
+  }
+
+  .locations__summary {
+    display: block;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--bronze-700);
+  }
+
+  .locations__showcase {
+    gap: 40px;
+  }
+
+  .locations__showcase-header {
+    gap: 0;
+  }
+
+  .locations__filters {
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+  }
+
+  /* Fewer than four cities (London): grouped in the middle rather than pushed apart */
+  .locations__filters:not(:has(> :nth-child(4))) {
+    justify-content: center;
+    gap: 32px;
+  }
+
+  .locations__filter {
+    font-size: 16px;
+  }
+
+  .locations__viewport {
+    min-height: 0;
+  }
+
+  .locations__track {
+    gap: 16px;
+  }
+
+  .locations__track .location-card {
+    width: 253px;
+  }
+
+  .locations__track .location-card__image {
+    height: 180px;
+  }
+
+  .locations__track .location-card__link {
+    text-transform: uppercase;
+  }
+}

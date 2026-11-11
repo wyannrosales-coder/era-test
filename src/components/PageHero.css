@@ -1,0 +1,164 @@
+/* Starts below the fixed nav (12px padding ×2 + 64px logo) */
+.page-hero {
+  /* Clips the photos that bleed off the edges */
+  overflow: clip;
+  padding: calc(88px + 120px) var(--page-gutter) 120px;
+  background: var(--white);
+}
+
+.page-hero--cream {
+  background: var(--bronze-100);
+}
+
+/* The photos are placed within this, which starts below the section's top padding */
+.page-hero__inner {
+  position: relative;
+}
+
+.page-hero__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+
+.page-hero__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: min(672px, 100%);
+  text-align: center;
+}
+
+.page-hero__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.page-hero__lede {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  color: var(--grey-700);
+}
+
+/* 505 × 438 photos, 201px past each edge, 72px below the nav. They're placed within
+   .page-hero__inner, which starts below the section's 120px top padding. */
+.page-hero__photo {
+  position: absolute;
+  top: calc(72px - 120px);
+  width: 505px;
+  height: 438px;
+}
+
+/* The frame stays put; the picture is 20% taller so it can drift inside it (PageHero.tsx) */
+.page-hero__photo {
+  overflow: hidden;
+}
+
+.page-hero__photo img {
+  position: absolute;
+  left: 0;
+  top: -10%;
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Measured from the wrapper, which sits inside the page gutter */
+.page-hero__photo--left {
+  left: calc(-201px - var(--page-gutter));
+}
+
+.page-hero__photo--right {
+  right: calc(-201px - var(--page-gutter));
+}
+
+/* Narrower screens: the photos shrink and tuck further off the edges so the copy stays clear */
+@media (max-width: 1300px) {
+  .page-hero__photo {
+    width: 340px;
+    height: 295px;
+  }
+
+  .page-hero__photo--left {
+    left: calc(-170px - var(--page-gutter));
+  }
+
+  .page-hero__photo--right {
+    right: calc(-170px - var(--page-gutter));
+  }
+}
+
+/* Tablets: the photos sit above the title at the edges, as on the homepage's Partners */
+@media (max-width: 900px) {
+  .page-hero {
+    padding: calc(64px + 24px) var(--page-gutter) 72px;
+  }
+
+  .page-hero__content {
+    gap: 40px;
+    padding-top: 180px;
+  }
+
+  .page-hero__photo {
+    top: 0;
+    width: 150px;
+    height: 130px;
+  }
+
+  .page-hero__photo--left {
+    left: calc(-1 * var(--page-gutter));
+  }
+
+  .page-hero__photo--right {
+    right: calc(-1 * var(--page-gutter));
+  }
+}
+
+/* The single photo is the phone layout's (below) */
+.page-hero__photo--single {
+  display: none;
+}
+
+/*
+ * Phones (About us, Figma 745:15704): the copy and line, then one 342 × 240 photo below.
+ * The frame sits in the flow; the picture still drifts subtly inside it.
+ */
+@media (max-width: 700px) {
+  .page-hero {
+    padding: calc(64px + 72px) var(--page-gutter) 72px;
+  }
+
+  .page-hero__content {
+    gap: 32px;
+    padding-top: 0;
+  }
+
+  .page-hero__copy {
+    gap: 48px;
+  }
+
+  /* A button sits 48px below the copy, like the copy's own rows (Figma 786:11411) */
+  .page-hero__copy + :not(.vline) {
+    margin-top: 16px;
+  }
+
+  .page-hero__photo--left,
+  .page-hero__photo--right {
+    display: none;
+  }
+
+  .page-hero__photo--single {
+    display: block;
+    position: relative;
+    top: auto;
+    width: 100%;
+    height: 240px;
+    margin-top: 40px;
+  }
+}

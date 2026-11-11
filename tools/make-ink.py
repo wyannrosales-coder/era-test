@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Hand-drawn ink layer for the "Life beyond the classroom" section.
 
-Writes twelve small SVG clusters (ink-l1..l6 landscape, ink-p1..p6 portrait) into dist/assets/ink/. Each lies under one
+Writes twelve small SVG clusters (ink-l1..l6 landscape, ink-p1..p6 portrait) into public/locations/macquarie-park/experience/assets/ink/. Each lies under one
 photo of the collage and is positioned by epiisod-social.js. Everything is drawn from a tiny single-stroke handwriting font and a
 handful of doodles, with a seeded wobble so each line looks pen-drawn. Re-run after editing the layouts:
 
@@ -10,7 +10,7 @@ handful of doodles, with a seeded wobble so each line looks pen-drawn. Re-run af
 import math, os, random
 
 INK = '#15110e'
-OUT = os.path.join(os.path.dirname(__file__), '..', 'dist', 'assets', 'ink')
+OUT = os.path.join(os.path.dirname(__file__), '..', 'public', 'locations', 'macquarie-park', 'experience', 'assets', 'ink')
 
 # ---- single-stroke handwriting font: baseline y=0, x-height 10, ascender 18, descender 7 (y down) ----
 G = {

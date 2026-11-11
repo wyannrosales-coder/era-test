@@ -1,0 +1,216 @@
+/* Tall wrapper (height set inline): its extra height is the scroll spent stepping */
+.wellness {
+  position: relative;
+}
+
+/* Pinned stage: heading on the left, image window on the right */
+.wellness__stage {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  height: 100vh;
+  max-width: 1512px;
+  margin: 0 auto;
+  padding: 0 var(--page-gutter);
+  overflow: clip;
+}
+
+/* One width for every story (the widest Figma variant), so the copy never re-wraps */
+.wellness__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  flex-shrink: 0;
+  width: 440px;
+}
+
+.wellness__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 200px;
+  animation: wellness-copy-in 600ms var(--ease-in-out);
+}
+
+
+.wellness__body {
+  font-weight: 300;
+  color: var(--royal-chocolate-600);
+}
+
+@keyframes wellness-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Figma's dot indicator, with invisible buttons over each dot */
+.wellness__dots {
+  position: relative;
+  width: 8px;
+  height: 56px;
+}
+
+.wellness__dot {
+  position: absolute;
+  left: -8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.wellness__dot:focus-visible {
+  outline: 1px solid var(--bronze-500);
+}
+
+/* Window the track moves through; neighbouring images peek in at the edges */
+.wellness__window {
+  position: relative;
+  align-self: stretch;
+  width: 836px;
+  margin-left: auto;
+  overflow: clip;
+}
+
+.wellness__track {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  will-change: transform;
+}
+
+.wellness__row {
+  display: flex;
+  align-items: center;
+}
+
+.wellness__row:not(.is-current) {
+  cursor: pointer;
+}
+
+.wellness__row--2 {
+  padding-left: 256px;
+}
+
+.wellness__frame {
+  position: relative;
+  flex-shrink: 0;
+  height: min(733px, calc(100vh - 140px));
+  aspect-ratio: 580 / 733;
+  overflow: hidden;
+}
+
+.wellness__frame img {
+  position: absolute;
+  max-width: none;
+  user-select: none;
+}
+
+.wellness__row--1 .wellness__frame img {
+  left: -108.75%;
+  top: -0.05%;
+  width: 246.56%;
+  height: 105.78%;
+}
+
+.wellness__row--2 .wellness__frame img {
+  left: -72.68%;
+  top: -9.14%;
+  width: 245.21%;
+  height: 109.14%;
+}
+
+.wellness__row--3 .wellness__frame img {
+  left: -16.87%;
+  top: -21.15%;
+  width: 122.58%;
+  height: 121.15%;
+}
+
+@media (max-width: 1100px) {
+  .wellness__window {
+    width: auto;
+    flex: 1;
+  }
+
+  .wellness__row--2 {
+    padding-left: 15%;
+  }
+
+  .wellness__frame {
+    height: auto;
+    width: min(580px, 100%, calc((100vh - 140px) * 580 / 733));
+  }
+}
+
+/*
+ * Phones (Figma 713:4094): the heading on top, the images side by side below it (each
+ * 286px, 16px apart, the next peeking in from the right) and the dots centred beneath.
+ * The heading's children join the stage grid (display: contents) so the dots can sit
+ * under the images; the vertical dot graphic is turned to run left to right.
+ */
+@media (max-width: 700px) {
+  .wellness__stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(4, auto);
+    align-content: start;
+    gap: 16px 0;
+    height: 100vh;
+    height: 100svh;
+    padding: 48px var(--page-gutter) 0;
+  }
+
+  .wellness__heading {
+    display: contents;
+  }
+
+  .wellness__copy {
+    height: auto;
+    gap: 16px;
+  }
+
+  /* Full screen width so images slide in from the right edge and out past the left */
+  .wellness__window {
+    grid-row: 3;
+    align-self: start;
+    width: auto;
+    margin: 8px calc(-1 * var(--page-gutter)) 0;
+  }
+
+  .wellness__track {
+    flex-direction: row;
+    gap: 16px;
+    width: max-content;
+    padding: 0 var(--page-gutter);
+  }
+
+  .wellness__row--2 {
+    padding-left: 0;
+  }
+
+  .wellness__frame {
+    height: auto;
+    width: min(286px, calc((100svh - 310px) * 580 / 733));
+  }
+
+  .wellness__dots {
+    grid-row: 4;
+    justify-self: center;
+    /* 24px below the images: the turned 56px graphic is 8px tall, so trim 24px each side */
+    margin: -16px 0 -24px;
+    transform: rotate(-90deg);
+  }
+}

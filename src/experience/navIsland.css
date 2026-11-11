@@ -1,0 +1,96 @@
+/*
+ * The site nav on an experience page. The React app gets these basics from global.css;
+ * the experience pages have their own stylesheets (with their own rules for p, a, img…),
+ * so the same basics are given to the nav alone. `html html :where(#site-nav) x` weighs two
+ * element selectors: enough to beat the page's bare element rules, still weaker than any
+ * class, so every rule in Nav.css and the menus wins.
+ */
+html :where(#site-nav),
+html :where(#site-nav) *,
+html :where(#site-nav) *::before,
+html :where(#site-nav) *::after {
+  box-sizing: border-box;
+}
+
+html :where(#site-nav) {
+  color: var(--royal-chocolate-700);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+html :where(#site-nav) img {
+  display: block;
+  max-width: none;
+}
+
+html :where(#site-nav) :is(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+}
+
+html :where(#site-nav) a {
+  color: inherit;
+  text-decoration: none;
+}
+
+html :where(#site-nav) :is(p, span, a, li, h2, h3) {
+  letter-spacing: inherit;
+}
+
+html :where(#site-nav) p {
+  margin: 0;
+}
+
+html :where(#site-nav) .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Above the experience's own fixed pieces (chapter rail, progress bar), below its loader */
+#site-nav .nav {
+  z-index: 1600;
+}
+
+#site-nav .hamburger {
+  z-index: 1700;
+}
+
+/* The loading screen covers the page first; the nav arrives with the hero */
+html.ep-ld-hide #site-nav {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.ep-ld-in #site-nav {
+  animation: ep-ld-fade 0.8s ease both;
+}
+
+/*
+ * The two type styles the menus use (type.css). There they are :where() rules with no
+ * weight at all, so the experience page's own `p` rule would beat them; restated here at
+ * the same two-element weight as the basics above, and after them, so they apply. Keep
+ * in step with type.css.
+ */
+html body :where(#site-nav .type-h6) {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.25;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+}
+
+html body :where(#site-nav .type-body-s) {
+  font-size: 14px;
+  line-height: 20px;
+}

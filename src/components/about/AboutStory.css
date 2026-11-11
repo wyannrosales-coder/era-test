@@ -1,0 +1,253 @@
+.about-story {
+  padding: 120px var(--page-gutter);
+  background: var(--white);
+}
+
+.about-story__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 120px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.about-story__block {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+}
+
+.about-story__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+
+.about-story__columns {
+  display: flex;
+  align-items: flex-start;
+  gap: 80px;
+}
+
+/* Paragraphs separated by one blank line, as in Figma */
+.about-story__text {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  color: var(--grey-700);
+}
+
+/*
+ * The photo's full 1368 × 360 slot. Inside, the frame opens from a centred square to fill
+ * it (GSAP, AboutStory.tsx); the photo stays at full size behind it, so the square is a
+ * close-up crop that widens out rather than a shrunken picture.
+ */
+.about-story__photo {
+  --slot-w: min(var(--content-max), 100vw - 2 * var(--page-gutter));
+  position: relative;
+  width: 100%;
+  height: 360px;
+}
+
+.about-story__frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  background: #d9d9d9;
+  box-shadow: 0 100px 48px -72px rgba(57, 29, 19, 0.2);
+}
+
+.about-story__frame img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--slot-w);
+  height: 360px;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 39%;
+  transform: translate(-50%, -50%);
+}
+
+/* The second block runs into the line and button: 80px apart */
+.about-story__block--property {
+  margin-bottom: -40px;
+}
+
+.about-story__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+
+/* Solid chocolate button (Figma 735:15231), shared with the sign-up */
+.about-button {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 24px;
+  border: 0;
+  background: var(--royal-chocolate-600);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--white);
+  cursor: pointer;
+  transition: background-color 300ms var(--ease-in-out);
+}
+
+.about-button img {
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.about-button:hover {
+  background: var(--royal-chocolate-700);
+}
+
+.about-button:hover img {
+  transform: translateX(4px);
+}
+
+@media (max-width: 900px) {
+  .about-story {
+    padding: 72px var(--page-gutter);
+  }
+
+  .about-story__content {
+    gap: 72px;
+  }
+
+  .about-story__block {
+    gap: 32px;
+  }
+
+  .about-story__columns {
+    flex-direction: column;
+    gap: 1.5em;
+  }
+
+  .about-story__photo,
+  .about-story__frame img {
+    height: 240px;
+  }
+
+  .about-story__block--property {
+    margin-bottom: -24px;
+  }
+
+  .about-story__cta {
+    gap: 48px;
+  }
+}
+
+/* "Read more" is the phone layout's (below) */
+.about-story__more {
+  display: none;
+}
+
+/*
+ * Phones (Figma 745:15339 / 745:15539): one column of paragraphs 40px apart (24px in
+ * the property text). The property text is cut short under a fade with a "Read more"
+ * button; opening it animates to its full height and the button becomes "Read less".
+ */
+@media (max-width: 700px) {
+  .about-story__content {
+    gap: 64px;
+  }
+
+  /* The photo starts the property part: 144px below the who-we-are text (two 72px paddings) */
+  .about-story__block:first-child {
+    margin-bottom: 80px;
+  }
+
+  .about-story__block:first-child .about-story__columns,
+  .about-story__block:first-child .about-story__text {
+    gap: 40px;
+  }
+
+  .about-story__photo {
+    height: 209px;
+  }
+
+  /* Figma's closer crop on the building: the picture at 2.32× the frame's width, nudged
+     right and down to frame the tower */
+  .about-story__frame img {
+    width: calc(var(--slot-w) * 2.32);
+    height: auto;
+    aspect-ratio: 1920 / 1259;
+    transform: translate(calc(-50% + 5%), calc(-50% + 5%));
+  }
+
+  .about-story__block--property {
+    margin-bottom: 0;
+  }
+
+  .about-story__clamp {
+    position: relative;
+    max-height: 400px;
+    overflow: hidden;
+    transition: max-height 700ms var(--ease-in-out);
+  }
+
+  .about-story__clamp::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 162px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--white) 43%);
+    pointer-events: none;
+    transition: opacity 500ms var(--ease-in-out);
+  }
+
+  .about-story__block--property.is-expanded .about-story__clamp {
+    max-height: var(--full-h, 3000px);
+  }
+
+  .about-story__block--property.is-expanded .about-story__clamp::after {
+    opacity: 0;
+  }
+
+  /* Underlined text button over the fade (Figma 745:15551) */
+  .about-story__more {
+    display: block;
+    align-self: center;
+    margin-top: -72px;
+    position: relative;
+    padding: 12px 24px;
+    border: 0;
+    border-bottom: 1px solid var(--bronze-700);
+    background: none;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    text-transform: uppercase;
+    color: var(--royal-chocolate-600);
+    cursor: pointer;
+  }
+
+  /* Open: "Read less" sits below the text */
+  .about-story__block--property.is-expanded .about-story__more {
+    margin-top: 0;
+  }
+
+  /* The line and button: 48px below the property text, 100px above the location */
+  .about-story__cta {
+    gap: 32px;
+    margin-top: -16px;
+  }
+}

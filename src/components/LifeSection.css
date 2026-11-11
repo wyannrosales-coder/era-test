@@ -1,0 +1,37 @@
+.life {
+  position: relative;
+  overflow-x: clip;
+  background: var(--white);
+}
+
+/* Intro stays pinned underneath while the wellness fold scrolls up over it */
+.life__intro {
+  position: sticky;
+  top: 0;
+  background: var(--white);
+}
+
+/* Drifts up and dims as it's covered — animated by GSAP in LifeSection.tsx */
+.life__intro-content {
+  will-change: transform;
+}
+
+/* A full screen tall, so it also dims any space below the intro on tall screens */
+.life__intro-shade {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 100vh;
+  background: var(--royal-chocolate-700);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Laid out a screen below the intro, so it scrolls up over it */
+.life__wellness {
+  position: absolute;
+  top: var(--slide, 100vh);
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  background: var(--white);
+}

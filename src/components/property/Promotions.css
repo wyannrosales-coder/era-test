@@ -1,0 +1,385 @@
+.promotions {
+  --visible: 0.44;
+  --progress: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 98px;
+  padding: 80px var(--page-gutter) 120px;
+  overflow: hidden;
+  background: var(--white);
+}
+
+/* Featured promotion */
+.promo-banner {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--content-max);
+  min-height: 331px;
+  overflow: hidden;
+  background: var(--royal-chocolate-600);
+}
+
+.promo-banner__copy {
+  flex: 1 0 0;
+  min-width: 0;
+  max-width: 788px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  padding: 40px 64px;
+}
+
+.promo-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.promo-banner__eyebrow {
+  font-size: 18px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--line-in-white);
+}
+
+.promo-banner__title {
+  color: var(--white);
+}
+
+.promo-banner__body {
+  color: var(--bronze-300);
+}
+
+.promo-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.promo-banner__button {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 24px;
+  border: 1px solid var(--bronze-300);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--bronze-300);
+  transition:
+    background-color 300ms var(--ease-in-out),
+    color 300ms var(--ease-in-out);
+}
+
+.promo-banner__button:hover {
+  background: rgba(233, 223, 208, 0.12);
+}
+
+.promo-banner__button--solid {
+  background: var(--bronze-300);
+  color: var(--royal-chocolate-600);
+}
+
+.promo-banner__button--solid:hover {
+  background: var(--white);
+}
+
+.promo-banner__image {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 556px;
+  object-fit: cover;
+  border-top-left-radius: 566.5px;
+}
+
+/* Latest promotions */
+.promotions__latest {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+.promotions__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+
+.promotions__all {
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--bronze-700);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-600);
+  transition: background-color 300ms var(--ease-in-out);
+}
+
+.promotions__all:hover {
+  background: var(--bronze-200);
+}
+
+/*
+ * Scrolls to the page edges so cards peek in from either side; the padding keeps
+ * the first card aligned with the content and leaves room for the card shadows.
+ */
+.promotions__viewport {
+  --edge: max(var(--page-gutter), (100vw - var(--content-max)) / 2);
+  margin: -24px calc(-1 * var(--edge)) -72px;
+  padding: 24px var(--edge) 72px;
+  scroll-padding-inline: var(--edge);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+  outline: none;
+}
+
+.promotions__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.promotions__viewport.is-dragging,
+.promotions__viewport.is-gliding {
+  scroll-snap-type: none;
+}
+
+.promotions__viewport.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.promotions__viewport:focus-visible {
+  outline: 1px solid var(--bronze-500);
+  outline-offset: -1px;
+}
+
+.promotions__track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+}
+
+/* 324 × 410 card (Figma 1082:16919) */
+.promo-card {
+  display: flex;
+  flex-direction: column;
+  width: 324px;
+  height: 410px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid var(--royal-chocolate-200);
+  background: var(--white);
+  box-shadow: 0 96px 80px -72px rgba(57, 29, 19, 0.2);
+  scroll-snap-align: start;
+}
+
+.promo-card__image {
+  flex-shrink: 0;
+  height: 180px;
+  overflow: hidden;
+  background: #d9d9d9;
+}
+
+.promo-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.promo-card__body {
+  flex: 1 0 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 24px;
+}
+
+.promo-card__text {
+  flex: 1 0 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Playfair Medium 18 / 1.4, smaller than the shared H4 */
+.promo-card__title {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+
+/* Two lines, then an ellipsis */
+.promo-card__description {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: var(--royal-chocolate-500);
+}
+
+.promo-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.promo-card__link span {
+  padding: 8px 0;
+}
+
+.promo-card__link img {
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.promo-card__link:hover img {
+  transform: translateX(4px);
+}
+
+/*
+ * Scrubber: the progress bar doubles as a scrollbar. The wrapper gives the 6px bar
+ * a comfortable hit area; the bar thickens while hovered or dragged.
+ */
+.promotions__scrubber {
+  width: min(788px, 100%);
+  margin: -12px 0;
+  padding: 12px 0;
+  cursor: pointer;
+  touch-action: none;
+  outline: none;
+}
+
+.promotions__scrubber:focus-visible {
+  outline: 1px solid var(--bronze-500);
+  outline-offset: 2px;
+}
+
+/* 788px track; the thumb shows the visible share and travels with the scroll */
+.promotions__progress {
+  position: relative;
+  height: 6px;
+  background: var(--bronze-300);
+  transition: transform 200ms var(--ease-in-out);
+}
+
+.promotions__scrubber:hover .promotions__progress,
+.promotions__scrubber:active .promotions__progress,
+.promotions__scrubber:focus-visible .promotions__progress {
+  transform: scaleY(1.5);
+}
+
+.promotions__scrubber .promotions__progress-bar {
+  cursor: grab;
+}
+
+.promotions__scrubber:active .promotions__progress-bar {
+  cursor: grabbing;
+}
+
+.promotions__progress-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--visible) * 100%);
+  background: var(--bronze-600);
+  transform: translateX(calc(var(--progress) * (100% / var(--visible) - 100%)));
+}
+
+@media (max-width: 1100px) {
+  .promo-banner {
+    flex-direction: column-reverse;
+  }
+
+  .promo-banner__copy {
+    max-width: none;
+    padding: 40px 32px;
+  }
+
+  .promo-banner__image {
+    width: 100%;
+    height: 280px;
+    border-top-left-radius: 280px;
+  }
+}
+
+@media (max-width: 700px) {
+  .promotions {
+    gap: 64px;
+    padding-bottom: 80px;
+  }
+
+  /* Featured promotion (Figma 1275:9798): the copy first, then the arched photo */
+  .promo-banner {
+    flex-direction: column;
+    gap: 10px;
+    min-height: 0;
+  }
+
+  .promo-banner__copy {
+    padding: 24px;
+  }
+
+  .promo-banner__eyebrow {
+    color: var(--bronze-400);
+  }
+
+  .promo-banner__title {
+    font-size: 24px;
+    line-height: 1.4;
+  }
+
+  .promo-banner__body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Both buttons across the width, one above the other */
+  .promo-banner__actions {
+    flex-direction: column;
+  }
+
+  .promo-banner__button {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .promo-banner__image {
+    height: 240px;
+    border-top-left-radius: 240px;
+  }
+
+  /* "Latest promotion" and its button centred, 40px apart (Figma 1275:9813) */
+  .promotions__header {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .promo-card {
+    width: min(300px, 80vw);
+  }
+}

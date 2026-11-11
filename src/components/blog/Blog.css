@@ -1,0 +1,572 @@
+/* ---- Shared ---- */
+.blog-meta {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-500);
+}
+
+.blog-button {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--bronze-700);
+  background: none;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+  transition: background-color 300ms var(--ease-in-out);
+}
+
+.blog-button:hover {
+  background: var(--bronze-200);
+}
+
+/* Three 438px cards to a row, 24px apart, 48px between rows */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 48px 24px;
+  width: 100%;
+}
+
+/* ---- Listing (Figma 1082:18399) ---- */
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 120px;
+  padding: calc(88px + 80px) var(--page-gutter) 200px;
+  background: var(--white);
+}
+
+/* Title, blog name and a 100px gold line, 32px apart (Figma 1119:43365) */
+.blog-list__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: -40px;
+  text-align: center;
+}
+
+.blog-list__heading .type-h1 em {
+  font-weight: 400;
+}
+
+.blog-list__posts {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+.blog-list__filters {
+  justify-content: flex-start;
+}
+
+.blog-list__empty {
+  font-size: 18px;
+  color: var(--royal-chocolate-500);
+}
+
+/* Featured: the photo beside the copy on cream (Figma 1082:19161) */
+.blog-featured {
+  /* Above the heading, which drifts down behind it */
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: var(--content-max);
+  overflow: hidden;
+  border: 1px solid var(--white);
+  background: var(--bronze-100);
+  box-shadow: 0 96px 80px -72px rgba(57, 29, 19, 0.2);
+}
+
+.blog-featured__media {
+  /* Its own width, not the photo's natural one */
+  flex: 0 0 49%;
+  width: 49%;
+  min-width: 0;
+  /* A fixed 410px whatever the photo's shape (Figma 1082:19143) */
+  height: 410px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 12% taller than its frame, so the scroll drift (±6%) never shows an edge */
+.blog-featured__image {
+  position: absolute;
+  top: -6%;
+  left: 0;
+  width: 100%;
+  height: 112%;
+  object-fit: cover;
+}
+
+/* The category, tucked into the photo's top-left corner */
+.blog-featured__category {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 8px 24px;
+  font-size: 16px;
+}
+
+.blog-featured__text .blog-featured__eyebrow {
+  font-size: 18px;
+}
+
+.blog-featured__body {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 48px;
+  padding: 48px 40px;
+}
+
+.blog-featured__text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.blog-featured__excerpt {
+  margin-top: 16px;
+  font-weight: 300;
+  color: var(--royal-chocolate-600);
+}
+
+.blog-featured__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.blog-featured:hover .blog-button {
+  background: var(--bronze-200);
+}
+
+/* ---- Post (Figma 1097:20160) ---- */
+.blog-post {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding: calc(88px + 80px) var(--page-gutter) 200px;
+  background: var(--white);
+}
+
+.blog-post > * {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.blog-post__crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 16px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--grey-700);
+}
+
+.blog-post__crumbs [aria-hidden] {
+  color: var(--bronze-700);
+}
+
+.blog-post__crumbs a:hover {
+  color: var(--royal-chocolate-700);
+}
+
+.blog-post__crumbs [aria-current] {
+  font-weight: 500;
+  color: var(--royal-chocolate-700);
+}
+
+/* Article (812) beside the panel (440), 116 apart, a rule 80px below */
+.blog-post__main {
+  display: flex;
+  align-items: flex-start;
+  gap: 116px;
+  padding-bottom: 80px;
+  border-bottom: 1px solid var(--royal-chocolate-300);
+}
+
+.blog-post__article {
+  flex: 0 1 812px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+
+.blog-post__header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.blog-post__image {
+  width: 100%;
+  height: 410px;
+  object-fit: cover;
+  border: 1px solid var(--bronze-100);
+  box-shadow: 0 48px 20px -32px rgba(0, 0, 0, 0.18);
+}
+
+.blog-post__section {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.blog-post__section-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--royal-chocolate-700);
+}
+
+.blog-post__paragraph {
+  line-height: 1.6;
+  color: var(--royal-chocolate-700);
+}
+
+/* Contents and share, kept in view while reading */
+.blog-post__aside {
+  flex: 1 0 0;
+  min-width: 0;
+  position: sticky;
+  top: calc(var(--nav-offset, 88px) + 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  transition: top 400ms var(--ease-in-out);
+}
+
+.blog-post__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Panel headings: the eyebrow style at 18px */
+.blog-post__panel .blog-post__label {
+  font-size: 18px;
+}
+
+.blog-post__contents {
+  position: relative;
+  display: flex;
+  padding-left: 27px;
+}
+
+/* 3px track; the bronze mark spans the section in view (one share of the track each) */
+.blog-post__contents::before,
+.blog-post__contents-bar {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 3px;
+}
+
+.blog-post__contents::before {
+  inset-block: 0;
+  background: var(--grey-200);
+}
+
+.blog-post__contents-bar {
+  top: calc(100% / var(--n) * var(--i));
+  height: calc(100% / var(--n));
+  background: var(--bronze-500);
+  transition: top 400ms var(--ease-in-out);
+}
+
+.blog-post__contents ul {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.blog-post__contents button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.2;
+  text-align: left;
+  color: var(--royal-chocolate-700);
+  cursor: pointer;
+  transition: color 300ms var(--ease-in-out);
+}
+
+.blog-post__contents button:hover,
+.blog-post__contents button.is-current {
+  color: var(--bronze-700);
+}
+
+.blog-post__share {
+  display: flex;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 24px icons (the artwork is drawn at 36 and scales cleanly) */
+.blog-post__share img {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.blog-post__share button,
+.blog-post__share a {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.blog-post__share button:hover,
+.blog-post__share a:hover {
+  opacity: 0.7;
+}
+
+.blog-post__copied {
+  min-height: 20px;
+  margin-top: -12px;
+  font-size: 14px;
+  color: var(--bronze-700);
+}
+
+.blog-post__related {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
+/* Phones only: sharing below the article, and the section bar (below) */
+.blog-post__share-end,
+.blog-post__bar {
+  display: none;
+}
+
+/* ---- Smaller screens ---- */
+@media (max-width: 1100px) {
+  .blog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .blog-post__main {
+    flex-direction: column-reverse;
+    gap: 48px;
+  }
+
+  .blog-post__article {
+    flex: none;
+    width: 100%;
+  }
+
+  .blog-post__aside {
+    position: static;
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .blog-featured {
+    flex-direction: column;
+  }
+
+  .blog-featured__media {
+    flex: none;
+    width: 100%;
+    height: 280px;
+  }
+}
+
+@media (max-width: 700px) {
+  .blog-list,
+  .blog-post {
+    gap: 64px;
+    padding: calc(64px + 48px) var(--page-gutter) 96px;
+  }
+
+  .blog-list__heading {
+    gap: 16px;
+    margin-bottom: -24px;
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .blog-featured__body {
+    gap: 32px;
+    padding: 24px;
+  }
+
+  .blog-featured__foot {
+    flex-wrap: wrap;
+  }
+
+  /* Post (Figma 1361:27193): crumbs, the article, then sharing, 40 apart */
+  .blog-post {
+    gap: 40px;
+    padding: calc(64px + 24px) var(--page-gutter) 72px;
+  }
+
+  .blog-post__crumbs {
+    line-height: 1.5;
+  }
+
+  .blog-post__image {
+    height: 200px;
+  }
+
+  .blog-post__article {
+    gap: 48px;
+  }
+
+  .blog-post__paragraph {
+    line-height: 1.2;
+  }
+
+  .blog-post__main {
+    padding-bottom: 48px;
+  }
+
+  .blog-post__aside {
+    display: none;
+  }
+
+  .blog-post__share-end {
+    display: flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  .blog-post__share-end .blog-post__copied {
+    margin-top: -16px;
+  }
+
+  /* Related blogs: their own band, 72 below sharing; the heading 64 above the cards */
+  .blog-post__related {
+    gap: 64px;
+    margin-top: 104px;
+  }
+
+  .blog-post__related .type-h3 {
+    font-size: 36px;
+  }
+
+  .blog-post__related .blog-card {
+    height: 448px;
+  }
+
+  .blog-post__related .blog-card__title {
+    font-size: 24px;
+  }
+
+  /*
+   * Section bar (Figma 1361:27930): once the title has scrolled away, the section in
+   * view as a dropdown beside a share button, just below the nav and following it as it
+   * hides. Slides away again after the article.
+   */
+  .blog-post__bar {
+    position: fixed;
+    top: var(--nav-offset, 64px);
+    left: 0;
+    right: 0;
+    z-index: 95;
+    display: flex;
+    gap: 8px;
+    padding: 8px var(--page-gutter);
+    background: var(--white);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition:
+      top 400ms var(--ease-in-out),
+      transform 400ms var(--ease-in-out),
+      opacity 400ms var(--ease-in-out),
+      visibility 0s linear 400ms;
+  }
+
+  .blog-post__bar.is-shown {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition:
+      top 400ms var(--ease-in-out),
+      transform 400ms var(--ease-in-out),
+      opacity 400ms var(--ease-in-out);
+  }
+
+  .blog-post__jump {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .blog-post__jump select,
+  .blog-post__bar-share {
+    height: 44px;
+    border: 1px solid var(--bronze-400);
+    border-radius: 0;
+    background: var(--bronze-100);
+  }
+
+  .blog-post__jump select {
+    width: 100%;
+    padding: 0 48px 0 16px;
+    -webkit-appearance: none;
+    appearance: none;
+    font: inherit;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--royal-chocolate-600);
+    text-overflow: ellipsis;
+  }
+
+  .blog-post__jump img {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    pointer-events: none;
+  }
+
+  .blog-post__bar-share {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    padding: 0;
+    cursor: pointer;
+  }
+}

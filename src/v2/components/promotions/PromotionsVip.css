@@ -1,0 +1,121 @@
+.promotions-vip {
+  overflow: clip;
+  padding: 140px var(--page-gutter) 200px;
+  background: var(--bronze-100);
+}
+
+/* The photos are placed within this, which starts below the section's top padding */
+.promotions-vip__inner {
+  position: relative;
+}
+
+.promotions-vip__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.promotions-vip__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(672px, 100%);
+  text-align: center;
+}
+
+.promotions-vip__text {
+  width: min(672px, 100%);
+  font-weight: 300;
+  text-align: center;
+  color: var(--royal-chocolate-600);
+}
+
+/* 505 × 438 photos level with the line, tucked well off the edges to leave negative space
+   around the copy: 201px past the left edge, and from 75% + 74px */
+.promotions-vip__photo {
+  position: absolute;
+  top: 0;
+  width: 505px;
+  height: 438px;
+  overflow: hidden;
+}
+
+.promotions-vip__photo img {
+  position: absolute;
+  left: 0;
+  top: -10%;
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.promotions-vip__photo--left {
+  left: calc(-201px - var(--page-gutter));
+}
+
+.promotions-vip__photo--right {
+  left: calc(75% + 74px + var(--page-gutter) / 2);
+}
+
+@media (max-width: 1300px) {
+  .promotions-vip__photo {
+    width: 340px;
+    height: 295px;
+  }
+
+  .promotions-vip__photo--left {
+    left: calc(-170px - var(--page-gutter));
+  }
+
+  .promotions-vip__photo--right {
+    left: auto;
+    right: calc(-170px - var(--page-gutter));
+  }
+}
+
+/* Phones: the photos give way and the invitation stands on its own */
+@media (max-width: 900px) {
+  .promotions-vip {
+    padding: 72px var(--page-gutter);
+  }
+
+  .promotions-vip__photo {
+    display: none;
+  }
+}
+
+/* The single photo is the phone layout's (below) */
+.promotions-vip__photo--single {
+  display: none;
+}
+
+/*
+ * Phones (Figma 786:11707): the line, then the heading, text and button 48px apart, and
+ * one 240px photo 40px below. The frame sits in the flow; the picture drifts inside it.
+ */
+@media (max-width: 700px) {
+  .promotions-vip__content {
+    gap: 48px;
+  }
+
+  .promotions-vip__content > .vline {
+    margin-bottom: -16px;
+  }
+
+  .promotions-vip__text {
+    font-weight: 400;
+    color: var(--grey-700);
+  }
+
+  .promotions-vip__photo--single {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 240px;
+    margin-top: 40px;
+  }
+}

@@ -1,0 +1,429 @@
+.why-reviews {
+  /* Distance from the content edge to the page edge: the row runs off the right */
+  --bleed: max(var(--page-gutter), (100vw - var(--content-max)) / 2);
+  /* Portrait widths, closed and open (Figma 889:10333 → 889:9647) */
+  --closed-w: 323px;
+  --open-w: 556px;
+  --card-h: 480px;
+  /* Slow and soft, easing in and out, for the widening; the review follows close behind */
+  --reveal-ease: cubic-bezier(0.45, 0.05, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+  padding: 140px var(--page-gutter);
+  overflow-x: clip;
+  background: var(--bronze-100);
+}
+
+.why-reviews__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+
+/* Starts on the content's left edge and scrolls sideways out to the screen's right edge */
+.why-reviews__track {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  align-self: flex-start;
+  width: calc(100vw - var(--bleed));
+  margin-left: calc(var(--bleed) - var(--page-gutter));
+  /* The last portrait can scroll clear of the screen edge */
+  padding-right: var(--page-gutter);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.why-reviews__track::-webkit-scrollbar {
+  display: none;
+}
+
+.why-reviews__track.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.why-reviews__track.is-dragging .why-review {
+  pointer-events: none;
+}
+
+.why-reviews__item {
+  flex: none;
+}
+
+/* Portrait: the photo with the resident's name; opens to the review */
+.why-review {
+  position: relative;
+  display: block;
+  width: var(--closed-w);
+  height: var(--card-h);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--bronze-300);
+  background: #d9d9d9;
+  font: inherit;
+  text-align: left;
+  color: var(--white);
+  cursor: pointer;
+  transition: width 1000ms var(--reveal-ease);
+}
+
+.why-review.is-open {
+  width: var(--open-w);
+}
+
+.why-review:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: 3px;
+}
+
+/* Cover-cropped as in Figma, zoomed about the crop's focus. Opening glides from the
+   portrait's crop to the open card's, centred on the face, as the card widens. */
+.why-review__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--pos);
+  transform: scale(var(--zoom));
+  transform-origin: var(--pos);
+  transition:
+    object-position 1000ms var(--reveal-ease),
+    transform 1000ms var(--reveal-ease),
+    transform-origin 1000ms var(--reveal-ease);
+  pointer-events: none;
+}
+
+.why-review.is-open .why-review__image {
+  object-position: var(--open-pos);
+  transform: scale(var(--open-zoom));
+  transform-origin: var(--open-pos);
+}
+
+/* The chocolate fade behind the name; the review brings its own band */
+.why-review__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(195deg, rgba(57, 29, 19, 0) 60.01%, rgba(57, 29, 19, 0.8) 92.36%);
+  mix-blend-mode: multiply;
+  transition: opacity 800ms var(--ease-in-out);
+}
+
+.why-review.is-open .why-review__shade {
+  opacity: 0;
+}
+
+.why-review__name {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 24px 32px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.5;
+  white-space: nowrap;
+  transition:
+    opacity 500ms var(--ease-in-out) 400ms,
+    transform 500ms var(--ease-in-out) 400ms;
+}
+
+.why-review.is-open .why-review__name {
+  opacity: 0;
+  transform: translateY(6px);
+  transition-duration: 400ms;
+  transition-delay: 0ms;
+}
+
+/*
+ * The review band (Figma 889:9655): a blurred bronze-to-chocolate glass across the foot.
+ * It's laid out at the open width from the start, so the text never reflows while the
+ * portrait widens — the portrait simply uncovers it.
+ */
+.why-review__panel {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: calc(var(--open-w) - 2px);
+  padding: 24px;
+  /*
+   * Revealed by sliding up from below the card's edge, never by fading: a band that's
+   * partly transparent can't blur or blend with the photo, so the glass would only snap
+   * in once a fade finished.
+   */
+  transform: translateY(100%);
+  transition: transform 500ms var(--ease-in-out);
+}
+
+/*
+ * Figma multiplies a 70% bronze-to-chocolate gradient over the blurred photo. Chrome drops
+ * a multiply blend while the photo or band is animating and applies it once they stop,
+ * so the glass would darken late. Instead the blurred photo is dimmed by the backdrop
+ * filter and a plain, deep bronze-to-chocolate overlay sits on top: dark enough for the
+ * quote to read, and the same on every frame.
+ */
+.why-review__panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(229.34deg, rgba(90, 50, 20, 0.75) 1.32%, rgba(36, 18, 12, 0.9) 61.04%);
+  backdrop-filter: blur(6px) brightness(0.7);
+  -webkit-backdrop-filter: blur(6px) brightness(0.7);
+}
+
+.why-review.is-open .why-review__panel {
+  transform: none;
+  transition: transform 900ms var(--reveal-ease) 150ms;
+}
+
+.why-review__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-left: 24px;
+  border-left: 2px solid var(--royal-chocolate-500);
+}
+
+.why-review__quote-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.why-review__quote {
+  flex: 1 0 0;
+  min-width: 0;
+  font-style: italic;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.why-review__quote-row img {
+  flex-shrink: 0;
+}
+
+.why-review__author {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.why-review__person {
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.why-review__person strong {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/* Always one line; a name too long for the card ends in an ellipsis */
+.why-review__university {
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.5;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--line-in-white);
+}
+
+/* The review's lines arrive one after the other */
+.why-review__quote-row,
+.why-review__author {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 300ms var(--ease-in-out),
+    transform 300ms var(--ease-in-out);
+}
+
+.why-review.is-open .why-review__quote-row,
+.why-review.is-open .why-review__author {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 700ms var(--ease-in-out) 300ms,
+    transform 900ms var(--reveal-ease) 300ms;
+}
+
+.why-review.is-open .why-review__author {
+  transition-delay: 400ms;
+}
+
+/*
+ * Progress bar (Figma 929:4875): a 672 × 4 grey track, 80px below the row, with a bronze
+ * thumb sized to the share of the row in view, travelling with the scroll. It doubles as
+ * a scrollbar; the wrapper gives the thin bar a comfortable hit area.
+ */
+.why-reviews {
+  --visible: 0.44;
+  --progress: 0;
+}
+
+.why-reviews__scrubber {
+  width: min(672px, 100%);
+  margin: -12px 0;
+  padding: 12px 0;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.why-reviews__scrubber:focus-visible {
+  outline: 1px solid var(--bronze-500);
+  outline-offset: 2px;
+}
+
+.why-reviews__progress {
+  position: relative;
+  height: 4px;
+  background: var(--grey-200);
+  transition: transform 200ms var(--ease-in-out);
+}
+
+.why-reviews__scrubber:hover .why-reviews__progress,
+.why-reviews__scrubber:active .why-reviews__progress,
+.why-reviews__scrubber:focus-visible .why-reviews__progress {
+  transform: scaleY(1.5);
+}
+
+.why-reviews__progress-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--visible) * 100%);
+  background: var(--bronze-500);
+  transform: translateX(calc(var(--progress) * (100% / var(--visible) - 100%)));
+  cursor: grab;
+}
+
+.why-reviews__scrubber:active .why-reviews__progress-bar {
+  cursor: grabbing;
+}
+
+/*
+ * Phones (Figma 929:4597): every review is shown expanded and nothing animates
+ * (WhyReviews.tsx). Each photo has its own crop for the 300 × 375 card, and keeps the
+ * bottom fade under the review.
+ */
+.why-review.is-static {
+  cursor: default;
+}
+
+.why-review.is-static .why-review__image {
+  object-position: var(--phone-pos);
+  transform: scale(var(--phone-zoom));
+  transform-origin: var(--phone-pos);
+}
+
+.why-review.is-static .why-review__shade {
+  opacity: 1;
+  background: linear-gradient(192.7deg, rgba(57, 29, 19, 0) 60.01%, rgba(57, 29, 19, 0.8) 92.36%);
+}
+
+.why-review.is-static .why-review__panel::before {
+  background: linear-gradient(244.06deg, rgba(90, 50, 20, 0.75) 1.32%, rgba(36, 18, 12, 0.9) 61.04%);
+}
+
+.why-review.is-static,
+.why-review.is-static * {
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-review,
+  .why-review__image,
+  .why-review__name,
+  .why-review__panel,
+  .why-review__quote-row,
+  .why-review__author {
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .why-reviews {
+    padding: 120px var(--page-gutter);
+  }
+}
+
+/* Phones (Figma 929:4597): 300 × 375 cards, always open (see .is-static) */
+@media (max-width: 700px) {
+  .why-reviews {
+    --closed-w: 300px;
+    --open-w: min(300px, calc(100vw - 2 * var(--page-gutter)));
+    --card-h: 375px;
+    gap: 24px;
+    padding: 48px var(--page-gutter) 72px;
+  }
+
+  .why-reviews__header {
+    gap: 24px;
+  }
+
+  .why-reviews__track {
+    gap: 16px;
+  }
+
+  .why-review {
+    border-width: 0.78px;
+  }
+
+  .why-review__name {
+    padding: 16px 20px;
+    font-size: 20px;
+  }
+
+  .why-review__panel {
+    padding: 16px;
+  }
+
+  .why-review__body {
+    gap: 16px;
+    padding-left: 16px;
+  }
+
+  .why-review__quote-row {
+    gap: 16px;
+  }
+
+  .why-review__quote {
+    font-size: 16px;
+  }
+
+  .why-review__quote-row img {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* The name on its own line, the course under it */
+  .why-review__person {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .why-review__person strong {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  .why-review__comma {
+    display: none;
+  }
+
+  .why-review__university {
+    font-size: 14px;
+  }
+}

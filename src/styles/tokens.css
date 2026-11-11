@@ -1,0 +1,44 @@
+/* Design tokens from the EPIISOD Figma file */
+:root {
+  --white: #ffffff;
+  --bronze-100: #fbfaf7;
+  --bronze-200: #f8f5ef;
+  --bronze-300: #e9dfd0;
+  --bronze-400: #d7c5a9;
+  --bronze-500: #d0a77f;
+  --bronze-600: #c8a977;
+  --bronze-700: #896d42;
+  --royal-chocolate-200: #ebe8e7;
+  --royal-chocolate-300: #dcd7d3;
+  --royal-chocolate-400: #a59994;
+  --royal-chocolate-500: #74615a;
+  --royal-chocolate-600: #391d13;
+  --royal-chocolate-700: #24120c;
+  --deep-olive-200: #e1e3d2;
+  --deep-olive-500: #71785c;
+  --deep-olive-700: #202a0f;
+  --deep-sapphire-700: #0b2237;
+  --line-in-white: #d7c5a9;
+  --menu-text: #e9dfd0;
+  --grey-200: #e9ecef;
+  --grey-400: #a9afb5;
+  --grey-600: #6c757d;
+  --grey-700: #495057;
+  --grey-800: #343a40;
+  --grey-900: #212529;
+  --error-500: #ea5826;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Albert Sans', system-ui, sans-serif;
+
+  --page-gutter: 72px;
+  --content-max: 1368px;
+
+  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+@media (max-width: 900px) {
+  :root {
+    --page-gutter: 24px;
+  }
+}

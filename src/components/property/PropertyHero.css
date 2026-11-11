@@ -1,0 +1,177 @@
+.property-hero {
+  position: relative;
+  /* Always one screen tall; the copy scales with the screen height (as on the homepage hero) */
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--royal-chocolate-700);
+}
+
+.property-hero__image,
+.property-hero__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.property-hero__image {
+  object-fit: cover;
+}
+
+.property-hero__overlay {
+  background: var(--royal-chocolate-700);
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+}
+
+/* Darkens as the hero scrolls away — animated by GSAP */
+.property-hero__shade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.property-hero__content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 6svh, 48px);
+  width: min(var(--content-max), calc(100% - 2 * var(--page-gutter)));
+  padding-bottom: clamp(16px, 5svh, 40px);
+}
+
+.property-hero__title {
+  font-size: clamp(32px, 8svh, 64px);
+  text-align: center;
+  color: var(--white);
+}
+
+.property-hero__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(16px, 5svh, 40px);
+}
+
+.property-hero__cta {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+  height: 44px;
+  border: 1px solid var(--white);
+  background: none;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--white);
+  cursor: pointer;
+  transition:
+    background-color 300ms var(--ease-in-out),
+    color 300ms var(--ease-in-out);
+}
+
+.property-hero__cta img {
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.property-hero__cta:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.property-hero__cta:hover img {
+  transform: translateX(4px);
+}
+
+.property-hero__media {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 72px;
+}
+
+.property-hero__media-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--grey-600);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--white);
+  transition: border-color 300ms var(--ease-in-out);
+}
+
+.property-hero__media-link:hover {
+  border-bottom-color: var(--white);
+}
+
+/* The 360° mark sits in a 39×24 slot, offset as in Figma */
+.property-hero__icon-360 {
+  position: relative;
+  flex-shrink: 0;
+  width: 39px;
+  height: 24px;
+}
+
+.property-hero__icon-360 img {
+  position: absolute;
+  left: 13.05%;
+  top: 1.59px;
+}
+
+@media (max-width: 900px) {
+  .property-hero__title {
+    font-size: clamp(28px, 5svh, 40px);
+  }
+
+  .property-hero__media {
+    gap: 8px 32px;
+  }
+}
+
+/* Very short screens: drop the decorative line so the copy stays clear of the nav */
+@media (max-height: 600px) {
+  .property-hero__content .vline {
+    display: none;
+  }
+}
+
+/* See all rooms + Enter the experience (the property's immersive page), side by side */
+.property-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 16px;
+}
+
+.property-hero__cta--experience {
+  border-color: var(--bronze-500);
+  background: var(--bronze-500);
+  color: var(--royal-chocolate-700);
+}
+
+.property-hero__cta--experience img {
+  filter: brightness(0);
+}
+
+.property-hero__cta--experience:hover {
+  border-color: var(--white);
+  background: var(--white);
+}
+
+.property-hero__cta--experience:hover img {
+  transform: none;
+}

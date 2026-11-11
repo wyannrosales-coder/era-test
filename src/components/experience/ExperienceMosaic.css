@@ -1,0 +1,412 @@
+/*
+ * Static layout first (phones, reduced motion): the wall as a grid, then the Exclusives
+ * content on the darkened lobby photo. `.is-animated` (set by ExperienceMosaic.tsx on
+ * larger screens) turns the section into the pinned, expanding stage.
+ */
+.xp-mosaic {
+  /* Driven by GSAP: --p, the expansion (0 → 1); --shade, the veil's opacity */
+  --p: 0;
+  --shade: 0;
+  /* One Figma pixel at this screen width (the wall is drawn at 1512) */
+  --u: calc(100vw / 1512);
+  background: var(--white);
+}
+
+.xp-mosaic__grid {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.xp-mosaic__column {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.xp-mosaic__photo {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--bronze-100);
+  background: var(--white);
+  box-shadow: 0 48px 20px -32px rgba(0, 0, 0, 0.18);
+}
+
+.xp-mosaic__photo--tall,
+.xp-mosaic__photo--feature {
+  aspect-ratio: 488 / 440;
+}
+
+.xp-mosaic__photo--short {
+  aspect-ratio: 488 / 208;
+}
+
+.xp-mosaic__photo > img {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  object-fit: cover;
+}
+
+/* At rest the lobby frame shows the middle of the photo, around the tree */
+.xp-mosaic__photo--feature > img {
+  transform: scale(2.068);
+}
+
+.xp-mosaic__veil {
+  position: absolute;
+  inset: 0;
+  /* Figma's overlay layer (1071:5558): chocolate at 95%, multiplied over the photo */
+  background: var(--royal-chocolate-700);
+  mix-blend-mode: multiply;
+  opacity: calc(0.95 * var(--shade));
+}
+
+/* Exclusives content, static: the darkened lobby behind it */
+.xp-mosaic__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  margin-top: 24px;
+  padding: 80px var(--page-gutter);
+  background:
+    linear-gradient(rgba(36, 18, 12, 0.95), rgba(36, 18, 12, 0.95)),
+    url('../../assets/experience/mosaic-lobby-tree.jpg') center / cover;
+  background-blend-mode: multiply;
+}
+
+.xp-mosaic__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  text-align: center;
+}
+
+.xp-mosaic__heading .eyebrow {
+  color: var(--line-in-white);
+}
+
+.xp-mosaic__heading .type-h2 {
+  color: var(--white);
+}
+
+.xp-mosaic__lede {
+  color: var(--bronze-200);
+}
+
+.xp-mosaic__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+
+.xp-mosaic__button {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 24px;
+  border: 1px solid var(--bronze-700);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--line-in-white);
+  transition:
+    background-color 300ms var(--ease-in-out),
+    border-color 300ms var(--ease-in-out);
+}
+
+.xp-mosaic__button:hover {
+  border-color: var(--line-in-white);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.xp-mosaic__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xp-mosaic__card {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+}
+
+/* 200px photo over the copy (Figma 1071:5534) */
+.xp-mosaic__card-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.xp-mosaic__card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 24px;
+}
+
+.xp-mosaic__card-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--royal-chocolate-700);
+}
+
+.xp-mosaic__card-text {
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-600);
+}
+
+/*
+ * Animated stage (Figma 1058:5277). Everything is sized in Figma pixels (--u) so the
+ * frames match at any width; the stage is at least a screen tall.
+ */
+.xp-mosaic.is-animated .xp-mosaic__stage {
+  --stage-h: max(100vh, calc(904 * var(--u)));
+  position: relative;
+  height: var(--stage-h);
+  overflow: hidden;
+}
+
+.xp-mosaic.is-animated .xp-mosaic__grid {
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  /* Centred even once the middle column is wider than the screen */
+  justify-content: center;
+}
+
+.xp-mosaic.is-animated .xp-mosaic__column--left,
+.xp-mosaic.is-animated .xp-mosaic__column--right {
+  flex: 1 1 0;
+}
+
+/* Holds the grid and copy; drifts as the section hands over to the café */
+.xp-mosaic.is-animated .xp-mosaic__inner {
+  position: absolute;
+  inset: 0;
+}
+
+/* The middle column widens from 488 to the full width, plus a few pixels to cover the edges */
+.xp-mosaic.is-animated .xp-mosaic__column--middle {
+  flex: 0 0 auto;
+  width: calc((488 + var(--p) * 1024) * var(--u) + var(--p) * 54px);
+}
+
+/* Fixed heights while the widths change (Figma keeps them as the columns narrow) */
+.xp-mosaic.is-animated .xp-mosaic__photo {
+  aspect-ratio: auto;
+}
+
+.xp-mosaic.is-animated .xp-mosaic__photo--tall {
+  height: calc(440 * var(--u));
+}
+
+.xp-mosaic.is-animated .xp-mosaic__photo--short {
+  height: calc(208 * var(--u));
+}
+
+.xp-mosaic.is-animated .xp-mosaic__photo--feature {
+  height: calc((1 - var(--p)) * 440 * var(--u) + var(--p) * (var(--stage-h) + 6px));
+  border-width: 0;
+}
+
+/* The lobby photo holds still at the stage's size; its frame uncovers it */
+.xp-mosaic.is-animated .xp-mosaic__photo--feature > img {
+  inset: auto;
+  left: 50%;
+  top: 50%;
+  width: calc(100vw + 6px);
+  height: calc(var(--stage-h) + 6px);
+  transform: translate(-50%, -50%);
+}
+
+/* The content sits over the stage at Figma's positions (of 904) */
+.xp-mosaic.is-animated .xp-mosaic__content {
+  position: absolute;
+  inset: 0;
+  justify-content: flex-start;
+  gap: 80px;
+  margin: 0;
+  padding: calc(var(--stage-h) * 140 / 904) var(--page-gutter) 0;
+  background: none;
+  pointer-events: none;
+}
+
+.xp-mosaic.is-animated .xp-mosaic__heading,
+.xp-mosaic.is-animated .xp-mosaic__cta .vline,
+.xp-mosaic.is-animated .xp-mosaic__button,
+.xp-mosaic.is-animated .xp-mosaic__card {
+  visibility: hidden;
+  pointer-events: auto;
+}
+
+/* Three 440px cards in a level row on the content width (Figma 1071:5582); they arrive
+   staggered and settle into line (ExperienceMosaic.tsx) */
+.xp-mosaic.is-animated .xp-mosaic__cards {
+  position: absolute;
+  top: calc(var(--stage-h) * 426 / 904);
+  left: 50%;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24px;
+  width: min(var(--content-max), calc(100% - 2 * var(--page-gutter)));
+  transform: translateX(-50%);
+}
+
+.xp-mosaic.is-animated .xp-mosaic__card {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .xp-mosaic.is-animated .xp-mosaic__card-text {
+    font-size: 16px;
+  }
+}
+
+/* Phones: one column of photos inside the page gutter, then the Exclusives content */
+@media (max-width: 700px) {
+  .xp-mosaic__grid {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 0 var(--page-gutter);
+  }
+
+  .xp-mosaic__column {
+    gap: 16px;
+  }
+
+  .xp-mosaic__photo {
+    box-shadow: 0 32px 20px -24px rgba(0, 0, 0, 0.18);
+  }
+
+  /* Short frames would be slivers at this width */
+  .xp-mosaic__photo--short {
+    aspect-ratio: 488 / 300;
+  }
+
+  .xp-mosaic__content {
+    gap: 40px;
+    margin-top: 48px;
+    padding: 72px var(--page-gutter);
+  }
+
+  .xp-mosaic__cta {
+    gap: 40px;
+  }
+
+  .xp-mosaic__card-text {
+    font-size: 16px;
+  }
+}
+
+/*
+ * Phones, animated (Figma 1275:8431): the 3-column wall at Figma's 390 scale, wider than
+ * the screen, sticks while the lobby frame grows to fill it; the Exclusives content then
+ * scrolls up over the darkened lobby, which stays behind it as the background.
+ */
+@media (max-width: 700px) {
+  .xp-mosaic.is-unfolding {
+    --u: calc(100vw / 390);
+    /* The lobby frame's height, 176.36 → the screen's */
+    --feature-h: calc((1 - var(--p)) * 176.36 * var(--u) + var(--p) * (100svh + 6px));
+  }
+
+  .xp-mosaic.is-unfolding .xp-mosaic__grid {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: calc(8 * var(--u));
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .xp-mosaic.is-unfolding .xp-mosaic__column {
+    gap: calc(8 * var(--u));
+  }
+
+  /* The side columns narrow as the middle one widens, the wall keeping its 460 width
+     (Figma 1275:8709: 148 → 82 → 50), until they're beyond the screen's edges */
+  .xp-mosaic.is-unfolding .xp-mosaic__column--left,
+  .xp-mosaic.is-unfolding .xp-mosaic__column--right {
+    flex: 0 0 calc((148 - var(--p) * 121) * var(--u) - var(--p) * 6px);
+  }
+
+  /* 148 → the full width, plus a few pixels to cover the edges */
+  .xp-mosaic.is-unfolding .xp-mosaic__column--middle {
+    flex: 0 0 auto;
+    width: calc((148 + var(--p) * 242) * var(--u) + var(--p) * 12px);
+  }
+
+  .xp-mosaic.is-unfolding .xp-mosaic__photo {
+    aspect-ratio: auto;
+    box-shadow: 0 19px 8px -13px rgba(0, 0, 0, 0.18);
+  }
+
+  /* The side rows grow with the lobby, so each side column stays as tall as the middle
+     one (short + lobby + short) */
+  .xp-mosaic.is-unfolding .xp-mosaic__photo--tall {
+    height: calc((var(--feature-h) + 176.36 * var(--u)) / 2);
+  }
+
+  .xp-mosaic.is-unfolding .xp-mosaic__photo--short {
+    aspect-ratio: auto;
+    height: calc(83.37 * var(--u));
+  }
+
+  .xp-mosaic.is-unfolding .xp-mosaic__photo--feature {
+    height: var(--feature-h);
+    border-width: 0;
+  }
+
+  /* The lobby photo holds still at the screen's size; its frame uncovers it */
+  .xp-mosaic.is-unfolding .xp-mosaic__photo--feature > img {
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    width: calc(100vw + 6px);
+    height: calc(100svh + 6px);
+    transform: translate(-50%, -50%);
+  }
+
+  /* Starts below the screen, so it arrives once the lobby has filled it (the
+     timeline in ExperienceMosaic.tsx runs over 80% of a screen) */
+  .xp-mosaic.is-unfolding .xp-mosaic__content {
+    margin-top: 90svh;
+    padding-top: 0;
+    /* The button sits in the middle of the screen on the bare lobby (Figma 1275:8709)
+       as the section ends, so the hand-over's parallax carries it under the café */
+    padding-bottom: calc(50svh - 22px);
+    background: none;
+  }
+
+  /* About 300px of bare lobby between the last card and the line (40 gap + 260) */
+  .xp-mosaic.is-unfolding .xp-mosaic__cta {
+    margin-top: 260px;
+  }
+}

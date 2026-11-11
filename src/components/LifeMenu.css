@@ -1,0 +1,170 @@
+.life-menu__links {
+  display: flex;
+  align-items: stretch;
+  width: min(1136px, 100%);
+  padding: 16px 0;
+}
+
+.life-menu__link {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 32px;
+  transition: background-color 200ms ease;
+}
+
+.life-menu__link:first-child {
+  flex-shrink: 0;
+  width: 440px;
+  border-right: 1px solid var(--line-in-white);
+}
+
+.life-menu__link:not(:first-child) {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.life-menu__link:hover,
+.life-menu__link:focus-visible {
+  background: var(--bronze-200);
+}
+
+.life-menu__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-700);
+}
+
+.life-menu__description {
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--royal-chocolate-500);
+}
+
+.life-menu__link:first-child .life-menu__description {
+  font-size: 18px;
+}
+
+/* Navigation option B (Figma 690:4739 / 690:4830): rows of bordered links */
+.nav-menu-b__row {
+  display: flex;
+  align-items: stretch;
+  width: min(1136px, 100%);
+  padding: 16px 0;
+}
+
+.nav-menu-b__link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 32px;
+  transition: background-color 200ms ease;
+}
+
+.nav-menu-b__link:hover,
+.nav-menu-b__link:focus-visible {
+  background: var(--bronze-200);
+}
+
+.nav-menu-b__link .life-menu__description {
+  font-size: 18px;
+}
+
+.nav-menu-b__link .nav-menu-b__small {
+  font-size: 16px;
+}
+
+/* Life (Figma 1080:8880): Why EPIISOD and Experience stacked (555px, each ruled left) ·
+   the Blog column (441px, ruled left) with its two articles */
+.nav-menu-b__life {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  width: min(var(--content-max), 100%);
+}
+
+.nav-menu-b__pages {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  flex-shrink: 0;
+  width: 555px;
+  padding: 16px 0;
+}
+
+.nav-menu-b__pages .nav-menu-b__link {
+  flex: 1 0 auto;
+  border-left: 1px solid var(--line-in-white);
+}
+
+.nav-menu-b__blog {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 441px;
+  padding: 16px 0;
+  border-left: 1px solid var(--line-in-white);
+}
+
+/* Promotions (Figma 1361:28011): one link, ruled left, sized to its text */
+.nav-menu-b__promos {
+  flex-shrink: 0;
+  align-self: flex-start;
+  width: 324px;
+  padding: 16px 0;
+}
+
+.nav-menu-b__promos .nav-menu-b__link {
+  border-left: 1px solid var(--line-in-white);
+}
+
+.nav-menu-b__label {
+  padding: 20px 32px;
+}
+
+.nav-menu-b__link--article {
+  gap: 4px;
+  width: 348px;
+  margin: 12px 0;
+  padding-block: 16px;
+}
+
+.nav-menu-b__article-description {
+  font-weight: 300;
+  color: var(--royal-chocolate-500);
+}
+
+.nav-menu-b__article {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-700);
+}
+
+/* Contact: Contact Us (440px, ruled both sides) · Join the Waitlist (464px) */
+.nav-menu-b__row--contact .nav-menu-b__link:first-child {
+  flex-shrink: 0;
+  width: 440px;
+  border-left: 1px solid var(--line-in-white);
+  border-right: 1px solid var(--line-in-white);
+}
+
+.nav-menu-b__row--contact .nav-menu-b__link:not(:first-child) {
+  flex-shrink: 0;
+  width: 464px;
+}
+
+.nav-menu-b__row--contact .nav-menu-b__link:nth-child(2) {
+  border-right: 1px solid var(--line-in-white);
+}
+
+.nav-menu-b__row--contact {
+  width: min(var(--content-max), 100%);
+}

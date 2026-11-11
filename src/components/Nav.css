@@ -1,0 +1,495 @@
+.nav {
+  /* Fixed above every section (including pinned ones) */
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 var(--page-gutter);
+  --nav-text: var(--white);
+  background: rgba(255, 255, 255, 0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0);
+  transition:
+    background-color 400ms var(--ease-in-out),
+    box-shadow 400ms var(--ease-in-out),
+    transform 400ms var(--ease-in-out);
+}
+
+/* Scrolling down: the main bar slides away (on property pages the sub-navigation stays) */
+.nav.is-condensed {
+  transform: translateY(calc(-1 * var(--bar-h, 0px)));
+}
+
+/* Over a full-screen scroll story (`hiddenIn`): the whole nav, sub-navigation too, slides away */
+.nav.is-hidden {
+  transform: translateY(-100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0);
+}
+
+/* With no sub-navigation the whole bar is out of view: drop its shadow too */
+.nav.is-condensed:not(.nav--sub) {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0);
+}
+
+/* …but comes back while keyboard focus is in it (not after a mouse click, which leaves focus behind) */
+.nav.is-condensed:has(.nav__inner :focus-visible),
+.nav.is-hidden:has(:focus-visible) {
+  transform: none;
+}
+
+/* Over the hero: white type with Figma's soft text shadow for legibility (not on the
+   solid cream and dark bars, which have no photo behind them) */
+.nav:not(.nav--cream):not(.nav--dark):not(.is-scrolled):not(.is-open) .nav__inner,
+.nav:not(.nav--cream):not(.nav--dark):not(.is-scrolled):not(.is-open) .nav__sub {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.7));
+}
+
+/* Scrolled: 90% white bar, soft shadow, chocolate type (Figma 539:12327) */
+.nav.is-scrolled,
+.nav.is-open {
+  --nav-text: var(--royal-chocolate-600);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Mega menu open: solid white (Figma 539:18628) */
+.nav.is-open {
+  background: var(--white);
+}
+
+/* Icons in both colourways, cross-fading */
+.nav__icon {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.nav__icon img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 400ms var(--ease-in-out);
+}
+
+/* Compact when scrolled (Figma 539:12758): 64px → 40px logo, 16px → 12px padding */
+.nav__logo .nav__icon {
+  transition:
+    width 400ms var(--ease-in-out),
+    height 400ms var(--ease-in-out);
+}
+
+.nav.is-scrolled .nav__inner {
+  padding: 12px 0;
+}
+
+.nav.is-scrolled .nav__logo .nav__icon {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.nav__icon-dark,
+.nav.is-scrolled .nav__icon-light,
+.nav.is-open .nav__icon-light {
+  opacity: 0;
+}
+
+.nav.is-scrolled .nav__icon-dark,
+.nav.is-open .nav__icon-dark {
+  opacity: 1;
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: var(--content-max);
+  padding: 16px 0;
+  transition: padding 400ms var(--ease-in-out);
+}
+
+.nav__links {
+  flex: 1 0 0;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+.nav__links--end {
+  justify-content: flex-end;
+  gap: 40px;
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--nav-text);
+  transition: color 400ms var(--ease-in-out), opacity 200ms ease;
+  white-space: nowrap;
+}
+
+button.nav__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.nav__link.is-active {
+  font-weight: 700;
+}
+
+/* Locations: the word links to its page, the caret beside it opens the menu */
+.nav__split {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* A larger target than the 16px caret, 8px from the word like the other carets */
+button.nav__link.nav__caret {
+  margin-right: -6px;
+  padding: 0 6px;
+}
+
+.nav__caret .nav__icon {
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.nav__caret[aria-expanded='true'] .nav__icon {
+  transform: rotate(180deg);
+}
+
+.nav__link:hover {
+  opacity: 0.75;
+}
+
+.nav__logo {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.nav__lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--nav-text);
+  cursor: pointer;
+  transition: color 400ms var(--ease-in-out);
+}
+
+.nav__cta {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border: 1px solid var(--white);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--white);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background-color 400ms var(--ease-in-out),
+    border-color 400ms var(--ease-in-out),
+    color 400ms var(--ease-in-out);
+}
+
+.nav__cta:hover {
+  background: var(--white);
+  color: var(--royal-chocolate-700);
+}
+
+/* Scrolled: solid bronze button with chocolate type. 1px less padding offsets the
+   border (the filled button has none in Figma), so it's 44px tall like the design. */
+.nav.is-scrolled .nav__cta,
+.nav.is-open .nav__cta {
+  padding: 11px 24px;
+  border-color: var(--line-in-white);
+  background: var(--line-in-white);
+  color: var(--royal-chocolate-600);
+}
+
+.nav.is-scrolled .nav__cta:hover,
+.nav.is-open .nav__cta:hover {
+  border-color: var(--bronze-600);
+  background: var(--bronze-600);
+}
+
+.nav__menu {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/*
+ * Property pages: a 24px-padded bar with a hairline, then the sub-navigation.
+ * Once scrolled it compacts exactly like the homepage's (40px logo, 12px padding).
+ */
+.nav--sub .nav__inner {
+  border-bottom: 1px solid var(--royal-chocolate-500);
+  transition:
+    padding 400ms var(--ease-in-out),
+    border-color 400ms var(--ease-in-out);
+}
+
+.nav--sub:not(.is-scrolled) .nav__inner {
+  padding: 24px 0;
+}
+
+.nav--sub.is-scrolled .nav__inner {
+  border-bottom-color: var(--line-in-white);
+}
+
+/* An open mega menu brings its own divider */
+.nav--sub.is-open .nav__inner {
+  border-bottom-color: transparent;
+}
+
+.nav__sub {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  width: calc(100% + 2 * var(--page-gutter));
+  max-height: 80px;
+  /* None below, so the current section's bar sits on the row's bottom edge */
+  padding: 4px var(--page-gutter) 0;
+  background: rgba(248, 245, 239, 0);
+  transition:
+    background-color 400ms var(--ease-in-out),
+    max-height 400ms var(--ease-in-out),
+    padding 400ms var(--ease-in-out),
+    opacity 250ms var(--ease-in-out);
+}
+
+.nav.is-scrolled .nav__sub {
+  --nav-text: var(--royal-chocolate-700);
+  background: var(--bronze-200);
+}
+
+/* The section in view: a 4px sand bar under its link (Figma 1182:17374), growing up from
+   the row's edge. On tablets and phones the row scrolls sideways and keeps it in sight. */
+.nav__sub-link {
+  box-shadow: inset 0 0 0 var(--bronze-500);
+  transition:
+    color 400ms var(--ease-in-out),
+    opacity 200ms ease,
+    box-shadow 350ms var(--ease-in-out);
+}
+
+.nav__sub-link.is-current {
+  box-shadow: inset 0 -4px 0 var(--bronze-500);
+}
+
+/* A mega menu takes over: the sub-navigation folds away while it's open */
+.nav.is-open .nav__sub {
+  max-height: 0;
+  padding-block: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    max-height 400ms var(--ease-in-out),
+    padding 400ms var(--ease-in-out),
+    opacity 150ms var(--ease-in-out),
+    visibility 0s linear 400ms;
+}
+
+/*
+ * Dark tone (Contact page, Figma 539:24148): a solid chocolate bar with white type
+ * and the filled bronze button at the top; once scrolled it's the homepage's bar.
+ */
+.nav--dark:not(.is-scrolled):not(.is-open) {
+  background: var(--royal-chocolate-700);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.nav--dark:not(.is-scrolled):not(.is-open) .nav__inner {
+  padding: 12px 0;
+  filter: none;
+}
+
+.nav--dark .nav__cta {
+  padding: 11px 24px;
+  border-color: var(--line-in-white);
+  background: var(--line-in-white);
+  color: var(--royal-chocolate-600);
+}
+
+.nav--dark .nav__cta:hover {
+  border-color: var(--bronze-600);
+  background: var(--bronze-600);
+}
+
+/* Cream: a bronze-200 bar with chocolate type and icons from the start (Figma 735:13845);
+   it turns into the usual compact white bar once scrolled */
+.nav--cream {
+  --nav-text: var(--royal-chocolate-600);
+}
+
+.nav--cream:not(.is-scrolled):not(.is-open) {
+  background: var(--bronze-200);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.nav--cream:not(.is-scrolled):not(.is-open) .nav__inner {
+  padding: 12px 0;
+  filter: none;
+}
+
+.nav--cream .nav__icon-light {
+  opacity: 0;
+}
+
+.nav--cream .nav__icon-dark {
+  opacity: 1;
+}
+
+.nav--cream .nav__cta {
+  padding: 11px 24px;
+  border-color: var(--line-in-white);
+  background: var(--line-in-white);
+  color: var(--royal-chocolate-600);
+}
+
+.nav--cream .nav__cta:hover {
+  border-color: var(--bronze-600);
+  background: var(--bronze-600);
+}
+
+@media (max-width: 1100px) {
+  .nav__sub {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav__sub::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* More links past an edge: that edge fades out (Nav.tsx sets the classes) */
+  .nav__sub.has-more-right {
+    mask-image: linear-gradient(to right, #000 calc(100% - 56px), transparent);
+  }
+
+  .nav__sub.has-more-left {
+    mask-image: linear-gradient(to right, transparent, #000 56px);
+  }
+
+  .nav__sub.has-more-left.has-more-right {
+    mask-image: linear-gradient(to right, transparent, #000 56px, #000 calc(100% - 56px), transparent);
+  }
+
+  /* A mouse can drag the row along */
+  @media (hover: hover) {
+    .nav__sub.has-more-left,
+    .nav__sub.has-more-right {
+      cursor: grab;
+    }
+  }
+
+  .nav__sub.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .nav__sub.is-dragging .nav__sub-link {
+    cursor: grabbing;
+  }
+
+}
+
+@media (max-width: 700px) {
+  .nav__sub {
+    gap: 20px;
+  }
+
+  /* Phones: over the hero, just the logo and menu (Figma 1275:9080); the sub-navigation
+     unfolds once the page scrolls, then stays */
+  .nav--sub:not(.is-scrolled):not(.is-open) .nav__inner {
+    border-bottom-color: transparent;
+  }
+
+  .nav:not(.is-scrolled) .nav__sub {
+    max-height: 0;
+    padding-block: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      max-height 400ms var(--ease-in-out),
+      padding 400ms var(--ease-in-out),
+      opacity 150ms var(--ease-in-out),
+      visibility 0s linear 400ms;
+  }
+
+  .nav__sub-link {
+    font-size: 14px;
+    letter-spacing: 1.4px;
+  }
+}
+
+/* Navigation option B: the hamburger only on tablets and phones */
+@media (min-width: 1101px) {
+  .nav__menu--small-screens {
+    display: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .nav__links:not(.nav__links--end),
+  .nav__actions .nav__link,
+  .language-select,
+  .mega-menu {
+    display: none;
+  }
+
+  .nav__links--end {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .nav__cta {
+    display: none;
+  }
+}
+
+/* Phones (Figma 704:7544): a 48px logo with 8px above and below, the same 64px bar as
+   the compact one */
+@media (max-width: 700px) {
+  .nav:not(.is-scrolled) .nav__inner,
+  .nav--dark:not(.is-scrolled):not(.is-open) .nav__inner,
+  .nav--cream:not(.is-scrolled):not(.is-open) .nav__inner {
+    padding: 8px 0;
+  }
+
+  .nav:not(.is-scrolled) .nav__logo .nav__icon {
+    width: 48px !important;
+    height: 48px !important;
+  }
+}

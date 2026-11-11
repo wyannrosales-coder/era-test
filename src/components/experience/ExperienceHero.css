@@ -1,0 +1,36 @@
+/* Experience page hero (Figma 1015:5843): title, button, line and logos 56px apart */
+.experience-hero .page-hero__content {
+  gap: 56px;
+}
+
+/* Figma sets "life" in Playfair Italic regular, lighter than the shared H1 accent */
+.experience-hero .type-h1 em {
+  font-weight: 400;
+}
+
+/* Four 236 × 100 logo slots, 24px apart (Partners.css sizes the slots) */
+.experience-hero__logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .experience-hero .page-hero__content {
+    gap: 40px;
+  }
+}
+
+/* Phones: two 163px logos to a row */
+@media (max-width: 700px) {
+  .experience-hero .page-hero__content {
+    gap: 32px;
+  }
+
+  .experience-hero__logos {
+    gap: 16px;
+  }
+}

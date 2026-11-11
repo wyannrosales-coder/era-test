@@ -1,0 +1,587 @@
+.property-location {
+  padding: 120px var(--page-gutter);
+  background: var(--bronze-100);
+}
+
+.property-location__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px; /* between the header and the map */
+}
+
+/* "Location" with the address on the right (Figma 1080:5905) */
+.property-location__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
+  width: 100%;
+  max-width: var(--content-max);
+  padding-bottom: 40px;
+}
+
+.property-location__address {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--royal-chocolate-700);
+}
+
+.property-location__address img {
+  flex-shrink: 0;
+}
+
+.property-location__map {
+  position: relative;
+  z-index: 0; /* keeps Leaflet's own stacking below the nav and pinned controls */
+  width: 100%;
+  max-width: var(--content-max);
+  height: 583px;
+  border: 0.615px solid var(--bronze-600);
+  /* v2 (Figma 1455:18545): rounded map */
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* ---- "Find nearby areas" (Figma 1182:16838) ---- */
+
+/* The map's top-left corner: the field, then the area list or the chosen area's places */
+.location-finder {
+  --finder-shadow: 0 5px 10px rgba(0, 0, 0, 0.15), 0 19px 19px rgba(0, 0, 0, 0.13), 0 43px 26px rgba(0, 0, 0, 0.07),
+    0 76px 30px rgba(0, 0, 0, 0.02);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 500; /* above the map's panes and markers */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 440px;
+  max-height: 100%;
+  padding: 24px;
+  /* The empty corner around the panel lets the map be dragged */
+  pointer-events: none;
+}
+
+.location-finder > * {
+  pointer-events: auto;
+}
+
+.location-finder__field {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line-in-white);
+  /* v2 (Figma 1455:18553): rounded field */
+  border-radius: 4px;
+  background: var(--bronze-100);
+  box-shadow: var(--finder-shadow);
+  font: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: left;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+  transition: border-color 200ms var(--ease-in-out);
+}
+
+.location-finder__field:hover,
+.location-finder__field[aria-expanded='true'] {
+  border-color: var(--bronze-600);
+}
+
+.location-finder__field:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: 2px;
+}
+
+.location-finder__placeholder {
+  flex: 1 0 0;
+}
+
+/* White card below the field, fading down into place as it opens */
+.location-finder__panel {
+  min-height: 0;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--line-in-white);
+  border-radius: 4px;
+  background: var(--white);
+  box-shadow: var(--finder-shadow);
+  list-style: none;
+  animation: finder-in 280ms var(--ease-in-out);
+}
+
+@keyframes finder-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* Areas: icon in a sand circle, the name beside it; dark when pointed at or chosen */
+.location-finder__areas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.location-finder__area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: left;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+}
+
+.location-finder__icon {
+  flex-shrink: 0;
+  display: flex;
+  padding: 8px;
+  border-radius: 24px;
+  background: var(--bronze-500);
+  transition: background-color 250ms var(--ease-in-out);
+}
+
+.location-finder__icon.is-current,
+.location-finder__area:hover .location-finder__icon,
+.location-finder__area:focus-visible .location-finder__icon,
+.location-finder__area.is-current .location-finder__icon {
+  background: var(--royal-chocolate-700);
+}
+
+.location-finder__area:focus-visible {
+  outline: none;
+}
+
+/* The chosen area's places (Figma 1182:8459): fills the rest of the map's height */
+.location-finder__results {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 8px;
+}
+
+.location-finder__chosen {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--royal-chocolate-600);
+}
+
+.location-finder__chosen-name {
+  flex: 1 0 0;
+}
+
+.location-finder__clear {
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.location-finder__clear:hover {
+  opacity: 0.6;
+}
+
+.location-finder__places {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  margin: 0;
+  /* Room for the scroll bar, clear of the distances */
+  padding: 0 12px 0 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-in-white) transparent;
+}
+
+.location-finder__place {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: var(--royal-chocolate-600);
+  cursor: pointer;
+}
+
+.location-finder__place:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: -2px;
+}
+
+.location-finder__number {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bronze-300);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--royal-chocolate-600);
+  transition:
+    background-color 250ms var(--ease-in-out),
+    color 250ms var(--ease-in-out);
+}
+
+/* The place lit here and on the map */
+.location-finder__place.is-lit .location-finder__number {
+  background: var(--royal-chocolate-700);
+  color: var(--white);
+}
+
+.location-finder__place-name {
+  flex: 1 0 0;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.location-finder__distance {
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 24px;
+  white-space: nowrap;
+  color: var(--royal-chocolate-400);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .location-finder__panel {
+    animation: none;
+  }
+}
+
+/* Phones: a taller map with the finder across its top */
+@media (max-width: 700px) {
+  .property-location {
+    padding: 80px var(--page-gutter);
+  }
+
+  .property-location__header {
+    padding-bottom: 24px;
+  }
+
+  .property-location__map {
+    height: 560px;
+  }
+
+  .location-finder {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .location-finder__panel {
+    padding: 12px;
+  }
+
+  /* Leave the map's lower half in view under the list */
+  .location-finder__results {
+    max-height: 248px;
+  }
+}
+
+/* A place's photo (Figma 1182:8433): a 64px thumbnail before its number, which enlarges */
+.location-finder__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.location-finder__row .location-finder__place {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.location-finder__thumb {
+  flex-shrink: 0;
+  display: block;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: var(--bronze-200);
+  cursor: zoom-in;
+}
+
+.location-finder__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms var(--ease-in-out);
+}
+
+.location-finder__thumb:hover img {
+  transform: scale(1.06);
+}
+
+.location-finder__thumb:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: 2px;
+}
+
+/* Enlarged (Figma 1227:12135): the photo across the panel, its name and distance below.
+   The list stays where it was, hidden, for the way back. */
+.location-finder__results.is-enlarged .location-finder__places {
+  display: none;
+}
+
+.location-finder__photo {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 8px 0 0;
+  animation: location-finder-photo 450ms var(--ease-in-out) both;
+}
+
+.location-finder__photo img {
+  display: block;
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.location-finder__photo figcaption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 12px;
+  text-align: center;
+}
+
+.location-finder__photo-name {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--royal-chocolate-600);
+}
+
+@keyframes location-finder-photo {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .location-finder__photo {
+    animation: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .location-finder__thumb {
+    width: 48px;
+    height: 48px;
+  }
+
+  .location-finder__results.is-enlarged {
+    max-height: none;
+  }
+
+  .location-finder__photo img {
+    height: 120px;
+  }
+
+  .location-finder__photo figcaption {
+    padding-top: 8px;
+  }
+}
+
+/* A place with no photo yet: a sand square with a pin (Figma 1227:12217) */
+.location-finder__thumb--empty {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--bronze-300);
+  background: var(--bronze-200);
+  cursor: default;
+}
+
+.location-finder__thumb--empty img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Only on the full-screen phone map */
+.property-location__close,
+.location-finder__photo-close {
+  display: none;
+}
+
+/* ---- Phones (Figma 1275:10498) ---- */
+@media (max-width: 700px) {
+  /* "Location" centred over the address */
+  .property-location__header {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .property-location__address {
+    align-self: stretch;
+  }
+
+  .property-location__map {
+    height: 500px;
+  }
+
+  /* v2: the zoom buttons stay on phones too, riding just above the finder at the map's
+     foot (its height is set by PropertyLocation.tsx), lined up with its right edge */
+  .property-location__map .leaflet-bottom.leaflet-right .leaflet-control-zoom {
+    margin-right: 24px;
+    /* 12px above the finder; the attribution line (16px) sits under the buttons */
+    margin-bottom: calc(var(--finder-h, 68px) + 12px - 16px);
+    transition: margin-bottom 300ms var(--ease-in-out);
+  }
+
+  /* The field at the map's foot */
+  .location-finder {
+    top: auto;
+    bottom: 0;
+    padding: 24px;
+  }
+
+  /* Full screen: over the whole page, nav included. The section's drift (a transform)
+     would hold a fixed map inside it, so it's let go while the map is open. */
+  .property-location:has(.is-full) [data-exit-content] {
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .property-location__map.is-full {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    border: 0;
+  }
+
+  .property-location__map.is-full .location-finder {
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 0;
+    gap: 8px;
+  }
+
+  .property-location__map.is-full .location-finder__field {
+    width: auto;
+    margin: 0 24px;
+  }
+
+  /* No panel open: the field rests 24px above the foot */
+  .property-location__map.is-full .location-finder:not(:has(.location-finder__panel)) .location-finder__field {
+    margin-bottom: 24px;
+  }
+
+  /* Panels run edge to edge along the foot, rising in */
+  .property-location__map.is-full .location-finder__panel {
+    padding: 24px 32px;
+    border: 0;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+    animation: finder-rise 380ms var(--ease-in-out);
+  }
+
+  .property-location__map.is-full .location-finder__results {
+    max-height: 40svh;
+    padding-right: 24px;
+  }
+
+  /* A photo open: the field steps aside; the photo, its name and distance (Figma 1275:10499) */
+  .property-location__map.is-full .location-finder:has(.is-enlarged) .location-finder__field,
+  .property-location__map.is-full .location-finder__results.is-enlarged .location-finder__chosen {
+    display: none;
+  }
+
+  .property-location__map.is-full .location-finder__results.is-enlarged {
+    max-height: none;
+    padding: 16px;
+  }
+
+  .property-location__map.is-full .location-finder__photo {
+    position: relative;
+    margin: 0;
+  }
+
+  .property-location__map.is-full .location-finder__photo img {
+    height: 150px;
+  }
+
+  .property-location__map.is-full .location-finder__photo-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    background: rgba(36, 18, 12, 0.5);
+    cursor: pointer;
+  }
+
+  .property-location__map.is-full .location-finder__photo-close img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+  }
+
+  /* The cross in the corner closes the full-screen map */
+  .property-location__map.is-full .property-location__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 600;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    background: var(--white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+  }
+}
+
+@keyframes finder-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}

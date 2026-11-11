@@ -1,0 +1,473 @@
+.amenities {
+  background: var(--white);
+}
+
+/* Heading (Figma 1099:34855): line, eyebrow, title and lede, 40px apart */
+.amenities__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 80px var(--page-gutter);
+  text-align: center;
+}
+
+.amenities__lede {
+  max-width: 904px;
+  font-weight: 300;
+  color: var(--royal-chocolate-600);
+}
+
+/* ---- Plain layout (phones, tablets, reduced motion) ---- */
+.amenities__stage {
+  position: relative;
+  background: var(--royal-chocolate-700);
+}
+
+.amenities__inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.amenities__media {
+  position: relative;
+  aspect-ratio: 1512 / 800;
+  overflow: hidden;
+}
+
+.amenities__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-in-out);
+}
+
+.amenities__photo.is-active {
+  opacity: 1;
+}
+
+/* Each photo's Figma crop (Amenities.tsx sets --pos and --zoom) */
+.amenities__photo {
+  object-position: var(--pos, 50% 50%);
+  transform: scale(var(--zoom, 1));
+  transform-origin: var(--pos, 50% 50%);
+}
+
+/* Animated: shown whole in the window and wide frame, easing into its crop as the list
+   arrives (Figma 1099:34869 → 1082:17874) */
+.amenities.is-animated:not(.is-listing) .amenities__photo {
+  object-position: 50% 50%;
+  transform: none;
+  transform-origin: 50% 50%;
+}
+
+.amenities.is-animated .amenities__photo {
+  transition:
+    opacity 550ms var(--ease-in-out),
+    object-position 900ms var(--ease-in-out),
+    transform 900ms var(--ease-in-out),
+    transform-origin 900ms var(--ease-in-out);
+}
+
+/* Figma's overlay layer: chocolate multiplied over the photo, strongest behind the list */
+.amenities__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(66deg, #24120c 24.77%, rgba(36, 18, 12, 0.85) 47.27%, rgba(36, 18, 12, 0) 96.28%);
+  mix-blend-mode: multiply;
+  opacity: 0;
+}
+
+.amenities__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 60px;
+  padding: 72px var(--page-gutter);
+  color: var(--white);
+}
+
+.amenities__eyebrow {
+  color: var(--line-in-white);
+}
+
+.amenities__list-row {
+  display: flex;
+  gap: 48px;
+  margin-top: -20px;
+}
+
+/* 3px track the height of the list; the bronze fill reaches the active amenity */
+.amenities__progress {
+  position: relative;
+  flex-shrink: 0;
+  width: 3px;
+  background: var(--grey-200);
+}
+
+/* Larger screens: the bar is a scrollbar (Amenities.tsx), with a wider invisible grip */
+.amenities.is-animated .amenities__progress {
+  cursor: grab;
+  touch-action: none;
+}
+
+.amenities.is-animated .amenities__progress::before {
+  content: '';
+  position: absolute;
+  inset: -8px -16px;
+}
+
+.amenities.is-animated .amenities__progress.is-dragging {
+  cursor: grabbing;
+}
+
+.amenities.is-animated .amenities__progress:hover .amenities__progress-bar,
+.amenities.is-animated .amenities__progress.is-dragging .amenities__progress-bar {
+  box-shadow: 0 0 0 1px var(--bronze-500);
+}
+
+.amenities__progress-bar {
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--fill, 100%);
+  background: var(--bronze-500);
+  transition: height 450ms var(--ease-in-out);
+}
+
+.amenities__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.amenities__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--royal-chocolate-300);
+}
+
+.amenities__text {
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--royal-chocolate-300);
+}
+
+/* Plain layout: every amenity with its description */
+.amenities__text-wrap {
+  margin-top: 8px;
+}
+
+.amenities__button {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 24px;
+  border: 1px solid var(--white);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--white);
+  transition: background-color 300ms var(--ease-in-out);
+}
+
+.amenities__button span {
+  padding: 12px 0;
+}
+
+.amenities__button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.amenities:not(.is-animated) .amenities__overlay {
+  opacity: 0.6;
+}
+
+@media (max-width: 700px) {
+  .amenities__intro {
+    gap: 24px;
+    padding: 48px var(--page-gutter);
+  }
+
+  .amenities__media {
+    aspect-ratio: 390 / 300;
+  }
+
+  .amenities__copy {
+    gap: 40px;
+    padding: 48px var(--page-gutter);
+  }
+
+  .amenities__list-row {
+    gap: 24px;
+  }
+
+  .amenities__button {
+    font-size: 16px;
+  }
+}
+
+/* ---- Animated stage (Figma 1099:34869), pinned for the screen ---- */
+.amenities.is-animated .amenities__stage {
+  display: block;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  /* Behind the small window: the soft white-to-cream of Figma's frame */
+  background: linear-gradient(var(--white), var(--bronze-200));
+}
+
+/* Holds the photo and list; drifts as the rooms slide over (Amenities.tsx) */
+.amenities.is-animated .amenities__inner {
+  position: absolute;
+  inset: 0;
+}
+
+/* The photo fills the stage; its clip-path opens from the window (Amenities.tsx) */
+.amenities.is-animated .amenities__media {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  will-change: clip-path;
+}
+
+/* The list on the left, 120px down an 800px screen (Figma 1082:17937). Placed by `top`,
+   since GSAP moves it by transform as it arrives. */
+.amenities.is-animated .amenities__copy {
+  position: absolute;
+  top: max(96px, calc(50% - 280px));
+  left: max(var(--page-gutter), (100vw - var(--content-max)) / 2);
+  width: min(672px, calc(100% - 2 * var(--page-gutter)));
+  padding: 0;
+  visibility: hidden;
+}
+
+.amenities.is-animated .amenities__list {
+  flex: 1 0 0;
+  min-width: 0;
+  gap: 16px;
+}
+
+/* Active amenity: 40px, its first word italic, white, with its description below */
+.amenities.is-animated .amenities__item {
+  transition: padding 450ms var(--ease-in-out);
+}
+
+.amenities.is-animated .amenities__item.is-active {
+  padding: 24px 0;
+}
+
+.amenities.is-animated .amenities__title {
+  transition:
+    font-size 450ms var(--ease-in-out),
+    color 450ms var(--ease-in-out);
+}
+
+.amenities.is-animated .amenities__item.is-active .amenities__title {
+  font-size: 40px;
+  color: var(--white);
+}
+
+.amenities.is-animated .amenities__item.is-active .amenities__lead {
+  font-style: italic;
+}
+
+/* The description grows open under the active title, then fades in */
+.amenities.is-animated .amenities__text-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  transition:
+    grid-template-rows 450ms var(--ease-in-out),
+    margin-top 450ms var(--ease-in-out);
+}
+
+.amenities.is-animated .amenities__item.is-active .amenities__text-wrap {
+  grid-template-rows: 1fr;
+  margin-top: 16px;
+}
+
+.amenities.is-animated .amenities__text {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 300ms var(--ease-in-out);
+}
+
+.amenities.is-animated .amenities__item.is-active .amenities__text {
+  opacity: 1;
+  transition: opacity 400ms var(--ease-in-out) 150ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .amenities__photo,
+  .amenities__progress-bar {
+    transition: none;
+  }
+}
+
+/* Plain layout lists every amenity, so the bar is full */
+.amenities:not(.is-animated) .amenities__progress-bar {
+  height: 100%;
+}
+
+/* Phones only: the carousel's photos */
+.amenities__cards {
+  display: none;
+}
+
+/* ---- Phones, animated (Figma 1314:14065): the photo opens, then a carousel ---- */
+@media (max-width: 700px) {
+  /* The window sits 40px under the lede */
+  .amenities.is-carousel .amenities__intro {
+    padding: 72px var(--page-gutter) 40px;
+    gap: 40px;
+  }
+
+  .amenities.is-carousel .amenities__stage {
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    background: linear-gradient(var(--white), var(--bronze-200));
+  }
+
+  .amenities.is-carousel .amenities__inner {
+    position: absolute;
+    inset: 0;
+  }
+
+  .amenities.is-carousel .amenities__media {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+    will-change: clip-path;
+  }
+
+  /* The opening photo at Figma's size (1512 × 800 on a 390 screen, or the screen's
+     height if taller), centred on the window as it grows and moves (--cy, set by
+     Amenities.tsx), so the window always shows the building */
+  .amenities.is-carousel .amenities__photo {
+    inset: auto;
+    left: 50%;
+    top: var(--cy, 50%);
+    width: auto;
+    max-width: none;
+    height: max(calc(800 * 100vw / 390), 100%);
+    object-position: 50% 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Figma's overlay: chocolate at 95%, multiplied */
+  .amenities.is-carousel .amenities__overlay {
+    background: var(--royal-chocolate-700);
+    opacity: 0;
+  }
+
+  /* Photo row, bar, eyebrow, copy, button: 24px apart, centred on the screen */
+  .amenities.is-carousel .amenities__copy {
+    position: absolute;
+    inset: 0;
+    justify-content: center;
+    align-items: stretch;
+    gap: 24px;
+    padding: 48px var(--page-gutter);
+    visibility: hidden;
+  }
+
+  .amenities.is-carousel .amenities__list-row {
+    display: contents;
+  }
+
+  .amenities.is-carousel .amenities__cards {
+    display: block;
+    flex-shrink: 0;
+    order: 1;
+    /* 342 × 276 at the content width (a set height: aspect-ratio would grow to the photo) */
+    height: calc((100vw - 2 * var(--page-gutter)) * 276 / 342);
+  }
+
+  .amenities.is-carousel .amenities__track {
+    display: flex;
+    gap: 8px;
+    height: 100%;
+    will-change: transform;
+  }
+
+  .amenities.is-carousel .amenities__card {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .amenities.is-carousel .amenities__card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* 4px bar across; GSAP fills it a share per amenity */
+  .amenities.is-carousel .amenities__progress {
+    order: 2;
+    width: 100%;
+    height: 4px;
+    background: var(--royal-chocolate-500);
+  }
+
+  .amenities.is-carousel .amenities__progress-bar {
+    inset: 0;
+    height: auto;
+    transform-origin: left;
+    transition: none;
+  }
+
+  .amenities.is-carousel .amenities__eyebrow {
+    order: 3;
+    margin-bottom: -8px;
+    color: var(--bronze-400);
+  }
+
+  /* Amenities stacked in one place; GSAP hands over between them */
+  .amenities.is-carousel .amenities__list {
+    order: 4;
+    display: grid;
+  }
+
+  .amenities.is-carousel .amenities__item {
+    grid-area: 1 / 1;
+  }
+
+  .amenities.is-carousel .amenities__title {
+    font-size: 36px;
+    color: var(--white);
+  }
+
+  .amenities.is-carousel .amenities__lead {
+    font-style: italic;
+  }
+
+  .amenities.is-carousel .amenities__text-wrap {
+    margin-top: 16px;
+  }
+
+  .amenities.is-carousel .amenities__text {
+    color: var(--bronze-200);
+  }
+
+  .amenities.is-carousel .amenities__button {
+    order: 5;
+    justify-content: center;
+    width: 100%;
+  }
+}

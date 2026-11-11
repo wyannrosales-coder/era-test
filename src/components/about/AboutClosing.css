@@ -1,0 +1,24 @@
+.about-closing {
+  padding: 140px var(--page-gutter) 200px;
+  background: linear-gradient(to bottom, var(--bronze-100), var(--bronze-200));
+}
+
+.about-closing__content {
+  display: flex;
+  justify-content: center;
+}
+
+/* Phones (Figma 760:16755): a 50px line with 48px above and below */
+@media (max-width: 700px) {
+  .about-closing {
+    padding: 48px var(--page-gutter);
+  }
+
+  .about-closing .vline {
+    height: 50px !important;
+  }
+
+  .about-closing .vline img {
+    width: 50px;
+  }
+}

@@ -1,0 +1,106 @@
+/* Design tokens (colours, fonts, spacing) live in tokens.css so pages outside the React app can share them. */
+@import './tokens.css';
+@import './type.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--white);
+  color: var(--royal-chocolate-700);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p {
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Shared section heading: eyebrow + serif title */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 24px;
+  line-height: 1;
+  color: var(--bronze-700);
+  text-transform: uppercase;
+}
+
+.heading-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+/* Exit parallax (lib/useExitParallax.ts): the section clips its drifting content */
+.exit-parallax {
+  position: relative;
+  /* clip, not hidden: hidden would make it a scroll container and break sticky children */
+  overflow: clip;
+}
+
+[data-exit-content] {
+  will-change: transform;
+}
+
+/* Darkens the section as it scrolls away — animated by GSAP */
+.exit-shade {
+  position: absolute;
+  inset: 0;
+  background: var(--royal-chocolate-700);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .eyebrow {
+    font-size: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,199 @@
+.token-fold {
+  /* Positioned so it's the offsetParent the token's pin point is measured against */
+  position: relative;
+  /* Type size: Figma's 56px at 1512px wide, scaling with the window. Row gaps and the
+     token are sized from it too, so their proportions hold at every width. */
+  --fs: clamp(26px, 3.7vw, 56px);
+  --size: calc(var(--fs) * 2.75); /* token: 154px at 56px type */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  /* 200px below for ample negative space before the footer (120px on phones) */
+  padding: 120px var(--page-gutter) 200px;
+  /* Clip sideways (halves sliding apart) but not vertically */
+  overflow-x: clip;
+  /* v2: and at the top edge, so the falling coin only appears once this section's edge
+     has slid up past it (never over the section above) */
+  clip-path: inset(0 0 -100vh 0);
+  /* Continues the sign-up's cream into the footer's bronze */
+  background: linear-gradient(to bottom, var(--bronze-100), var(--bronze-200));
+}
+
+.token-fold__rows {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: var(--content-max);
+  /* Room below the last row: the token finishes its pass here (and rests here without motion) */
+  padding-bottom: calc(var(--size) + 160px); /* token comes to rest ~160px below the last line */
+}
+
+/*
+ * A row = left half (right-aligned) + right half (left-aligned), closed so it reads as
+ * one line: a word space between phrases, nothing between the halves of a split word.
+ */
+.token-fold__row {
+  display: flex;
+  justify-content: center;
+  gap: 0.28em;
+  font-size: var(--fs);
+  will-change: transform;
+}
+
+.token-fold__row--join {
+  gap: 0;
+}
+
+.token-fold__half {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: inherit;
+  line-height: 1.2;
+  color: var(--royal-chocolate-700);
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.token-fold__half em {
+  font-style: italic;
+}
+
+.token-fold__half--left {
+  /* Anchored to its right edge: if the text is wider than its half (phones), it runs off
+     to the left rather than into the right half */
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.token-fold__half--left > span {
+  flex-shrink: 0;
+}
+
+.token-fold__half--right {
+  text-align: left;
+}
+
+/* ---------- Token: a real-time 3D coin (src/lib/coin3d.ts) ---------- */
+
+/* Laid out well below the last row — where its pass ends; GSAP starts it up on the gold line */
+.token {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 20px;
+  width: var(--size);
+  height: var(--size);
+  margin-left: calc(var(--size) / -2);
+}
+
+.token__coin {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+/* The WebGL canvas: larger than the token (the coin fills 74% of it) so its turning edge
+   and perspective never clip */
+.token__canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--size) / 0.74);
+  height: calc(var(--size) / 0.74);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.token__canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Flat token shown until the 3D coin is ready (or if WebGL isn't available) */
+.token__fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #f0d6b4, var(--bronze-500) 45%, var(--bronze-700) 100%);
+  box-shadow: inset 0 0 0 calc(var(--size) * 0.07) rgba(255, 255, 255, 0.35);
+  transition: opacity 400ms ease;
+}
+
+.token__fallback img {
+  width: calc(var(--size) * 72 / 154);
+  height: calc(var(--size) * 72 / 154);
+  filter: brightness(0.55);
+}
+
+.has-3d-coin .token__fallback {
+  opacity: 0;
+}
+
+/*
+ * Figma's drop shadow (0 40 24 -24, rgba(57,29,19,.24)) as a soft ellipse under the
+ * token. A gradient rather than box-shadow: the box-shadow version left a pale disc
+ * inside its circle while composited. Moves with the token; stays steady as it spins.
+ */
+.token__shadow {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -14%;
+  height: 22%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(90, 58, 26, 0.28) 0%, rgba(90, 58, 26, 0.11) 45%, rgba(90, 58, 26, 0) 72%);
+  pointer-events: none;
+}
+
+/* Rows that only appear at one size (see ROWS in TokenFold.tsx) */
+.token-fold__row--phone {
+  display: none;
+}
+
+/*
+ * Phones (Figma 713:4138): the same pass-through as desktop with 20px type, rows 15px
+ * apart, an 87px token and a 50px line; the long second row becomes two. Rows may run
+ * wider than the screen's content area, as in Figma; the section clips them sideways.
+ */
+@media (max-width: 700px), (max-width: 1100px) and (orientation: portrait) {
+  .token-fold {
+    /* Phones keep the original travel, which doesn't need the top-edge clip */
+    clip-path: none;
+    --fs: 20.3px;
+    --size: 87px;
+    gap: 40px;
+    padding: 120px var(--page-gutter);
+  }
+
+  .token-fold .vline {
+    height: 50px !important;
+  }
+
+  .token-fold .vline img {
+    width: 50px;
+  }
+
+  .token-fold__rows {
+    gap: 15px;
+    padding-bottom: calc(var(--size) + 48px);
+  }
+
+  .token-fold__row--desktop {
+    display: none;
+  }
+
+  .token-fold__row--phone {
+    display: flex;
+  }
+}

@@ -1,0 +1,206 @@
+.partners {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 140px var(--page-gutter) 400px; /* +200px breathing room before the sign-up */
+  overflow: hidden;
+  background: var(--white);
+}
+
+.partners__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+/* Static logo row */
+.partners__logos {
+  /* Figma 1455:18084: two rows of four 236 × 100 slots, 40px apart each way */
+  display: grid;
+  grid-template-columns: repeat(4, 236px);
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  /* Figma 1441:15403: 119px from the heading (the column's gap is 80px) */
+  margin-top: 39px;
+}
+
+.partner-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 236px;
+  height: 100px;
+}
+
+/* Each logo's 198px box at 70% opacity; its pictures are placed in px as in Figma */
+.partner-logo__box {
+  position: relative;
+  flex-shrink: 0;
+  width: 198px;
+  overflow: hidden;
+  opacity: 0.7;
+}
+
+.partner-logo__piece {
+  position: absolute;
+  overflow: hidden;
+}
+
+.partner-logo__piece img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.partner-logo__piece img.is-cropped {
+  position: absolute;
+  max-width: none;
+  object-fit: fill;
+}
+
+.partner-logo__text {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-50%);
+  font-weight: 600;
+  font-size: 21.48px;
+  line-height: 1;
+  color: #000;
+  white-space: nowrap;
+}
+
+/* The frame stays put; the picture is 20% taller so it can drift inside it (Partners.tsx) */
+.partners__photo {
+  position: absolute;
+  top: 80px;
+  width: 505px;
+  height: 438px;
+  overflow: hidden;
+}
+
+.partners__photo img {
+  position: absolute;
+  left: 0;
+  top: -10%;
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.partners__photo--left {
+  left: -109px;
+}
+
+.partners__photo--right {
+  left: calc(75% - 18px);
+}
+
+/* Figma 1441:15474 crops the right photo lower (top -30.8% of a 144% tall picture); with
+   the 120% drift room, anchoring it to the bottom shows the same area and keeps the
+   strip of text along the photo’s top edge out of view */
+.partners__photo--right img {
+  object-position: 50% 100%;
+}
+
+/*
+ * Parallax speed, read by GSAP in Partners.tsx: the heading and logos barely move.
+ * (The photo frames only get a --speed on phones, below.)
+ */
+.partners__content {
+  --speed: -0.08;
+  will-change: transform;
+}
+
+@media (max-width: 1100px) {
+  .partners__photo {
+    width: 340px;
+    height: 295px;
+  }
+
+  .partners__photo--right {
+    left: auto;
+    right: -109px;
+  }
+
+  .partners__logos {
+    grid-template-columns: repeat(4, 200px);
+  }
+
+  .partner-logo {
+    width: 200px;
+  }
+}
+
+/* The single photo is the phone layout's (below) */
+.partners__single {
+  display: none;
+}
+
+/*
+ * Phones (Figma 713:4366): the line, the heading, the logos in a 2 × 2 grid, then one
+ * 342 × 227 photo. The heading and logos hold still; the photo's frame holds still too,
+ * and the picture drifts subtly inside it (Partners.tsx).
+ */
+@media (max-width: 700px), (max-width: 1100px) and (orientation: portrait) {
+  .partners {
+    padding: 72px var(--page-gutter);
+  }
+
+  .partners__content {
+    gap: 40px;
+    will-change: auto;
+  }
+
+  .partners__photo {
+    display: none;
+  }
+
+  /* v2 (Figma 1441:17554): a 342 × 227 frame with the photo centred in it, so the faces
+     are in view and the banner along the photo's top is cropped out */
+  .partners__single {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 342 / 227;
+    overflow: hidden;
+  }
+
+  .partners__single img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  /* v2 phones (Figma 1455:18185): three to a row in 114 × 48 slots, the last two centred,
+     each logo at 48% of its desktop size (95.6 of 198px) */
+  .partners__logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+    margin-top: 0;
+  }
+
+  .partner-logo {
+    width: 114px;
+    height: 48px;
+  }
+
+  .partner-logo__box {
+    transform: scale(0.4826);
+  }
+}

@@ -1,0 +1,303 @@
+.about-location {
+  position: relative;
+  padding: 200px var(--page-gutter);
+  background: var(--royal-chocolate-700);
+  color: var(--white);
+}
+
+/* The photo, blurred and toned chocolate (Figma's overlay layer) */
+.about-location__bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.about-location__backdrop {
+  position: absolute;
+  left: 0;
+  top: -15%;
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.about-location__tint {
+  position: absolute;
+  inset: 0;
+  background: rgba(57, 29, 19, 0.9);
+  mix-blend-mode: overlay;
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.about-location__content {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 45px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.about-location__intro {
+  flex: 1 0 0;
+  min-width: 0;
+  max-width: 904px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 56px;
+}
+
+.about-location__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.about-location__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.about-location .eyebrow {
+  color: var(--line-in-white);
+}
+
+.about-location .display-title {
+  color: var(--white);
+}
+
+.about-location__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  color: var(--bronze-200);
+}
+
+/* Outlined button on dark (Figma 735:15250) */
+.about-location__button {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 24px;
+  border: 1px solid var(--bronze-700);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: uppercase;
+  color: var(--line-in-white);
+  transition:
+    background-color 300ms var(--ease-in-out),
+    border-color 300ms var(--ease-in-out);
+}
+
+.about-location__button img {
+  transition: transform 300ms var(--ease-in-out);
+}
+
+.about-location__button:hover {
+  border-color: var(--line-in-white);
+  background: rgba(215, 197, 169, 0.1);
+}
+
+.about-location__button:hover img {
+  transform: translateX(4px);
+}
+
+/* Arched carousel: photos cross-fade, settling from a slight zoom */
+.about-location__carousel {
+  position: relative;
+  flex: 1 0 0;
+  min-width: 0;
+  height: 633px;
+  display: flex;
+  overflow: hidden;
+  border-top-left-radius: 360px;
+  background: #d9d9d9;
+}
+
+.about-location__slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.06);
+  transition:
+    opacity 900ms var(--ease-in-out),
+    transform 4800ms var(--ease-in-out);
+}
+
+.about-location__slide.is-active {
+  opacity: 1;
+  transform: none;
+}
+
+.about-location__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(179deg, rgba(25, 21, 11, 0.005) 54.5%, rgb(25, 21, 11) 115.8%);
+  pointer-events: none;
+}
+
+.about-location__overlay {
+  position: relative;
+  align-self: flex-end;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+  padding: 32px 40px;
+}
+
+.about-location__place {
+  flex: 1 0 0;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 1.5;
+  color: var(--white);
+  animation: about-place-in 700ms var(--ease-in-out);
+}
+
+@keyframes about-place-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.about-location__pager {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.about-location__count {
+  font-size: 16px;
+  line-height: 1.5;
+  white-space: nowrap;
+  word-spacing: 4px;
+}
+
+.about-location__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--white);
+  background: none;
+  cursor: pointer;
+  transition: background-color 250ms var(--ease-in-out);
+}
+
+.about-location__arrow:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.about-location__arrow:focus-visible {
+  outline: 1px solid var(--white);
+  outline-offset: 3px;
+}
+
+/* The Figma caret points down: turn it to point left / right */
+.about-location__arrow--prev {
+  transform: rotate(90deg);
+}
+
+.about-location__arrow--next {
+  transform: rotate(-90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-location__slide,
+  .about-location__place {
+    transition: opacity 300ms ease;
+    transform: none;
+    animation: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .about-location {
+    padding: 120px var(--page-gutter);
+  }
+
+  .about-location__content {
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .about-location__intro,
+  .about-location__carousel {
+    flex: none;
+    width: 100%;
+  }
+
+  .about-location__carousel {
+    height: min(633px, 120vw);
+  }
+}
+
+/*
+ * Phones (Figma 760:16442): the heading, copy and button left-aligned, then the arched
+ * carousel running edge to edge at the foot of the section — the place name centred over
+ * it, the count on the left and the arrows on the right.
+ */
+@media (max-width: 700px) {
+  .about-location {
+    padding: 72px 0 0;
+  }
+
+  .about-location__content {
+    gap: 40px;
+  }
+
+  .about-location__intro {
+    gap: 32px;
+    padding: 0 var(--page-gutter);
+  }
+
+  .about-location__copy {
+    gap: 48px;
+  }
+
+  /* One flowing title, wrapping on its own as in Figma */
+  .about-location__heading br {
+    display: none;
+  }
+
+  .about-location__carousel {
+    height: 400px;
+    border-top-left-radius: 200px;
+  }
+
+  /* A deeper fade behind the name and controls (Figma 760:16491) */
+  .about-location__fade {
+    background: linear-gradient(179deg, rgba(25, 21, 11, 0.005) 45.3%, rgb(25, 21, 11) 105.9%);
+  }
+
+  .about-location__overlay {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 24px;
+  }
+
+  .about-location__place {
+    font-size: 32px;
+    text-align: center;
+  }
+
+  .about-location__count {
+    margin-right: auto;
+  }
+}

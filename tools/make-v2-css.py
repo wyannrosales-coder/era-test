@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Builds dist/assets/epiisod-v2-auto.css: for every rule in the site's own stylesheets that uses the chocolate / sand
+"""Builds public/locations/macquarie-park/experience/assets/epiisod-v2-auto.css: for every rule in the site's own stylesheets that uses the chocolate / sand
 brand colours, a copy under html[data-ep-ver="2"] with the design-system colours swapped in. Re-run after changing those
 stylesheets:  python3 tools/make-v2-css.py"""
 import re, os
-A = os.path.join(os.path.dirname(__file__), '..', 'dist', 'assets')
+A = os.path.join(os.path.dirname(__file__), '..', 'public', 'locations', 'macquarie-park', 'experience', 'assets')
 FILES = ['epiisod-app.css', 'epiisod-badge.css', 'epiisod-facade.css', 'epiisod-location.css', 'epiisod-nav.css', 'epiisod-reveal.css',
          'epiisod-ring.css', 'epiisod-rooms.css', 'epiisod-smart-demo.css', 'epiisod-story.css', 'epiisod-theme.css']
 SWAP = [(re.compile(r'#24120c', re.I), '#212529'), (re.compile(r'#d0a77f', re.I), '#896d42'), (re.compile(r'#d7c5a9', re.I), '#dcd7d3'),

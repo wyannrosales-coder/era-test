@@ -1,0 +1,258 @@
+.why-experience {
+  /* Deep at the foot, so the last cards stay clear of the reviews as they slide over */
+  padding: 140px var(--page-gutter) 380px;
+  background: var(--white);
+}
+
+/* The layer that lags as the reviews slide over (useExitParallax) */
+.why-experience__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Room for the headline to land before the cards come in */
+  gap: 240px;
+}
+
+.why-experience__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+
+/* Columns in a level row; they arrive staggered and meet here (WhyExperience.tsx) */
+.why-experience__grid {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+.why-experience__column {
+  will-change: transform;
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Card: photo under a chocolate fade, the title at the foot; opens to its description */
+.why-feature {
+  /* Slow and soft, easing in and out */
+  --reveal-ease: cubic-bezier(0.45, 0.05, 0.25, 1);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: 500px;
+  overflow: hidden;
+  border: 1px solid var(--bronze-100);
+  background: var(--white);
+  box-shadow: 0 48px 20px -32px rgba(0, 0, 0, 0.18);
+}
+
+.why-feature__image {
+  --zoom: 1;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(var(--zoom));
+  transition: transform 1400ms var(--reveal-ease);
+}
+
+.why-feature.is-open .why-feature__image {
+  transform: scale(calc(var(--zoom) * 1.02));
+}
+
+/* Gradients can't animate, so the closed and open fades (Figma 912:4591 → 953:4887)
+   are two layers that cross-fade */
+.why-feature__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(191.54deg, rgba(57, 29, 19, 0) 58.84%, rgba(57, 29, 19, 0.9) 92.38%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  transition: opacity 900ms var(--ease-in-out);
+}
+
+.why-feature__shade--open {
+  background: linear-gradient(187.29deg, rgba(57, 29, 19, 0) 33.03%, rgba(57, 29, 19, 0.9) 88.7%);
+  opacity: 0;
+}
+
+.why-feature.is-open .why-feature__shade:not(.why-feature__shade--open) {
+  opacity: 0;
+}
+
+.why-feature.is-open .why-feature__shade--open {
+  opacity: 1;
+}
+
+/* The title band: a soft-light chocolate fade behind the copy, deeper once open */
+.why-feature__band {
+  position: relative;
+  width: 100%;
+  padding: 32px 24px;
+  color: var(--white);
+}
+
+.why-feature__band-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #24120c 26.67%, rgba(57, 29, 19, 0));
+  mix-blend-mode: soft-light;
+  transition: opacity 900ms var(--ease-in-out);
+}
+
+.why-feature__band-bg--open {
+  background: linear-gradient(to top, #24120c 70.13%, rgba(57, 29, 19, 0));
+  opacity: 0;
+}
+
+.why-feature.is-open .why-feature__band-bg:not(.why-feature__band-bg--open) {
+  opacity: 0;
+}
+
+.why-feature.is-open .why-feature__band-bg--open {
+  opacity: 1;
+}
+
+/* Above the band's fades */
+.why-feature__title,
+.why-feature__reveal {
+  position: relative;
+}
+
+.why-feature__title {
+  line-height: 1;
+  color: var(--white);
+}
+
+/* The title is the card's toggle; its hit area covers the whole card */
+.why-feature__toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  line-height: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.why-feature__toggle::after {
+  content: '';
+  position: absolute;
+  inset: -100vh -24px;
+  z-index: 1;
+}
+
+.why-feature__toggle:focus-visible {
+  outline: none;
+}
+
+.why-feature:has(.why-feature__toggle:focus-visible) {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: 3px;
+}
+
+/* The description grows in beneath the title, lifting it; then the text fades up */
+.why-feature__reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 900ms var(--reveal-ease);
+}
+
+.why-feature.is-open .why-feature__reveal {
+  grid-template-rows: 1fr;
+}
+
+.why-feature__text {
+  min-height: 0;
+  overflow: hidden;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 300ms var(--ease-in-out),
+    transform 300ms var(--ease-in-out);
+}
+
+/* 16px under the title, inside the growing row so closed cards keep their spacing */
+.why-feature__text::before {
+  content: '';
+  display: block;
+  height: 16px;
+}
+
+.why-feature.is-open .why-feature__text {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 700ms var(--ease-in-out) 250ms,
+    transform 900ms var(--reveal-ease) 250ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-feature__image,
+  .why-feature__shade,
+  .why-feature__band-bg,
+  .why-feature__reveal,
+  .why-feature__text {
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .why-experience {
+    padding: 120px var(--page-gutter) 300px;
+  }
+
+  .why-experience__content {
+    gap: 180px;
+  }
+
+  .why-feature {
+    height: 400px;
+  }
+}
+
+/* Phones: one column of shorter cards, without the stagger */
+@media (max-width: 700px) {
+  .why-experience {
+    padding: 80px var(--page-gutter) 300px;
+  }
+
+  .why-experience__content {
+    gap: 120px;
+  }
+
+  .why-experience__header {
+    gap: 32px;
+  }
+
+  .why-experience__grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .why-feature {
+    height: 360px;
+    box-shadow: 0 32px 20px -24px rgba(0, 0, 0, 0.18);
+  }
+
+  .why-feature__band {
+    padding: 24px;
+  }
+
+  .why-feature__text {
+    font-size: 16px;
+  }
+}

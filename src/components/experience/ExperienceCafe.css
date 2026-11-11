@@ -1,0 +1,225 @@
+.xp-cafe {
+  background: var(--white);
+}
+
+.xp-cafe__text {
+  font-weight: 300;
+  color: var(--royal-chocolate-600);
+}
+
+/* ---- Plain layout: each moment as a photo with its copy ---- */
+.xp-cafe__stage {
+  display: none;
+}
+
+.xp-cafe__static {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding: 120px var(--page-gutter);
+}
+
+.xp-cafe__moment {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.xp-cafe__moment-img {
+  flex: 0 1 672px;
+  min-width: 0;
+  aspect-ratio: 672 / 562.84;
+  overflow: hidden;
+}
+
+.xp-cafe__moment-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.xp-cafe__moment-copy {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* The bronze rule beside the copy, as on the stage */
+.xp-cafe__moment-text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-left: 24px;
+  border-left: 3px solid var(--bronze-500);
+}
+
+@media (max-width: 700px) {
+  .xp-cafe__static {
+    gap: 56px;
+    padding: 80px var(--page-gutter);
+  }
+
+  .xp-cafe__moment {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .xp-cafe__moment-img {
+    flex: none;
+    width: 100%;
+  }
+}
+
+/* ---- Animated stage (Figma 1071:5417), pinned for a screen ---- */
+.xp-cafe.is-animated .xp-cafe__static {
+  display: none;
+}
+
+.xp-cafe.is-animated .xp-cafe__stage {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 24px;
+  height: 100vh;
+  height: 100svh;
+  max-width: calc(var(--content-max) + 2 * var(--page-gutter));
+  margin: 0 auto;
+  padding: 0 var(--page-gutter);
+}
+
+/* Full-height column: its clip-path opens from the small window to the whole column,
+   so the next photo can peek below the first */
+.xp-cafe__media {
+  position: relative;
+  flex: 0 1 672px;
+  min-width: 0;
+  overflow: hidden;
+  will-change: clip-path;
+}
+
+.xp-cafe__track {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  will-change: transform;
+}
+
+.xp-cafe__photo {
+  overflow: hidden;
+}
+
+.xp-cafe__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Copy: 556 wide, centred on the screen's height, the bar beside it */
+.xp-cafe__copy {
+  flex: 0 1 556px;
+  min-width: 0;
+  align-self: center;
+  display: flex;
+  gap: 48px;
+}
+
+.xp-cafe__progress {
+  position: relative;
+  flex-shrink: 0;
+  width: 3px;
+  height: 160px;
+  margin-top: 64px;
+  background: var(--grey-200);
+}
+
+.xp-cafe__progress-bar {
+  position: absolute;
+  inset: 0;
+  background: var(--bronze-500);
+  transform: scaleY(0.5);
+  transform-origin: top;
+}
+
+/* Moments stacked in one place; GSAP hands over between them */
+.xp-cafe__items {
+  display: grid;
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.xp-cafe__item {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Eyebrow sits above the bar's top, 40px over the title (Figma) */
+.xp-cafe__item .eyebrow {
+  margin: 0 0 24px -51px;
+}
+
+/* ---- Phones, animated (Figma 1275:8537): the photos slide sideways ---- */
+@media (max-width: 700px) {
+  .xp-cafe.is-carousel .xp-cafe__static {
+    display: none;
+  }
+
+  .xp-cafe.is-carousel .xp-cafe__stage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    height: 100vh;
+    height: 100svh;
+    padding: 0 var(--page-gutter);
+    overflow: hidden;
+  }
+
+  /* The clip-path reaches past the frame to the screen's edges, so the next photo peeks */
+  .xp-cafe.is-carousel .xp-cafe__media {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 342 / 276;
+    overflow: visible;
+  }
+
+  .xp-cafe.is-carousel .xp-cafe__track {
+    top: 0;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .xp-cafe.is-carousel .xp-cafe__photo {
+    flex-shrink: 0;
+  }
+
+  /* Bar across, then the copy */
+  .xp-cafe.is-carousel .xp-cafe__copy {
+    flex: none;
+    align-self: stretch;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .xp-cafe.is-carousel .xp-cafe__progress {
+    width: 100%;
+    height: 4px;
+    margin-top: 0;
+  }
+
+  .xp-cafe.is-carousel .xp-cafe__progress-bar {
+    transform: scaleX(0.5);
+    transform-origin: left;
+  }
+
+  .xp-cafe.is-carousel .xp-cafe__item .eyebrow {
+    margin: 0;
+  }
+}
