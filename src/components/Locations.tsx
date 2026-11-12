@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { KeyboardEvent, MouseEvent, PointerEvent } from 'react';
 import LocationCard from './LocationCard';
 import { PROPERTIES, REGIONS } from './locationData';
@@ -49,6 +49,95 @@ export default function Locations() {
     [region, city],
   );
 
+  // The cards on screen lag the filter: the old ones leave, then the new ones arrive
+  const [shown, setShown] = useState(properties);
+  const latest = useRef(properties);
+  latest.current = properties;
+  const first = useRef(true);
+  const seen = useRef(false);
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cards = () => Array.from(trackRef.current?.children ?? []).filter((c) => c.tagName === 'A' || c.classList.contains('location-card')) as HTMLElement[];
+
+  /** New cards rise in one after another, the first few leading. */
+  const arrive = () => {
+    const list = cards();
+    if (!list.length) return;
+    gsap.killTweensOf(list);
+    if (reduced()) {
+      gsap.set(list, { opacity: 1, y: 0, clearProps: 'transform' });
+      return;
+    }
+    gsap.fromTo(
+      list,
+      { opacity: 0, y: 44, scale: 0.97 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.85, ease: 'power3.out', stagger: 0.1, clearProps: 'transform,opacity' },
+    );
+  };
+
+  // Until the section first comes on screen the cards wait, hidden; then they arrive
+  useLayoutEffect(() => {
+    if (!seen.current && !reduced()) gsap.set(cards(), { opacity: 0 });
+  }, []);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || seen.current) return;
+        seen.current = true;
+        io.disconnect();
+        arrive();
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // The filter changed: the cards on screen drift up and away, then the new set arrives
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    const out = cards();
+    gsap.killTweensOf(out);
+    const swap = () => {
+      setShown(latest.current);
+    };
+    if (!seen.current || reduced() || !out.length) {
+      swap();
+      return;
+    }
+    gsap.to(out, { opacity: 0, y: -18, duration: 0.24, ease: 'power2.in', stagger: 0.035, onComplete: swap });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [properties]);
+
+  // Once the new set is in place: start at its first card, then let it arrive
+  useLayoutEffect(() => {
+    if (first.current) return;
+    viewportRef.current?.scrollTo({ left: 0 });
+    if (seen.current && !reduced()) gsap.set(cards(), { opacity: 0 });
+    requestAnimationFrame(arrive);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shown]);
+
+  // The city filters' dot slides to the chosen one
+  const filtersRef = useRef<HTMLDivElement>(null);
+  const [dot, setDot] = useState<{ x: number } | null>(null);
+  useLayoutEffect(() => {
+    const place = () => {
+      const active = filtersRef.current?.querySelector<HTMLElement>('.locations__filter.is-active');
+      if (active) setDot({ x: active.offsetLeft + active.offsetWidth / 2 - 4 });
+    };
+    place();
+    const ro = new ResizeObserver(place);
+    if (filtersRef.current) ro.observe(filtersRef.current);
+    return () => ro.disconnect();
+  }, [city, regionId]);
+
   const selectRegion = (id: string) => {
     setRegionId(id);
     setCity(ALL);
@@ -88,11 +177,6 @@ export default function Locations() {
       ro.disconnect();
     };
   }, []);
-
-  // Start from the first card whenever the filter changes.
-  useEffect(() => {
-    viewportRef.current?.scrollTo({ left: 0 });
-  }, [properties]);
 
   // Mouse drag (touch and trackpads scroll natively).
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
@@ -304,8 +388,8 @@ export default function Locations() {
 
         <div className="locations__showcase">
           <div className="locations__showcase-header">
-            <h3 className="type-h3 locations__region-title">{region.name}</h3>
-            <div className="locations__filters" role="group" aria-label="Filter by city">
+            <h3 key={region.id} className="type-h3 locations__region-title">{region.name}</h3>
+            <div ref={filtersRef} className="locations__filters" role="group" aria-label="Filter by city">
               {filters.map((f) => (
                 <button
                   key={f}
@@ -315,9 +399,9 @@ export default function Locations() {
                   onClick={() => setCity(f)}
                 >
                   <span>{f}</span>
-                  <img src={activeDot} width={8} height={8} alt="" />
                 </button>
               ))}
+              {dot && <img className="locations__filter-dot" src={activeDot} width={8} height={8} alt="" style={{ transform: `translateX(${dot.x}px)` }} />}
             </div>
           </div>
 
@@ -337,11 +421,11 @@ export default function Locations() {
             onKeyDown={onKeyDown}
           >
             <div ref={trackRef} className="locations__track">
-              {properties.map((p) => (
+              {shown.map((p) => (
                 <LocationCard key={p.id} property={p} />
               ))}
             </div>
-            {properties.length === 0 && (
+            {shown.length === 0 && (
               <p className="locations__empty">
                 New {city === ALL ? region.name : city} homes are on the way. Stay tuned.
               </p>

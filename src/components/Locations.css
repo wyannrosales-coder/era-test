@@ -130,6 +130,7 @@
 }
 
 .locations__filters {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 24px;
@@ -158,9 +159,10 @@
   opacity: 1;
 }
 
-.locations__filter img {
-  opacity: 0;
-  transition: opacity 200ms ease;
+.locations__filter {
+  transition:
+    opacity 300ms var(--ease-in-out),
+    color 300ms var(--ease-in-out);
 }
 
 .locations__filter.is-active {
@@ -168,8 +170,35 @@
   opacity: 1;
 }
 
-.locations__filter.is-active img {
-  opacity: 1;
+/* One dot, sliding to the chosen city */
+.locations__filter-dot {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  pointer-events: none;
+  transition: transform 450ms var(--ease-lux);
+}
+
+/* The region's name gives way to the next as the cards change */
+.locations__region-title {
+  animation: locations-title 500ms var(--ease-lux) both;
+}
+
+@keyframes locations-title {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .locations__region-title {
+    animation: none;
+  }
+
+  .locations__filter-dot {
+    transition: none;
+  }
 }
 
 /*
@@ -454,7 +483,7 @@
   }
 
   /* Fewer than four cities (London): grouped in the middle rather than pushed apart */
-  .locations__filters:not(:has(> :nth-child(4))) {
+  .locations__filters:not(:has(> button:nth-child(4))) {
     justify-content: center;
     gap: 32px;
   }
