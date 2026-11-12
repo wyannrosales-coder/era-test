@@ -615,3 +615,8 @@ html.ep-lite .ep-air i { filter: none; }
 /* …and no title frame: the section opens on the room itself, with the phone */
 .arch-w .arch-s_t { display: none !important; }
 .arch-w .arch-s { aspect-ratio: auto !important; height: var(--_special-units---100vh, 100vh) !important; min-height: 0 !important; }
+
+/* the caption sits at the lower left of the room, clear of the bottom edge */
+.arch-w .arch-s { justify-content: flex-end !important; }
+.arch-w .arch-s_b .u-160 { display: none !important; }
+.arch-w .arch-s_b .u-96 { height: clamp(96px, 15vh, 150px) !important; }
