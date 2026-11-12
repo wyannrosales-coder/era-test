@@ -113,7 +113,7 @@ html body .nav__link.is-active {
   html body .nav--sub.is-scrolled:not(.is-open) .nav__inner {
     background: color-mix(in srgb, var(--surface-1) 92%, transparent);
     box-shadow:
-      0 0 0 100vmax rgba(251, 248, 241, 0.92),
+      0 0 0 100vmax color-mix(in srgb, var(--surface-1) 92%, transparent),
       0 2px 8px rgba(var(--ink-deep-rgb), 0.12);
     clip-path: inset(-24px -100vmax -24px -100vmax);
   }
