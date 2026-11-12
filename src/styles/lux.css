@@ -162,3 +162,32 @@ html body .rooms__field-button {
     display: none;
   }
 }
+
+/* ---------- Section nav on tablets and phones: a scrolling row of pills, never a tight strip ---------- */
+@media (max-width: 1100px) {
+  html body .nav--sub .nav__sub {
+    align-items: center;
+    gap: 6px;
+    /* Room at both ends, so the first and last chip clear the screen edge and the fade */
+    padding: 8px var(--page-gutter);
+    scroll-padding-inline: var(--page-gutter);
+  }
+
+  html body .nav--sub .nav__sub-link {
+    flex: none;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: var(--r-pill);
+    box-shadow: none;
+    transition:
+      background-color 300ms var(--ease-lux),
+      color 300ms var(--ease-lux);
+  }
+
+  /* The section in view: a chip with room around its label, as on desktop */
+  html body .nav--sub .nav__sub-link.is-current {
+    background: var(--ink);
+    color: var(--bronze-300);
+    box-shadow: none;
+  }
+}

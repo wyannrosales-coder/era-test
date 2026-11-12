@@ -340,3 +340,109 @@ html[data-theme='dark'] .a3d__button img {
     aspect-ratio: auto;
   }
 }
+
+/* ---- Phones and tablets: the building stays in view while the list scrolls beneath it ---- */
+@media (max-width: 900px) {
+  .a3d__copy {
+    gap: 20px;
+    padding: 48px var(--page-gutter) 112px;
+  }
+
+  .a3d__head {
+    margin-bottom: 0;
+  }
+
+  /* Full width, pinned just under the navigation: a tap on the list always shows its effect */
+  .a3d__right {
+    position: sticky;
+    top: var(--nav-offset, 0px);
+    z-index: 3;
+    align-self: stretch;
+    margin-inline: calc(-1 * var(--page-gutter));
+    height: clamp(240px, 40svh, 460px);
+    min-height: 0;
+    aspect-ratio: auto;
+    border-block: 1px solid var(--line-edge);
+    background: var(--surface-2);
+    transition: top 400ms var(--ease-in-out);
+  }
+
+  .a3d__hint {
+    left: var(--page-gutter);
+    bottom: 10px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  /* A smaller callout, so it doesn't cover the building */
+  .a3d__card-in {
+    width: 168px;
+    gap: 2px;
+    padding: 6px 6px 10px;
+  }
+
+  .a3d__card-in img {
+    height: 64px;
+    margin-bottom: 4px;
+  }
+
+  .a3d__card-title {
+    font-size: 15px;
+  }
+
+  .a3d__card-text {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .a3d__facade {
+    margin-bottom: 8px;
+    padding: 14px 16px;
+  }
+
+  /* Rows: a comfortable tap target, the chosen one lifted onto a card */
+  .a3d__group {
+    margin-bottom: 14px;
+  }
+
+  .a3d__row {
+    align-items: center;
+    min-height: 52px;
+    margin-inline: -12px;
+    width: calc(100% + 24px);
+    padding: 8px 12px;
+    border-radius: var(--r-ctl);
+    transition:
+      color 300ms var(--ease-in-out),
+      background-color 300ms var(--ease-in-out);
+  }
+
+  .a3d__item.is-active .a3d__row {
+    background: var(--surface-1);
+    box-shadow: inset 0 0 0 1px var(--line-edge);
+  }
+
+  .a3d__num {
+    width: 28px;
+  }
+
+  .a3d__title {
+    font-size: 19px;
+  }
+
+  .a3d__button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Phones: one column, so no title wraps onto three lines */
+@media (max-width: 560px) {
+  .a3d__groups {
+    columns: 1;
+  }
+
+  .a3d__group {
+    break-inside: auto;
+  }
+}
