@@ -5,13 +5,15 @@
  *
  * - corners, set apart for image containers, buttons (and fields) and cards (and panels):
  *   `curved` (rounded) or `sharp` (square);
- * - theme: `light` (the current look) or `dark`.
+ * - theme: `light` (the current look) or `dark`;
+ * - texture: `on` (a little grain and weave on a few bands) or `off`.
  *
  * Whether the other properties are coming soon or all ready lives in prototypeMode.ts,
  * since it changes the pages themselves and so reloads the page.
  */
 export type Corners = 'curved' | 'sharp';
 export type Theme = 'light' | 'dark';
+export type Texture = 'on' | 'off';
 
 export type CornerPart = 'media' | 'buttons' | 'cards';
 
@@ -20,6 +22,7 @@ const KEYS = {
   buttons: 'epiisod-corners-buttons',
   cards: 'epiisod-corners-cards',
   theme: 'epiisod-theme',
+  texture: 'epiisod-texture',
 } as const;
 
 function read<T extends string>(key: string, allowed: readonly T[], fallback: T): T {
@@ -39,6 +42,7 @@ export const settings = {
   buttons: read<Corners>(KEYS.buttons, ['curved', 'sharp'], legacyCorners),
   cards: read<Corners>(KEYS.cards, ['curved', 'sharp'], legacyCorners),
   theme: read<Theme>(KEYS.theme, ['light', 'dark'], 'light'),
+  texture: read<Texture>(KEYS.texture, ['on', 'off'], 'on'),
 };
 
 // The frozen v2 site keeps its own look
@@ -51,6 +55,7 @@ const apply = () => {
   root.dataset.cornersButtons = settings.buttons;
   root.dataset.cornersCards = settings.cards;
   root.dataset.theme = settings.theme;
+  root.dataset.texture = settings.texture;
   // The hand-built experience pages have light and dark looks of their own (epiisod-version.js): 2 is light, 1 is dark
   (window as unknown as { __epVer?: { set: (v: string) => void } }).__epVer?.set(settings.theme === 'dark' ? '1' : '2');
 };
@@ -75,9 +80,11 @@ function set<K extends keyof typeof settings>(key: K, value: (typeof settings)[K
 
 export const setCorners = (part: CornerPart, v: Corners) => set(part, v);
 export const setTheme = (v: Theme) => set('theme', v);
+export const setTexture = (v: Texture) => set('texture', v);
 export const resetSettings = () => {
   setCorners('media', 'curved');
   setCorners('buttons', 'curved');
   setCorners('cards', 'curved');
   setTheme('light');
+  setTexture('on');
 };

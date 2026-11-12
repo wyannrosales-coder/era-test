@@ -6,6 +6,7 @@ import EnquiryPill from './components/EnquiryPill';
 import './styles/global.css';
 import './styles/lux.css';
 import './styles/theme.css';
+import './styles/texture.css';
 import './lib/prototypeSettings';
 
 /**

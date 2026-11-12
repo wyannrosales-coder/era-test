@@ -95,10 +95,14 @@ html body .life-menu__experience > img {
 html[data-theme='dark'] {
   color-scheme: dark;
   /* Blacks and dark greys: neutral, no blue */
-  --paper: #0d0d0d;
-  --surface-1: #0d0d0d;
-  --surface-2: #171717;
-  --surface-white: #1f1f1f;
+  --paper: #0f0f0f;
+  /* Five steps of black, each clearly lighter than the last:
+     0 deepest (footer, closing) · 1 page · 2 alternate sections · 3 cards · 4 fields, raised */
+  --surface-0: #060606;
+  --surface-1: #0f0f0f;
+  --surface-2: #1a1a1a;
+  --surface-white: #252525;
+  --surface-3: #303030;
   --text-strong: #f5f2ec;
   --text-mid: #ebe8e1;
   --text-soft: #b3b3b3;
@@ -147,6 +151,25 @@ html[data-theme='dark'] body :is(
   background-color: var(--surface-2);
   border-top: 1px solid rgba(212, 184, 150, 0.14);
   border-bottom: 1px solid rgba(212, 184, 150, 0.14);
+}
+
+/* Fields, dropdowns and the calendar are the most raised step, above the cards they sit on */
+html[data-theme='dark'] body :is(
+    .ui-select,
+    .ui-list,
+    .ui-cal,
+    .contact-field__box,
+    .contact-field__box--message,
+    .rooms__menu,
+    .rooms__option,
+    .stay-connected__form input
+  ) {
+  background-color: var(--surface-3);
+}
+
+/* Cards lift a further step on hover */
+html[data-theme='dark'] body :is(.room-card, .find-card, .blog-card, .promo-card, .offer-card):hover {
+  background-color: var(--surface-3);
 }
 
 /* Dark icons drawn for a light page */

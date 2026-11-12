@@ -1,7 +1,7 @@
 .stay-connected {
   padding: 140px var(--page-gutter) 400px; /* +200px breathing room before what follows */
   /* Cream into the footer's bronze (Figma 539:11693) */
-  background: linear-gradient(to bottom, var(--surface-1), var(--surface-2));
+  background: linear-gradient(to bottom, var(--surface-1), var(--surface-0));
 }
 
 /* On the homepage it follows the white Partners section and hands on to the token fold */

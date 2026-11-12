@@ -5,11 +5,13 @@ import { PROPERTY_STATE, setPropertyState, type PropertyState } from '../lib/pro
 import {
   resetSettings,
   setCorners,
+  setTexture,
   setTheme,
   settings,
   subscribeSettings,
   type CornerPart,
   type Corners,
+  type Texture,
   type Theme,
 } from '../lib/prototypeSettings';
 import './SettingsModal.css';
@@ -81,9 +83,9 @@ const CORNER_ROWS: { part: CornerPart; title: string; help: string }[] = [
 export function SettingsModal({ onClose }: { onClose: () => void }) {
   const snapshot = useSyncExternalStore(
     subscribeSettings,
-    () => `${settings.media}|${settings.buttons}|${settings.cards}|${settings.theme}`,
+    () => `${settings.media}|${settings.buttons}|${settings.cards}|${settings.theme}|${settings.texture}`,
   );
-  const [media, buttons, cards, theme] = snapshot.split('|') as [Corners, Corners, Corners, Theme];
+  const [media, buttons, cards, theme, texture] = snapshot.split('|') as [Corners, Corners, Corners, Theme, Texture];
   const corners: Record<CornerPart, Corners> = { media, buttons, cards };
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -212,6 +214,25 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
             options={[
               { id: 'light', label: 'Light', hint: 'Current', preview: <ThemePreview mode="light" /> },
               { id: 'dark', label: 'Dark', hint: 'Black and grey', preview: <ThemePreview mode="dark" /> },
+            ]}
+          />
+        </section>
+
+        <section className="settings__group">
+          <div className="settings__group-head">
+            <Icon><path d="M4 4h4v4H4zM12 4h4v4h-4zM4 12h4v4H4zM12 12h4v4h-4z" /></Icon>
+            <div>
+              <h3 className="settings__label">Texture</h3>
+              <p className="settings__help">A little grain and weave on the footer, closing sections and two dark bands.</p>
+            </div>
+          </div>
+          <Choice<Texture>
+            label="Texture"
+            value={texture}
+            onChange={setTexture}
+            options={[
+              { id: 'on', label: 'On', hint: 'Used sparingly' },
+              { id: 'off', label: 'Off', hint: 'Flat colour' },
             ]}
           />
         </section>
