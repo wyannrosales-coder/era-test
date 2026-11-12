@@ -74,9 +74,13 @@
 
 /* ---- The list ---- */
 .a3d__groups {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
+  columns: 2;
+  column-gap: clamp(24px, 3vw, 48px);
+}
+
+.a3d__group {
+  break-inside: avoid;
+  margin-bottom: clamp(10px, 1.8svh, 20px);
 }
 
 .a3d__group-name {
@@ -132,41 +136,36 @@
 
 .a3d__title {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 18px;
   letter-spacing: -0.02em;
   line-height: 1.2;
-  transition: font-size 400ms var(--ease-in-out);
 }
 
 .a3d__item.is-active .a3d__title {
   font-style: italic;
 }
 
-.a3d__text-wrap {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 400ms var(--ease-in-out);
+/* The chosen amenity's description, under the list */
+.a3d__detail {
+  margin-top: clamp(10px, 2svh, 22px);
+  padding-top: clamp(10px, 1.8svh, 18px);
+  border-top: 1px solid var(--line-in-white);
 }
 
-.a3d__item.is-active .a3d__text-wrap {
-  grid-template-rows: 1fr;
+.a3d__detail-title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3svh, 26px);
+  font-style: italic;
+  letter-spacing: -0.02em;
+  color: var(--text-strong);
 }
 
-.a3d__text {
-  min-height: 0;
+.a3d__detail-text {
   margin: 0;
-  padding-left: 40px;
-  overflow: hidden;
   font-size: 15px;
   line-height: 1.5;
   color: var(--text-mid);
-  opacity: 0;
-  transition: opacity 400ms var(--ease-in-out);
-}
-
-.a3d__item.is-active .a3d__text {
-  padding-bottom: 6px;
-  opacity: 1;
 }
 
 .a3d__button {
@@ -306,7 +305,7 @@ html[data-theme='dark'] .a3d__button img {
 @media (min-width: 901px) {
   .a3d:not(.is-animated) .a3d__copy {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
     align-items: start;
     gap: clamp(32px, 5vw, 88px);
     max-width: var(--content-max);
@@ -357,7 +356,7 @@ html[data-theme='dark'] .a3d__button img {
     position: absolute;
     inset: 0;
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
     align-items: center;
     gap: clamp(32px, 5vw, 88px);
     max-width: var(--content-max);
@@ -388,10 +387,6 @@ html[data-theme='dark'] .a3d__button img {
 
   .a3d.is-animated .a3d__title {
     font-size: clamp(16px, 2.3svh, 20px);
-  }
-
-  .a3d.is-animated .a3d__item.is-active .a3d__title {
-    font-size: clamp(20px, 3.2svh, 28px);
   }
 
   .a3d.is-animated .a3d__eyebrow {

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import VLine from '../VLine';
-import { addStepSnap, gsap, useGSAP } from '../../lib/smoothScroll';
+import { gsap, useGSAP } from '../../lib/smoothScroll';
 import { useExitParallax } from '../../lib/useExitParallax';
 import line from '../../assets/make-it-yours-line.svg';
 import play from '../../assets/property/icon-play-white.svg';
@@ -23,8 +23,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
  * Amenities with the 3D building (in place of the photo amenities, Amenities.tsx): the
  * same entrance, a small window that opens to the whole screen as the stage pins. Then
  * the amenities, grouped and numbered, take the left column and the building the right.
- * Scrolling on steps through the amenities, and hovering one does too: each lights its
- * part of the building and flies the camera to it. Drag the model to look around.
+ * Tapping an amenity lights its part of the building and flies the camera to it,
+ * with a card and line on the spot; scrolling doesn't change it. Drag the model to look around.
  *
  * Phones, tablets and reduced motion get the model, then the list; tapping an amenity
  * flies to it.
@@ -36,11 +36,10 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  const [hover, setHover] = useState<number | null>(null);
   const [near, setNear] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [onScreen, setOnScreen] = useState(false);
-  const shown = hover ?? active;
+  const shown = active;
   const current = items[shown];
 
   // Load when within a screen or two; render only while on screen
@@ -80,21 +79,18 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
           return `inset(${y}px ${x}px ${y}px ${x}px)`;
         };
 
-        const STEPS_AT = 2.2;
+        // Pinned only for the opening: the window grows and the two columns arrive, then the
+        // page carries on. The amenities change on tap, not on scroll.
+        const OPEN = 2.2;
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
             trigger: stage,
             start: 'top top',
-            end: () => `+=${window.innerHeight * 0.6 * (STEPS_AT + items.length - 1 + 0.3)}`,
+            end: () => `+=${window.innerHeight * 0.6 * (OPEN + 0.2)}`,
             pin: true,
             scrub: 0.12,
             invalidateOnRefresh: true,
-            onUpdate: (self) => {
-              const t = self.progress * tl.duration();
-              const step = Math.round(Math.min(Math.max(t - STEPS_AT, 0), items.length - 1));
-              setActive((a) => (a === step ? a : step));
-            },
           },
         });
 
@@ -112,20 +108,10 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
           .fromTo('.a3d__panel', { opacity: 0 }, { opacity: 1, duration: 0.5 }, 1.3)
           .fromTo('.a3d__left', { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 1.65)
           .fromTo('.a3d__right', { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'power2.out' }, 1.75)
-          .addLabel('step0', STEPS_AT);
-        for (let i = 1; i < items.length; i++) tl.addLabel(`step${i}`, STEPS_AT + i);
-        tl.to({}, { duration: 0.3 }, STEPS_AT + items.length - 1);
-
-        const removeSnap = addStepSnap(
-          tl.scrollTrigger!,
-          () => items.map((_, i) => tl.labels[`step${i}`] / tl.duration()),
-          { nearest: true, lean: 0.1, duration: 0.5, rest: 120 },
-        );
+          .to({}, { duration: 0.2 }, OPEN);
 
         return () => {
-          removeSnap();
           section.classList.remove('is-animated');
-          setActive(0);
         };
       });
     },
@@ -164,16 +150,12 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
               <button
                 type="button"
                 className={`a3d__facade${shown === 0 ? ' is-active' : ''}`}
-                onMouseEnter={() => setHover(0)}
-                onMouseLeave={() => setHover(null)}
-                onFocus={() => setHover(0)}
-                onBlur={() => setHover(null)}
                 onClick={() => setActive(0)}
               >
                 <span className="a3d__facade-title">View facade</span>
                 <span className="a3d__facade-text">{facade.text}</span>
               </button>
-              <div className="a3d__groups" onMouseLeave={() => setHover(null)}>
+              <div className="a3d__groups">
                 {groups.map((g) => (
                   <div key={g.name} className="a3d__group">
                     <h3 className="a3d__group-name">{g.name}</h3>
@@ -188,23 +170,21 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
                               type="button"
                               className="a3d__row"
                               aria-expanded={on}
-                              onMouseEnter={() => setHover(i)}
-                              onFocus={() => setHover(i)}
-                              onBlur={() => setHover(null)}
                               onClick={() => setActive(i)}
                             >
                               <span className="a3d__num">{pad(i)}</span>
                               <span className="a3d__title">{a.title}</span>
                             </button>
-                            <div className="a3d__text-wrap">
-                              <p className="a3d__text">{a.text}</p>
-                            </div>
                           </li>
                         );
                       })}
                     </ol>
                   </div>
                 ))}
+              </div>
+              <div className="a3d__detail" aria-live="polite">
+                <p className="a3d__detail-title">{current?.title}</p>
+                <p className="a3d__detail-text">{current?.text}</p>
               </div>
               <a href={EXPERIENCE_URL} className="amenities__button a3d__button">
                 <img src={play} width={24} height={24} alt="" />
