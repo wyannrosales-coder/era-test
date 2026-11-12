@@ -796,3 +796,80 @@ a.room-card:focus-visible {
   flex-direction: column;
   align-items: flex-end;
 }
+
+/* List view: every row the same height, with the floor plan as a thumbnail before the price */
+.rooms__grid.is-list .room-card {
+  height: 232px;
+}
+
+.rooms__grid.is-list .room-card__image {
+  min-height: 0;
+  height: 100%;
+}
+
+.rooms__grid.is-list .room-card__body {
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.rooms__grid.is-list .room-card__chips {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.rooms__grid.is-list .room-card__chips li {
+  flex: none;
+  white-space: nowrap;
+}
+
+.room-card__plan {
+  display: none;
+}
+
+.rooms__grid.is-list .room-card__plan {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 132px;
+}
+
+.rooms__grid.is-list .room-card__plan img {
+  width: 132px;
+  height: 120px;
+  padding: 6px;
+  border: 1px solid var(--line-edge);
+  border-radius: var(--r-media);
+  background: #fff;
+  object-fit: contain;
+}
+
+.rooms__grid.is-list .room-card__plan span {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--text-mid);
+}
+
+@media (max-width: 1000px) {
+  .rooms__grid.is-list .room-card__plan {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .rooms__grid.is-list .room-card {
+    height: auto;
+  }
+
+  .rooms__grid.is-list .room-card__image {
+    height: 180px;
+  }
+
+  .rooms__grid.is-list .room-card__body {
+    height: auto;
+  }
+}

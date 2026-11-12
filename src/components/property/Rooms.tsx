@@ -101,9 +101,9 @@ function RoomCard({
                 {detail.views.length > 0 && <span>{detail.views.join(' · ')} views</span>}
               </p>
               <p className="room-card__summary">{detail.description}</p>
-              {detail.keyFeatures.length > 0 && (
+              {(detail.keyFeatures.length > 0 || detail.amenities.length > 0) && (
                 <ul className="room-card__chips">
-                  {detail.keyFeatures.slice(0, 4).map((f) => (
+                  {(detail.keyFeatures.length > 0 ? detail.keyFeatures : detail.amenities.flatMap((g) => g.items)).slice(0, 5).map((f) => (
                     <li key={f}>{f}</li>
                   ))}
                 </ul>
@@ -111,6 +111,12 @@ function RoomCard({
             </div>
           )}
         </div>
+        {detail?.floorPlan && (
+          <span className="room-card__plan">
+            <img src={detail.floorPlan} alt="" loading="lazy" />
+            <span>Floor plan</span>
+          </span>
+        )}
         {opening ? (
           <p className="room-card__price room-card__price--opening">
             <span className="room-card__from">{opening}</span>
