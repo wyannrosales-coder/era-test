@@ -1,4 +1,6 @@
 import { experienceHref } from '../../lib/links';
+import { MACQUARIE_AMENITY_GROUPS } from './amenityModel';
+import type { AmenityGroup } from './amenityModel';
 import hero from '../../assets/property/hero.jpg';
 import roomQuad from '../../assets/property/rooms/quad-ensuite.jpg';
 import roomSignature from '../../assets/property/rooms/signature-studio.jpg';
@@ -84,6 +86,8 @@ export type PropertyContent = {
   address: string;
   hero: string;
   amenities: Amenity[];
+  /** Where the property has a 3D building: amenities by group, shown in place of the photo amenities. */
+  amenities3d?: AmenityGroup[];
   rooms: Room[];
   /** Each room's details page (Figma 1195:26614), by room id. */
   roomDetails: RoomDetails[];
@@ -136,6 +140,7 @@ export const MACQUARIE_PARK: PropertyContent = {
   hero,
   // Photos and crops from Figma 1099:34869; every description is a placeholder (Figma:
   // "Something lorem ipsum…").
+  amenities3d: MACQUARIE_AMENITY_GROUPS,
   amenities: [
     {
       lead: 'Prime',

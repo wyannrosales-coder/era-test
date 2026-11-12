@@ -4,6 +4,7 @@ import { ScrollTrigger } from '../lib/smoothScroll';
 import type { SubLink } from '../components/Nav';
 import PropertyHero from '../components/property/PropertyHero';
 import Amenities from '../components/property/Amenities';
+import Amenities3D from '../components/property/Amenities3D';
 import Rooms from '../components/property/Rooms';
 import PropertyLocation from '../components/property/PropertyLocation';
 import Promotions from '../components/property/Promotions';
@@ -81,7 +82,11 @@ export default function PropertyPage({ content }: { content: PropertyContent }) 
       />
       <main>
         <PropertyHero content={content} onSeeRooms={() => scrollToSection(SECTIONS.rooms)} />
-        <Amenities id={SECTIONS.amenities} content={content} />
+        {content.amenities3d ? (
+          <Amenities3D id={SECTIONS.amenities} content={content} />
+        ) : (
+          <Amenities id={SECTIONS.amenities} content={content} />
+        )}
         <Rooms id={SECTIONS.rooms} content={content} />
         <PropertyLocation id={SECTIONS.location} content={content} />
         <Promotions id={SECTIONS.promotions} content={content} />
