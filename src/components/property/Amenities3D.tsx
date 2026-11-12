@@ -30,8 +30,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
  * flies to it.
  */
 export default function Amenities3D({ id, content }: { id: string; content: PropertyContent }) {
-  const groups = content.amenities3d ?? [];
-  const items = groups.flatMap((g) => g.items);
+  const { facade, groups } = content.amenities3d!;
+  // Step 0 is the facade, the building as a whole; the amenities follow
+  const items = [facade, ...groups.flatMap((g) => g.items)];
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -133,7 +134,7 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
 
   useExitParallax(sectionRef);
 
-  let n = -1;
+  let n = 0;
   return (
     <section ref={sectionRef} className="amenities a3d exit-parallax" id={id}>
       <div className="amenities__intro a3d__intro">
@@ -160,6 +161,18 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
           <div className="a3d__copy">
             <div className="a3d__left">
               <p className="eyebrow a3d__eyebrow">Amenities</p>
+              <button
+                type="button"
+                className={`a3d__facade${shown === 0 ? ' is-active' : ''}`}
+                onMouseEnter={() => setHover(0)}
+                onMouseLeave={() => setHover(null)}
+                onFocus={() => setHover(0)}
+                onBlur={() => setHover(null)}
+                onClick={() => setActive(0)}
+              >
+                <span className="a3d__facade-title">View facade</span>
+                <span className="a3d__facade-text">{facade.text}</span>
+              </button>
               <div className="a3d__groups" onMouseLeave={() => setHover(null)}>
                 {groups.map((g) => (
                   <div key={g.name} className="a3d__group">
@@ -180,7 +193,7 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
                               onBlur={() => setHover(null)}
                               onClick={() => setActive(i)}
                             >
-                              <span className="a3d__num">{pad(i + 1)}</span>
+                              <span className="a3d__num">{pad(i)}</span>
                               <span className="a3d__title">{a.title}</span>
                             </button>
                             <div className="a3d__text-wrap">
@@ -206,6 +219,7 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
                     src={MODEL}
                     view={current.view}
                     parts={current.parts}
+                    callout={current.anchor ? { title: current.title, image: current.image, anchor: current.anchor } : null}
                     active={onScreen}
                     onLoaded={() => setLoaded(true)}
                   />

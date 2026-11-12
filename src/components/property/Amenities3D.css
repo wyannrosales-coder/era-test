@@ -21,6 +21,57 @@
   margin: 0 0 20px;
 }
 
+/* The facade: the whole building, ahead of the list */
+.a3d__facade {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  margin-bottom: clamp(12px, 2svh, 22px);
+  padding: 12px 16px;
+  border: 1px solid var(--line-in-white);
+  border-radius: var(--r-ctl);
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition:
+    border-color 300ms var(--ease-in-out),
+    background-color 300ms var(--ease-in-out);
+}
+
+.a3d__facade:hover,
+.a3d__facade.is-active {
+  border-color: var(--gold, #b8966e);
+  color: var(--text-strong);
+}
+
+.a3d__facade.is-active {
+  background: var(--surface-1);
+}
+
+.a3d__facade-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+.a3d__facade.is-active .a3d__facade-title {
+  font-style: italic;
+}
+
+.a3d__facade-text {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-mid);
+}
+
+.a3d__facade:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: 2px;
+}
+
 /* ---- The list ---- */
 .a3d__groups {
   display: flex;
@@ -153,6 +204,70 @@ html[data-theme='dark'] .a3d__button img {
   cursor: grabbing;
 }
 
+/* The callout: a card with a photo and the amenity's name, and a line to its spot */
+.a3d__lead {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms var(--ease-in-out);
+}
+
+.a3d__lead polyline {
+  stroke: var(--text-strong);
+  stroke-width: 1.5;
+}
+
+.a3d__lead circle {
+  fill: var(--text-strong);
+  stroke: var(--surface-1);
+  stroke-width: 2;
+}
+
+.a3d__card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms var(--ease-in-out);
+}
+
+.a3d__card-in {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 176px;
+  padding: 6px 6px 10px;
+  border-radius: var(--r-card);
+  background: var(--text-strong);
+  color: var(--surface-1);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+  animation: a3d-card 450ms var(--ease-lux) both;
+}
+
+.a3d__card-in img {
+  width: 100%;
+  height: 104px;
+  border-radius: calc(var(--r-card) * 0.7);
+  object-fit: cover;
+}
+
+.a3d__card-in span {
+  padding: 0 8px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+@keyframes a3d-card {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
 .a3d__loading {
   position: absolute;
   inset: 0;
@@ -185,6 +300,19 @@ html[data-theme='dark'] .a3d__button img {
 
 .a3d__hint span {
   color: var(--accent-text);
+}
+
+/* Wide screens without the pinned stage (reduced motion): the same two columns, in the page */
+@media (min-width: 901px) {
+  .a3d:not(.is-animated) .a3d__copy {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: start;
+    gap: clamp(32px, 5vw, 88px);
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 72px var(--page-gutter);
+  }
 }
 
 /* ---- Animated stage ---- */

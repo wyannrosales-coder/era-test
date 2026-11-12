@@ -26,6 +26,8 @@ type Props = {
   view: ModelView;
   /** The model's parts to light up: any node whose name contains one of these ('' = all). */
   parts: string[];
+  /** A card with a leader line to a spot on the building (model units); null for none. */
+  callout?: { title: string; image: string; anchor: [number, number, number] } | null;
   onLoaded?: () => void;
   /** Whether the section is on screen (the render loop sleeps when it isn't). */
   active?: boolean;
@@ -44,10 +46,12 @@ const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
  * rest faded back, the camera flying to its view. Drag to orbit; the next amenity takes
  * the camera back. The GLB loads when this mounts, so it is only imported when needed.
  */
-export default function BuildingViewer({ src, view, parts, onLoaded, active = true }: Props) {
+export default function BuildingViewer({ src, view, parts, callout = null, onLoaded, active = true }: Props) {
   const host = useRef<HTMLDivElement>(null);
-  const live = useRef({ view, parts, active });
-  live.current = { view, parts, active };
+  const card = useRef<HTMLDivElement>(null);
+  const lead = useRef<SVGSVGElement>(null);
+  const live = useRef({ view, parts, active, callout });
+  live.current = { view, parts, active, callout };
   const api = useRef<{ viewChanged: () => void } | null>(null);
 
   useEffect(() => {
@@ -82,6 +86,8 @@ export default function BuildingViewer({ src, view, parts, onLoaded, active = tr
     const camera = new PerspectiveCamera(30, 1, 1, 600);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enablePan = false;
+    // The wheel scrolls the page (it steps through the amenities); drag is the only control
+    controls.enableZoom = false;
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
     controls.rotateSpeed = 0.7;
@@ -182,10 +188,49 @@ export default function BuildingViewer({ src, view, parts, onLoaded, active = tr
         cur.az = Math.atan2(off.x, off.z);
         cur.el = Math.asin(off.y / (cur.dist || 1));
       }
-      controls.minDistance = fitDist * 0.25;
-      controls.maxDistance = fitDist * 1.4;
       controls.update();
       renderer.render(scene, camera);
+      placeCallout();
+    };
+
+    // The card and its line: the card sits to one side of the spot (above it in the lower
+    // half of the view, below it in the upper half), the line runs out of the card's side
+    // and turns down or up to the dot, as in a labelled diagram.
+    const spot = new Vector3();
+    const placeCallout = () => {
+      const c = card.current;
+      const svg = lead.current;
+      if (!c || !svg) return;
+      const co = live.current.callout;
+      if (!co) {
+        c.style.opacity = '0';
+        svg.style.opacity = '0';
+        return;
+      }
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      spot.set(...co.anchor).project(camera);
+      const ax = ((spot.x + 1) / 2) * w;
+      const ay = ((1 - spot.y) / 2) * h;
+      const cw = c.offsetWidth;
+      const ch = c.offsetHeight;
+      const gap = 44;
+      const left = ax < w / 2;
+      const cx = Math.min(Math.max(left ? ax + gap : ax - gap - cw, 12), w - cw - 12);
+      const above = ay > h * 0.5;
+      const cy = Math.min(Math.max(above ? ay - 70 - ch : ay + 70, 12), h - ch - 12);
+      c.style.transform = `translate(${cx}px, ${cy}px)`;
+      const sx = ax < cx ? cx : cx + cw;
+      const sy = cy + ch / 2;
+      svg.setAttribute('width', String(w));
+      svg.setAttribute('height', String(h));
+      const line = svg.querySelector('polyline');
+      line?.setAttribute('points', `${sx},${sy} ${ax},${sy} ${ax},${ay}`);
+      const dot = svg.querySelector('circle');
+      dot?.setAttribute('cx', String(ax));
+      dot?.setAttribute('cy', String(ay));
+      c.style.opacity = '1';
+      svg.style.opacity = '1';
     };
 
     let disposed = false;
@@ -228,5 +273,21 @@ export default function BuildingViewer({ src, view, parts, onLoaded, active = tr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
 
-  return <div ref={host} className="a3d__canvas" role="img" aria-label="3D model of the building: drag to look around" />;
+  return (
+    <>
+      <div ref={host} className="a3d__canvas" role="img" aria-label="3D model of the building: drag to look around" />
+      <svg ref={lead} className="a3d__lead" aria-hidden>
+        <polyline fill="none" />
+        <circle r="6" />
+      </svg>
+      <div ref={card} className="a3d__card" aria-hidden>
+        {callout && (
+          <div key={callout.title} className="a3d__card-in">
+            <img src={callout.image} alt="" />
+            <span>{callout.title}</span>
+          </div>
+        )}
+      </div>
+    </>
+  );
 }
