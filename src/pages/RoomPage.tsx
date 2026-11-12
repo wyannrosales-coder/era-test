@@ -35,6 +35,7 @@ import closeIcon from '../assets/menu/close.svg';
 import './RoomPage.css';
 import Select from '../components/ui/Select';
 import DateField from '../components/ui/DateField';
+import TourModal from '../components/ui/TourModal';
 
 /** Section ids, shared by the sub-navigation and the sections themselves (Figma 1195:30270). */
 const SECTIONS = {
@@ -402,6 +403,13 @@ export default function RoomPage({
   propertyHref: string;
 }) {
   const room = content.rooms.find((r) => r.id === details.roomId)!;
+  // The virtual tour opens over the page, full screen
+  const [tourOpen, setTourOpen] = useState(false);
+  const openTour = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setTourOpen(true);
+  };
+  const closeTour = useCallback(() => setTourOpen(false), []);
   // The terms this room can be booked for
   const stays = useMemo(() => content.stays.filter((s) => s.prices[room.id] !== undefined), [content.stays, room.id]);
   const params = new URLSearchParams(window.location.search);
@@ -551,7 +559,7 @@ export default function RoomPage({
                 <img src={arrowLeft16} width={16} height={16} alt="" />
               </a>
               <div className="room-carousel__actions">
-                <a href={details.virtualTour} className="room-chip" target="_blank" rel="noopener noreferrer">
+                <a href={details.virtualTour} className="room-chip" onClick={openTour}>
                   Virtual tour
                   <img src={arrowRight16} width={16} height={16} alt="" />
                 </a>
@@ -588,7 +596,7 @@ export default function RoomPage({
                     {copied ? 'Link copied' : 'Share'}
                     <img src={shareIcon} width={24} height={24} alt="" />
                   </button>
-                  <a href={details.virtualTour} className="room-link" target="_blank" rel="noopener noreferrer">
+                  <a href={details.virtualTour} className="room-link" onClick={openTour}>
                     Virtual tour
                     <img src={arrowRight} width={24} height={24} alt="" />
                   </a>
@@ -649,7 +657,7 @@ export default function RoomPage({
                   ))}
                 </ul>
               </div>
-              <a href={details.virtualTour} className="room-button" target="_blank" rel="noopener noreferrer">
+              <a href={details.virtualTour} className="room-button" onClick={openTour}>
                 Virtual tour
                 <img src={arrowRight} width={24} height={24} alt="" />
               </a>
@@ -679,7 +687,7 @@ export default function RoomPage({
                     <ul className="room-amenities__list">
                       {g.items.map((item) => (
                         <li key={item} className="room-amenity">
-                          <img src={amenityIcon(item)} width={24} height={24} alt="" />
+                          <img src={amenityIcon(item)} width={18} height={18} alt="" />
                           {item}
                         </li>
                       ))}
@@ -774,6 +782,7 @@ export default function RoomPage({
         <WhyLiving />
         <AboutClosing />
       </main>
+      {tourOpen && <TourModal url={details.virtualTour} title={room.name} onClose={closeTour} />}
       <Footer />
       {planOpen && (
         <PlanViewer

@@ -232,10 +232,12 @@ export default function Nav({
     if (!subLinks) return;
     const update = () => {
       const below = (headerRef.current?.offsetHeight ?? 0) + 1;
+      // The last section whose top has passed under the nav (so a gap between sections
+      // keeps the one just left lit), none once it has scrolled wholly past
       let current: string | null = null;
       for (const { target } of subLinks) {
         const r = document.getElementById(target)?.getBoundingClientRect();
-        if (r && r.top <= below && r.bottom > below) current = target;
+        if (r && r.top <= below + 24 && r.bottom > below - 160) current = target;
       }
       setCurrentSub(current);
     };

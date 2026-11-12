@@ -47,8 +47,6 @@ html body :is(
     .about-story__photo,
     .faqs__photo,
     .xp-cafe__photo,
-    .room-gallery__photo,
-    .room-carousel__photo,
     .location-finder__photo,
     .amenities__photo,
     .wellness-reveal__big-img
@@ -178,7 +176,6 @@ html[data-theme='dark'] body :is(
 /* Frames, rules and photo borders drawn in sand for a light page stay quiet on dark */
 html[data-theme='dark'] body :is(
     .room-gallery__photo,
-    .room-carousel,
     .room-plan-viewer__stage,
     .room-plan,
     .room-view,
@@ -188,11 +185,10 @@ html[data-theme='dark'] body :is(
     .room-chip,
     .room-carousel__photo,
     .room-offers,
-    .room-plan__image,
     .property-location__map,
     .room-book,
     .room-book__control,
-    .xp-mosaic__photo
+    .room-view
   ) {
   border-color: var(--hairline);
 }
@@ -204,6 +200,40 @@ html[data-theme='dark'] body :is(.room-book__summary, .room-bookbar, .room-s, .r
 html[data-theme='dark'] body .room-book__control:hover,
 html[data-theme='dark'] body .room-book__control:focus-within {
   border-color: rgba(212, 184, 150, 0.5);
+}
+
+/* Photo frames are a plain grey, not sand */
+html[data-theme='dark'] body :is(
+    .room-gallery__photo,
+    .room-carousel,
+    .room-carousel__photo,
+    .room-plan__image,
+    .room-plan-viewer__stage,
+    .xp-mosaic__photo
+  ) {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* The section pill-nav: a card-grey pill, the current section a clear sand chip */
+html[data-theme='dark'] body .nav--sub .nav__sub {
+  background: color-mix(in srgb, var(--surface-white) 96%, transparent);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme='dark'] body .nav--sub.is-scrolled .nav__sub {
+  background: color-mix(in srgb, var(--surface-white) 96%, transparent);
+}
+
+html[data-theme='dark'] body .nav--sub .nav__sub-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme='dark'] body .nav--sub .nav__sub-link.is-current {
+  background: var(--gold);
+  color: var(--on-gold);
+  font-weight: 600;
 }
 
 /* Outlined buttons whose frame was the ink: on black the frame would vanish, so they take the type colour */

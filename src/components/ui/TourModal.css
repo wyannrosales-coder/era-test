@@ -1,0 +1,83 @@
+/* The virtual tour, full screen over the page */
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+  display: flex;
+  flex-direction: column;
+  background: #050505;
+  color: #f5f2ec;
+  animation: tour-in 300ms var(--ease-lux) both;
+}
+
+.tour__bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px var(--page-gutter);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.tour__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+.tour__title span {
+  margin-right: 10px;
+  font-family: var(--font-body, inherit);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #d4b896;
+}
+
+.tour__close {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--r-pill);
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: inherit;
+  cursor: pointer;
+}
+
+.tour__close:hover,
+.tour__close:focus-visible {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tour__frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #0a0a0a;
+}
+
+html.tour-open {
+  overflow: hidden;
+}
+
+@keyframes tour-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour {
+    animation: none;
+  }
+}
