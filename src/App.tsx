@@ -20,6 +20,7 @@ import WaitlistPage from './pages/WaitlistPage';
 import FaqPage from './pages/FaqPage';
 import LocationsPage from './pages/LocationsPage';
 import RoomPage from './pages/RoomPage';
+import FindRoomPage from './pages/FindRoomPage';
 import BlogListPage from './pages/BlogListPage';
 import BlogPostPage from './pages/BlogPostPage';
 import { AUDIENCES, POSTS } from './components/blog/blogData';
@@ -66,6 +67,7 @@ export default function App() {
   if (path === '/join-the-waitlist') return <WaitlistPage />;
   if (path === '/locations') return <LocationsPage />;
   if (path === '/faqs') return <FaqPage />;
+  if (path === '/find-a-room') return <FindRoomPage />;
   // Blogs: /blog/<audience> lists a blog; /blog/<audience>/<post> is a post
   const blog = path.match(/^\/blog(?:\/([^/]+))?(?:\/([^/]+))?$/);
   if (blog) {

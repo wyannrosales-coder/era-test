@@ -391,6 +391,9 @@ export default function Nav({
                 </a>
               )}
               {NAV_VARIANT === 'b' && <LanguageSelect onOpen={() => setOpenMenu(null)} />}
+              <a href="/find-a-room" className="nav__link">
+                <span>Find a room</span>
+              </a>
               <a href="#" className="nav__link">
                 <span>Log in</span>
               </a>

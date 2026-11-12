@@ -24,21 +24,11 @@
   display: contents;
 }
 
-/*
- * Search: two fields (Figma 1080:5717), pinned below the sub-navigation while the rooms
- * scroll, on a full-width white band (::before) with 16px above and below (Figma
- * 1182:17149). The padding is cancelled by the margins, so the layout keeps its spacing.
- */
+/* Search: the five-field bar (RoomSearchBar), full width of the section's column */
 .rooms__search {
   position: relative;
   z-index: 3;
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-  width: min(672px, 100%);
-  margin: -16px 0;
-  padding: 16px 0;
-  transition: top 400ms var(--ease-in-out);
+  width: min(1320px, 100%);
 }
 
 .rooms__search::before {

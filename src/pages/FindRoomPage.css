@@ -1,0 +1,222 @@
+/* Find a room: a dark hero, the search panel overlapping its foot, then the room grid */
+.find-page {
+  background: var(--paper);
+}
+
+.find-page__hero {
+  padding: 200px var(--page-gutter) 140px;
+  background: var(--royal-chocolate-600, #121a2a);
+  color: #fff;
+}
+
+.find-page__hero-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.find-page__eyebrow {
+  margin: 0 0 20px;
+  color: var(--line-in-white);
+}
+
+.find-page__title {
+  max-width: 14em;
+  margin: 0;
+  color: #fff;
+}
+
+.find-page__title em {
+  font-style: italic;
+}
+
+.find-page__body {
+  max-width: 1320px;
+  margin: -64px auto 0;
+  padding: 0 var(--page-gutter) 160px;
+}
+
+.find-page__count {
+  margin: 24px 0 32px;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--grey-800, #5b5b57);
+}
+
+.find-page__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px 24px;
+}
+
+.find-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line-in-white);
+  border-radius: 16px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 400ms var(--ease-lux),
+    box-shadow 400ms var(--ease-lux);
+  animation: find-card-in 600ms var(--ease-lux) both;
+  animation-delay: calc(var(--i, 0) * 50ms);
+}
+
+.find-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(14, 22, 38, 0.14);
+}
+
+.find-card:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: 3px;
+}
+
+.find-card__image {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--royal-chocolate-200);
+}
+
+.find-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms var(--ease-lux);
+}
+
+.find-card:hover .find-card__image img {
+  transform: scale(1.04);
+}
+
+.find-card__property {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--royal-chocolate-700);
+}
+
+.find-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px 20px;
+}
+
+.find-card__type {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.find-card__name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--royal-chocolate-700);
+}
+
+.find-card__size {
+  font-size: 13px;
+  color: var(--grey-800, #5b5b57);
+}
+
+.find-card__price,
+.find-card__enquire {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 14px;
+  font-size: 13px;
+  color: var(--grey-800, #5b5b57);
+}
+
+.find-card__amount {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--royal-chocolate-700);
+}
+
+.find-card__enquire {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.find-card.is-sold-out .find-card__image img {
+  filter: grayscale(0.6);
+}
+
+.find-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.find-page__empty h2,
+.find-page__empty p {
+  margin: 0;
+}
+
+.find-page__empty .room-search__clear {
+  margin-top: 12px;
+}
+
+@keyframes find-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .find-card {
+    animation: none;
+  }
+}
+
+@media (max-width: 1180px) {
+  .find-page__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .find-page__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .find-page__hero {
+    padding: 160px var(--page-gutter) 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .find-page__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .find-page__body {
+    margin-top: -48px;
+    padding-bottom: 96px;
+  }
+}
