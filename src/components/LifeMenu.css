@@ -87,17 +87,6 @@
   width: min(var(--content-max), calc(100vw - 2 * var(--page-gutter)));
 }
 
-/* A photo leads the menu, as on the live v2 menu */
-.life-menu__photo {
-  flex: none;
-  align-self: stretch;
-  width: 240px;
-  min-height: 200px;
-  margin: 16px 0;
-  border-radius: 16px;
-  object-fit: cover;
-}
-
 .nav-menu-b__pages {
   display: flex;
   flex-direction: column;
@@ -118,18 +107,6 @@
   flex: 0 1 320px;
   min-width: 240px;
   padding: 16px 0;
-  border-left: 1px solid var(--line-in-white);
-}
-
-/* Promotions (Figma 1361:28011): one link, ruled left, sized to its text */
-.nav-menu-b__promos {
-  flex: 0 1 220px;
-  min-width: 180px;
-  align-self: flex-start;
-  padding: 16px 0;
-}
-
-.nav-menu-b__promos .nav-menu-b__link {
   border-left: 1px solid var(--line-in-white);
 }
 
@@ -180,47 +157,94 @@
   width: min(var(--content-max), 100%);
 }
 
-/* Per-property experience links: a thumbnail, the property and where it leads */
-.life-menu__experiences {
+/* Property experiences: a horizontal carousel under Experience */
+.life-menu__carousel {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin: 0 0 0 32px;
+  gap: 12px;
+  margin-top: 8px;
+  padding-left: 32px;
+}
+
+.life-menu__carousel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.life-menu__carousel-label {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.life-menu__arrows {
+  gap: 8px;
+}
+
+.life-menu__arrows .carousel-arrow {
+  width: 34px;
+  height: 34px;
+}
+
+.life-menu__viewport {
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  /* Room for the cards' hover lift and shadow, which aren't clipped */
+  margin: -8px;
+  padding: 8px;
+}
+
+.life-menu__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.life-menu__experiences {
+  display: flex;
+  gap: 16px;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
+.life-menu__experiences li {
+  flex: none;
+  scroll-snap-align: start;
+}
+
 .life-menu__experience {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 8px 12px 8px 8px;
-  border-radius: 12px;
-  transition: background-color 200ms ease;
+  flex-direction: column;
+  gap: 6px;
+  width: 184px;
+  color: inherit;
+  transition: transform 300ms var(--ease-lux);
 }
 
 a.life-menu__experience:hover,
 a.life-menu__experience:focus-visible {
-  background: var(--bronze-200);
+  transform: translateY(-3px);
 }
 
 .life-menu__experience > img {
-  flex: none;
-  width: 72px;
-  height: 54px;
-  border-radius: 8px;
+  width: 100%;
+  height: 112px;
+  margin-bottom: 4px;
+  border-radius: 12px;
   object-fit: cover;
+  transition: box-shadow 300ms var(--ease-lux);
+}
+
+a.life-menu__experience:hover > img {
+  box-shadow: 0 10px 24px rgba(14, 22, 38, 0.18);
 }
 
 .life-menu__experience.is-soon > img {
   filter: grayscale(0.5);
-}
-
-.life-menu__experience-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
 }
 
 .life-menu__experience-name {
@@ -242,23 +266,4 @@ a.life-menu__experience:focus-visible {
 
 .life-menu__experience.is-soon .life-menu__experience-cta {
   color: var(--royal-chocolate-500);
-}
-
-/* Every property open: a compact list */
-.life-menu__experiences.is-many {
-  gap: 0;
-}
-
-.life-menu__experiences.is-many .life-menu__experience {
-  gap: 12px;
-  padding: 4px 8px;
-}
-
-.life-menu__experiences.is-many .life-menu__experience > img {
-  width: 48px;
-  height: 36px;
-}
-
-.life-menu__experiences.is-many .life-menu__experience-name {
-  font-size: 16px;
 }

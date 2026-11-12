@@ -1,10 +1,11 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { MegaMenuPanel } from './MegaMenu';
+import CarouselArrows from './ui/CarouselArrows';
 import type { NavVariant } from '../lib/navVariant';
 import arrowRight from '../assets/menu-arrow-right.svg';
 import { PROPERTIES } from './locationData';
 import { experienceHref } from '../lib/links';
 import { ALL_READY } from '../lib/prototypeMode';
-import menuPhoto from '../assets/life-1.jpg';
 import loungePhoto from '../assets/experience/mosaic-lounge.jpg';
 import './LifeMenu.css';
 
@@ -53,6 +54,80 @@ const LINKS = [
 ];
 
 /**
+ * The property experiences as a horizontal carousel under "Experience": a photo card per
+ * property, each entering its experience page (or marked coming soon), with chevrons.
+ */
+function ExperienceCarousel({ onNavigate }: { onNavigate: () => void }) {
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = useState({ prev: false, next: false });
+
+  const measure = useCallback(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+    setEdges({ prev: el.scrollLeft > 4, next: el.scrollLeft + el.clientWidth < el.scrollWidth - 4 });
+  }, []);
+
+  useEffect(() => {
+    measure();
+    const el = viewportRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [measure]);
+
+  const step = (dir: 1 | -1) => {
+    const el = viewportRef.current;
+    const card = el?.querySelector<HTMLElement>('.life-menu__experience');
+    if (!el || !card) return;
+    el.scrollBy({ left: dir * (card.offsetWidth + 16), behavior: 'smooth' });
+  };
+
+  return (
+    <div className="life-menu__carousel">
+      <div className="life-menu__carousel-head">
+        <p className="life-menu__carousel-label">Enter an experience</p>
+        <CarouselArrows
+          className="life-menu__arrows"
+          label="Browse the property experiences"
+          canPrev={edges.prev}
+          canNext={edges.next}
+          onPrev={() => step(-1)}
+          onNext={() => step(1)}
+        />
+      </div>
+      <div ref={viewportRef} className="life-menu__viewport" onScroll={measure} data-lenis-prevent>
+        <ul className="life-menu__experiences">
+          {EXPERIENCE_ENTRIES.map(({ name, image, href }) => {
+            const body = (
+              <>
+                <img src={image} alt="" loading="lazy" />
+                <span className="life-menu__experience-name">{name}</span>
+                <span className="life-menu__experience-cta">
+                  {href ? 'Enter the experience' : 'Coming soon'}
+                  {href && <img src={arrowRight} width={14} height={14} alt="" />}
+                </span>
+              </>
+            );
+            return (
+              <li key={name}>
+                {href ? (
+                  <a href={href} className="life-menu__experience" onClick={onNavigate}>
+                    {body}
+                  </a>
+                ) : (
+                  <span className="life-menu__experience is-soon">{body}</span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+/**
  * Life @ EPIISOD mega menu (Figma 539:20915): page links with a short description,
  * highlighting on hover (Figma 539:21311). Navigation option B (Figma 1080:8880) stacks
  * them beside a Blog column, which in option A lives in the hamburger menu, then Promotions.
@@ -62,7 +137,6 @@ export default function LifeMenu({ id, open, onNavigate, variant = 'a' }: LifeMe
     return (
       <MegaMenuPanel id={id} open={open} heading="Life @ EPIISOD">
         <div className="nav-menu-b__life">
-          <img className="life-menu__photo" src={menuPhoto} alt="" />
           <div className="nav-menu-b__pages">
             <a href="/why-epiisod" className="nav-menu-b__link" onClick={onNavigate}>
               <span className="life-menu__title">Why EPIISOD</span>
@@ -74,36 +148,7 @@ export default function LifeMenu({ id, open, onNavigate, variant = 'a' }: LifeMe
                 The EPIISOD Experience that goes beyond accommodation
               </span>
             </a>
-            <ul
-              className={`life-menu__experiences${EXPERIENCE_ENTRIES.length > 3 ? ' is-many' : ''}`}
-              aria-label="Enter an experience"
-            >
-              {EXPERIENCE_ENTRIES.map(({ name, image, href }) => {
-                const body = (
-                  <>
-                    <img src={image} alt="" width={72} height={54} loading="lazy" />
-                    <span className="life-menu__experience-text">
-                      <span className="life-menu__experience-name">{name}</span>
-                      <span className="life-menu__experience-cta">
-                        {href ? 'Enter the experience' : 'Coming soon'}
-                        {href && <img src={arrowRight} width={14} height={14} alt="" />}
-                      </span>
-                    </span>
-                  </>
-                );
-                return (
-                  <li key={name}>
-                    {href ? (
-                      <a href={href} className="life-menu__experience" onClick={onNavigate}>
-                        {body}
-                      </a>
-                    ) : (
-                      <span className="life-menu__experience is-soon">{body}</span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+            <ExperienceCarousel onNavigate={onNavigate} />
           </div>
           <div className="nav-menu-b__blog">
             <p className="nav-menu-b__label life-menu__title">Blog</p>
@@ -116,12 +161,6 @@ export default function LifeMenu({ id, open, onNavigate, variant = 'a' }: LifeMe
                 <span className="type-body-s nav-menu-b__article-description">{description}</span>
               </a>
             ))}
-          </div>
-          <div className="nav-menu-b__promos">
-            <a href="/promotions" className="nav-menu-b__link" onClick={onNavigate}>
-              <span className="life-menu__title">Promotions</span>
-              <span className="life-menu__description">EPIISOD’s exclusive deals</span>
-            </a>
           </div>
         </div>
       </MegaMenuPanel>

@@ -71,7 +71,7 @@
 }
 
 /* The bar's room is for the hamburger menu's copy below this */
-@media (max-width: 1250px) {
+@media (max-width: 1470px) {
   .nav .proto-toggle:not(.proto-toggle--panel) {
     display: none;
   }
@@ -79,4 +79,30 @@
 
 .proto-toggle--panel .proto-toggle__label {
   display: inline;
+}
+
+/* Where the bar has no room for it (between a phone's menu and a wide bar): a small chip
+   at the bottom left of the screen */
+.proto-toggle--floating {
+  display: none;
+}
+
+@media (min-width: 1101px) and (max-width: 1470px) {
+  .proto-toggle--floating {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 900;
+    display: inline-flex;
+    padding: 6px 8px 6px 14px;
+    border: 1px solid rgba(139, 110, 78, 0.35);
+    border-radius: 999px;
+    background: var(--paper, #fbf8f1);
+    box-shadow: 0 8px 24px rgba(14, 22, 38, 0.18);
+    color: var(--royal-chocolate-700, #121a2a);
+  }
+
+  .proto-toggle--floating .proto-toggle__label {
+    display: inline;
+  }
 }

@@ -155,3 +155,10 @@ html body .rooms__option {
 html body .rooms__field-button {
   border-radius: 12px;
 }
+
+/* The bar is full between a phone's menu and a wide screen: Log in (not live yet) gives way */
+@media (max-width: 1400px) {
+  html body .nav__actions .nav__login {
+    display: none;
+  }
+}

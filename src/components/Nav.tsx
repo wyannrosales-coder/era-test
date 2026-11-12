@@ -25,6 +25,8 @@ type MenuKey = 'life' | 'locations' | 'contact';
  * Contact us works the same way, its caret opening the contact menu (Figma 690:4830).
  */
 const PRIMARY_LINKS: { label: string; menu?: MenuKey; href?: string; caret?: boolean }[] = [
+  // Option B: About leads the bar (option A keeps it in the hamburger menu)
+  ...(NAV_VARIANT === 'b' ? [{ label: 'About', href: '/about' }] : []),
   { label: 'Life @ epiisod', menu: 'life' },
   { label: 'Locations', menu: 'locations', href: '/locations' },
   { label: 'Contact us', menu: 'contact', href: '/contact' },
@@ -388,15 +390,15 @@ export default function Nav({
           <div className="nav__links nav__links--end">
             <div className="nav__actions">
               {NAV_VARIANT === 'b' && (
-                <a href="/about" className="nav__link">
-                  <span>About</span>
+                <a href="/promotions" className="nav__link">
+                  <span>Promotions</span>
                 </a>
               )}
               {NAV_VARIANT === 'b' && <LanguageSelect onOpen={() => setOpenMenu(null)} />}
               <a href="/find-a-room" className="nav__link">
                 <span>Find a room</span>
               </a>
-              <a href="#" className="nav__link">
+              <a href="#" className="nav__link nav__login">
                 <span>Log in</span>
               </a>
               {NAV_VARIANT === 'a' && <LanguageSelect onOpen={() => setOpenMenu(null)} />}
