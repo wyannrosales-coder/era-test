@@ -36,7 +36,8 @@ export default function Hero({
   image = heroImage,
   title = (
     <>
-      Thoughtfully designed <em>student living</em>
+      Thoughtfully designed <br className="hero__br" />
+      <em>student living</em>
     </>
   ),
   subtitle = 'Modern spaces, all-inclusive amenities, and a vibrant student community—all in the cities where you study.',

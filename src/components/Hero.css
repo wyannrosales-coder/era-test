@@ -34,14 +34,17 @@
   position: absolute;
   left: 0;
   right: 0;
+  top: 0;
   bottom: 0;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* Centred in the screen, clear of the nav bar above */
+  justify-content: center;
   gap: clamp(16px, 4svh, 32px);
   width: min(1280px, calc(100% - 2 * var(--page-gutter)));
-  padding: clamp(16px, 6svh, 48px) 0;
+  padding: clamp(88px, 12svh, 120px) 0 clamp(16px, 6svh, 48px);
 }
 
 .hero__copy {
@@ -83,6 +86,12 @@
 /* Search: the room search bar as glass over the photo */
 .hero__content .room-search--hero {
   width: 100%;
+}
+
+@media (max-width: 700px) {
+  .hero__br {
+    display: none;
+  }
 }
 
 @media (max-width: 900px) {
