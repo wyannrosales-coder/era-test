@@ -4,10 +4,19 @@
  */
 
 /* ---------- Corners ---------- */
-html[data-corners='sharp'] {
+html[data-corners-media='sharp'] {
+  --r-media: 0px;
+}
+
+/* Buttons, and the fields and lists they sit beside */
+html[data-corners-buttons='sharp'] {
   --r-pill: 0px;
   --r-btn: 0px;
   --r-ctl: 0px;
+}
+
+/* Cards, and the panels (dialogs, the search bar) */
+html[data-corners-cards='sharp'] {
   --r-card: 0px;
   --r-panel: 0px;
 }
@@ -44,12 +53,12 @@ html body :is(
     .amenities__photo,
     .wellness-reveal__big-img
   ) {
-  border-radius: var(--r-card);
+  border-radius: var(--r-media);
   overflow: hidden;
 }
 
 html body :is(.page-hero__photo, .partners__photo, .why-living__photo, .promotions-vip__photo, .loc-intro__photo) {
-  border-radius: var(--r-card);
+  border-radius: var(--r-media);
   overflow: hidden;
 }
 
@@ -60,7 +69,7 @@ html body :is(
     .promotions-vip__photo--left,
     .loc-intro__photo--left
   ) {
-  border-radius: 0 var(--r-card) var(--r-card) 0;
+  border-radius: 0 var(--r-media) var(--r-media) 0;
 }
 
 html body :is(
@@ -70,16 +79,16 @@ html body :is(
     .promotions-vip__photo--right,
     .loc-intro__photo--right
   ) {
-  border-radius: var(--r-card) 0 0 var(--r-card);
+  border-radius: var(--r-media) 0 0 var(--r-media);
 }
 
 /* The lobby photo opens to the full screen, so its corners square off as it does */
 html body .xp-mosaic__photo--feature {
-  border-radius: calc((1 - var(--p, 0)) * var(--r-card));
+  border-radius: calc((1 - var(--p, 0)) * var(--r-media));
 }
 
 html body .life-menu__experience > img {
-  border-radius: var(--r-ctl);
+  border-radius: var(--r-media);
 }
 
 /* ---------- Dark theme ---------- */

@@ -58,6 +58,7 @@
   --accent-text: var(--bronze-700);
 
   /* Corners: what the corners setting changes (curved here; sharp zeroes them) */
+  --r-media: 16px;
   --r-pill: 999px;
   --r-btn: 4px;
   --r-ctl: 12px;

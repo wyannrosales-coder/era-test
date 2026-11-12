@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { PROPERTY_STATE, setPropertyState, type PropertyState } from '../lib/prototypeMode';
 import {
@@ -7,24 +8,30 @@ import {
   setTheme,
   settings,
   subscribeSettings,
+  type CornerPart,
   type Corners,
   type Theme,
 } from '../lib/prototypeSettings';
 import './SettingsModal.css';
 
-function Segmented<T extends string>({
+type Option<T extends string> = { id: T; label: string; hint?: string; preview?: ReactNode };
+
+/** Two or three choices as a radio group; options may carry a small preview of the choice. */
+function Choice<T extends string>({
   label,
   value,
   options,
   onChange,
+  compact = false,
 }: {
   label: string;
   value: T;
-  options: { id: T; label: string; hint?: string; swatch?: string }[];
+  options: Option<T>[];
   onChange: (next: T) => void;
+  compact?: boolean;
 }) {
   return (
-    <div className="settings__options" role="radiogroup" aria-label={label}>
+    <div className={`settings__options${compact ? ' settings__options--compact' : ''}`} role="radiogroup" aria-label={label}>
       {options.map((o) => (
         <button
           key={o.id}
@@ -34,14 +41,38 @@ function Segmented<T extends string>({
           className={`settings__option${value === o.id ? ' is-on' : ''}`}
           onClick={() => value !== o.id && onChange(o.id)}
         >
-          {o.swatch && <span className={`settings__swatch settings__swatch--${o.swatch}`} aria-hidden />}
-          <span className="settings__option-label">{o.label}</span>
-          {o.hint && <span className="settings__option-hint">{o.hint}</span>}
+          {o.preview}
+          <span className="settings__option-text">
+            <span className="settings__option-label">{o.label}</span>
+            {o.hint && <span className="settings__option-hint">{o.hint}</span>}
+          </span>
         </button>
       ))}
     </div>
   );
 }
+
+const Icon = ({ children }: { children: ReactNode }) => (
+  <svg className="settings__icon" viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    {children}
+  </svg>
+);
+
+/** A mini page, in the light or dark look. */
+const ThemePreview = ({ mode }: { mode: Theme }) => (
+  <span className={`settings__mini settings__mini--${mode}`} aria-hidden>
+    <i className="settings__mini-bar" />
+    <i className="settings__mini-title" />
+    <i className="settings__mini-line" />
+    <i className="settings__mini-card" />
+  </span>
+);
+
+const CORNER_ROWS: { part: CornerPart; title: string; help: string }[] = [
+  { part: 'media', title: 'Image containers', help: 'Photos, galleries and banners' },
+  { part: 'buttons', title: 'Buttons', help: 'Buttons, fields and dropdowns' },
+  { part: 'cards', title: 'Cards', help: 'Room, blog and location cards, panels' },
+];
 
 /**
  * The prototype settings dialog: how the other properties stand (changing it reloads the
@@ -50,9 +81,10 @@ function Segmented<T extends string>({
 export function SettingsModal({ onClose }: { onClose: () => void }) {
   const snapshot = useSyncExternalStore(
     subscribeSettings,
-    () => `${settings.corners}|${settings.theme}`,
+    () => `${settings.media}|${settings.buttons}|${settings.cards}|${settings.theme}`,
   );
-  const [corners, theme] = snapshot.split('|') as [Corners, Theme];
+  const [media, buttons, cards, theme] = snapshot.split('|') as [Corners, Corners, Corners, Theme];
+  const corners: Record<CornerPart, Corners> = { media, buttons, cards };
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -101,9 +133,14 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
         </header>
 
         <section className="settings__group">
-          <h3 className="settings__label">Other properties</h3>
-          <p className="settings__help">Coming soon is how the site stands today. All ready shows every property open. Changing it reloads the page.</p>
-          <Segmented<PropertyState>
+          <div className="settings__group-head">
+            <Icon><path d="M3 17V8l7-5 7 5v9M8 17v-5h4v5" /></Icon>
+            <div>
+              <h3 className="settings__label">Other properties</h3>
+              <p className="settings__help">Coming soon is how the site stands today; All ready shows every property open. Changing it reloads the page.</p>
+            </div>
+          </div>
+          <Choice<PropertyState>
             label="Other properties"
             value={PROPERTY_STATE}
             onChange={setPropertyState}
@@ -115,36 +152,73 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
         </section>
 
         <section className="settings__group">
-          <h3 className="settings__label">Corners</h3>
-          <p className="settings__help">The shape of cards, photos, fields and buttons.</p>
-          <Segmented<Corners>
-            label="Corners"
-            value={corners}
-            onChange={setCorners}
-            options={[
-              { id: 'curved', label: 'Curved', hint: 'Rounded', swatch: 'curved' },
-              { id: 'sharp', label: 'Sharp', hint: 'Square', swatch: 'sharp' },
-            ]}
-          />
+          <div className="settings__group-head">
+            <Icon><path d="M4 16V9a5 5 0 0 1 5-5h7" /></Icon>
+            <div>
+              <h3 className="settings__label">Corners</h3>
+              <p className="settings__help">Set the shape of each part of the site on its own.</p>
+            </div>
+          </div>
+          <ul className="settings__rows">
+            {CORNER_ROWS.map((row) => (
+              <li key={row.part} className="settings__row">
+                <span className={`settings__shape settings__shape--${row.part} is-${corners[row.part]}`} aria-hidden>
+                  {row.part === 'media' && (
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="8.5" cy="9" r="1.6" />
+                      <path d="m3 18 5.5-5.5 4 4 3-3L21 18" />
+                    </svg>
+                  )}
+                  {row.part === 'buttons' && <i />}
+                  {row.part === 'cards' && (
+                    <>
+                      <i />
+                      <b />
+                      <b />
+                    </>
+                  )}
+                </span>
+                <span className="settings__row-text">
+                  <span className="settings__row-title">{row.title}</span>
+                  <span className="settings__row-help">{row.help}</span>
+                </span>
+                <Choice<Corners>
+                  compact
+                  label={row.title}
+                  value={corners[row.part]}
+                  onChange={(next) => setCorners(row.part, next)}
+                  options={[
+                    { id: 'curved', label: 'Curved' },
+                    { id: 'sharp', label: 'Sharp' },
+                  ]}
+                />
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section className="settings__group">
-          <h3 className="settings__label">Theme</h3>
-          <p className="settings__help">Light is the current look. The property experience pages follow it too.</p>
-          <Segmented<Theme>
+          <div className="settings__group-head">
+            <Icon><path d="M16.5 11.5A6.5 6.5 0 0 1 8.5 3.5a6.5 6.5 0 1 0 8 8Z" /></Icon>
+            <div>
+              <h3 className="settings__label">Theme</h3>
+              <p className="settings__help">Light is the current look. The property experience pages follow it too.</p>
+            </div>
+          </div>
+          <Choice<Theme>
             label="Theme"
             value={theme}
             onChange={setTheme}
             options={[
-              { id: 'light', label: 'Light', hint: 'Current', swatch: 'light' },
-              { id: 'dark', label: 'Dark', hint: 'Black and grey', swatch: 'dark' },
+              { id: 'light', label: 'Light', hint: 'Current', preview: <ThemePreview mode="light" /> },
+              { id: 'dark', label: 'Dark', hint: 'Black and grey', preview: <ThemePreview mode="dark" /> },
             ]}
           />
         </section>
 
         <footer className="settings__footer">
           <button type="button" className="settings__reset" onClick={resetSettings}>
-            Reset corners and theme
+            Reset to defaults
           </button>
           <button type="button" className="settings__done" onClick={onClose}>
             Done
