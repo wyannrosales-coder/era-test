@@ -95,7 +95,7 @@
   font-size: 14px;
   line-height: 20px;
   text-transform: uppercase;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .offer-card__link span {

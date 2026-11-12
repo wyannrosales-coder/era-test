@@ -225,7 +225,7 @@
   height: 100svh;
   overflow: hidden;
   /* Behind the small window: the soft white-to-cream of Figma's frame */
-  background: linear-gradient(var(--white), var(--bronze-200));
+  background: linear-gradient(var(--surface-white), var(--surface-2));
 }
 
 /* Holds the photo and list; drifts as the rooms slide over (Amenities.tsx) */
@@ -339,7 +339,7 @@
     height: 100vh;
     height: 100svh;
     overflow: hidden;
-    background: linear-gradient(var(--white), var(--bronze-200));
+    background: linear-gradient(var(--surface-white), var(--surface-2));
   }
 
   .amenities.is-carousel .amenities__inner {

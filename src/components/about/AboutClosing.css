@@ -1,6 +1,6 @@
 .about-closing {
   padding: 140px var(--page-gutter) 200px;
-  background: linear-gradient(to bottom, var(--bronze-100), var(--bronze-200));
+  background: linear-gradient(to bottom, var(--surface-1), var(--surface-2));
 }
 
 .about-closing__content {

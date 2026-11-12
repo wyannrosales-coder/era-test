@@ -34,7 +34,7 @@
 }
 
 .room-crumbs__slash {
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .room-crumbs [aria-current] {
@@ -203,7 +203,7 @@
   font-size: 18px;
   line-height: 1;
   text-transform: uppercase;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .room-actions {
@@ -306,7 +306,7 @@ a.room-button:hover img {
   gap: 4px;
   font-size: 18px;
   line-height: 1.2;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .room-overview__text {
@@ -460,7 +460,7 @@ a.room-button:hover img {
   right: 0;
   bottom: 0;
   height: 120px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--white) 80%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--surface-white) 80%);
   opacity: 0;
   pointer-events: none;
   transition: opacity 450ms var(--ease-in-out);

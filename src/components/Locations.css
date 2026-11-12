@@ -105,7 +105,7 @@
   font-size: 14px;
   line-height: 1;
   text-transform: uppercase;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 /* Right column */
@@ -436,7 +436,7 @@
     line-height: 1;
     text-align: center;
     text-transform: uppercase;
-    color: var(--bronze-700);
+    color: var(--accent-text);
   }
 
   .locations__showcase {

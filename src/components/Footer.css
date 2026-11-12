@@ -128,7 +128,7 @@
 }
 
 .footer__links a:hover {
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .footer__city {

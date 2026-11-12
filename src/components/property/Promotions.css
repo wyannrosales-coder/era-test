@@ -245,7 +245,7 @@
   font-size: 18px;
   line-height: 20px;
   text-transform: uppercase;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .promo-card__link span {

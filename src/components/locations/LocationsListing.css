@@ -416,7 +416,7 @@
   font-size: 14px;
   line-height: 1;
   text-transform: uppercase;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .loc-region__cities {

@@ -229,7 +229,7 @@
 }
 
 .faq-page__answer a:hover {
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .faq-page__answer img {

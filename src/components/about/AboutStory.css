@@ -209,7 +209,7 @@
     right: 0;
     bottom: 0;
     height: 162px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--white) 43%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--surface-white) 43%);
     pointer-events: none;
     transition: opacity 500ms var(--ease-in-out);
   }

@@ -233,7 +233,7 @@
 }
 
 .contact-check a {
-  color: var(--bronze-700);
+  color: var(--accent-text);
   text-decoration: underline;
   text-underline-position: from-font;
 }
@@ -324,7 +324,7 @@
   font-weight: 500;
   font-size: 24px;
   line-height: 1.2;
-  color: var(--bronze-700);
+  color: var(--accent-text);
   outline: none;
   animation: contact-thanks 500ms var(--ease-in-out) both;
 }

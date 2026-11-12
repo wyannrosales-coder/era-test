@@ -167,7 +167,7 @@
   line-height: 16px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .rooms__option {
@@ -436,7 +436,7 @@
 .room-card__type {
   font-size: 14px;
   text-transform: uppercase;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 

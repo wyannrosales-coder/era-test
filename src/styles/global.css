@@ -57,7 +57,7 @@ p {
   font-size: 12px;
   line-height: 1.4;
   letter-spacing: 0.22em;
-  color: var(--bronze-700);
+  color: var(--accent-text);
   text-transform: uppercase;
 }
 

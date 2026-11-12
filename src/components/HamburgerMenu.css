@@ -177,7 +177,7 @@
 .menu-panel__item:hover span,
 .menu-panel__sub-link:hover,
 .menu-panel__property:hover {
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .menu-panel__caret {
@@ -266,7 +266,7 @@
   line-height: 20px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: var(--bronze-700);
+  color: var(--accent-text);
   cursor: pointer;
 }
 
@@ -304,7 +304,7 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 20px;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .menu-panel__city {

@@ -185,7 +185,7 @@
 }
 
 .blog-post__crumbs [aria-hidden] {
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .blog-post__crumbs a:hover {
@@ -322,7 +322,7 @@
 
 .blog-post__contents button:hover,
 .blog-post__contents button.is-current {
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .blog-post__share {
@@ -359,7 +359,7 @@
   min-height: 20px;
   margin-top: -12px;
   font-size: 14px;
-  color: var(--bronze-700);
+  color: var(--accent-text);
 }
 
 .blog-post__related {

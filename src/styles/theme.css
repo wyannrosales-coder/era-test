@@ -41,7 +41,8 @@ html body :is(
     .room-gallery__photo,
     .room-carousel__photo,
     .location-finder__photo,
-    .amenities__photo
+    .amenities__photo,
+    .wellness-reveal__big-img
   ) {
   border-radius: var(--r-card);
   overflow: hidden;
@@ -84,15 +85,77 @@ html body .life-menu__experience > img {
 /* ---------- Dark theme ---------- */
 html[data-theme='dark'] {
   color-scheme: dark;
-  --paper: #0b1220;
-  --surface-1: #0b1220;
-  --surface-2: #111a2c;
-  --surface-white: #16223a;
-  --text-strong: #f5f0e4;
-  --text-mid: #e8e1d2;
-  --text-soft: #aab1bf;
+  --paper: #0e1525;
+  --surface-1: #0e1525;
+  --surface-2: #172239;
+  --surface-white: #1e2b47;
+  --text-strong: #f6f1e5;
+  --text-mid: #ebe5d6;
+  --text-soft: #b4bbc8;
+  --accent-text: #dcbf92;
   --grey-900: #f0ebe0;
-  --grey-800: #d9d5ca;
-  --grey-700: #c2c6ce;
-  --grey-600: #a9afb5;
+  --grey-800: #dad6cb;
+  --grey-700: #c4c8d0;
+  --grey-600: #aab0b8;
+}
+
+/* Rhythm: alternate sections lift a step, with a fine gold rule between */
+html[data-theme='dark'] body :is(
+    .life,
+    .property-location,
+    .faqs,
+    .about-signup,
+    .why-experience,
+    .promotions-vip,
+    .amenities + .rooms + .property-location
+  ) {
+  background-color: var(--surface-2);
+  border-top: 1px solid rgba(212, 184, 150, 0.14);
+  border-bottom: 1px solid rgba(212, 184, 150, 0.14);
+}
+
+/* Dark icons drawn for a light page */
+html[data-theme='dark'] :is(.footer__socials img, .rooms__sort-button > img, .location-finder__icon img) {
+  filter: brightness(0) invert(0.9) sepia(0.25);
+}
+
+/* Cards and panels sit a step above the page with a hairline edge */
+html[data-theme='dark'] body :is(
+    .room-card,
+    .find-card,
+    .blog-card,
+    .promo-card,
+    .offer-card,
+    .why-review__panel,
+    .map-home__card
+  ) {
+  border: 1px solid rgba(212, 184, 150, 0.16);
+}
+
+/* Buttons drawn dark-on-light turn cream-on-dark */
+html[data-theme='dark'] body :is(.about-button, .contact-form__submit, .room-book__submit) {
+  border-color: var(--text-strong);
+  background: var(--text-strong);
+  color: var(--surface-1);
+}
+
+html[data-theme='dark'] body :is(.about-button, .contact-form__submit, .room-book__submit):hover:not(:disabled) {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--on-gold);
+}
+
+/* Lines and emblems drawn dark for a light page */
+html[data-theme='dark'] :is(.vline img, .about-closing__content img, .footer__wordmark img) {
+  filter: brightness(0) invert(0.82) sepia(0.3);
+}
+
+/* Partner logos are dark artwork: show them light */
+html[data-theme='dark'] .partner-logo img {
+  filter: brightness(0) invert(0.88);
+}
+
+html[data-theme='dark'] .contact-check input {
+  border: 1px solid var(--line-in-white);
+  background: var(--surface-white);
 }

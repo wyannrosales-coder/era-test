@@ -1,12 +1,12 @@
 .stay-connected {
   padding: 140px var(--page-gutter) 400px; /* +200px breathing room before what follows */
   /* Cream into the footer's bronze (Figma 539:11693) */
-  background: linear-gradient(to bottom, var(--bronze-100), var(--bronze-200));
+  background: linear-gradient(to bottom, var(--surface-1), var(--surface-2));
 }
 
 /* On the homepage it follows the white Partners section and hands on to the token fold */
 .stay-connected--from-white {
-  background: linear-gradient(to bottom, var(--white), var(--bronze-100));
+  background: linear-gradient(to bottom, var(--surface-white), var(--surface-1));
 }
 
 .stay-connected__content {
@@ -143,7 +143,7 @@
   font-weight: 500;
   font-size: 24px;
   line-height: 1.2;
-  color: var(--bronze-700);
+  color: var(--accent-text);
   outline: none;
   animation: stay-connected-thanks 500ms var(--ease-in-out) both;
 }
