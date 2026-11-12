@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import Nav from '../components/Nav';
 import EnquiryPill from '../components/EnquiryPill';
+import AuthHost from '../components/auth/AuthHost';
 import '../styles/tokens.css';
 import '../styles/type.css';
 import '../styles/lux.css';
@@ -28,5 +29,10 @@ if (mount) {
   // The floating enquiry pill, same as every other page
   const pillRoot = document.createElement('div');
   document.body.appendChild(pillRoot);
-  createRoot(pillRoot).render(<EnquiryPill />);
+  createRoot(pillRoot).render(
+    <>
+      <EnquiryPill />
+      <AuthHost />
+    </>,
+  );
 }

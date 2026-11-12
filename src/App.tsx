@@ -11,6 +11,8 @@ import Footer from './components/Footer';
 import PropertyPage from './pages/PropertyPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import ContactPage from './pages/ContactPage';
+import BookingPage from './pages/BookingPage';
+import AccountPage from './pages/AccountPage';
 import AboutPage from './pages/AboutPage';
 import PromotionsPage from './pages/PromotionsPage';
 import PromoDetailPage from './pages/PromoDetailPage';
@@ -60,6 +62,8 @@ function Redirect({ to }: { to: string }) {
 export default function App() {
   const path = window.location.pathname.replace(/\/+$/, '');
   if (path === '/contact') return <ContactPage />;
+  if (path === '/booking') return <BookingPage />;
+  if (path === '/account') return <AccountPage />;
   if (path === '/about') return <AboutPage />;
   if (path === '/promotions') return <PromotionsPage />;
   // An offer's page: /promotions/<offer>

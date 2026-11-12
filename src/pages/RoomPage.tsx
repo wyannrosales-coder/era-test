@@ -36,6 +36,7 @@ import './RoomPage.css';
 import Select from '../components/ui/Select';
 import DateField from '../components/ui/DateField';
 import TourModal from '../components/ui/TourModal';
+import { requireLogin, saveDraft } from '../lib/auth';
 
 /** Section ids, shared by the sub-navigation and the sections themselves (Figma 1195:30270). */
 const SECTIONS = {
@@ -248,6 +249,7 @@ function BookingCard({
   setDate,
   opening,
   registerLink,
+  onBook,
 }: {
   room: Room;
   details: RoomDetails;
@@ -260,6 +262,8 @@ function BookingCard({
   /** Before bookings open: shown in place of the price, with Register interest instead of Book. */
   opening?: string;
   registerLink?: (stay: Stay | null, date: string) => string;
+  /** Book: signs in first when needed, then goes on to the booking. */
+  onBook?: (stay: Stay, date: string, view: string) => void;
 }) {
   const [view, setView] = useState('');
   const [tried, setTried] = useState(false);
@@ -277,8 +281,12 @@ function BookingCard({
     if (!stay || !date || missing.view || !room.available) return;
     // TODO: this site's own booking flow; until then, the live booking (or, before opening,
     // its enquiry form) for these choices
-    const href = opening && registerLink ? registerLink(stay, date) : liveBookingHref(details.slug, stay, date);
-    window.open(href, '_blank', 'noopener');
+    if (opening && registerLink) {
+      window.open(registerLink(stay, date), '_blank', 'noopener');
+      return;
+    }
+    if (onBook) onBook(stay, date, view);
+    else window.open(liveBookingHref(details.slug, stay, date), '_blank', 'noopener');
   };
 
   return (
@@ -432,6 +440,26 @@ export default function RoomPage({
     setTourOpen(true);
   };
   const closeTour = useCallback(() => setTourOpen(false), []);
+  // Book: keep what was chosen, ask for a sign-in if there isn't one, then go on to the booking
+  const startBooking = (stay: Stay, date: string, view: string) => {
+    const weeks = Number(stay.label.match(/\d+/)?.[0] ?? 52);
+    saveDraft({
+      propertyHref,
+      propertyName: `${content.brand} ${content.place}`,
+      roomId: room.id,
+      roomName: room.name,
+      roomImage: details.photos[0] ?? room.image,
+      roomHref: window.location.pathname + window.location.search,
+      stayId: stay.id,
+      stayLabel: `${stay.group} · ${stay.label}`,
+      weeks,
+      weekly: stay.prices[room.id],
+      currency: content.roomCurrency,
+      checkIn: date,
+      view: view || undefined,
+    });
+    requireLogin(() => window.location.assign('/booking'));
+  };
   // The terms this room can be booked for
   const stays = useMemo(() => content.stays.filter((s) => s.prices[room.id] !== undefined), [content.stays, room.id]);
   const params = new URLSearchParams(window.location.search);
@@ -792,6 +820,7 @@ export default function RoomPage({
               setStayId={setStayId}
               date={date}
               setDate={setDate}
+              onBook={startBooking}
               opening={content.opening}
               registerLink={
                 content.opening && content.liveUrl && content.slug

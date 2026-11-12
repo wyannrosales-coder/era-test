@@ -9,6 +9,7 @@ import menuLight from '../assets/menu-icon.svg';
 import menuDark from '../assets/menu-icon-dark.svg';
 import MegaMenu from './MegaMenu';
 import LanguageSelect from './LanguageSelect';
+import { openLogin, useSession } from '../lib/auth';
 import HamburgerMenu from './HamburgerMenu';
 import ContactMenu from './ContactMenu';
 import { NAV_VARIANT } from '../lib/navVariant';
@@ -115,6 +116,7 @@ export default function Nav({
    *  chocolate type (About us). */
   tone?: 'light' | 'dark' | 'cream';
 }) {
+  const session = useSession();
   const [scrolled, setScrolled] = useState(false);
   const [condensed, setCondensed] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -400,9 +402,22 @@ export default function Nav({
               <a href="/find-a-room" className="nav__link">
                 <span>Find a room</span>
               </a>
-              <a href="#" className="nav__link nav__login">
-                <span>Log in</span>
-              </a>
+              {session ? (
+                <a href="/account" className="nav__link nav__login">
+                  <span>My account</span>
+                </a>
+              ) : (
+                <a
+                  href="#login"
+                  className="nav__link nav__login"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openLogin();
+                  }}
+                >
+                  <span>Log in</span>
+                </a>
+              )}
               {NAV_VARIANT === 'a' && <LanguageSelect onOpen={() => setOpenMenu(null)} />}
               <a href="#" className="nav__cta">
                 Book a tour

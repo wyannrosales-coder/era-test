@@ -381,3 +381,4 @@ html:is([data-lang='zh'], [data-lang='hi']) body :is(.eyebrow, [class*='__label'
   letter-spacing: 0.02em;
   text-transform: none;
 }
+
