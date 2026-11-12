@@ -13,7 +13,7 @@
   border: 1px solid var(--line-in-white);
   border-radius: var(--r-panel);
   background: var(--surface-1);
-  box-shadow: 0 18px 40px rgba(14, 22, 38, 0.1);
+  box-shadow: 0 18px 40px rgba(var(--ink-soft-rgb), 0.1);
 }
 
 .room-search__field {
@@ -213,7 +213,7 @@
   padding: 18px 24px 20px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--r-panel);
-  background: rgba(14, 22, 38, 0.34);
+  background: rgba(var(--ink-soft-rgb), 0.34);
   box-shadow: none;
   backdrop-filter: blur(10px) saturate(1.1);
   -webkit-backdrop-filter: blur(10px) saturate(1.1);

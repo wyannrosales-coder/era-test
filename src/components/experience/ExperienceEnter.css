@@ -100,7 +100,7 @@ a.xp-enter__card:hover .xp-enter__img {
   height: 96px;
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 50%;
-  background: rgba(14, 22, 38, 0.32);
+  background: rgba(var(--ink-soft-rgb), 0.32);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   font-size: 11px;

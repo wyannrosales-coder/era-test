@@ -1,8 +1,15 @@
 /* Dark look (the site's dark theme, src/lib/prototypeSettings.ts): the sections drawn on light paper switch to the
    ink-navy scheme the dark sections already use. Everything sits under html[data-ep-ver="1"]; version 2 (light) is untouched. */
 html[data-ep-ver="1"] {
-  --d-bg: #0e1525; --d-bg2: #172239; --d-card: #1e2b47; --d-line: rgba(212, 184, 150, .24);
-  --d-text: #f4f0e6; --d-soft: #b4bbc8; --d-gold: #dcbf92;
+  --d-bg: #0d0d0d; --d-bg2: #171717; --d-card: #1f1f1f; --d-line: rgba(212, 184, 150, .24);
+  --d-text: #f4f0e6; --d-soft: #b3b3b3; --d-gold: #dcbf92;
+}
+/* the page's own palette, in blacks and greys (these were navy) */
+html[data-ep-ver="1"] {
+  --_global-colors---brand-500--velvet-plum: #101010;
+  --_global-colors---base-1000--0: #05050500; --_global-colors---base-1000--5: #0505050d; --_global-colors---base-1000--10: #0505051a;
+  --_global-colors---base-1000--30: #0505054d; --_global-colors---base-1000--60: #05050599; --_global-colors---base-1000--100: #050505;
+  --ep-choc-600: #121212; --ep-choc-700: #050505;
 }
 html[data-ep-ver="1"] .theme_on-light {
   --_colors---base-1000--primary:var(--_global-colors---base-0--100);--_colors---other--bg:var(--d-bg);--_colors---base-0--primary:var(--_global-colors---base-1000--100);--_colors---base-1000--gray-text:var(--_global-colors---base-0--60);--_colors---additional--success:#05855e;--_colors---additional--alert:#edae42;--_colors---additional--error:#ea5826;--_colors---other--transparent:transparent;--_colors---base-1000--line:var(--_global-colors---base-0--10);--_colors---base-1000--disabled:var(--_global-colors---base-0--30);--_colors---brand-500--primary\<deleted\|variable-91ff398b-1b86-c83e-9325-f542c634d71f\>:var(--_global-colors---brand-500--powder-sky);--_colors---base-1000--bg:var(--_global-colors---base-0--5);--_colors---base-0--gray-text:var(--_global-colors---base-1000--60);--_colors---base-0--disabled:var(--_global-colors---base-1000--30);--_colors---base-0--line:var(--_global-colors---base-1000--10);--_colors---base-0--bg:var(--_global-colors---base-1000--5);--_colors---white--primary:var(--_global-colors---white--100);--_colors---white--gray-text:var(--_global-colors---white--80);--_colors---white--disabled:var(--_global-colors---white--40);--_colors---white--line:var(--_global-colors---white--20);--_colors---white--bg:var(--_global-colors---white--10)
@@ -38,7 +45,7 @@ html[data-ep-ver="1"] .ep-loc.is-rm .ep-loc_end { background: var(--d-bg) !impor
 
 /* rooms: the magazine sits on a dark table; its printed pages stay paper */
 html[data-ep-ver="1"] .ep-rooms { background: var(--d-bg) !important; color: var(--d-text) !important; }
-html[data-ep-ver="1"] .ep-mag { background: radial-gradient(120% 90% at 50% 40%, #1d2a47, #0e1525) !important; }
+html[data-ep-ver="1"] .ep-mag { background: radial-gradient(120% 90% at 50% 40%, #262626, #0d0d0d) !important; }
 html[data-ep-ver="1"] .ep-mag_head { color: var(--d-text) !important; }
 html[data-ep-ver="1"] .ep-mag_eb { color: var(--d-gold) !important; }
 html[data-ep-ver="1"] .ep-mag_tick { color: var(--d-text) !important; }
@@ -49,3 +56,22 @@ html[data-ep-ver="1"] .ep-mag_tbtn { border-color: rgba(244, 240, 230, .4) !impo
 html[data-ep-ver="1"] :is(.sc_h, .sc_a) { color: var(--d-text) !important; }
 html[data-ep-ver="1"] .ep-cr_p { color: var(--d-soft) !important; }
 html[data-ep-ver="1"] .ep-ap_eye { color: var(--d-gold) !important; }
+
+/* loading screen: black, not chocolate */
+html[data-ep-ver="1"] .ep-ld { background: #050505; }
+html[data-ep-ver="1"] .ep-ld_card { background: radial-gradient(120% 90% at 50% 45%, #262626 0%, #050505 60%, #141414 100%); }
+
+/* building rail: the fade to the next section and the blueprint grid, in dark */
+html[data-ep-ver="1"] .bd_rail {
+  background-image: linear-gradient(90deg, rgba(13, 13, 13, 0) calc(100% - 230vw), #0d0d0d calc(100% - 100vw)),
+    linear-gradient(rgba(244, 240, 230, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(244, 240, 230, .07) 1px, transparent 1px),
+    linear-gradient(rgba(244, 240, 230, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(244, 240, 230, .035) 1px, transparent 1px) !important;
+}
+@media (max-width: 767px) {
+  html[data-ep-ver="1"] .bd_rail {
+    background-image: linear-gradient(180deg, rgba(13, 13, 13, 0) calc(100% - 1100px), #0d0d0d calc(100% - 420px)),
+      linear-gradient(rgba(244, 240, 230, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(244, 240, 230, .07) 1px, transparent 1px),
+      linear-gradient(rgba(244, 240, 230, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(244, 240, 230, .035) 1px, transparent 1px) !important;
+  }
+}
+html[data-ep-ver="1"] .bd_prog { background: rgba(244, 240, 230, .12); }

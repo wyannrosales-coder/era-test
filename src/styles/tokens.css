@@ -50,6 +50,10 @@
   --text-mid: var(--royal-chocolate-600);
   --text-soft: var(--royal-chocolate-500);
   --on-gold: #04070e;
+  /* The ink as RGB triples, for overlays and shadows (the dark theme makes them neutral) */
+  --ink-rgb: 18, 26, 42;
+  --ink-deep-rgb: 4, 7, 14;
+  --ink-soft-rgb: 14, 22, 38;
   /* Gold used as text (eyebrows, links): darker on light, lighter on dark */
   --accent-text: var(--bronze-700);
 

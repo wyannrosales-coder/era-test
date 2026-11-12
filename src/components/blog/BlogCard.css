@@ -27,7 +27,7 @@
 .blog-card__shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(201.38deg, rgba(18, 26, 42, 0) 11.87%, rgba(18, 26, 42, 0.9) 86.76%);
+  background: linear-gradient(201.38deg, rgba(var(--ink-rgb), 0) 11.87%, rgba(var(--ink-rgb), 0.9) 86.76%);
   mix-blend-mode: multiply;
 }
 
@@ -45,7 +45,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(to top, #04070e 70.13%, rgba(18, 26, 42, 0));
+  background: linear-gradient(to top, rgb(var(--ink-deep-rgb)) 70.13%, rgba(var(--ink-rgb), 0));
   mix-blend-mode: soft-light;
 }
 

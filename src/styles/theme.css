@@ -85,18 +85,29 @@ html body .life-menu__experience > img {
 /* ---------- Dark theme ---------- */
 html[data-theme='dark'] {
   color-scheme: dark;
-  --paper: #0e1525;
-  --surface-1: #0e1525;
-  --surface-2: #172239;
-  --surface-white: #1e2b47;
-  --text-strong: #f6f1e5;
-  --text-mid: #ebe5d6;
-  --text-soft: #b4bbc8;
+  /* Blacks and dark greys: neutral, no blue */
+  --paper: #0d0d0d;
+  --surface-1: #0d0d0d;
+  --surface-2: #171717;
+  --surface-white: #1f1f1f;
+  --text-strong: #f5f2ec;
+  --text-mid: #ebe8e1;
+  --text-soft: #b3b3b3;
   --accent-text: #dcbf92;
-  --grey-900: #f0ebe0;
-  --grey-800: #dad6cb;
-  --grey-700: #c4c8d0;
-  --grey-600: #aab0b8;
+  --grey-900: #f0ede7;
+  --grey-800: #dbd8d2;
+  --grey-700: #c4c4c4;
+  --grey-600: #aaaaaa;
+  /* The ink the dark sections, heroes and footer are drawn in */
+  --royal-chocolate-700: #050505;
+  --royal-chocolate-600: #121212;
+  --royal-chocolate-500: #8c8c8c;
+  --royal-chocolate-400: #8a8a8a;
+  --ink: #050505;
+  --on-gold: #050505;
+  --ink-rgb: 16, 16, 16;
+  --ink-deep-rgb: 5, 5, 5;
+  --ink-soft-rgb: 12, 12, 12;
 }
 
 /* Rhythm: alternate sections lift a step, with a fine gold rule between */

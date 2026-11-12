@@ -75,7 +75,7 @@
   margin-top: 24px;
   padding: 80px var(--page-gutter);
   background:
-    linear-gradient(rgba(4, 7, 14, 0.95), rgba(4, 7, 14, 0.95)),
+    linear-gradient(rgba(var(--ink-deep-rgb), 0.95), rgba(var(--ink-deep-rgb), 0.95)),
     url('../../assets/experience/mosaic-lobby-tree.jpg') center / cover;
   background-blend-mode: multiply;
 }

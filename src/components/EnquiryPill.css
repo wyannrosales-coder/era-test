@@ -33,7 +33,7 @@
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
-  box-shadow: 0 10px 30px rgba(4, 7, 14, 0.28);
+  box-shadow: 0 10px 30px rgba(var(--ink-deep-rgb), 0.28);
   transition:
     background-color 300ms var(--ease-lux),
     transform 300ms var(--ease-lux);

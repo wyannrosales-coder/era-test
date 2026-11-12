@@ -137,7 +137,7 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
             onChange={setTheme}
             options={[
               { id: 'light', label: 'Light', hint: 'Current', swatch: 'light' },
-              { id: 'dark', label: 'Dark', hint: 'Ink navy', swatch: 'dark' },
+              { id: 'dark', label: 'Dark', hint: 'Black and grey', swatch: 'dark' },
             ]}
           />
         </section>

@@ -34,7 +34,7 @@
   padding: 40px;
   border: 1px solid var(--royal-chocolate-300);
   background: var(--surface-1);
-  box-shadow: 0 96px 80px -72px rgba(18, 26, 42, 0.2);
+  box-shadow: 0 96px 80px -72px rgba(var(--ink-rgb), 0.2);
 }
 
 .about-signup__fields {

@@ -110,7 +110,7 @@
 .why-review__shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(195deg, rgba(18, 26, 42, 0) 60.01%, rgba(18, 26, 42, 0.8) 92.36%);
+  background: linear-gradient(195deg, rgba(var(--ink-rgb), 0) 60.01%, rgba(var(--ink-rgb), 0.8) 92.36%);
   mix-blend-mode: multiply;
   transition: opacity 800ms var(--ease-in-out);
 }
@@ -172,7 +172,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(229.34deg, rgba(90, 50, 20, 0.75) 1.32%, rgba(4, 7, 14, 0.9) 61.04%);
+  background: linear-gradient(229.34deg, rgba(90, 50, 20, 0.75) 1.32%, rgba(var(--ink-deep-rgb), 0.9) 61.04%);
   backdrop-filter: blur(6px) brightness(0.7);
   -webkit-backdrop-filter: blur(6px) brightness(0.7);
 }
@@ -326,11 +326,11 @@
 
 .why-review.is-static .why-review__shade {
   opacity: 1;
-  background: linear-gradient(192.7deg, rgba(18, 26, 42, 0) 60.01%, rgba(18, 26, 42, 0.8) 92.36%);
+  background: linear-gradient(192.7deg, rgba(var(--ink-rgb), 0) 60.01%, rgba(var(--ink-rgb), 0.8) 92.36%);
 }
 
 .why-review.is-static .why-review__panel::before {
-  background: linear-gradient(244.06deg, rgba(90, 50, 20, 0.75) 1.32%, rgba(4, 7, 14, 0.9) 61.04%);
+  background: linear-gradient(244.06deg, rgba(90, 50, 20, 0.75) 1.32%, rgba(var(--ink-deep-rgb), 0.9) 61.04%);
 }
 
 .why-review.is-static,

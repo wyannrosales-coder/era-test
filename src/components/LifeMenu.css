@@ -240,7 +240,7 @@ a.life-menu__experience:focus-visible {
 }
 
 a.life-menu__experience:hover > img {
-  box-shadow: 0 10px 24px rgba(14, 22, 38, 0.18);
+  box-shadow: 0 10px 24px rgba(var(--ink-soft-rgb), 0.18);
 }
 
 .life-menu__experience.is-soon > img {

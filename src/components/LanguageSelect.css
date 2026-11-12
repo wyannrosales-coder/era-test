@@ -23,7 +23,7 @@
   list-style: none;
   border: 1px solid var(--bronze-300);
   background: var(--surface-1);
-  box-shadow: 0 8px 24px rgba(4, 7, 14, 0.14);
+  box-shadow: 0 8px 24px rgba(var(--ink-deep-rgb), 0.14);
   opacity: 0;
   visibility: hidden;
   transform: translate(-50%, -4px);

@@ -73,14 +73,14 @@
 .why-feature__shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(191.54deg, rgba(18, 26, 42, 0) 58.84%, rgba(18, 26, 42, 0.9) 92.38%);
+  background: linear-gradient(191.54deg, rgba(var(--ink-rgb), 0) 58.84%, rgba(var(--ink-rgb), 0.9) 92.38%);
   mix-blend-mode: multiply;
   pointer-events: none;
   transition: opacity 900ms var(--ease-in-out);
 }
 
 .why-feature__shade--open {
-  background: linear-gradient(187.29deg, rgba(18, 26, 42, 0) 33.03%, rgba(18, 26, 42, 0.9) 88.7%);
+  background: linear-gradient(187.29deg, rgba(var(--ink-rgb), 0) 33.03%, rgba(var(--ink-rgb), 0.9) 88.7%);
   opacity: 0;
 }
 
@@ -103,13 +103,13 @@
 .why-feature__band-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, #04070e 26.67%, rgba(18, 26, 42, 0));
+  background: linear-gradient(to top, rgb(var(--ink-deep-rgb)) 26.67%, rgba(var(--ink-rgb), 0));
   mix-blend-mode: soft-light;
   transition: opacity 900ms var(--ease-in-out);
 }
 
 .why-feature__band-bg--open {
-  background: linear-gradient(to top, #04070e 70.13%, rgba(18, 26, 42, 0));
+  background: linear-gradient(to top, rgb(var(--ink-deep-rgb)) 70.13%, rgba(var(--ink-rgb), 0));
   opacity: 0;
 }
 

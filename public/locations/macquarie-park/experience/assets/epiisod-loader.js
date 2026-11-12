@@ -31,7 +31,7 @@
     var cs = getComputedStyle(el); M = parseFloat(cs.getPropertyValue('--ld-m')) || 16; R = parseFloat(cs.getPropertyValue('--ld-r')) || 6;
     if (!M || isNaN(M)) M = Math.max(10, Math.min(30, W * 0.022));
     sheen = ctx.createRadialGradient(W / 2, H * 0.45, 0, W / 2, H * 0.45, Math.max(W, H) * 0.7);
-    sheen.addColorStop(0, '#33190f'); sheen.addColorStop(0.6, '#04070e'); sheen.addColorStop(1, '#1c0e09');
+    sheen.addColorStop(0, '#262626'); sheen.addColorStop(0.6, '#050505'); sheen.addColorStop(1, '#141414');
   }
   // frame, card and (optionally) the opening, punched out so the page shows through
   var borderA = 1;

@@ -20,7 +20,7 @@
 .instagram__tint {
   position: absolute;
   inset: 0;
-  background: rgba(18, 26, 42, 0.9);
+  background: rgba(var(--ink-rgb), 0.9);
   mix-blend-mode: overlay;
 }
 
@@ -146,7 +146,7 @@
   justify-content: flex-end;
   gap: 12px;
   padding: 20px;
-  background: linear-gradient(180deg, rgba(4, 7, 14, 0.2) 0%, rgba(4, 7, 14, 0.88) 55%);
+  background: linear-gradient(180deg, rgba(var(--ink-deep-rgb), 0.2) 0%, rgba(var(--ink-deep-rgb), 0.88) 55%);
   color: var(--white);
   opacity: 0;
   transition: opacity 400ms var(--ease-in-out);

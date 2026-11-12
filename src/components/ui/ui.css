@@ -76,7 +76,7 @@
   background: var(--surface-1);
   color: var(--text-strong);
   font-family: var(--font-body);
-  box-shadow: 0 18px 48px rgba(4, 7, 14, 0.22);
+  box-shadow: 0 18px 48px rgba(var(--ink-deep-rgb), 0.22);
   animation: ui-pop 220ms var(--ease-lux);
   overscroll-behavior: contain;
 }
@@ -164,7 +164,7 @@
   background: var(--surface-1);
   color: var(--text-strong);
   font-family: var(--font-body);
-  box-shadow: 0 18px 48px rgba(4, 7, 14, 0.22);
+  box-shadow: 0 18px 48px rgba(var(--ink-deep-rgb), 0.22);
   animation: ui-pop 220ms var(--ease-lux);
 }
 

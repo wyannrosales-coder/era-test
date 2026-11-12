@@ -53,7 +53,7 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background: rgba(4, 7, 14, 0.55);
+  background: rgba(var(--ink-deep-rgb), 0.55);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   animation: settings-fade 250ms var(--ease-lux) both;
@@ -213,7 +213,7 @@
 .settings__swatch--dark {
   border-radius: 6px;
   border-color: #d4b896;
-  background: #0b1220;
+  background: #0d0d0d;
 }
 
 .settings__footer {

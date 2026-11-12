@@ -8,7 +8,7 @@
   position: relative;
   overflow: hidden;
   padding: 168px var(--page-gutter) 72px;
-  background: var(--royal-chocolate-600, #121a2a);
+  background: var(--royal-chocolate-600);
   color: #fff;
 }
 
@@ -95,7 +95,7 @@
 
 .find-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 40px rgba(14, 22, 38, 0.14);
+  box-shadow: 0 18px 40px rgba(var(--ink-soft-rgb), 0.14);
 }
 
 .find-card:focus-visible {
