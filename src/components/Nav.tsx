@@ -5,8 +5,6 @@ import caretLight from '../assets/caret-down.svg';
 import caretDark from '../assets/caret-down-dark.svg';
 import logoLight from '../assets/nav-logo.svg';
 import logoDark from '../assets/nav-logo-compact.svg';
-import menuLight from '../assets/menu-icon.svg';
-import menuDark from '../assets/menu-icon-dark.svg';
 import MegaMenu from './MegaMenu';
 import LanguageSelect from './LanguageSelect';
 import { openLogin, useSession } from '../lib/auth';
@@ -70,6 +68,15 @@ export function scrollToSection(id: string, { immediate = false }: { immediate?:
     (header.dataset.barHiddenIn?.split(',') ?? []).includes(id) ||
     (!!hideAfter && goingDown && top - sub >= pageTop(hideAfter) - sub - COMPACT_BAR_HEIGHT);
   scrollToY(top - sub - (barHides ? 0 : COMPACT_BAR_HEIGHT), { immediate });
+}
+
+/** The menu (hamburger) icon, drawn in the nav's own text colour so it follows the bar and the theme. */
+function MenuIcon() {
+  return (
+    <svg className="nav__menu-icon" viewBox="0 0 40 40" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <path d="M6.25 10h27.5M6.25 20h27.5M6.25 30h27.5" />
+    </svg>
+  );
 }
 
 /** An icon in both colourways, cross-fading with the nav's state. */
@@ -437,7 +444,7 @@ export default function Nav({
                 setPanelOpen(true);
               }}
             >
-              <Icon light={menuLight} dark={menuDark} size={40} />
+              <MenuIcon />
             </button>
           </div>
         </nav>

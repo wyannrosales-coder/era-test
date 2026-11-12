@@ -8,7 +8,15 @@
   pointer-events: none;
   transition:
     opacity 500ms var(--ease-lux),
-    transform 500ms var(--ease-lux);
+    transform 500ms var(--ease-lux),
+    bottom 400ms var(--ease-in-out);
+}
+
+/* A room page's fixed price bar (tablets and phones) sits at the foot: the pill rides above it */
+@media (max-width: 1100px) {
+  body:has(.room-bookbar:not(.room-bookbar--hidden)) .enquiry-pill {
+    bottom: calc(var(--bookbar-h, 74px) + 12px);
+  }
 }
 
 .enquiry-pill.is-shown {
