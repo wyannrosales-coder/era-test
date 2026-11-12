@@ -16,6 +16,7 @@ import {
   type Filters,
   type Result,
 } from '../components/rooms/roomSearch';
+import bannerImage from '../assets/property/hero.jpg';
 import './FindRoomPage.css';
 
 const PARAMS = ['city', 'institution', 'type', 'price', 'term'] as const;
@@ -107,26 +108,27 @@ export default function FindRoomPage() {
       <Nav />
       <main className="find-page">
         <header className="find-page__hero">
+          <img className="find-page__hero-image" src={bannerImage} alt="" />
+          <div className="find-page__hero-overlay" aria-hidden />
           <div className="find-page__hero-inner">
             <p className="eyebrow find-page__eyebrow">Find a room</p>
             <h1 className="type-h1 find-page__title">
               Every room, across every <em>EPIISOD.</em>
             </h1>
+            <RoomSearchBar
+              className="room-search--hero find-page__search"
+              value={draft}
+              onChange={setDraft}
+              onSearch={() => run(draft)}
+              onClear={() => {
+                setDraft(NO_FILTERS);
+                run(NO_FILTERS);
+              }}
+            />
           </div>
         </header>
 
         <section className="find-page__body" aria-label="Rooms">
-          <RoomSearchBar
-            className="find-page__search"
-            value={draft}
-            onChange={setDraft}
-            onSearch={() => run(draft)}
-            onClear={() => {
-              setDraft(NO_FILTERS);
-              run(NO_FILTERS);
-            }}
-          />
-
           <p className="find-page__count" aria-live="polite">
             {results.length} {results.length === 1 ? 'room matches' : 'rooms match'}
             {lowest !== undefined && <> · from AU${lowest} / wk</>}

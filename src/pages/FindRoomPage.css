@@ -3,26 +3,55 @@
   background: var(--paper);
 }
 
+/* An image banner with the search on it (the homepage hero's glass bar) */
 .find-page__hero {
-  padding: 200px var(--page-gutter) 140px;
+  position: relative;
+  overflow: hidden;
+  padding: 168px var(--page-gutter) 72px;
   background: var(--royal-chocolate-600, #121a2a);
   color: #fff;
 }
 
+.find-page__hero-image,
+.find-page__hero-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.find-page__hero-image {
+  object-fit: cover;
+}
+
+.find-page__hero-overlay {
+  background: var(--royal-chocolate-700);
+  mix-blend-mode: multiply;
+  opacity: 0.45;
+}
+
 .find-page__hero-inner {
-  max-width: 1320px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  max-width: 1280px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .find-page__eyebrow {
-  margin: 0 0 20px;
-  color: var(--line-in-white);
+  margin: 0;
+  color: #fff;
 }
 
 .find-page__title {
-  max-width: 14em;
   margin: 0;
+  font-size: clamp(24px, 3.2vw, 40px);
+  white-space: nowrap;
   color: #fff;
+  text-shadow: 0 2px 18px rgba(6, 10, 20, 0.5);
 }
 
 .find-page__title em {
@@ -31,12 +60,12 @@
 
 .find-page__body {
   max-width: 1320px;
-  margin: -64px auto 0;
-  padding: 0 var(--page-gutter) 160px;
+  margin: 0 auto;
+  padding: 48px var(--page-gutter) 160px;
 }
 
 .find-page__count {
-  margin: 24px 0 32px;
+  margin: 0 0 32px;
   font-size: 14px;
   letter-spacing: 0.04em;
   color: var(--grey-800, #5b5b57);
@@ -206,7 +235,7 @@
   }
 
   .find-page__hero {
-    padding: 160px var(--page-gutter) 120px;
+    padding: 136px var(--page-gutter) 48px;
   }
 }
 
@@ -216,7 +245,10 @@
   }
 
   .find-page__body {
-    margin-top: -48px;
     padding-bottom: 96px;
+  }
+
+  .find-page__title {
+    white-space: normal;
   }
 }
