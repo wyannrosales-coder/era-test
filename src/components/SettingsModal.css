@@ -9,9 +9,11 @@
   border: 1px solid transparent;
   border-radius: 50%;
   background: transparent;
-  color: inherit;
+  /* The nav's own text colour (white over a photo, dark on the scrolled and cream bars, per theme) */
+  color: var(--nav-text, inherit);
   cursor: pointer;
   transition:
+    color 400ms var(--ease-in-out),
     background-color 250ms var(--ease-lux),
     border-color 250ms var(--ease-lux),
     transform 500ms var(--ease-lux);
@@ -20,6 +22,22 @@
 .settings-button:hover {
   border-color: currentColor;
   transform: rotate(40deg);
+}
+
+/* Desktop: in the empty margin at the top left of the screen (the chat icon mirrors it on the
+   right), so the nav's links keep all their room beside the logo */
+@media (min-width: 1101px) {
+  .nav__links:not(.nav__links--end) {
+    position: relative;
+  }
+
+  .nav__links:not(.nav__links--end) > .settings-button {
+    position: absolute;
+    top: 50%;
+    left: calc(-1 * (var(--page-gutter) - 18px));
+    margin: 0;
+    translate: 0 -50%;
+  }
 }
 
 .settings-button:focus-visible,

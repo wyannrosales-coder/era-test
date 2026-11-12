@@ -15,6 +15,7 @@ import ContactMenu from './ContactMenu';
 import { NAV_VARIANT } from '../lib/navVariant';
 import LifeMenu from './LifeMenu';
 import SettingsButton from './SettingsModal';
+import ChatNavButton from './chat/ChatNavButton';
 import LocationsMenu from './LocationsMenu';
 import './Nav.css';
 
@@ -422,6 +423,7 @@ export default function Nav({
               <a href="#" className="nav__cta">
                 Book a tour
               </a>
+              <ChatNavButton />
             </div>
             {/* Option B has no hamburger on desktop; it remains the navigation on tablets and phones */}
             <button

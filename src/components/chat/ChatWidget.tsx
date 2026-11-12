@@ -566,6 +566,22 @@ export default function ChatWidget() {
   });
   const [shown, setShown] = useState(false);
   const [draft, setDraft] = useState('');
+  const [full, setFull] = useState(() => {
+    try {
+      return sessionStorage.getItem('epiisod-chat-full') === '1';
+    } catch {
+      return false;
+    }
+  });
+  const toggleFull = () =>
+    setFull((f) => {
+      try {
+        sessionStorage.setItem('epiisod-chat-full', f ? '0' : '1');
+      } catch {
+        // not kept
+      }
+      return !f;
+    });
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -584,10 +600,16 @@ export default function ChatWidget() {
   useEffect(() => {
     if (!chat.open) return;
     if (window.matchMedia('(min-width: 601px)').matches) inputRef.current?.focus();
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setChatOpen(false);
+    // Escape steps back: full screen first, then the panel
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      if (full) toggleFull();
+      else setChatOpen(false);
+    };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [chat.open]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chat.open, full]);
 
   const property = PROPERTIES.find((p) => p.href && (path === p.href || path.startsWith(`${p.href}/`)));
   const tag = property?.name.replace(/^EPIISOD\s+/i, '');
@@ -662,7 +684,7 @@ export default function ChatWidget() {
       )}
 
       {chat.open && (
-        <section className="chat" role="dialog" aria-label="EPIISOD Assistant">
+        <section className={`chat${full ? ' chat--full' : ''}`} role="dialog" aria-label="EPIISOD Assistant">
           <header className="chat__head">
             <div>
               <h3 className="chat__title">EPIISOD Assistant</h3>
@@ -677,6 +699,23 @@ export default function ChatWidget() {
                   </svg>
                 </button>
               )}
+              <button
+                type="button"
+                className="chat__tool chat__tool--full"
+                onClick={toggleFull}
+                aria-label={full ? 'Exit full screen' : 'Full screen'}
+                title={full ? 'Exit full screen' : 'Full screen'}
+              >
+                {full ? (
+                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 2v4H2M10 14v-4h4" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 6V2h4M14 10v4h-4" />
+                  </svg>
+                )}
+              </button>
               <button type="button" className="chat__tool" onClick={() => setChatOpen(false)} aria-label="Close chat">
                 <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true" stroke="currentColor" strokeWidth="1.3">
                   <path d="M1 1l8 8M9 1L1 9" />

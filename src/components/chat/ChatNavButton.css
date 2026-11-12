@@ -1,0 +1,58 @@
+/* The nav's chat icon: takes the nav's own text colour, so it follows the bar and the theme */
+.chat-nav {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--nav-text);
+  cursor: pointer;
+  transition:
+    color 400ms var(--ease-in-out),
+    background-color 250ms var(--ease-lux),
+    border-color 250ms var(--ease-lux);
+}
+
+.chat-nav:hover,
+.chat-nav.is-open {
+  border-color: currentColor;
+}
+
+.chat-nav:focus-visible {
+  outline: 2px solid var(--gold, #b8966e);
+  outline-offset: 2px;
+}
+
+/* Desktop: in the empty margin at the top right of the screen, so the nav keeps all its room */
+@media (min-width: 1101px) {
+  .nav__links--end {
+    position: relative;
+  }
+
+  .chat-nav {
+    position: absolute;
+    top: 50%;
+    right: calc(-1 * (var(--page-gutter) - 18px));
+    translate: 0 -50%;
+  }
+}
+
+/* Mid-size screens: the nav's items sit a little closer, so nothing crowds the logo */
+@media (min-width: 1101px) and (max-width: 1500px) {
+  .nav .nav__actions {
+    gap: 20px;
+  }
+
+  .nav .nav__links .nav__link {
+    letter-spacing: 1.2px;
+    font-size: 14px;
+  }
+
+  .nav .nav__links:not(.nav__links--end) {
+    gap: 16px;
+  }
+}

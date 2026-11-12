@@ -664,7 +664,52 @@
   color: var(--text-soft);
 }
 
+/* Full screen: the whole window, with the conversation kept to a readable column */
+.chat--full {
+  inset: 0;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+}
+
+.chat--full .chat__head {
+  padding-inline: max(22px, calc((100% - 860px) / 2));
+}
+
+.chat--full .chat__log {
+  padding-inline: max(18px, calc((100% - 860px) / 2));
+}
+
+.chat--full .chat__composer,
+.chat--full .chat__foot {
+  padding-inline: max(14px, calc((100% - 860px) / 2));
+}
+
+.chat--full .chat-bubble {
+  max-width: 78%;
+}
+
+.chat--full .chat-card,
+.chat--full .chat-error {
+  max-width: 560px;
+}
+
+.chat--full .chat-room {
+  flex-basis: 240px;
+}
+
+.chat--full .chat-rooms {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
 @media (max-width: 600px) {
+  /* A phone's panel is already the whole screen */
+  .chat__tool--full {
+    display: none;
+  }
+
   .chat {
     inset: 0;
     width: auto;
