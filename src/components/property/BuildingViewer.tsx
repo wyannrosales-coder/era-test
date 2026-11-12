@@ -1,23 +1,29 @@
 import { useEffect, useRef } from 'react';
 import {
   ACESFilmicToneMapping,
+  BackSide,
   Box3,
   Color,
   DirectionalLight,
   HemisphereLight,
   Mesh,
+  MeshBasicMaterial,
   MeshStandardMaterial,
+  PCFSoftShadowMap,
   PMREMGenerator,
   PerspectiveCamera,
+  PlaneGeometry,
   Scene,
+  ShaderMaterial,
+  ShadowMaterial,
   Sphere,
+  SphereGeometry,
   Vector3,
   WebGLRenderer,
 } from 'three';
 import type { Material, Object3D } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import type { ModelView } from './amenityModel';
 
 type Props = {
@@ -39,6 +45,29 @@ const DIM = 0.12;
 const GOLD = new Color('#c9a46a');
 const rad = (d: number) => (d * Math.PI) / 180;
 /** Node names come back from the loader with spaces and slashes rewritten, so compare letters only. */
+/** What each of the model's materials is, so light plays on it as it would in the street. */
+function tune(m: MeshStandardMaterial) {
+  const n = norm(m.name);
+  m.envMapIntensity = 1;
+  if (n.includes('windowglass')) {
+    Object.assign(m, { roughness: 0.06, metalness: 0.55, envMapIntensity: 1.8 });
+  } else if (n.includes('photovoltaic')) {
+    Object.assign(m, { roughness: 0.22, metalness: 0.5, envMapIntensity: 1.5 });
+  } else if (n.includes('bronze')) {
+    Object.assign(m, { roughness: 0.38, metalness: 0.85, envMapIntensity: 1.3 });
+  } else if (n.includes('poolwater')) {
+    Object.assign(m, { roughness: 0.04, metalness: 0.1, envMapIntensity: 1.8 });
+  } else if (n.includes('galvanised')) {
+    Object.assign(m, { roughness: 0.5, metalness: 0.7, envMapIntensity: 1.1 });
+  } else if (n.includes('planting')) {
+    Object.assign(m, { roughness: 1, metalness: 0, envMapIntensity: 0.5 });
+  } else if (n.includes('decktimber')) {
+    Object.assign(m, { roughness: 0.7, metalness: 0, envMapIntensity: 0.6 });
+  } else {
+    // Mineral finish: stone and render, matt
+    Object.assign(m, { roughness: 0.9, metalness: 0, envMapIntensity: 0.55 });
+  }
+}
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 /**
@@ -66,22 +95,67 @@ export default function BuildingViewer({ src, view, parts, callout = null, onLoa
     const renderer = new WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
+    renderer.toneMappingExposure = 0.95;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = PCFSoftShadowMap;
     el.appendChild(renderer.domElement);
     renderer.domElement.style.display = 'block';
     renderer.domElement.style.touchAction = 'pan-y';
 
     const scene = new Scene();
+
+    // Daylight to reflect: a sky dome from a warm horizon to a clear blue, with the sun in it.
+    // The glass and bronze pick the sky up; nothing here is drawn on screen.
     const pmrem = new PMREMGenerator(renderer);
-    const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    const sky = new Scene();
+    sky.add(
+      new Mesh(
+        new SphereGeometry(50, 32, 16),
+        new ShaderMaterial({
+          side: BackSide,
+          depthWrite: false,
+          uniforms: {
+            top: { value: new Color('#5d93d8') },
+            mid: { value: new Color('#bcd3ea') },
+            low: { value: new Color('#e6dccb') },
+          },
+          vertexShader: 'varying vec3 p; void main(){ p = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+          fragmentShader:
+            'uniform vec3 top; uniform vec3 mid; uniform vec3 low; varying vec3 p; void main(){ float h = p.y; vec3 c = h > 0.0 ? mix(mid, top, pow(h, 0.6)) : mix(mid, low, pow(-h, 0.5)); gl_FragColor = vec4(c, 1.0); }',
+        }),
+      ),
+    );
+    const sunDisc = new Mesh(new SphereGeometry(5, 16, 8), new MeshBasicMaterial({ color: new Color(14, 12, 9) }));
+    sunDisc.position.set(30, 38, 22);
+    sky.add(sunDisc);
+    const env = pmrem.fromScene(sky, 0.02).texture;
     scene.environment = env;
-    scene.add(new HemisphereLight(0xffffff, 0x8a8278, 0.9));
-    const sun = new DirectionalLight(0xfff0dc, 2.4);
-    sun.position.set(40, 70, 30);
+
+    scene.add(new HemisphereLight(0xdbe8ff, 0xb9a98e, 0.55));
+    const sun = new DirectionalLight(0xfff1dc, 3.2);
+    sun.position.set(42, 70, 34);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    sun.shadow.camera.left = -48;
+    sun.shadow.camera.right = 48;
+    sun.shadow.camera.top = 48;
+    sun.shadow.camera.bottom = -48;
+    sun.shadow.camera.near = 10;
+    sun.shadow.camera.far = 220;
+    sun.shadow.bias = -0.0004;
+    sun.shadow.normalBias = 0.06;
+    sun.shadow.radius = 3;
     scene.add(sun);
-    const fill = new DirectionalLight(0xdfe8ff, 0.6);
-    fill.position.set(-40, 30, -30);
+    const fill = new DirectionalLight(0xcfdcff, 0.5);
+    fill.position.set(-40, 26, -30);
     scene.add(fill);
+
+    // The ground the building stands on only shows the shadows falling on it
+    const ground = new Mesh(new PlaneGeometry(220, 220), new ShadowMaterial({ opacity: 0.28 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.52;
+    ground.receiveShadow = true;
+    scene.add(ground);
 
     const camera = new PerspectiveCamera(30, 1, 1, 600);
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -158,6 +232,7 @@ export default function BuildingViewer({ src, view, parts, callout = null, onLoa
         const to = on ? 1 : DIM;
         p.shown += (to - p.shown) * (reduce ? 1 : 0.12);
         p.material.opacity = p.base * p.shown;
+        p.mesh.castShadow = p.shown > 0.5;
         const solid = p.shown > 0.98 && p.base >= 1;
         if (p.material.transparent === solid) {
           p.material.transparent = !solid;
@@ -254,7 +329,9 @@ export default function BuildingViewer({ src, view, parts, callout = null, onLoa
         if (!m.isMesh) return;
         const src = m.material as Material;
         const mat = (src as MeshStandardMaterial).clone();
-        mat.envMapIntensity = 0.9;
+        tune(mat);
+        m.castShadow = true;
+        m.receiveShadow = true;
         m.material = mat;
         pieces.push({ mesh: m, material: mat, base: mat.opacity, shown: 1, name: norm(m.name || o.parent?.name || '') });
       });
