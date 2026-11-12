@@ -84,15 +84,26 @@
   display: flex;
   align-items: stretch;
   gap: 24px;
-  width: min(var(--content-max), 100%);
+  width: min(var(--content-max), calc(100vw - 2 * var(--page-gutter)));
+}
+
+/* A photo leads the menu, as on the live v2 menu */
+.life-menu__photo {
+  flex: none;
+  align-self: stretch;
+  width: 240px;
+  min-height: 200px;
+  margin: 16px 0;
+  border-radius: 16px;
+  object-fit: cover;
 }
 
 .nav-menu-b__pages {
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  flex-shrink: 0;
-  width: 555px;
+  gap: 12px;
+  flex: 1 1 0;
+  min-width: 0;
   padding: 16px 0;
 }
 
@@ -104,17 +115,17 @@
 .nav-menu-b__blog {
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
-  width: 441px;
+  flex: 0 1 320px;
+  min-width: 240px;
   padding: 16px 0;
   border-left: 1px solid var(--line-in-white);
 }
 
 /* Promotions (Figma 1361:28011): one link, ruled left, sized to its text */
 .nav-menu-b__promos {
-  flex-shrink: 0;
+  flex: 0 1 220px;
+  min-width: 180px;
   align-self: flex-start;
-  width: 324px;
   padding: 16px 0;
 }
 
@@ -128,7 +139,7 @@
 
 .nav-menu-b__link--article {
   gap: 4px;
-  width: 348px;
+  width: 100%;
   margin: 12px 0;
   padding-block: 16px;
 }
@@ -167,4 +178,68 @@
 
 .nav-menu-b__row--contact {
   width: min(var(--content-max), 100%);
+}
+
+/* Per-property experience links: a thumbnail, the property and where it leads */
+.life-menu__experiences {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+
+.life-menu__experience {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 12px 8px 8px;
+  border-radius: 12px;
+  transition: background-color 200ms ease;
+}
+
+a.life-menu__experience:hover,
+a.life-menu__experience:focus-visible {
+  background: var(--bronze-200);
+}
+
+.life-menu__experience > img {
+  flex: none;
+  width: 72px;
+  height: 54px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.life-menu__experience.is-soon > img {
+  filter: grayscale(0.5);
+}
+
+.life-menu__experience-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.life-menu__experience-name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--royal-chocolate-700);
+}
+
+.life-menu__experience-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.life-menu__experience.is-soon .life-menu__experience-cta {
+  color: var(--royal-chocolate-500);
 }

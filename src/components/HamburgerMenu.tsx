@@ -17,6 +17,7 @@ const GROUPS: Record<'life' | 'contact' | 'blog', Link[]> = {
   life: [
     { label: 'Why EPIISOD', href: '/why-epiisod' },
     { label: 'Experience', href: '/experience' },
+    { label: 'Experience · Macquarie Park', href: '/locations/macquarie-park/experience' },
     { label: 'Promotions', href: '/promotions' },
   ],
   contact: [
