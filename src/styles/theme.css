@@ -119,15 +119,15 @@ html[data-theme='dark'] {
   --ink-soft-rgb: 12, 12, 12;
 }
 
-/* The lobby veil multiplies near-black over the photo, which in dark leaves nothing to see
-   through; a plain black veil keeps the photo faintly visible behind the Enter section */
-html[data-theme='dark'] body .xp-mosaic__veil {
+/* The lobby veil used to multiply near-black over the photo, leaving nothing to see through;
+   a plain black veil keeps the photo visible behind the Enter section (light and dark) */
+html body .xp-mosaic__veil {
   mix-blend-mode: normal;
   background: #000;
   opacity: calc(0.65 * var(--shade));
 }
 
-html[data-theme='dark'] body .xp-mosaic__content {
+html body .xp-mosaic__content {
   background:
     linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
     url('../assets/experience/mosaic-lobby-tree.jpg') center / cover;
