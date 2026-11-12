@@ -49,6 +49,7 @@
   /* Deepest and most raised steps (the dark theme spreads the surfaces into five levels; light keeps its two) */
   --surface-0: var(--bronze-200);
   --surface-3: var(--bronze-100);
+  --surface-4: var(--bronze-200);
   --text-strong: var(--royal-chocolate-700);
   --text-mid: var(--royal-chocolate-600);
   --text-soft: var(--royal-chocolate-500);

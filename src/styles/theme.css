@@ -97,12 +97,14 @@ html[data-theme='dark'] {
   /* Blacks and dark greys: neutral, no blue */
   --paper: #0f0f0f;
   /* Five steps of black, each clearly lighter than the last:
-     0 deepest (footer, closing) · 1 page · 2 alternate sections · 3 cards · 4 fields, raised */
+     0 black (footer, bands) · 1 page · 2 charcoal band · 4 grey band · cards · 3 fields, raised */
   --surface-0: #060606;
   --surface-1: #0f0f0f;
   --surface-2: #1a1a1a;
-  --surface-white: #252525;
-  --surface-3: #303030;
+  --surface-white: #2a2a2a;
+  --surface-3: #353535;
+  /* The grey of the lightest section band: above the page, under the cards */
+  --surface-4: #222222;
   --text-strong: #f5f2ec;
   --text-mid: #ebe8e1;
   --text-soft: #b3b3b3;
@@ -138,17 +140,34 @@ html body .xp-mosaic__content {
   background-blend-mode: normal;
 }
 
-/* Rhythm: alternate sections lift a step, with a fine gold rule between */
+/* Rhythm: sections step down the greys to black and back as the page goes, a fine gold rule
+   between: 4 dark grey, 3 grey, 2 charcoal, 1 page, 0 black */
+html[data-theme='dark'] body :is(
+    .life,
+    .property-location,
+    .about-signup
+  ) {
+  background-color: var(--surface-4);
+}
+
+html[data-theme='dark'] body :is(.faqs, .amenities + .rooms + .property-location) {
+  background-color: var(--surface-2);
+}
+
+html[data-theme='dark'] body :is(.partners, .promotions, .promotions-vip, .why-experience) {
+  background-color: var(--surface-0);
+}
+
 html[data-theme='dark'] body :is(
     .life,
     .property-location,
     .faqs,
     .about-signup,
     .why-experience,
+    .promotions,
     .promotions-vip,
-    .amenities + .rooms + .property-location
+    .partners
   ) {
-  background-color: var(--surface-2);
   border-top: 1px solid rgba(212, 184, 150, 0.14);
   border-bottom: 1px solid rgba(212, 184, 150, 0.14);
 }
