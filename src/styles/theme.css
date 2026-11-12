@@ -105,6 +105,9 @@ html[data-theme='dark'] {
   --surface-3: #353535;
   /* The grey of the lightest section band: above the page, under the cards */
   --surface-4: #222222;
+  /* Hairlines are quiet in the dark: a whisper of gold, not the bright sand of the light theme */
+  --line-in-white: rgba(212, 184, 150, 0.18);
+  --hairline: rgba(212, 184, 150, 0.16);
   --text-strong: #f5f2ec;
   --text-mid: #ebe8e1;
   --text-soft: #b3b3b3;
@@ -172,6 +175,37 @@ html[data-theme='dark'] body :is(
   border-bottom: 1px solid rgba(212, 184, 150, 0.14);
 }
 
+/* Frames, rules and photo borders drawn in sand for a light page stay quiet on dark */
+html[data-theme='dark'] body :is(
+    .room-gallery__photo,
+    .room-carousel,
+    .room-plan-viewer__stage,
+    .room-plan,
+    .room-view,
+    .room-of,
+    .room-ameni,
+    .room-amenity,
+    .room-chip,
+    .room-carousel__photo,
+    .room-offers,
+    .room-plan__image,
+    .property-location__map,
+    .room-book,
+    .room-book__control,
+    .xp-mosaic__photo
+  ) {
+  border-color: var(--hairline);
+}
+
+html[data-theme='dark'] body :is(.room-book__summary, .room-bookbar, .room-s, .room-section) {
+  border-color: var(--hairline);
+}
+
+html[data-theme='dark'] body .room-book__control:hover,
+html[data-theme='dark'] body .room-book__control:focus-within {
+  border-color: rgba(212, 184, 150, 0.5);
+}
+
 /* Fields, dropdowns and the calendar are the most raised step, above the cards they sit on */
 html[data-theme='dark'] body :is(
     .ui-select,
@@ -181,7 +215,8 @@ html[data-theme='dark'] body :is(
     .contact-field__box--message,
     .rooms__menu,
     .rooms__option,
-    .stay-connected__form input
+    .stay-connected__form input,
+    .room-book__control
   ) {
   background-color: var(--surface-3);
 }
