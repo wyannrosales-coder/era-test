@@ -91,7 +91,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  flex: 1 1 0;
+  flex: 3 1 0;
   min-width: 0;
   padding: 16px 0;
 }
@@ -104,8 +104,8 @@
 .nav-menu-b__blog {
   display: flex;
   flex-direction: column;
-  flex: 0 1 320px;
-  min-width: 240px;
+  flex: 2 1 0;
+  min-width: 0;
   padding: 16px 0;
   border-left: 1px solid var(--line-in-white);
 }
@@ -266,4 +266,30 @@ a.life-menu__experience:hover > img {
 
 .life-menu__experience.is-soon .life-menu__experience-cta {
   color: var(--royal-chocolate-500);
+}
+
+/*
+ * One scale for the links in this menu, the Blog articles' (18px title, 14px description):
+ * Why EPIISOD and Experience, and the property cards, use it too. The column headings
+ * (Blog) stay larger.
+ */
+html body .nav-menu-b__pages .nav-menu-b__link .life-menu__title,
+html body .life-menu__experience-name {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--royal-chocolate-700);
+}
+
+html body .nav-menu-b__pages .nav-menu-b__link .life-menu__description {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--royal-chocolate-500);
+}
+
+html body .life-menu__experience-cta {
+  font-size: 11px;
 }
