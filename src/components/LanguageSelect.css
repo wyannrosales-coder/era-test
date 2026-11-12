@@ -45,8 +45,8 @@
 
 .language-select__option {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
   width: 100%;
   padding: 10px 20px;
   border: 0;
@@ -76,4 +76,55 @@
 .language-select__name {
   font-weight: 300;
   color: var(--text-soft);
+}
+
+.nav__lang {
+  gap: 8px;
+}
+
+.nav__lang .flag,
+.language-select__option .flag {
+  flex: none;
+  border-radius: 3px;
+}
+
+/* Three languages in a row */
+.language-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.language-row__option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  border: 1px solid var(--line-edge);
+  border-radius: var(--r-ctl);
+  background: var(--surface-1);
+  font: inherit;
+  font-size: 14px;
+  color: var(--text-strong);
+  cursor: pointer;
+  transition:
+    border-color 250ms var(--ease-lux),
+    box-shadow 250ms var(--ease-lux);
+}
+
+.language-row__option:hover {
+  border-color: var(--bronze-700);
+}
+
+.language-row__option.is-on {
+  border-color: var(--gold, #b8966e);
+  box-shadow: 0 0 0 1px var(--gold, #b8966e);
+  font-weight: 600;
+  cursor: default;
+}
+
+.language-row__option:focus-visible {
+  outline: 2px solid var(--text-strong);
+  outline-offset: 2px;
 }

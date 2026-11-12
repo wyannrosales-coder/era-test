@@ -14,6 +14,7 @@ import {
   type Texture,
   type Theme,
 } from '../lib/prototypeSettings';
+import { LanguageRow } from './LanguageSelect';
 import './SettingsModal.css';
 
 type Option<T extends string> = { id: T; label: string; hint?: string; preview?: ReactNode };
@@ -133,6 +134,20 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
             </svg>
           </button>
         </header>
+
+        <section className="settings__group">
+          <div className="settings__group-head">
+            <Icon>
+              <circle cx="10" cy="10" r="7" />
+              <path d="M3 10h14M10 3c2 2 3 4.4 3 7s-1 5-3 7c-2-2-3-4.4-3-7s1-5 3-7Z" />
+            </Icon>
+            <div>
+              <h3 className="settings__label">Language</h3>
+              <p className="settings__help">The whole site follows it, and it is remembered on this device.</p>
+            </div>
+          </div>
+          <LanguageRow />
+        </section>
 
         <section className="settings__group">
           <div className="settings__group-head">

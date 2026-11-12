@@ -8,6 +8,7 @@ import caretRight from '../assets/menu/caret-right.svg';
 import caretDown from '../assets/menu/caret-down.svg';
 import caretLeft from '../assets/menu/caret-left.svg';
 import SettingsButton from './SettingsModal';
+import { LanguageRow } from './LanguageSelect';
 import './HamburgerMenu.css';
 
 type Link = { label: string; href: string };
@@ -187,6 +188,7 @@ export default function HamburgerMenu({ open, onClose }: HamburgerMenuProps) {
             <a href="#" className="menu-panel__cta" onClick={onClose}>
               Book a tour
             </a>
+            <LanguageRow className="menu-panel__languages" />
             <SettingsButton row />
           </>,
         )}

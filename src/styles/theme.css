@@ -354,3 +354,30 @@ html[data-theme='dark'] .contact-check input {
   border: 1px solid var(--line-edge);
   background: var(--surface-white);
 }
+
+/* ---------- Languages ---------- */
+/* Chinese and Hindi need faces of their own: the serif and sans fall back to the system's best */
+html[data-lang='zh'] body {
+  font-family: var(--font-body), 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+}
+
+html[data-lang='zh'] :is(h1, h2, h3, h4, .type-h1, .type-h2, .type-h3, .type-h4, .display-title) {
+  font-family: var(--font-display), 'Songti SC', 'STSong', 'Noto Serif SC', 'SimSun', serif;
+  letter-spacing: 0;
+}
+
+html[data-lang='hi'] body {
+  font-family: var(--font-body), 'Kohinoor Devanagari', 'Noto Sans Devanagari', 'Mangal', 'Nirmala UI', sans-serif;
+}
+
+html[data-lang='hi'] :is(h1, h2, h3, h4, .type-h1, .type-h2, .type-h3, .type-h4, .display-title) {
+  font-family: var(--font-display), 'Kohinoor Devanagari', 'Noto Serif Devanagari', 'Mangal', 'Nirmala UI', serif;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+/* Wide letter-spacing and uppercase are for Latin type; they spoil Chinese and Hindi */
+html:is([data-lang='zh'], [data-lang='hi']) body :is(.eyebrow, [class*='__label'], [class*='eyebrow'], button, a) {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}

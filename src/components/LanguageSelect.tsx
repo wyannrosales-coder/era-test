@@ -1,45 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
+import Flag from './Flag';
+import { LANGUAGES, useLanguage, type Language } from '../lib/language';
 import dropdownLight from '../assets/dropdown.svg';
 import dropdownDark from '../assets/dropdown-dark.svg';
 import './LanguageSelect.css';
 
-const LANGUAGES = [
-  { code: 'en', label: 'EN', name: 'English' },
-  { code: 'zh', label: '中文', name: '中文' },
-] as const;
-type Language = (typeof LANGUAGES)[number]['code'];
-const STORAGE_KEY = 'epiisod-language';
-
-const readSaved = (): Language => {
-  try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    return LANGUAGES.some((l) => l.code === saved) ? (saved as Language) : 'en';
-  } catch {
-    return 'en';
-  }
-};
-
 /**
- * The nav's language menu: EN (English) or 中文. The choice sets the page's `lang`
- * and is remembered on this device. The site's copy isn't translated yet.
+ * The nav's language menu: a flag and the language, with English, 中文 and हिन्दी to choose from.
+ * The choice translates the whole page at once (public/i18n/engine.js), sets its `lang`, and is
+ * remembered on this device and in the address (?lang=).
  */
 export default function LanguageSelect({ onOpen }: { onOpen?: () => void }) {
-  const [language, setLanguage] = useState<Language>(readSaved);
+  const [language, setLanguage] = useLanguage();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const current = LANGUAGES.find((l) => l.code === language) ?? LANGUAGES[0];
-
-  useEffect(() => {
-    document.documentElement.lang = language === 'zh' ? 'zh-Hans' : 'en';
-    try {
-      window.localStorage.setItem(STORAGE_KEY, language);
-    } catch {
-      // Storage unavailable (private mode etc.): the choice just isn't remembered
-    }
-  }, [language]);
 
   // Close on a click elsewhere or Escape (returning focus to the button)
   useEffect(() => {
@@ -93,7 +71,9 @@ export default function LanguageSelect({ onOpen }: { onOpen?: () => void }) {
         aria-expanded={open}
         aria-label={`Language: ${current.name}`}
         onClick={toggle}
+        translate="no"
       >
+        <Flag code={current.code} size={20} />
         <span lang={current.code}>{current.label}</span>
         <span className="nav__icon language-select__caret" style={{ width: 16, height: 16 }}>
           <img className="nav__icon-light" src={dropdownLight} width={16} height={16} alt="" />
@@ -101,7 +81,7 @@ export default function LanguageSelect({ onOpen }: { onOpen?: () => void }) {
         </span>
       </button>
 
-      <ul className="language-select__menu" onKeyDown={onListKey}>
+      <ul className="language-select__menu" onKeyDown={onListKey} translate="no">
         {LANGUAGES.map((l, i) => (
           <li key={l.code}>
             <button
@@ -112,12 +92,35 @@ export default function LanguageSelect({ onOpen }: { onOpen?: () => void }) {
               aria-current={l.code === language}
               onClick={() => choose(l.code)}
             >
-              <span className="language-select__label">{l.label}</span>
-              {l.name !== l.label && <span className="language-select__name">{l.name}</span>}
+              <Flag code={l.code} size={22} />
+              <span className="language-select__label">{l.name}</span>
             </button>
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+/** The three languages as a row of buttons (the phone menu and the settings dialog). */
+export function LanguageRow({ className = '' }: { className?: string }) {
+  const [language, setLanguage] = useLanguage();
+  return (
+    <div className={`language-row ${className}`} role="radiogroup" aria-label="Language" translate="no">
+      {LANGUAGES.map((l) => (
+        <button
+          key={l.code}
+          type="button"
+          role="radio"
+          lang={l.code}
+          aria-checked={language === l.code}
+          className={`language-row__option${language === l.code ? ' is-on' : ''}`}
+          onClick={() => language !== l.code && setLanguage(l.code)}
+        >
+          <Flag code={l.code} size={24} />
+          <span>{l.name}</span>
+        </button>
+      ))}
     </div>
   );
 }

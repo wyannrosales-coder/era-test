@@ -423,7 +423,7 @@ export default function Footer() {
     <footer ref={footerRef} className={`footer footer--logo-${FOOTER_VARIANT}`}>
       <div className="footer__brand">
         <div className="footer__drift">
-          <div className="footer__wordmark" role="img" aria-label="EPIISOD">
+          <div className="footer__wordmark" role="img" aria-label="EPIISOD" translate="no">
             {WORDMARK.map((part, i) => (
               <span
                 key={i}
@@ -459,7 +459,7 @@ export default function Footer() {
               <LinkGroup title="EPIISOD" links={EPIISOD_LINKS} />
               <div className="footer__group footer__group--follow">
                 <h2 className="type-h5 footer__heading">Follow us</h2>
-                <ul className="footer__socials">
+                <ul className="footer__socials" translate="no">
                   {SOCIALS.map((s) => (
                     <li key={s.name}>
                       <a href="#" aria-label={s.name}>
