@@ -5,20 +5,51 @@
   background: var(--surface-2);
 }
 
-.a3d__media {
-  display: none;
-}
-
 .a3d__copy {
   display: flex;
-  flex-direction: column-reverse;
-  gap: 40px;
-  padding: 56px var(--page-gutter) 72px;
+  flex-direction: column;
+  gap: 32px;
+  padding: 72px var(--page-gutter);
   color: var(--text-strong);
 }
 
-.a3d__eyebrow {
-  margin: 0 0 20px;
+/* Heading: eyebrow and title, sized for the left column */
+.a3d__head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: clamp(18px, 3svh, 32px);
+}
+
+.a3d__heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(28px, 2.9vw, 42px);
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  color: var(--text-strong);
+}
+
+.a3d__heading em {
+  font-style: italic;
+}
+
+/* Phones and tablets: heading, the model, then the list */
+.a3d__left {
+  display: contents;
+}
+
+.a3d__head {
+  order: 0;
+}
+
+.a3d__right {
+  order: 1;
+}
+
+.a3d__body {
+  order: 2;
 }
 
 /* The facade: the whole building, ahead of the list */
@@ -285,103 +316,27 @@ html[data-theme='dark'] .a3d__button img {
   color: var(--accent-text);
 }
 
-/* Wide screens without the pinned stage (reduced motion): the same two columns, in the page */
+
 @media (min-width: 901px) {
-  .a3d:not(.is-animated) .a3d__copy {
+  .a3d__copy {
     display: grid;
     grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    align-items: start;
-    gap: clamp(32px, 5vw, 88px);
-    max-width: var(--content-max);
-    margin: 0 auto;
-    padding: 72px var(--page-gutter);
-  }
-}
-
-/* ---- Animated stage ---- */
-@media (min-width: 901px) {
-  .a3d.is-animated .a3d__stage {
-    height: 100vh;
-    height: 100svh;
-    overflow: hidden;
-    background: linear-gradient(var(--surface-white), var(--surface-2));
-  }
-
-  .a3d.is-animated .a3d__inner {
-    position: absolute;
-    inset: 0;
-  }
-
-  /* The photo fills the stage; its clip-path opens from the window */
-  .a3d.is-animated .a3d__media {
-    position: absolute;
-    inset: 0;
-    display: block;
-    will-change: clip-path;
-  }
-
-  .a3d.is-animated .a3d__media img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Then the section's own surface (light, or black and grey) takes over the photo */
-  .a3d.is-animated .a3d__panel {
-    position: absolute;
-    inset: 0;
-    background: var(--surface-2);
-    opacity: 0;
-  }
-
-  .a3d.is-animated .a3d__copy {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    grid-template-areas: 'left right';
     align-items: center;
     gap: clamp(32px, 5vw, 88px);
     max-width: var(--content-max);
     margin: 0 auto;
-    padding: 88px var(--page-gutter) 40px;
-    pointer-events: none;
+    padding: 96px var(--page-gutter);
   }
 
-  .a3d.is-animated .a3d__left,
-  .a3d.is-animated .a3d__right {
-    pointer-events: auto;
-    visibility: hidden;
+  .a3d__left {
+    display: block;
+    grid-area: left;
   }
 
-  .a3d.is-animated .a3d__right {
-    height: min(calc(100svh - 120px), 760px);
+  .a3d__right {
+    grid-area: right;
+    height: min(calc(100svh - 160px), 720px);
     aspect-ratio: auto;
   }
-
-  /* Tighter rows so every amenity fits the screen */
-  .a3d.is-animated .a3d__groups {
-    gap: clamp(8px, 1.6svh, 18px);
-  }
-
-  .a3d.is-animated .a3d__row {
-    padding: clamp(2px, 0.55svh, 6px) 0;
-  }
-
-  .a3d.is-animated .a3d__title {
-    font-size: clamp(16px, 2.3svh, 20px);
-  }
-
-  .a3d.is-animated .a3d__eyebrow {
-    margin-bottom: clamp(8px, 1.6svh, 18px);
-  }
-
-  .a3d.is-animated .a3d__button {
-    margin-top: clamp(14px, 2.4svh, 28px);
-  }
-}
-
-.a3d__button:hover {
-  background: var(--surface-1);
 }
