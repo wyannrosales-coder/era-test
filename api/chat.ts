@@ -23,6 +23,31 @@ import { KNOWLEDGE } from './_knowledge.js';
 
 export const maxDuration = 60;
 
+/**
+ * Rate limits, so one visitor (or a script) can't run up the bill. Kept in memory, so they hold
+ * per server instance: Vercel may run several, and a cold start resets the counts. That makes
+ * them a good brake, not a hard cap: for a hard one, add a Vercel Firewall rate-limit rule on
+ * /api/chat and set a monthly spend limit on the API key in the Anthropic Console.
+ * Override with CHAT_LIMIT_PER_IP (requests per 10 minutes) and CHAT_LIMIT_PER_HOUR (all visitors).
+ */
+const WINDOW_MS = 10 * 60_000;
+const hits = new Map<string, number[]>();
+let hourly: number[] = [];
+
+function limited(ip: string, perIp: number, perHour: number): number | null {
+  const now = Date.now();
+  hourly = hourly.filter((t) => now - t < 3_600_000);
+  if (hourly.length >= perHour) return 60;
+  const mine = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  if (mine.length >= perIp) return Math.ceil((mine[0] + WINDOW_MS - now) / 1000);
+  mine.push(now);
+  hourly.push(now);
+  hits.set(ip, mine);
+  // Forget visitors who have gone quiet, so the map can't grow without end
+  if (hits.size > 5000) for (const [key, times] of hits) if (!times.some((t) => now - t < WINDOW_MS)) hits.delete(key);
+  return null;
+}
+
 const MAX_BODY = 600_000; // characters of JSON: a long conversation, with room to spare
 const MAX_TURNS = 120;
 
@@ -219,6 +244,16 @@ export async function POST(request: Request) {
   // Read through globalThis so this compiles with or without Node's type definitions
   const { env } = (globalThis as unknown as { process: { env: Record<string, string | undefined> } }).process;
   if (!env.ANTHROPIC_API_KEY) return json(503, 'not_configured', 'The assistant is not connected yet.');
+
+  // Each tool answer is a request too, so a full booking takes around twenty
+  const ip = request.headers.get('x-real-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'local';
+  const wait = limited(ip, Number(env.CHAT_LIMIT_PER_IP) || 60, Number(env.CHAT_LIMIT_PER_HOUR) || 1500);
+  if (wait !== null) {
+    return Response.json(
+      { error: { code: 'rate_limited', message: 'You’ve sent a lot of messages. Please wait a few minutes and try again, or contact our team.' } },
+      { status: 429, headers: { 'Retry-After': String(wait) } },
+    );
+  }
 
   const raw = await request.text();
   if (raw.length > MAX_BODY) return json(413, 'too_long', 'This conversation is too long. Please start a new chat.');

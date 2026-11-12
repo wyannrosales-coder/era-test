@@ -720,7 +720,7 @@ export default function ChatWidget() {
                     : chat.error.message}
                 </p>
                 <div className="chat-card__actions">
-                  {!notConnected && (
+                  {!notConnected && chat.error.code !== 'rate_limited' && (
                     <button type="button" className="chat-button chat-button--small" onClick={retry}>
                       Try again
                     </button>
