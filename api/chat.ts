@@ -16,7 +16,7 @@
  * Set GEMINI_API_KEY in the Vercel project's environment variables (and in .env.local for
  * `npm run dev`). The key is only read here, on the server. Without it this answers 503 and
  * the chat panel points people to the contact page instead.
- * Optional: CHAT_MODEL (default gemini-3.5-flash-lite), CHAT_EFFORT (low | medium | high, default low).
+ * Optional: CHAT_MODEL (default gemini-4-hydrogen), CHAT_EFFORT (low | medium | high, default low).
  *
  * Talks to the Gemini API's generateContent REST endpoint directly (no SDK). The assistant's
  * turns go back to the browser with Gemini's own parts attached (`gemini`), which come back
@@ -364,7 +364,7 @@ export async function POST(request: Request) {
     return json(400, 'bad_request', 'The conversation could not be read.');
   }
 
-  const model = env.CHAT_MODEL || 'gemini-3.5-flash-lite';
+  const model = env.CHAT_MODEL || 'gemini-4-hydrogen';
   const level = { low: 'LOW', medium: 'MEDIUM', high: 'HIGH' }[env.CHAT_EFFORT ?? 'low'] ?? 'LOW';
   const encoder = new TextEncoder();
 
