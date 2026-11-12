@@ -620,3 +620,13 @@ html.ep-lite .ep-air i { filter: none; }
 .arch-w .arch-s { justify-content: flex-end !important; }
 .arch-w .arch-s_b .u-160 { display: none !important; }
 .arch-w .arch-s_b .u-96 { height: clamp(96px, 15vh, 150px) !important; }
+
+/* Light version: the Resi-Life sheet is pale, so its heading, carousel arrows, bar and counter are dark ink
+   (they were cream, designed for a dark sheet) */
+html[data-ep-ver="2"] section.arch .ep-cr_h,
+html[data-ep-ver="2"] section.arch .ep-cr_h em { color: #04070e; }
+html[data-ep-ver="2"] section.arch .ep-carousel_btn,
+html[data-ep-ver="2"] section.arch .ep-carousel_count { color: #04070e; border-color: rgba(4, 7, 14, .55); }
+html[data-ep-ver="2"] section.arch .ep-carousel_btn:hover { background: rgba(4, 7, 14, .08); }
+html[data-ep-ver="2"] section.arch .ep-carousel_bar { background: rgba(4, 7, 14, .14); }
+html[data-ep-ver="2"] section.arch .ep-carousel_bar > * { background: #04070e; }

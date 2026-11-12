@@ -10,6 +10,15 @@
   document.body.appendChild(fly);
   var inn = fly.firstChild, A = inn.querySelector('.ep-trv_a'), B = inn.querySelector('.ep-trv_b');
   B.style.backgroundImage = 'url(/locations/macquarie-park/experience/assets/app/f1_full.webp)';
+  // The travelling phone ends on the app's own screen: it shows whichever screen is chosen in the app section
+  var BASES = ['f1_full', 'f2_full', 's3', 'f4_full', 's5', 'f6_base'], shownB = 0;
+  function syncScreen() {
+    var tabs = app.querySelectorAll('.ep-ap_tab'), i = 0;
+    for (var k = 0; k < tabs.length; k++) if (tabs[k].classList.contains('is-on')) { i = k; break; }
+    if (i === shownB) return;
+    shownB = i; B.style.backgroundImage = 'url(/locations/macquarie-park/experience/assets/app/' + BASES[i] + '.webp)';
+  }
+  app.addEventListener('click', function () { syncScreen(); });   // a tab chosen while the phone is travelling
   var active = false, cloneW = 266, cloneH = 520, on = false;
   function clamp(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
   function ease(t) { return t * t * (3 - 2 * t); }
@@ -31,6 +40,7 @@
     var go = p > 0.001 && p < 0.999 && (smartOn || on);
     if (!go) { if (on) { on = false; show(false); } return; }
     if (!on) { on = true; snapshot(); show(true); }
+    syncScreen();
     var a = S.phone.getBoundingClientRect(), b = target.getBoundingClientRect(), e = ease(p);
     var l = lerp(a.left, b.left, e), t = lerp(a.top, b.top, e), w = lerp(a.width, b.width, e), h = lerp(a.height, b.height, e);
     var pad = lerp(10, 11, e), rad = lerp(40, 46, e);
