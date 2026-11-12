@@ -82,3 +82,6 @@ html[data-ep-ver="1"] .sc_ink.is-on { opacity: .85; }
 
 /* the resident pass section: dark grey in the dark theme */
 html[data-ep-ver="1"] section.ep-footer { background: #1c1c1c; }
+
+/* events heading */
+html[data-ep-ver="1"] .ep-cr_h { color: var(--d-text) !important; }

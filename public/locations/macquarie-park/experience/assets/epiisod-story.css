@@ -605,3 +605,9 @@ html.ep-lite .ep-air i { filter: none; }
 .loc-info-w .ep-sf_h { text-transform: none; }
 .loc-info-w .flower.loc-intro { scale: .62; transform-origin: 0 100%; translate: -4% -10%; pointer-events: none; }
 @media (max-width: 991px) { .loc-info-w .flower.loc-intro { scale: .7; translate: -6% 4%; } }
+
+/* Smart rooms: no opening transition (the two cream windows that swell into the room); the scroll goes straight to the section */
+.arch-intro-s, .arch_themes_light { display: none !important; }
+.arch-w { transform: none !important; scale: none !important; }
+/* …and the screen of empty scroll that used to carry the transition */
+.arch-w + ._100vh.b-desk { display: none !important; }
