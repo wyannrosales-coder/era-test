@@ -611,3 +611,7 @@ html.ep-lite .ep-air i { filter: none; }
 .arch-w { transform: none !important; scale: none !important; }
 /* …and the screen of empty scroll that used to carry the transition */
 .arch-w + ._100vh.b-desk { display: none !important; }
+
+/* …and no title frame: the section opens on the room itself, with the phone */
+.arch-w .arch-s_t { display: none !important; }
+.arch-w .arch-s { aspect-ratio: auto !important; height: var(--_special-units---100vh, 100vh) !important; min-height: 0 !important; }

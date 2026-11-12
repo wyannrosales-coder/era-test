@@ -264,7 +264,7 @@
   function update() {
     if (!mq.matches || reduce) { resetAll(); return; }
     var r = box.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = window.innerHeight;
-    var p = ease(clamp(-r.top / 640));
+    var p = ease(clamp(1 - r.top / vh));   // settled once the block has arrived at the top of the screen: the whole room on screen and the phone up (no title frame to scroll through first)
     var ar = (img.naturalWidth || 2000) / (img.naturalHeight || 1116);
     // sizes come from the block's own (unscaled) layout box: during the intro the block is drawn scaled down, and its
     // on-screen size would leave the picture short of the bottom of the block
