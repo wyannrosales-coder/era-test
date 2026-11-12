@@ -16,7 +16,7 @@
  * Set GEMINI_API_KEY in the Vercel project's environment variables (and in .env.local for
  * `npm run dev`). The key is only read here, on the server. Without it this answers 503 and
  * the chat panel points people to the contact page instead.
- * Optional: CHAT_MODEL (default gemini-3.6-flash), CHAT_EFFORT (low | medium | high, default low).
+ * Optional: CHAT_MODEL (default gemini-3.5-flash-lite), CHAT_EFFORT (low | medium | high, default low).
  *
  * Talks to the Gemini API's generateContent REST endpoint directly (no SDK). The assistant's
  * turns go back to the browser with Gemini's own parts attached (`gemini`), which come back
@@ -347,7 +347,7 @@ export async function POST(request: Request) {
     return json(400, 'bad_request', 'The conversation could not be read.');
   }
 
-  const model = env.CHAT_MODEL || 'gemini-3.6-flash';
+  const model = env.CHAT_MODEL || 'gemini-3.5-flash-lite';
   const level = { low: 'LOW', medium: 'MEDIUM', high: 'HIGH' }[env.CHAT_EFFORT ?? 'low'] ?? 'LOW';
   const encoder = new TextEncoder();
 
@@ -355,7 +355,8 @@ export async function POST(request: Request) {
     async start(controller) {
       const send = (data: unknown) => controller.enqueue(encoder.encode(sse(data)));
       try {
-        const res = await fetch(`${env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com'}/v1beta/models/${encodeURIComponent(model)}:streamGenerateContent?alt=sse`, {
+        const call = () =>
+          fetch(`${env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com'}/v1beta/models/${encodeURIComponent(model)}:streamGenerateContent?alt=sse`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY! },
           body: JSON.stringify({
@@ -366,6 +367,12 @@ export async function POST(request: Request) {
             generationConfig: { maxOutputTokens: 4000, thinkingConfig: { thinkingLevel: level } },
           }),
         });
+        // Google sometimes answers "high demand" (503) for a moment: one quiet retry
+        let res = await call();
+        if (res.status === 503) {
+          await new Promise((r) => setTimeout(r, 1500));
+          res = await call();
+        }
         if (!res.ok || !res.body) {
           const detail = (await res.json().catch(() => null)) as { error?: { message?: string; status?: string } } | null;
           console.error('chat: Gemini error', res.status, detail?.error?.message);
