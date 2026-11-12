@@ -3,6 +3,7 @@ import type { NavVariant } from '../lib/navVariant';
 import arrowRight from '../assets/menu-arrow-right.svg';
 import { PROPERTIES } from './locationData';
 import { experienceHref } from '../lib/links';
+import { ALL_READY } from '../lib/prototypeMode';
 import menuPhoto from '../assets/life-1.jpg';
 import loungePhoto from '../assets/experience/mosaic-lounge.jpg';
 import './LifeMenu.css';
@@ -14,14 +15,20 @@ type LifeMenuProps = {
   variant?: NavVariant;
 };
 
-/** The properties with an experience to enter (or one on its way), each with its photo. */
-const EXPERIENCE_ENTRIES = [
-  { id: 'macquarie-park', image: loungePhoto },
-  { id: 'bedford', image: undefined },
-].flatMap(({ id, image }) => {
+/**
+ * The properties with an experience to enter (or one on its way), each with its photo:
+ * Macquarie Park and Bedford, or — with every property ready (prototype switch) — all of them.
+ */
+const EXPERIENCE_ENTRIES = (ALL_READY ? PROPERTIES.map((p) => p.id) : ['macquarie-park', 'bedford']).flatMap((id) => {
   const property = PROPERTIES.find((p) => p.id === id);
   return property
-    ? [{ name: property.name.replace(/^EPIISOD\s+/, ''), image: image ?? property.image, href: experienceHref(id) }]
+    ? [
+        {
+          name: property.name.replace(/^EPIISOD\s+/, ''),
+          image: id === 'macquarie-park' ? loungePhoto : property.image,
+          href: experienceHref(id),
+        },
+      ]
     : [];
 });
 
@@ -67,7 +74,10 @@ export default function LifeMenu({ id, open, onNavigate, variant = 'a' }: LifeMe
                 The EPIISOD Experience that goes beyond accommodation
               </span>
             </a>
-            <ul className="life-menu__experiences" aria-label="Enter an experience">
+            <ul
+              className={`life-menu__experiences${EXPERIENCE_ENTRIES.length > 3 ? ' is-many' : ''}`}
+              aria-label="Enter an experience"
+            >
               {EXPERIENCE_ENTRIES.map(({ name, image, href }) => {
                 const body = (
                   <>

@@ -7,6 +7,7 @@ import closeIcon from '../assets/menu/close.svg';
 import caretRight from '../assets/menu/caret-right.svg';
 import caretDown from '../assets/menu/caret-down.svg';
 import caretLeft from '../assets/menu/caret-left.svg';
+import PrototypeToggle from './PrototypeToggle';
 import './HamburgerMenu.css';
 
 type Link = { label: string; href: string };
@@ -180,6 +181,7 @@ export default function HamburgerMenu({ open, onClose }: HamburgerMenuProps) {
             <a href="#" className="menu-panel__cta" onClick={onClose}>
               Book a tour
             </a>
+            <PrototypeToggle className="proto-toggle--panel" />
           </>,
         )}
 

@@ -25,12 +25,7 @@ import BlogListPage from './pages/BlogListPage';
 import BlogPostPage from './pages/BlogPostPage';
 import { AUDIENCES, POSTS } from './components/blog/blogData';
 import { PROPERTIES } from './components/locationData';
-import { MACQUARIE_PARK, type PropertyContent } from './components/property/propertyContent';
-
-/** Page content for each property that has its own page, keyed by property id. */
-const PROPERTY_PAGES: Record<string, PropertyContent> = {
-  'macquarie-park': MACQUARIE_PARK,
-};
+import { PROPERTY_PAGES } from './components/property/propertyPages';
 
 function HomePage() {
   return (

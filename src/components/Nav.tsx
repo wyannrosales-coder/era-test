@@ -13,6 +13,7 @@ import HamburgerMenu from './HamburgerMenu';
 import ContactMenu from './ContactMenu';
 import { NAV_VARIANT } from '../lib/navVariant';
 import LifeMenu from './LifeMenu';
+import PrototypeToggle from './PrototypeToggle';
 import LocationsMenu from './LocationsMenu';
 import './Nav.css';
 
@@ -377,6 +378,7 @@ export default function Nav({
                 </a>
               ),
             )}
+            <PrototypeToggle />
           </div>
 
           <a href="/" className="nav__logo" aria-label="EPIISOD home">

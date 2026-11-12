@@ -243,3 +243,22 @@ a.life-menu__experience:focus-visible {
 .life-menu__experience.is-soon .life-menu__experience-cta {
   color: var(--royal-chocolate-500);
 }
+
+/* Every property open: a compact list */
+.life-menu__experiences.is-many {
+  gap: 0;
+}
+
+.life-menu__experiences.is-many .life-menu__experience {
+  gap: 12px;
+  padding: 4px 8px;
+}
+
+.life-menu__experiences.is-many .life-menu__experience > img {
+  width: 48px;
+  height: 36px;
+}
+
+.life-menu__experiences.is-many .life-menu__experience-name {
+  font-size: 16px;
+}

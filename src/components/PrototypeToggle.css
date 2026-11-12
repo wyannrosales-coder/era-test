@@ -1,0 +1,82 @@
+/* Prototype switch: a small labelled two-way pill that follows the nav's text colour */
+.proto-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+}
+
+.proto-toggle__label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.proto-toggle__track {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  opacity: 0.9;
+}
+
+.proto-toggle__option {
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background-color 250ms var(--ease-lux),
+    color 250ms var(--ease-lux);
+}
+
+.proto-toggle__option.is-on {
+  background: var(--gold, #c9a46a);
+  color: var(--royal-chocolate-700, #121a2a);
+  cursor: default;
+}
+
+.proto-toggle__option:not(.is-on):hover {
+  background: rgba(127, 127, 127, 0.22);
+}
+
+.proto-toggle__option:focus-visible {
+  outline: 2px solid var(--gold, #c9a46a);
+  outline-offset: 2px;
+}
+
+.proto-toggle--panel {
+  margin: 24px 0 0;
+  color: var(--royal-chocolate-700);
+}
+
+/* In the bar it follows the links, the label dropped for room */
+.nav .proto-toggle {
+  margin-left: 8px;
+}
+
+.nav .proto-toggle__label {
+  display: none;
+}
+
+/* The bar's room is for the hamburger menu's copy below this */
+@media (max-width: 1250px) {
+  .nav .proto-toggle:not(.proto-toggle--panel) {
+    display: none;
+  }
+}
+
+.proto-toggle--panel .proto-toggle__label {
+  display: inline;
+}

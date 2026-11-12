@@ -10,13 +10,15 @@
 import { MACQUARIE_PARK } from '../property/propertyContent';
 import type { PropertyContent, RoomType } from '../property/propertyContent';
 import { PROPERTIES } from '../locationData';
+import { PROPERTY_PAGES } from '../property/propertyPages';
+import { ALL_READY } from '../../lib/prototypeMode';
 import roomSignature from '../../assets/property/rooms/signature-studio.jpg';
 import roomQuad from '../../assets/property/rooms/quad-ensuite.jpg';
 import roomAspect from '../../assets/property/rooms/aspect-studio.jpg';
 import roomEmpowered from '../../assets/property/rooms/empowered-studio.jpg';
 import roomPremier from '../../assets/property/rooms/premier-empowered-studio.jpg';
 
-export type CityId = 'melbourne' | 'sydney';
+export type CityId = 'melbourne' | 'sydney' | 'perth' | 'london';
 
 export type Filters = {
   city: '' | CityId;
@@ -29,6 +31,8 @@ export const NO_FILTERS: Filters = { city: '', institution: '', type: '', price:
 
 export const CITIES: { id: CityId; label: string }[] = [
   { id: 'melbourne', label: 'Melbourne' },
+  // Perth only once its properties are open (prototype switch)
+  ...(ALL_READY ? [{ id: 'perth' as const, label: 'Perth' }] : []),
   { id: 'sydney', label: 'Sydney' },
 ];
 
@@ -207,8 +211,15 @@ export const BEDFORD_ROOMS: SearchRoom[] = [
   bedfordRoom('aspect', 'Studio', 'Aspect Studio', roomAspect),
 ];
 
-/** Every room across every property. */
-export const ALL_ROOMS: SearchRoom[] = [...roomsOf(MACQUARIE_PARK, 'macquarie-park'), ...BEDFORD_ROOMS];
+/**
+ * Every room across every property. With every property ready (prototype switch), each
+ * Australian one lists its own rooms with prices, instead of Bedford's enquiry-only ones.
+ */
+export const ALL_ROOMS: SearchRoom[] = ALL_READY
+  ? PROPERTIES.filter((p) => PROPERTY_PAGES[p.id] && p.city !== 'London').flatMap((p) =>
+      roomsOf(PROPERTY_PAGES[p.id], p.id),
+    )
+  : [...roomsOf(MACQUARIE_PARK, 'macquarie-park'), ...BEDFORD_ROOMS];
 
 /**
  * A room's weekly price: for a chosen term, that term's; otherwise the lowest the room

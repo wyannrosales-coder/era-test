@@ -48,7 +48,7 @@ export default function RoomSearchBar({ value, onChange, onSearch, onClear, lock
           onChange={(e) => set({ city: e.target.value as Filters['city'] })}
         >
           <option value="">All cities</option>
-          {CITIES.map((c) => (
+          {[...CITIES, ...(lockedCity && !CITIES.some((c) => c.id === lockedCity) ? [{ id: lockedCity, label: lockedCity[0].toUpperCase() + lockedCity.slice(1) }] : [])].map((c) => (
             <option key={c.id} value={c.id}>
               {c.label}
             </option>

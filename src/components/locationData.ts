@@ -1,4 +1,5 @@
 import { experienceHref } from '../lib/links';
+import { ALL_READY } from '../lib/prototypeMode';
 import macquarie from '../assets/loc-macquarie.jpg';
 import bedford from '../assets/loc-bedford.jpg';
 import mckenzie from '../assets/loc-mckenzie.jpg';
@@ -58,7 +59,7 @@ export const REGIONS: Region[] = [
 ];
 
 /** Every property, shown in the Locations carousel and the nav's Locations menu. */
-export const PROPERTIES: Property[] = [
+const CURRENT_PROPERTIES: Property[] = [
   {
     id: 'macquarie-park',
     name: 'EPIISOD Macquarie Park',
@@ -126,3 +127,16 @@ export const PROPERTIES: Property[] = [
     openingYear: '2027',
   },
 ];
+
+/**
+ * Every property as the site stands, or — with the prototype switch on "all ready" —
+ * every one open, with its page and experience link.
+ */
+export const PROPERTIES: Property[] = ALL_READY
+  ? CURRENT_PROPERTIES.map((p) => ({
+      ...p,
+      comingSoon: false,
+      href: `/locations/${p.id}`,
+      experienceHref: experienceHref(p.id),
+    }))
+  : CURRENT_PROPERTIES;
