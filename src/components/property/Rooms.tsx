@@ -15,6 +15,7 @@ import tagTag from '../../assets/property/rooms/tag-tag.svg';
 import tagProhibit from '../../assets/property/rooms/tag-prohibit.svg';
 import tagGift from '../../assets/property/rooms/tag-gift.svg';
 import type { PropertyContent, Room, RoomTag, RoomType } from './propertyContent';
+import type { RoomDetails } from './roomDetails';
 import './Rooms.css';
 
 const ALL = 'All';
@@ -50,7 +51,20 @@ function useDismiss(open: boolean, ref: RefObject<HTMLElement>, close: () => voi
 }
 
 /** Room card (Figma 539:30859): photo with a status tag, type, name, views and price; opens the room's page. */
-function RoomCard({ room, currency, index, href }: { room: ListedRoom; currency: string; index: number; href?: string }) {
+function RoomCard({
+  room,
+  currency,
+  index,
+  href,
+  detail,
+}: {
+  room: ListedRoom;
+  currency: string;
+  index: number;
+  href?: string;
+  /** The list view's size, views, key features and summary. */
+  detail?: RoomDetails;
+}) {
   const tag = TAGS[room.available ? room.tag : 'soldOut'];
   const Card = href ? 'a' : 'article';
   return (
@@ -74,6 +88,22 @@ function RoomCard({ room, currency, index, href }: { room: ListedRoom; currency:
           <p className={`room-card__features${room.features ? '' : ' is-empty'}`}>
             {room.features ?? ' '}
           </p>
+          {detail && (
+            <div className="room-card__more">
+              <p className="room-card__meta">
+                <span>{detail.size.split(' (')[0]}</span>
+                {detail.views.length > 0 && <span>{detail.views.join(' · ')} views</span>}
+              </p>
+              <p className="room-card__summary">{detail.description}</p>
+              {detail.keyFeatures.length > 0 && (
+                <ul className="room-card__chips">
+                  {detail.keyFeatures.slice(0, 4).map((f) => (
+                    <li key={f}>{f}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
         {room.weekly !== undefined ? (
           <p className="room-card__price">
@@ -314,6 +344,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
                 currency={content.roomCurrency}
                 index={i}
                 href={roomHref(room.id)}
+                detail={view === 'list' ? content.roomDetails.find((d) => d.roomId === room.id) : undefined}
               />
             ))}
           </div>
