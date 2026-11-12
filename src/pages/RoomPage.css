@@ -156,10 +156,13 @@
 }
 
 /* ---- Details beside the booking card: 812 + 116 + 440 ---- */
+/* Always 60 / 40: the details take three parts, the booking card two, and the card never
+   goes narrower than its fields need (the details give way instead) */
 .room-body {
-  display: flex;
-  align-items: flex-start;
-  gap: 116px;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(360px, 2fr);
+  align-items: start;
+  gap: clamp(40px, 6vw, 116px);
   max-width: calc(var(--content-max) + 2 * var(--page-gutter));
   /* 200px below, so the pinned booking card stops well clear of Location */
   margin: 0 auto 200px;
@@ -167,7 +170,6 @@
 }
 
 .room-main {
-  flex: 0 1 812px;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -701,7 +703,6 @@ a.room-button:hover img {
 
 /* ---- Booking card (Figma 1195:27652), pinned while the details scroll ---- */
 .room-aside {
-  flex: 1 0 0;
   min-width: 0;
   position: sticky;
   top: calc(var(--nav-offset, 0px) + 24px);
@@ -1057,6 +1058,7 @@ a.room-button:hover img {
 @media (max-width: 1100px) {
   /* The card isn't pinned here, so less room is needed below it */
   .room-body {
+    display: flex;
     flex-direction: column;
     gap: 48px;
     margin-bottom: 80px;
