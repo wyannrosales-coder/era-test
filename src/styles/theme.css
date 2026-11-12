@@ -89,6 +89,21 @@ html body .life-menu__experience > img {
   border-radius: var(--r-media);
 }
 
+/* An open menu sits on a surface of its own (white on cream, card grey on black) with a
+   shadow and a hairline, so it doesn't melt into the page behind it */
+html body .nav.is-open {
+  background: var(--surface-white);
+  box-shadow:
+    0 30px 60px -24px rgba(var(--ink-deep-rgb), 0.4),
+    0 1px 0 var(--line-edge);
+}
+
+html[data-theme='dark'] body .nav.is-open {
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
 /* ---------- Dark theme ---------- */
 html[data-theme='dark'] {
   color-scheme: dark;

@@ -274,6 +274,7 @@ a.life-menu__experience:hover > img {
  * (Blog) stay larger.
  */
 html body .nav-menu-b__pages .nav-menu-b__link .life-menu__title,
+html body .nav-menu-b__row--contact .nav-menu-b__link .life-menu__title,
 html body .life-menu__experience-name {
   font-family: var(--font-body);
   font-weight: 500;
@@ -283,7 +284,8 @@ html body .life-menu__experience-name {
   color: var(--text-strong);
 }
 
-html body .nav-menu-b__pages .nav-menu-b__link .life-menu__description {
+html body .nav-menu-b__pages .nav-menu-b__link .life-menu__description,
+html body .nav-menu-b__row--contact .nav-menu-b__link .life-menu__description {
   font-weight: 300;
   font-size: 14px;
   line-height: 20px;
