@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import VLine from '../VLine';
 import { gsap, useGSAP } from '../../lib/smoothScroll';
 import { useExitParallax } from '../../lib/useExitParallax';
 import courtyard from '../../assets/experience/mosaic-courtyard.jpg';
@@ -9,12 +8,10 @@ import lobbyTree from '../../assets/experience/mosaic-lobby-tree.jpg';
 import dining from '../../assets/experience/mosaic-dining.jpg';
 import terrace from '../../assets/experience/mosaic-terrace.jpg';
 import hall from '../../assets/experience/mosaic-hall.jpg';
-import line from '../../assets/hero-line.svg';
-import play from '../../assets/property/icon-play-white.svg';
 import perks from '../../assets/why/exp-convenience.jpg';
 import privileges from '../../assets/experience/card-privileges.jpg';
 import exclusives from '../../assets/experience/card-exclusives.jpg';
-import { EXPERIENCE_URL } from '../../lib/links';
+import ExperienceEnter from './ExperienceEnter';
 import './ExperienceMosaic.css';
 
 type Photo = { image: string; size: 'tall' | 'short' };
@@ -102,7 +99,7 @@ export default function ExperienceMosaic({ id }: { id?: string }) {
             trigger: section.querySelector<HTMLElement>('.xp-mosaic__stage'),
             // The stage may be taller than the screen; centre it while pinned
             start: 'center center',
-            end: '+=420%',
+            end: '+=500%',
             pin: true,
             scrub: 0.8,
             invalidateOnRefresh: true,
@@ -124,18 +121,25 @@ export default function ExperienceMosaic({ id }: { id?: string }) {
             { autoAlpha: 0, y: (i: number) => CARD_DEPTH[i].to, duration: 0.4, ease: 'power1.in', stagger: 0.05 },
             2.75,
           )
-          // The line and button take their place, each at its own speed, and keep drifting
-          .fromTo('.xp-mosaic__cta .vline', { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 3.1)
-          .fromTo('.xp-mosaic__button', { autoAlpha: 0, y: 80 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 3.15)
-          .to('.xp-mosaic__cta .vline', { y: -8, duration: 0.45 }, 3.55)
-          .to('.xp-mosaic__button', { y: -16, duration: 0.45 }, 3.65)
-          // Hold on the finished frame, the button in view, then the line and button lift
-          // away before the page moves on
-          .to({}, { duration: 0.5 })
-          .to(
-            ['.xp-mosaic__cta .vline', '.xp-mosaic__button'],
-            { autoAlpha: 0, y: '-=40', duration: 0.45, ease: 'power1.in', stagger: 0.08 },
+          // The Exclusives heading leaves with its cards; the Enter heading takes its place and
+          // a card per property rises, each at its own speed, then they hold and lift away
+          .to('.xp-mosaic__heading', { autoAlpha: 0, y: -40, duration: 0.45, ease: 'power1.in' }, 2.8)
+          .fromTo('.xp-enter__heading', { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 3.2)
+          .fromTo(
+            '.xp-enter__item',
+            { autoAlpha: 0, y: (i: number) => 140 + i * 50 },
+            { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out', stagger: 0.12 },
+            3.3,
           )
+          .to('.xp-enter__heading', { y: -12, duration: 0.5 }, 3.7)
+          .to({}, { duration: 1.1 })
+          .to(['.xp-enter__heading', '.xp-enter__item'], {
+            autoAlpha: 0,
+            y: '-=40',
+            duration: 0.45,
+            ease: 'power1.in',
+            stagger: 0.08,
+          })
           .to({}, { duration: 0.25 });
         return () => section.classList.remove('is-animated');
       });
@@ -214,16 +218,7 @@ export default function ExperienceMosaic({ id }: { id?: string }) {
               ))}
             </ul>
 
-            <div className="xp-mosaic__cta">
-              <VLine src={line} length={50} />
-              <a
-                href={EXPERIENCE_URL}
-                className="xp-mosaic__button"
-              >
-                <img src={play} width={24} height={24} alt="" />
-                <span>Enter the EPIISOD experience</span>
-              </a>
-            </div>
+            <ExperienceEnter />
           </div>
         </div>
       </div>

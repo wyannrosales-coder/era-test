@@ -253,8 +253,8 @@
 }
 
 .xp-mosaic.is-animated .xp-mosaic__heading,
-.xp-mosaic.is-animated .xp-mosaic__cta .vline,
-.xp-mosaic.is-animated .xp-mosaic__button,
+.xp-mosaic.is-animated .xp-enter__heading,
+.xp-mosaic.is-animated .xp-enter__item,
 .xp-mosaic.is-animated .xp-mosaic__card {
   visibility: hidden;
   pointer-events: auto;
@@ -408,5 +408,30 @@
   /* About 300px of bare lobby between the last card and the line (40 gap + 260) */
   .xp-mosaic.is-unfolding .xp-mosaic__cta {
     margin-top: 260px;
+  }
+}
+
+/* The last frame: Enter the EPIISOD experience, over the same darkened lobby */
+.xp-mosaic.is-animated .xp-mosaic__enter {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--stage-h) * 96 / 904);
+  padding: 0 var(--page-gutter);
+}
+
+.xp-mosaic.is-animated .xp-enter__inner {
+  gap: 44px;
+}
+
+/* Static and phone layouts: it follows the Exclusives cards in the flow */
+.xp-mosaic:not(.is-animated) .xp-mosaic__enter {
+  margin-top: 40px;
+}
+
+@media (max-width: 700px) {
+  .xp-mosaic.is-unfolding .xp-mosaic__enter {
+    margin-top: 120px;
+    padding-bottom: 96px;
   }
 }

@@ -10,13 +10,14 @@ const CARDS = [
 ];
 
 /**
- * "Enter the EPIISOD experience" (after the live v2 Experience page): one image card per
+ * "Enter the EPIISOD experience" (after the live v2 Experience page), the last frame of the
+ * Exclusives stage (ExperienceMosaic): one image card per
  * property, each opening that property's experience page. A property without one yet
  * shows "Coming soon" instead of a link (lib/links.ts lists the ones that exist).
  */
-export default function ExperienceEnter({ id }: { id?: string }) {
+export default function ExperienceEnter() {
   return (
-    <section id={id} className="xp-enter" aria-labelledby="xp-enter-title">
+    <div className="xp-mosaic__enter xp-enter" role="group" aria-labelledby="xp-enter-title">
       <div className="xp-enter__inner">
         <div className="heading-group xp-enter__heading">
           <p className="eyebrow">Experience EPIISOD</p>
@@ -56,6 +57,6 @@ export default function ExperienceEnter({ id }: { id?: string }) {
           })}
         </ul>
       </div>
-    </section>
+    </div>
   );
 }

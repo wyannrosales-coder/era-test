@@ -1,11 +1,6 @@
 /* Enter the EPIISOD experience: ink band, a pair of photo cards (440 × 320 on desktop) */
+/* The heading and cards sit on the stage's darkened lobby photo (ExperienceMosaic.css) */
 .xp-enter {
-  position: relative;
-  z-index: 1;
-  padding: 120px var(--page-gutter) 140px;
-  background:
-    linear-gradient(rgba(10, 16, 28, 0.86), rgba(10, 16, 28, 0.92)),
-    url('../../assets/experience/mosaic-lobby-tree.jpg') center / cover;
   color: #fff;
 }
 
@@ -148,10 +143,6 @@ a.xp-enter__card:hover .xp-enter__badge {
 }
 
 @media (max-width: 800px) {
-  .xp-enter {
-    padding: 88px var(--page-gutter) 96px;
-  }
-
   .xp-enter__inner {
     gap: 48px;
   }
