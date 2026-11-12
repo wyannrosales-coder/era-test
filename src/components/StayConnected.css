@@ -38,10 +38,10 @@
   height: 46px;
   padding: 0 16px;
   border: 1px solid var(--line-in-white);
-  background: var(--bronze-100);
+  background: var(--surface-1);
   font-size: 16px;
   line-height: 24px;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
   outline: none;
   transition:
     border-color 250ms var(--ease-in-out),
@@ -49,7 +49,7 @@
 }
 
 .stay-connected__field input::placeholder {
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 .stay-connected__field input:hover {
@@ -59,18 +59,18 @@
 /* Focused / typing: white field with a bronze-700 border (Figma 539:11773) */
 .stay-connected__field input:focus {
   border-color: var(--bronze-700);
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 /* Submitted: fields keep their values in the resting style */
 .stay-connected__form.is-submitted input {
   border-color: var(--line-in-white);
-  background: var(--bronze-100);
+  background: var(--surface-1);
   cursor: default;
 }
 
 .stay-connected__submit {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,7 +84,7 @@
   font-size: 16px;
   line-height: 20px;
   text-transform: uppercase;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
   cursor: pointer;
   transition:
     background-color 300ms var(--ease-in-out),
@@ -92,7 +92,7 @@
 }
 
 .stay-connected__submit:hover {
-  background: var(--bronze-100);
+  background: var(--surface-1);
 }
 
 /* Both fields filled: solid bronze-700 with white type and arrow (Figma 539:11875) */

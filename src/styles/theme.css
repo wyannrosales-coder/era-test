@@ -1,0 +1,98 @@
+/*
+ * Prototype settings (src/lib/prototypeSettings.ts, the nav's settings modal): the corner
+ * style and the dark theme. Loaded last, so it can sit over the components' own rules.
+ */
+
+/* ---------- Corners ---------- */
+html[data-corners='sharp'] {
+  --r-pill: 0px;
+  --r-btn: 0px;
+  --r-ctl: 0px;
+  --r-card: 0px;
+  --r-panel: 0px;
+}
+
+/* Cards share one radius (square when sharp) */
+html body :is(
+    .room-card,
+    .location-card,
+    .loc-card,
+    .blog-card,
+    .promo-card,
+    .offer-card,
+    .xp-mosaic__card,
+    .xp-enter__card,
+    .find-card,
+    .amenities__card,
+    .map-home__card,
+    .why-review__panel
+  ) {
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
+
+/* Photo frames; those that bleed off a screen edge are rounded on the inner side only */
+html body :is(
+    .xp-mosaic__photo,
+    .life-intro__photo,
+    .about-story__photo,
+    .faqs__photo,
+    .xp-cafe__photo,
+    .room-gallery__photo,
+    .room-carousel__photo,
+    .location-finder__photo,
+    .amenities__photo
+  ) {
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
+
+html body :is(.page-hero__photo, .partners__photo, .why-living__photo, .promotions-vip__photo, .loc-intro__photo) {
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
+
+html body :is(
+    .page-hero__photo--left,
+    .partners__photo--left,
+    .why-living__photo--left,
+    .promotions-vip__photo--left,
+    .loc-intro__photo--left
+  ) {
+  border-radius: 0 var(--r-card) var(--r-card) 0;
+}
+
+html body :is(
+    .page-hero__photo--right,
+    .partners__photo--right,
+    .why-living__photo--right,
+    .promotions-vip__photo--right,
+    .loc-intro__photo--right
+  ) {
+  border-radius: var(--r-card) 0 0 var(--r-card);
+}
+
+/* The lobby photo opens to the full screen, so its corners square off as it does */
+html body .xp-mosaic__photo--feature {
+  border-radius: calc((1 - var(--p, 0)) * var(--r-card));
+}
+
+html body .life-menu__experience > img {
+  border-radius: var(--r-ctl);
+}
+
+/* ---------- Dark theme ---------- */
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #0b1220;
+  --surface-1: #0b1220;
+  --surface-2: #111a2c;
+  --surface-white: #16223a;
+  --text-strong: #f5f0e4;
+  --text-mid: #e8e1d2;
+  --text-soft: #aab1bf;
+  --grey-900: #f0ebe0;
+  --grey-800: #d9d5ca;
+  --grey-700: #c2c6ce;
+  --grey-600: #a9afb5;
+}

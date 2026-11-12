@@ -22,7 +22,7 @@
   padding: 8px 0;
   list-style: none;
   border: 1px solid var(--bronze-300);
-  background: var(--paper);
+  background: var(--surface-1);
   box-shadow: 0 8px 24px rgba(4, 7, 14, 0.14);
   opacity: 0;
   visibility: hidden;
@@ -54,7 +54,7 @@
   font-size: 16px;
   line-height: 20px;
   text-align: left;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
   transition: background-color 150ms ease;
 }
@@ -62,7 +62,7 @@
 .language-select__option:hover,
 .language-select__option:focus-visible {
   outline: none;
-  background: var(--bronze-200);
+  background: var(--surface-2);
 }
 
 .language-select__option.is-current .language-select__label {
@@ -75,5 +75,5 @@
 
 .language-select__name {
   font-weight: 300;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }

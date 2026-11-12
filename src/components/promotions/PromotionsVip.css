@@ -1,7 +1,7 @@
 .promotions-vip {
   overflow: clip;
   padding: 140px var(--page-gutter) 200px;
-  background: var(--bronze-100);
+  background: var(--surface-1);
 }
 
 /* The photos are placed within this, which starts below the section's top padding */
@@ -30,7 +30,7 @@
   width: min(672px, 100%);
   font-weight: 300;
   text-align: center;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 /* 505 × 438 photos level with the line, tucked well off the edges to leave negative space

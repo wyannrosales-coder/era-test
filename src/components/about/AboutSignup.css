@@ -1,6 +1,6 @@
 .about-signup {
   padding: 120px var(--page-gutter);
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .about-signup__content {
@@ -33,7 +33,7 @@
   gap: 24px;
   padding: 40px;
   border: 1px solid var(--royal-chocolate-300);
-  background: var(--paper);
+  background: var(--surface-1);
   box-shadow: 0 96px 80px -72px rgba(18, 26, 42, 0.2);
 }
 
@@ -61,7 +61,7 @@
 
 .about-signup__form.is-submitted .contact-field__box {
   border-color: var(--line-in-white);
-  background: var(--bronze-100);
+  background: var(--surface-1);
 }
 
 @media (max-width: 1100px) {

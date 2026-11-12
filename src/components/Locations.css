@@ -5,7 +5,7 @@
   --column-gap: 24px;
   padding: 200px var(--page-gutter);
   overflow-x: clip;
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .locations__overview {
@@ -33,7 +33,7 @@
   width: 464px;
   padding-right: 48px;
   align-self: stretch;
-  background: var(--paper);
+  background: var(--surface-1);
   /* Shadow fades in as cards start sliding beneath the column */
   box-shadow: 72px 0 60px -60px rgba(0, 0, 0, calc(0.2 * min(1, var(--progress, 0) * 5)));
 }
@@ -88,7 +88,7 @@
   font-size: 18px;
   line-height: 1.5;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .locations__region-header img {
@@ -148,7 +148,7 @@
   font-size: 18px;
   line-height: 20px;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   opacity: 0.7;
   cursor: pointer;
   transition: opacity 200ms ease;
@@ -244,7 +244,7 @@
   font-family: var(--font-display);
   font-style: italic;
   font-size: 24px;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 /*
@@ -500,7 +500,7 @@
   border: 1px solid var(--line-in-white);
   border-radius: 50%;
   background: transparent;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
   cursor: pointer;
   transition:
     background-color 300ms var(--ease-lux),

@@ -51,7 +51,7 @@
   padding: 0 72px 48px 48px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .menu-panel--main {
@@ -142,7 +142,7 @@
   letter-spacing: 1.8px;
   text-align: left;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
 }
 
@@ -222,11 +222,11 @@
   padding-left: 24px;
   font-size: 16px;
   line-height: 1.2;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .menu-panel__cta {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   height: 44px;
@@ -236,7 +236,7 @@
   font-size: 16px;
   line-height: 20px;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--on-gold);
   transition: background-color 300ms var(--ease-in-out);
 }
 
@@ -282,7 +282,7 @@
   line-height: 20px;
   letter-spacing: 1.8px;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .menu-panel__countries {
@@ -319,7 +319,7 @@
   line-height: 20px;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .menu-panel__properties {
@@ -338,7 +338,7 @@
   height: 22px;
   font-size: 16px;
   line-height: 1.2;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .menu-panel__soon {
@@ -373,7 +373,7 @@
   margin-left: 12px;
   padding: 2px 8px;
   border: 1px solid currentColor;
-  border-radius: 99px;
+  border-radius: var(--r-pill);
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 1.1px;

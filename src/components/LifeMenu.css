@@ -26,7 +26,7 @@
 
 .life-menu__link:hover,
 .life-menu__link:focus-visible {
-  background: var(--bronze-200);
+  background: var(--surface-2);
 }
 
 .life-menu__title {
@@ -34,14 +34,14 @@
   font-weight: 500;
   font-size: 24px;
   line-height: 1.5;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .life-menu__description {
   font-weight: 300;
   font-size: 16px;
   line-height: 1;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 .life-menu__link:first-child .life-menu__description {
@@ -67,7 +67,7 @@
 
 .nav-menu-b__link:hover,
 .nav-menu-b__link:focus-visible {
-  background: var(--bronze-200);
+  background: var(--surface-2);
 }
 
 .nav-menu-b__link .life-menu__description {
@@ -123,7 +123,7 @@
 
 .nav-menu-b__article-description {
   font-weight: 300;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 .nav-menu-b__article {
@@ -133,7 +133,7 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 1.5;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 /* Contact: Contact Us (440px, ruled both sides) · Join the Waitlist (464px) */
@@ -234,7 +234,7 @@ a.life-menu__experience:focus-visible {
   width: 100%;
   height: 112px;
   margin-bottom: 4px;
-  border-radius: 12px;
+  border-radius: var(--r-ctl);
   object-fit: cover;
   transition: box-shadow 300ms var(--ease-lux);
 }
@@ -251,7 +251,7 @@ a.life-menu__experience:hover > img {
   font-family: var(--font-display);
   font-size: 18px;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .life-menu__experience-cta {
@@ -265,7 +265,7 @@ a.life-menu__experience:hover > img {
 }
 
 .life-menu__experience.is-soon .life-menu__experience-cta {
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 /*
@@ -280,14 +280,14 @@ html body .life-menu__experience-name {
   font-size: 18px;
   line-height: 1.5;
   letter-spacing: 0;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 html body .nav-menu-b__pages .nav-menu-b__link .life-menu__description {
   font-weight: 300;
   font-size: 14px;
   line-height: 20px;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 html body .life-menu__experience-cta {

@@ -1,10 +1,10 @@
 .xp-cafe {
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .xp-cafe__text {
   font-weight: 300;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 /* ---- Plain layout: each moment as a photo with its copy ---- */

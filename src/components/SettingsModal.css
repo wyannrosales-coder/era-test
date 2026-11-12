@@ -1,0 +1,285 @@
+/* Settings icon in the nav, the phone menu's row, and the prototype settings dialog */
+.settings-button {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-left: 4px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background-color 250ms var(--ease-lux),
+    border-color 250ms var(--ease-lux),
+    transform 500ms var(--ease-lux);
+}
+
+.settings-button:hover {
+  border-color: currentColor;
+  transform: rotate(40deg);
+}
+
+.settings-button:focus-visible,
+.settings-row:focus-visible {
+  outline: 2px solid var(--gold, #b8966e);
+  outline-offset: 2px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px 0;
+  border: 0;
+  border-top: 1px solid var(--line-in-white);
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--text-strong);
+  cursor: pointer;
+}
+
+/* ---------- Dialog ---------- */
+.settings {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(4, 7, 14, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: settings-fade 250ms var(--ease-lux) both;
+}
+
+.settings__dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: min(520px, 100%);
+  max-height: calc(100svh - 48px);
+  overflow-y: auto;
+  padding: 32px;
+  border: 1px solid var(--line-in-white);
+  border-radius: var(--r-panel);
+  background: var(--surface-1);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+  color: var(--text-strong);
+  animation: settings-rise 350ms var(--ease-lux) both;
+}
+
+.settings__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settings__eyebrow {
+  margin: 0 0 6px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bronze-700);
+}
+
+.settings__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--text-strong);
+}
+
+.settings__close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line-in-white);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-strong);
+  cursor: pointer;
+}
+
+.settings__close:hover {
+  border-color: var(--text-strong);
+}
+
+.settings__group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings__label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-strong);
+}
+
+.settings__help {
+  margin: 0 0 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+.settings__options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.settings__option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--line-in-white);
+  border-radius: var(--r-ctl);
+  background: var(--surface-white);
+  font: inherit;
+  text-align: left;
+  color: var(--text-strong);
+  cursor: pointer;
+  transition:
+    border-color 250ms var(--ease-lux),
+    box-shadow 250ms var(--ease-lux);
+}
+
+.settings__option:hover {
+  border-color: var(--bronze-700);
+}
+
+.settings__option.is-on {
+  border-color: var(--gold, #b8966e);
+  box-shadow: 0 0 0 2px var(--gold, #b8966e);
+  cursor: default;
+}
+
+.settings__option:focus-visible {
+  outline: 2px solid var(--text-strong);
+  outline-offset: 2px;
+}
+
+.settings__option-label {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.settings__option-hint {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+/* Little previews of each choice */
+.settings__swatch {
+  width: 44px;
+  height: 28px;
+  margin-bottom: 6px;
+  border: 1.5px solid currentColor;
+  opacity: 0.85;
+}
+
+.settings__swatch--curved {
+  border-radius: 12px;
+}
+
+.settings__swatch--sharp {
+  border-radius: 0;
+}
+
+.settings__swatch--light {
+  border-radius: 6px;
+  border-color: #d4b896;
+  background: var(--surface-1);
+}
+
+.settings__swatch--dark {
+  border-radius: 6px;
+  border-color: #d4b896;
+  background: #0b1220;
+}
+
+.settings__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.settings__reset {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+.settings__reset:hover {
+  color: var(--text-strong);
+}
+
+.settings__done {
+  height: 44px;
+  padding: 0 28px;
+  border: 1px solid var(--gold, #b8966e);
+  border-radius: var(--r-pill);
+  background: var(--gold, #b8966e);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--on-gold);
+  cursor: pointer;
+}
+
+.settings__done:hover {
+  background: var(--text-strong);
+  border-color: var(--text-strong);
+  color: var(--surface-1);
+}
+
+html.settings-open {
+  overflow: hidden;
+}
+
+@keyframes settings-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes settings-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings,
+  .settings__dialog {
+    animation: none;
+  }
+}

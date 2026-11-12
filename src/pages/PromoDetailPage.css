@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .promo-detail__blocks p {
@@ -75,7 +75,7 @@ ol.promo-detail__list {
   gap: 48px;
   padding: 0 var(--page-gutter) 200px;
   overflow: hidden;
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 /* Stretches the row so it can scroll out to the page edges */
@@ -102,7 +102,7 @@ ol.promo-detail__list {
   .promo-detail {
     gap: 40px;
     padding: calc(64px + 72px) var(--page-gutter) 72px;
-    background: var(--bronze-100);
+    background: var(--surface-1);
   }
 
   .promo-detail .blog-post__main {

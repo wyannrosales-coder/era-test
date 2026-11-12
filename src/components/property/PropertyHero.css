@@ -62,7 +62,7 @@
 }
 
 .property-hero__cta {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -160,7 +160,7 @@
 .property-hero__cta--experience {
   border-color: var(--bronze-500);
   background: var(--bronze-500);
-  color: var(--royal-chocolate-700);
+  color: var(--on-gold);
 }
 
 .property-hero__cta--experience img {
@@ -169,7 +169,7 @@
 
 .property-hero__cta--experience:hover {
   border-color: var(--white);
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .property-hero__cta--experience:hover img {

@@ -1,6 +1,6 @@
 .about-story {
   padding: 120px var(--page-gutter);
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .about-story__content {
@@ -92,7 +92,7 @@
 
 /* Solid chocolate button (Figma 735:15231), shared with the sign-up */
 .about-button {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -236,7 +236,7 @@
     font-size: 16px;
     line-height: 20px;
     text-transform: uppercase;
-    color: var(--royal-chocolate-600);
+    color: var(--text-mid);
     cursor: pointer;
   }
 

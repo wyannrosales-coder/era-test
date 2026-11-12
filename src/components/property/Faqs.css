@@ -6,7 +6,7 @@
   gap: 40px;
   padding: 140px var(--page-gutter) 200px;
   overflow: hidden;
-  background: var(--bronze-100);
+  background: var(--surface-1);
 }
 
 /* Photos frame the heading, scaling with the viewport (505×438 at 1512px) */
@@ -37,7 +37,7 @@
   width: min(672px, 100%);
   font-weight: 300;
   text-align: center;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .faqs__list {
@@ -63,7 +63,7 @@
   font-size: 18px;
   line-height: 20px;
   text-align: left;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
   cursor: pointer;
 }
 
@@ -111,11 +111,11 @@
 .faqs__answer p {
   padding: 0 32px 24px 0;
   font-weight: 300;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .faqs__cta {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   height: 44px;
@@ -125,12 +125,12 @@
   font-size: 18px;
   line-height: 20px;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   transition: background-color 300ms var(--ease-in-out);
 }
 
 .faqs__cta:hover {
-  background: var(--bronze-200);
+  background: var(--surface-2);
 }
 
 /* Parallax speeds, read by GSAP in Faqs.tsx (as in Partners.css) */

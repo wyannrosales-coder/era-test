@@ -1,5 +1,5 @@
 .amenities {
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 /* Heading (Figma 1099:34855): line, eyebrow, title and lede, 40px apart */
@@ -15,7 +15,7 @@
 .amenities__lede {
   max-width: 904px;
   font-weight: 300;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 /* ---- Plain layout (phones, tablets, reduced motion) ---- */
@@ -168,7 +168,7 @@
 }
 
 .amenities__button {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   gap: 8px;

@@ -5,7 +5,7 @@
   align-items: center;
   padding: 140px var(--page-gutter) 400px; /* +200px breathing room before the sign-up */
   overflow: hidden;
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .partners__content {

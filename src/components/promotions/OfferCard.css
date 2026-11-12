@@ -5,7 +5,7 @@
   height: 586px;
   overflow: hidden;
   border: 1px solid var(--royal-chocolate-300);
-  background: var(--paper);
+  background: var(--surface-1);
   box-shadow: 0 96px 80px -72px rgba(18, 26, 42, 0.2);
 }
 
@@ -50,7 +50,7 @@
 
 .offer-card__tag--direct-debit {
   background: var(--bronze-500);
-  color: var(--royal-chocolate-700);
+  color: var(--on-gold);
 }
 
 .offer-card__body {
@@ -68,7 +68,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .offer-card__title {

@@ -1,7 +1,7 @@
 .rooms {
   /* Deep at the foot, so the hand-over's dimming waits until the last cards have risen */
   padding: 120px var(--page-gutter) 200px;
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 /* The hand-over shade also dims the pinned controls (they sit at z-index 3–4) */
@@ -41,7 +41,7 @@
   min-width: 0;
   height: 46px;
   border: 1px solid var(--line-in-white);
-  background: var(--bronze-100);
+  background: var(--surface-1);
   transition:
     border-color 250ms var(--ease-in-out),
     background-color 250ms var(--ease-in-out);
@@ -54,7 +54,7 @@
 .rooms__field.is-open,
 .rooms__field:focus-within {
   border-color: var(--bronze-700);
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .rooms__field-button {
@@ -70,7 +70,7 @@
   font-size: 16px;
   line-height: 24px;
   text-align: left;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
 }
 
@@ -132,7 +132,7 @@
   flex-direction: column;
   padding: 8px 0;
   border: 1px solid var(--line-in-white);
-  background: var(--paper);
+  background: var(--surface-1);
   box-shadow:
     0 5px 10px rgba(0, 0, 0, 0.12),
     0 19px 19px rgba(0, 0, 0, 0.1),
@@ -182,7 +182,7 @@
   font-size: 16px;
   line-height: 1.3;
   text-align: left;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
   transition: background-color 200ms var(--ease-in-out);
 }
@@ -190,12 +190,12 @@
 .rooms__option:hover,
 .rooms__option:focus-visible {
   outline: none;
-  background: var(--bronze-100);
+  background: var(--surface-1);
 }
 
 .rooms__option.is-current {
   font-weight: 600;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 /* The chosen stay's check-in window, under the fields */
@@ -203,7 +203,7 @@
   margin-top: -32px;
   font-size: 14px;
   line-height: 20px;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 .rooms__results {
@@ -243,7 +243,7 @@
   font: inherit;
   font-size: 18px;
   line-height: 1.2;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
 }
 
@@ -259,7 +259,7 @@
   font-size: 18px;
   line-height: 20px;
   white-space: nowrap;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
   cursor: pointer;
 }
 
@@ -275,7 +275,7 @@
   flex-shrink: 0;
   width: 40px;
   height: 24px;
-  border-radius: 48px;
+  border-radius: var(--r-pill);
   background: var(--grey-400);
   transition: background-color 200ms ease;
 }
@@ -288,7 +288,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--paper);
+  background: var(--surface-1);
   transition: transform 200ms var(--ease-in-out);
 }
 
@@ -335,7 +335,7 @@
 .rooms__empty {
   font-size: 18px;
   text-align: center;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 /* Room card (Figma 539:30859) */
@@ -345,7 +345,7 @@
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--bronze-300);
-  background: var(--paper);
+  background: var(--surface-1);
   box-shadow: 0 96px 80px -72px rgba(18, 26, 42, 0.2);
 }
 
@@ -447,7 +447,7 @@
 
 .room-card__features {
   font-size: 16px;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 .room-card__price {
@@ -464,7 +464,7 @@
   font-weight: 500;
   font-size: 18px;
   line-height: normal;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 @media (max-width: 1100px) {

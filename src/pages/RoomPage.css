@@ -1,6 +1,6 @@
 /* A room's page (Figma 1195:26614) */
 .room-page {
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 /* ---- Breadcrumbs and gallery ---- */
@@ -30,7 +30,7 @@
 }
 
 .room-crumbs a:hover {
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-crumbs__slash {
@@ -40,7 +40,7 @@
 .room-crumbs [aria-current] {
   font-weight: 500;
   text-transform: none;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 /* The lead photo (672 wide) beside four more in a grid; 360 tall in all */
@@ -98,19 +98,19 @@
   height: 44px;
   padding: 0 12px;
   border: 0;
-  background: var(--paper);
+  background: var(--surface-1);
   font: inherit;
   font-weight: 600;
   font-size: 14px;
   line-height: 20px;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
   transition: background-color 250ms var(--ease-in-out);
 }
 
 .room-gallery__all:hover {
-  background: var(--bronze-200);
+  background: var(--surface-2);
 }
 
 /* Phones only: the full-width photo carousel (Figma 1328:15867) */
@@ -227,7 +227,7 @@
   line-height: 20px;
   text-transform: uppercase;
   white-space: nowrap;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
 }
 
@@ -243,7 +243,7 @@ a.room-button:hover img {
 
 /* Outlined buttons */
 .room-button {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -257,13 +257,13 @@ a.room-button:hover img {
   line-height: 20px;
   text-transform: uppercase;
   white-space: nowrap;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
   transition: background-color 300ms var(--ease-in-out);
 }
 
 .room-button:hover {
-  background: var(--bronze-200);
+  background: var(--surface-2);
 }
 
 .room-button__caret.is-up {
@@ -290,14 +290,14 @@ a.room-button:hover img {
   font-weight: 400;
   font-size: 40px;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-overview__subtitle {
   font-size: 18px;
   line-height: 1.2;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .room-overview__size {
@@ -312,7 +312,7 @@ a.room-button:hover img {
 .room-overview__text {
   font-size: 18px;
   line-height: 1.4;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 /* Offers: a sand frame under its tag, offers two to a row */
@@ -353,13 +353,13 @@ a.room-button:hover img {
 .room-check strong {
   font-weight: 600;
   font-size: 18px;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-check strong + span {
   font-weight: 300;
   font-size: 14px;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 /* Specs (Figma 1195:28744) */
@@ -376,7 +376,7 @@ a.room-button:hover img {
   font-weight: 500;
   font-size: 24px;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-features {
@@ -394,7 +394,7 @@ a.room-button:hover img {
   gap: 12px;
   font-size: 18px;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-views {
@@ -477,14 +477,14 @@ a.room-button:hover img {
 
 .room-amenities + .room-button {
   position: relative;
-  background: var(--paper);
+  background: var(--surface-1);
   transition:
     margin-top 650ms var(--ease-in-out),
     background-color 300ms var(--ease-in-out);
 }
 
 .room-amenities + .room-button:hover {
-  background: var(--bronze-200);
+  background: var(--surface-2);
 }
 
 .room-amenities__group {
@@ -498,7 +498,7 @@ a.room-button:hover img {
   font-weight: 600;
   font-size: 18px;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-amenities__list {
@@ -517,12 +517,12 @@ a.room-button:hover img {
   gap: 12px;
   padding: 8px 16px;
   border: 1px solid var(--royal-chocolate-300);
-  background: var(--bronze-200);
+  background: var(--surface-2);
   white-space: nowrap;
   font-weight: 600;
   font-size: 18px;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 /* Floor plan (Figma 1195:29061) */
@@ -543,7 +543,7 @@ a.room-button:hover img {
   /* The plan sits clear of the corner icon (48px down from the top) */
   padding: 56px 32px 32px;
   border: 1px solid var(--bronze-400);
-  background: var(--paper);
+  background: var(--surface-1);
   box-shadow: 0 48px 20px -32px rgba(0, 0, 0, 0.18);
 }
 
@@ -576,12 +576,12 @@ a.room-button:hover img {
   right: 8px;
   display: flex;
   padding: 8px;
-  background: var(--bronze-100);
+  background: var(--surface-1);
   transition: background-color 250ms var(--ease-in-out);
 }
 
 .room-plan__image:hover .room-plan__magnify {
-  background: var(--bronze-200);
+  background: var(--surface-2);
 }
 
 /* ---- The floor plan, full screen ---- */
@@ -593,12 +593,12 @@ a.room-button:hover img {
   flex-direction: column;
   gap: 16px;
   padding: 24px var(--page-gutter);
-  background: var(--bronze-100);
+  background: var(--surface-1);
   animation: room-lightbox-in 300ms var(--ease-in-out);
 }
 
 .room-plan-viewer .room-lightbox__top {
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 .room-plan-viewer__hint {
@@ -619,7 +619,7 @@ a.room-button:hover img {
   text-transform: uppercase;
   text-decoration: underline;
   text-underline-offset: 4px;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .room-plan-viewer__stage {
@@ -628,7 +628,7 @@ a.room-button:hover img {
   overflow: hidden;
   padding: 0;
   border: 1px solid var(--bronze-300);
-  background: var(--paper);
+  background: var(--surface-1);
   cursor: zoom-in;
 }
 
@@ -669,7 +669,7 @@ a.room-button:hover img {
   margin-top: -20px;
   font-size: 14px;
   line-height: 18px;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 .room-disclaimer img {
@@ -683,14 +683,14 @@ a.room-button:hover img {
   font-weight: 600;
   font-size: 18px;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-plan__note {
   font-weight: 300;
   font-size: 16px;
   line-height: 1.5;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-plan__caption {
@@ -714,7 +714,7 @@ a.room-button:hover img {
   gap: 16px;
   padding: 24px;
   border: 1px solid var(--royal-chocolate-200);
-  background: var(--paper);
+  background: var(--surface-1);
   box-shadow: 0 96px 80px -72px rgba(18, 26, 42, 0.2);
 }
 
@@ -724,14 +724,14 @@ a.room-button:hover img {
   font-weight: 500;
   font-size: 24px;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-book__required {
   font-size: 14px;
   line-height: 20px;
   text-align: right;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-book__required span,
@@ -748,7 +748,7 @@ a.room-button:hover img {
 .room-book__label {
   font-size: 14px;
   line-height: 20px;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-book__control {
@@ -757,7 +757,7 @@ a.room-button:hover img {
   align-items: center;
   height: 46px;
   border: 1px solid var(--line-in-white);
-  background: var(--bronze-100);
+  background: var(--surface-1);
   transition: border-color 250ms var(--ease-in-out);
 }
 
@@ -767,7 +767,7 @@ a.room-button:hover img {
 
 .room-book__control:focus-within {
   border-color: var(--bronze-700);
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .room-book__field.has-error .room-book__control {
@@ -787,13 +787,13 @@ a.room-button:hover img {
   font: inherit;
   font-size: 16px;
   line-height: 24px;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   outline: none;
   cursor: pointer;
 }
 
 .room-book__control .is-empty {
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 /* The date field draws its own placeholder and icon */
@@ -810,7 +810,7 @@ a.room-button:hover img {
   left: 16px;
   font-size: 16px;
   line-height: 24px;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
   pointer-events: none;
 }
 
@@ -823,7 +823,7 @@ a.room-button:hover img {
 .room-book__hint {
   font-size: 14px;
   line-height: 18px;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 .room-book__error {
@@ -839,7 +839,7 @@ a.room-button:hover img {
   margin: 24px 0 16px;
   font-size: 14px;
   line-height: 18px;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .room-book__note-title {
@@ -885,11 +885,11 @@ a.room-button:hover img {
 .room-book__amount strong {
   font-weight: 700;
   font-size: 24px;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-book__submit {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1088,7 +1088,7 @@ a.room-button:hover img {
     gap: 16px;
     padding: 12px var(--page-gutter);
     border-top: 1px solid var(--bronze-300);
-    background: var(--paper);
+    background: var(--surface-1);
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
     transition:
       transform 400ms var(--ease-in-out),
@@ -1112,7 +1112,7 @@ a.room-button:hover img {
 
   .room-bookbar__price strong {
     font-size: 20px;
-    color: var(--royal-chocolate-700);
+    color: var(--text-strong);
   }
 
   .room-gallery {
@@ -1214,7 +1214,7 @@ a.room-button:hover img {
     line-height: 20px;
     text-transform: uppercase;
     white-space: nowrap;
-    color: var(--royal-chocolate-700);
+    color: var(--text-strong);
     cursor: pointer;
     pointer-events: auto;
   }

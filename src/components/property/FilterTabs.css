@@ -19,7 +19,7 @@
   line-height: 20px;
   text-transform: uppercase;
   white-space: nowrap;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   opacity: 0.7;
   cursor: pointer;
   transition: opacity 200ms ease;

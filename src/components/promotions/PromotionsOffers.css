@@ -1,6 +1,6 @@
 .promotions-offers {
   padding: 120px var(--page-gutter);
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .promotions-offers__content {

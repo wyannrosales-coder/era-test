@@ -1,6 +1,6 @@
 .property-location {
   padding: 120px var(--page-gutter);
-  background: var(--bronze-100);
+  background: var(--surface-1);
 }
 
 .property-location__content {
@@ -26,7 +26,7 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .property-location__address img {
@@ -76,13 +76,13 @@
   height: 44px;
   padding: 0 16px;
   border: 1px solid var(--line-in-white);
-  background: var(--bronze-100);
+  background: var(--surface-1);
   box-shadow: var(--finder-shadow);
   font: inherit;
   font-size: 16px;
   line-height: 24px;
   text-align: left;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
   transition: border-color 200ms var(--ease-in-out);
 }
@@ -107,7 +107,7 @@
   margin: 0;
   padding: 16px;
   border: 1px solid var(--line-in-white);
-  background: var(--paper);
+  background: var(--surface-1);
   box-shadow: var(--finder-shadow);
   list-style: none;
   animation: finder-in 280ms var(--ease-in-out);
@@ -140,7 +140,7 @@
   font-size: 16px;
   line-height: 24px;
   text-align: left;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
 }
 
@@ -180,7 +180,7 @@
   min-height: 44px;
   font-size: 16px;
   line-height: 24px;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .location-finder__chosen-name {
@@ -226,7 +226,7 @@
   background: none;
   font: inherit;
   text-align: left;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
   cursor: pointer;
 }
 
@@ -246,7 +246,7 @@
   font-weight: 600;
   font-size: 14px;
   line-height: 1;
-  color: var(--royal-chocolate-600);
+  color: var(--on-gold);
   transition:
     background-color 250ms var(--ease-in-out),
     color 250ms var(--ease-in-out);
@@ -327,7 +327,7 @@
   padding: 0;
   overflow: hidden;
   border: 0;
-  background: var(--bronze-200);
+  background: var(--surface-2);
   cursor: zoom-in;
 }
 
@@ -380,7 +380,7 @@
   font-weight: 700;
   font-size: 16px;
   line-height: 1.2;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 @keyframes location-finder-photo {
@@ -420,7 +420,7 @@
   display: grid;
   place-items: center;
   border: 1px solid var(--bronze-300);
-  background: var(--bronze-200);
+  background: var(--surface-2);
   cursor: default;
 }
 
@@ -564,7 +564,7 @@
     height: 40px;
     padding: 0;
     border: 0;
-    background: var(--paper);
+    background: var(--surface-1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     cursor: pointer;
   }

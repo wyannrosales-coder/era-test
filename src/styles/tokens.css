@@ -40,6 +40,23 @@
   --content-max: 1368px;
 
   --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+
+  /* Surfaces and text: what the theme (light / dark) changes. Dark sections, photos and
+     gold buttons keep their own colours in both. */
+  --surface-1: var(--bronze-100);
+  --surface-2: var(--bronze-200);
+  --surface-white: #ffffff;
+  --text-strong: var(--royal-chocolate-700);
+  --text-mid: var(--royal-chocolate-600);
+  --text-soft: var(--royal-chocolate-500);
+  --on-gold: #04070e;
+
+  /* Corners: what the corners setting changes (curved here; sharp zeroes them) */
+  --r-pill: 999px;
+  --r-btn: 4px;
+  --r-ctl: 12px;
+  --r-card: 16px;
+  --r-panel: 24px;
 }
 
 @media (max-width: 900px) {

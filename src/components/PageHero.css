@@ -3,11 +3,11 @@
   /* Clips the photos that bleed off the edges */
   overflow: clip;
   padding: calc(88px + 120px) var(--page-gutter) 120px;
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 .page-hero--cream {
-  background: var(--bronze-100);
+  background: var(--surface-1);
 }
 
 /* The photos are placed within this, which starts below the section's top padding */

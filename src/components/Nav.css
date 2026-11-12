@@ -48,14 +48,14 @@
 /* Scrolled: 90% white bar, soft shadow, chocolate type (Figma 539:12327) */
 .nav.is-scrolled,
 .nav.is-open {
-  --nav-text: var(--royal-chocolate-600);
-  background: rgba(251, 248, 241, 0.92);
+  --nav-text: var(--text-mid);
+  background: color-mix(in srgb, var(--surface-1) 92%, transparent);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 /* Mega menu open: solid white (Figma 539:18628) */
 .nav.is-open {
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 /* Icons in both colourways, cross-fading */
@@ -200,7 +200,7 @@ button.nav__link.nav__caret {
 }
 
 .nav__cta {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   padding: 12px 24px;
@@ -218,8 +218,8 @@ button.nav__link.nav__caret {
 }
 
 .nav__cta:hover {
-  background: var(--paper);
-  color: var(--royal-chocolate-700);
+  background: var(--surface-1);
+  color: var(--text-strong);
 }
 
 /* Scrolled: solid bronze button with chocolate type. 1px less padding offsets the
@@ -229,7 +229,7 @@ button.nav__link.nav__caret {
   padding: 11px 24px;
   border-color: var(--line-in-white);
   background: var(--line-in-white);
-  color: var(--royal-chocolate-600);
+  color: var(--on-gold);
 }
 
 .nav.is-scrolled .nav__cta:hover,
@@ -286,8 +286,8 @@ button.nav__link.nav__caret {
 }
 
 .nav.is-scrolled .nav__sub {
-  --nav-text: var(--royal-chocolate-700);
-  background: var(--bronze-200);
+  --nav-text: var(--text-strong);
+  background: var(--surface-2);
 }
 
 /* The section in view: a 4px sand bar under its link (Figma 1182:17374), growing up from
@@ -336,7 +336,7 @@ button.nav__link.nav__caret {
   padding: 11px 24px;
   border-color: var(--line-in-white);
   background: var(--line-in-white);
-  color: var(--royal-chocolate-600);
+  color: var(--on-gold);
 }
 
 .nav--dark .nav__cta:hover {
@@ -347,11 +347,11 @@ button.nav__link.nav__caret {
 /* Cream: a bronze-200 bar with chocolate type and icons from the start (Figma 735:13845);
    it turns into the usual compact white bar once scrolled */
 .nav--cream {
-  --nav-text: var(--royal-chocolate-600);
+  --nav-text: var(--text-mid);
 }
 
 .nav--cream:not(.is-scrolled):not(.is-open) {
-  background: var(--bronze-200);
+  background: var(--surface-2);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
 }
 
@@ -372,7 +372,7 @@ button.nav__link.nav__caret {
   padding: 11px 24px;
   border-color: var(--line-in-white);
   background: var(--line-in-white);
-  color: var(--royal-chocolate-600);
+  color: var(--on-gold);
 }
 
 .nav--cream .nav__cta:hover {

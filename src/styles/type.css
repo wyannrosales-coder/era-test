@@ -12,7 +12,7 @@
   font-weight: 400;
   line-height: 1.12;
   letter-spacing: -0.04em;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 :where(.type-h1) {
@@ -57,7 +57,7 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 1.6;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 :where(.type-h6) {
@@ -65,7 +65,7 @@
   font-size: 12px;
   line-height: 1.4;
   letter-spacing: 0.2em;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 /*

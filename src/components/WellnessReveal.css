@@ -90,7 +90,7 @@
 
 .wellness-reveal__body {
   font-weight: 300;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 /* Main photo; its right edge sits 92px inside the gutter at Figma's 1512px width */

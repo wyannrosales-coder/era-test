@@ -2,10 +2,11 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import Nav from '../components/Nav';
 import EnquiryPill from '../components/EnquiryPill';
-import PrototypeToggle from '../components/PrototypeToggle';
 import '../styles/tokens.css';
 import '../styles/type.css';
 import '../styles/lux.css';
+import '../styles/theme.css';
+import '../lib/prototypeSettings';
 import './navIsland.css';
 
 /**
@@ -26,10 +27,5 @@ if (mount) {
   // The floating enquiry pill, same as every other page
   const pillRoot = document.createElement('div');
   document.body.appendChild(pillRoot);
-  createRoot(pillRoot).render(
-  <>
-    <EnquiryPill />
-    <PrototypeToggle className="proto-toggle--floating" />
-  </>,
-);
+  createRoot(pillRoot).render(<EnquiryPill />);
 }

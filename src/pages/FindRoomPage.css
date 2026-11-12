@@ -1,6 +1,6 @@
 /* Find a room: a dark hero, the search panel overlapping its foot, then the room grid */
 .find-page {
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 /* An image banner with the search on it (the homepage hero's glass bar) */
@@ -82,8 +82,8 @@
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--line-in-white);
-  border-radius: 16px;
-  background: #fff;
+  border-radius: var(--r-card);
+  background: var(--surface-white);
   color: inherit;
   text-decoration: none;
   transition:
@@ -127,13 +127,13 @@
   left: 12px;
   bottom: 12px;
   padding: 6px 12px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: rgba(255, 255, 255, 0.94);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--royal-chocolate-700);
+  color: var(--on-gold);
 }
 
 .find-card__body {
@@ -156,7 +156,7 @@
   font-size: 20px;
   letter-spacing: -0.02em;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .find-card__size {
@@ -178,7 +178,7 @@
 .find-card__amount {
   font-size: 18px;
   font-weight: 500;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .find-card__enquire {

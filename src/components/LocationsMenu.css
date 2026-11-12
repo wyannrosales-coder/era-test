@@ -20,7 +20,7 @@
   font-weight: 500;
   font-size: 24px;
   line-height: 1.5;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
   white-space: nowrap;
 }
 
@@ -51,7 +51,7 @@
   font-size: 14px;
   line-height: 1;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .locations-menu__property {
@@ -64,7 +64,7 @@
 
 .locations-menu__property.is-link:hover,
 .locations-menu__property.is-link:focus-visible {
-  background: var(--bronze-200);
+  background: var(--surface-2);
 }
 
 .locations-menu__name-row {
@@ -77,7 +77,7 @@
   font-weight: 500;
   font-size: 18px;
   line-height: 1.5;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
   white-space: nowrap;
 }
 
@@ -99,7 +99,7 @@
 
 .locations-menu__address {
   font-weight: 300;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 /* Option B (Figma 1081:16430): open properties (787px) · coming soon, ruled left */
@@ -173,7 +173,7 @@
   font-size: 14px;
   line-height: 1;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 .locations-menu-b__soon-summary strong {
@@ -190,7 +190,7 @@
   font-weight: 300;
   font-size: 18px;
   line-height: 1.5;
-  color: var(--royal-chocolate-500);
+  color: var(--text-soft);
 }
 
 .locations-menu-b__soon-name {
@@ -226,7 +226,7 @@
 .locations-menu__experience:hover,
 .locations-menu__experience:focus-visible {
   border-bottom-color: var(--royal-chocolate-700);
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .locations-menu-b__cities .locations-menu__experience {

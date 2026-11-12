@@ -13,7 +13,7 @@
   gap: 80px;
   padding: 140px var(--page-gutter);
   overflow-x: clip;
-  background: var(--bronze-100);
+  background: var(--surface-1);
 }
 
 .why-reviews__header {

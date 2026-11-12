@@ -51,7 +51,7 @@
   font-weight: 400;
   font-size: inherit;
   line-height: 1.2;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
   white-space: nowrap;
   will-change: transform;
 }

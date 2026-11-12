@@ -23,9 +23,9 @@
   gap: 10px;
   padding: 12px 14px 12px 20px;
   border: 1px solid rgba(139, 110, 78, 0.35);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--bronze-400);
-  color: var(--ink);
+  color: var(--on-gold);
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 500;
@@ -46,7 +46,7 @@
 
 .enquiry-pill__tag {
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--ink);
   color: var(--bronze-300);
   font-size: 9px;

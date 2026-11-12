@@ -71,7 +71,7 @@
 
 .blog-tag--2 {
   background: var(--bronze-400);
-  color: var(--royal-chocolate-600);
+  color: var(--on-gold);
 }
 
 .blog-tag--3 {
@@ -90,8 +90,8 @@
 }
 
 .blog-tag--6 {
-  background: var(--paper);
-  color: var(--royal-chocolate-600);
+  background: var(--surface-1);
+  color: var(--text-mid);
 }
 
 .blog-card__category {

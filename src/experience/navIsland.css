@@ -13,7 +13,7 @@ html :where(#site-nav) *::after {
 }
 
 html :where(#site-nav) {
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
   font-family: var(--font-body);
   font-size: 16px;
   line-height: normal;
@@ -87,7 +87,7 @@ html body :where(#site-nav .type-h6) {
   line-height: 1.25;
   letter-spacing: 1.6px;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--text-mid);
 }
 
 html body :where(#site-nav .type-body-s) {

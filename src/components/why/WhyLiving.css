@@ -53,7 +53,7 @@
 }
 
 .why-living__button {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   height: 44px;
@@ -63,7 +63,7 @@
   font-size: 16px;
   line-height: 20px;
   text-transform: uppercase;
-  color: var(--royal-chocolate-600);
+  color: var(--on-gold);
   transition: background-color 300ms var(--ease-in-out);
 }
 

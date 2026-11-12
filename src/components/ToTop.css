@@ -11,7 +11,7 @@
   height: 52px;
   padding: 0;
   border: 0;
-  border-radius: 100px;
+  border-radius: var(--r-pill);
   background: rgba(18, 26, 42, 0.3);
   filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.15)) drop-shadow(0 19px 9.5px rgba(0, 0, 0, 0.13))
     drop-shadow(0 43px 13px rgba(0, 0, 0, 0.07));

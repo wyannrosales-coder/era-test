@@ -1,7 +1,7 @@
 .brand-video {
   position: relative;
   padding: 140px var(--page-gutter);
-  background: var(--paper);
+  background: var(--surface-1);
 }
 
 /* GSAP layers: drift = exit parallax, lift = centres the frame while pinned */

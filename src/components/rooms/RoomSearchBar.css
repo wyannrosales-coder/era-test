@@ -11,7 +11,7 @@
   width: 100%;
   padding: 24px 32px 28px;
   border: 1px solid var(--line-in-white);
-  border-radius: 20px;
+  border-radius: var(--r-panel);
   background: var(--bronze-100, #fff);
   box-shadow: 0 18px 40px rgba(14, 22, 38, 0.1);
 }
@@ -50,8 +50,8 @@
   height: 46px;
   padding: 0 14px;
   border: 1px solid var(--line-in-white);
-  border-radius: 12px;
-  background: #fff;
+  border-radius: var(--r-ctl);
+  background: var(--surface-white);
   transition:
     border-color 250ms var(--ease-in-out),
     box-shadow 250ms var(--ease-in-out);
@@ -68,11 +68,11 @@
 
 .room-search .ui-select__button {
   font-size: 14px;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-search .ui-select__button.is-empty {
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-search .ui-select__button:disabled {
@@ -81,7 +81,7 @@
 }
 
 .room-search .ui-select:has(.ui-select__button:disabled) {
-  background: var(--bronze-100);
+  background: var(--surface-1);
 }
 
 .room-search .ui-select__button:focus-visible {
@@ -122,7 +122,7 @@
   gap: 10px;
   height: 46px;
   padding: 0 24px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   font: inherit;
   font-size: 12px;
   font-weight: 500;
@@ -139,7 +139,7 @@
 .room-search__clear {
   border: 1px solid var(--royal-chocolate-700);
   background: transparent;
-  color: var(--royal-chocolate-700);
+  color: var(--text-strong);
 }
 
 .room-search__clear:hover {
@@ -187,7 +187,7 @@
   .room-search {
     gap: 16px;
     padding: 20px 16px;
-    border-radius: 16px;
+    border-radius: var(--r-card);
   }
 
   .room-search__field,
@@ -212,7 +212,7 @@
 .room-search--hero {
   padding: 18px 24px 20px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 28px;
+  border-radius: var(--r-panel);
   background: rgba(14, 22, 38, 0.34);
   box-shadow: none;
   backdrop-filter: blur(10px) saturate(1.1);
@@ -225,7 +225,7 @@
 
 .room-search--hero .ui-select {
   border-color: rgba(255, 255, 255, 0.38);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   padding: 0 18px;
   background: rgba(255, 255, 255, 0.08);
 }
@@ -253,12 +253,12 @@
 .room-search--hero .room-search__submit {
   border-color: var(--gold, #c9a46a);
   background: var(--gold, #c9a46a);
-  color: var(--royal-chocolate-700);
+  color: var(--on-gold);
 }
 
 .room-search--hero .room-search__submit:hover {
   border-color: #fff;
-  background: #fff;
+  background: var(--surface-white);
 }
 
 .room-search--hero .room-search__clear {
@@ -267,8 +267,8 @@
 }
 
 .room-search--hero .room-search__clear:hover {
-  background: #fff;
-  color: var(--royal-chocolate-700);
+  background: var(--surface-white);
+  color: var(--text-strong);
 }
 
 /* Phones: a compact two-column grid so the hero's copy still fits above it */
@@ -278,7 +278,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px 12px;
     padding: 14px;
-    border-radius: 22px;
+    border-radius: var(--r-panel);
   }
 
   .room-search--hero .room-search__field,

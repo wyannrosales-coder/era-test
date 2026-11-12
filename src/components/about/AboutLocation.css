@@ -79,7 +79,7 @@
 
 /* Outlined button on dark (Figma 735:15250) */
 .about-location__button {
-  border-radius: 4px;
+  border-radius: var(--r-btn);
   display: inline-flex;
   align-items: center;
   gap: 8px;
