@@ -124,12 +124,12 @@ html[data-theme='dark'] {
 html[data-theme='dark'] body .xp-mosaic__veil {
   mix-blend-mode: normal;
   background: #000;
-  opacity: calc(0.8 * var(--shade));
+  opacity: calc(0.65 * var(--shade));
 }
 
 html[data-theme='dark'] body .xp-mosaic__content {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
     url('../assets/experience/mosaic-lobby-tree.jpg') center / cover;
   background-blend-mode: normal;
 }
