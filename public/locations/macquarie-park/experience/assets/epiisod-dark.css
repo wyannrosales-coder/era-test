@@ -1,0 +1,51 @@
+/* Dark look (the site's dark theme, src/lib/prototypeSettings.ts): the sections drawn on light paper switch to the
+   ink-navy scheme the dark sections already use. Everything sits under html[data-ep-ver="1"]; version 2 (light) is untouched. */
+html[data-ep-ver="1"] {
+  --d-bg: #0e1525; --d-bg2: #172239; --d-card: #1e2b47; --d-line: rgba(212, 184, 150, .24);
+  --d-text: #f4f0e6; --d-soft: #b4bbc8; --d-gold: #dcbf92;
+}
+html[data-ep-ver="1"] .theme_on-light {
+  --_colors---base-1000--primary:var(--_global-colors---base-0--100);--_colors---other--bg:var(--d-bg);--_colors---base-0--primary:var(--_global-colors---base-1000--100);--_colors---base-1000--gray-text:var(--_global-colors---base-0--60);--_colors---additional--success:#05855e;--_colors---additional--alert:#edae42;--_colors---additional--error:#ea5826;--_colors---other--transparent:transparent;--_colors---base-1000--line:var(--_global-colors---base-0--10);--_colors---base-1000--disabled:var(--_global-colors---base-0--30);--_colors---brand-500--primary\<deleted\|variable-91ff398b-1b86-c83e-9325-f542c634d71f\>:var(--_global-colors---brand-500--powder-sky);--_colors---base-1000--bg:var(--_global-colors---base-0--5);--_colors---base-0--gray-text:var(--_global-colors---base-1000--60);--_colors---base-0--disabled:var(--_global-colors---base-1000--30);--_colors---base-0--line:var(--_global-colors---base-1000--10);--_colors---base-0--bg:var(--_global-colors---base-1000--5);--_colors---white--primary:var(--_global-colors---white--100);--_colors---white--gray-text:var(--_global-colors---white--80);--_colors---white--disabled:var(--_global-colors---white--40);--_colors---white--line:var(--_global-colors---white--20);--_colors---white--bg:var(--_global-colors---white--10)
+  background-color: var(--d-bg);
+  color: var(--d-text);
+}
+
+/* the page itself, behind the sections that are transparent */
+html[data-ep-ver="1"], html[data-ep-ver="1"] body, html[data-ep-ver="1"] .transition-container, html[data-ep-ver="1"] .transition-wrapper {
+  background-color: var(--d-bg);
+}
+
+/* sections with their own paper */
+html[data-ep-ver="1"] .ep-ap { background-color: var(--d-bg) !important; }
+html[data-ep-ver="1"] .section.arch { background-color: var(--d-bg2) !important; }
+html[data-ep-ver="1"] .section.clip:not(.theme_on-brand):not(.arch) { background-color: var(--d-bg) !important; }
+
+/* amenities ring */
+html[data-ep-ver="1"] :is(.ep-ring_h, .ep-ring_count, .ep-ring_t) { color: var(--d-text) !important; }
+html[data-ep-ver="1"] .ep-ring_p { color: var(--d-soft) !important; }
+html[data-ep-ver="1"] .ep-rnav_pct { color: var(--d-soft) !important; }
+
+/* small gold labels */
+html[data-ep-ver="1"] :is(.bd_eb, .ep-ap_no) { color: var(--d-gold) !important; }
+
+/* white sheets and white page sections */
+html[data-ep-ver="1"] .ep-ring_bg { background: var(--d-bg) !important; }
+html[data-ep-ver="1"] .ep-ring_btn { border-color: rgba(244, 240, 230, .45) !important; background: var(--d-card) !important; color: var(--d-text) !important; }
+html[data-ep-ver="1"] section#nearby { background: var(--d-bg) !important; }
+html[data-ep-ver="1"] :is(.bd_pn5, .loc-path-w, .ep-nearby_top) { background: var(--d-bg) !important; }
+html[data-ep-ver="1"] .loc-path-w { box-shadow: 0 0 0 100vmax var(--d-bg) !important; }
+html[data-ep-ver="1"] .ep-loc.is-rm .ep-loc_end { background: var(--d-bg) !important; color: var(--d-text) !important; }
+
+/* rooms: the magazine sits on a dark table; its printed pages stay paper */
+html[data-ep-ver="1"] .ep-rooms { background: var(--d-bg) !important; color: var(--d-text) !important; }
+html[data-ep-ver="1"] .ep-mag { background: radial-gradient(120% 90% at 50% 40%, #1d2a47, #0e1525) !important; }
+html[data-ep-ver="1"] .ep-mag_head { color: var(--d-text) !important; }
+html[data-ep-ver="1"] .ep-mag_eb { color: var(--d-gold) !important; }
+html[data-ep-ver="1"] .ep-mag_tick { color: var(--d-text) !important; }
+html[data-ep-ver="1"] .ep-mag_tick em { background: var(--d-text) !important; color: #04070e !important; }
+html[data-ep-ver="1"] .ep-mag_tbtn { border-color: rgba(244, 240, 230, .4) !important; background: var(--d-card) !important; color: var(--d-text) !important; }
+
+/* social, events and app headings */
+html[data-ep-ver="1"] :is(.sc_h, .sc_a) { color: var(--d-text) !important; }
+html[data-ep-ver="1"] .ep-cr_p { color: var(--d-soft) !important; }
+html[data-ep-ver="1"] .ep-ap_eye { color: var(--d-gold) !important; }

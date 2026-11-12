@@ -130,7 +130,7 @@ export function SettingsModal({ onClose }: { onClose: () => void }) {
 
         <section className="settings__group">
           <h3 className="settings__label">Theme</h3>
-          <p className="settings__help">Light is the current look. The Experience page itself stays light.</p>
+          <p className="settings__help">Light is the current look. The property experience pages follow it too.</p>
           <Segmented<Theme>
             label="Theme"
             value={theme}

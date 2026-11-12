@@ -36,6 +36,8 @@ const apply = () => {
   const root = document.documentElement;
   root.dataset.corners = settings.corners;
   root.dataset.theme = settings.theme;
+  // The hand-built experience pages have light and dark looks of their own (epiisod-version.js): 2 is light, 1 is dark
+  (window as unknown as { __epVer?: { set: (v: string) => void } }).__epVer?.set(settings.theme === 'dark' ? '1' : '2');
 };
 apply();
 

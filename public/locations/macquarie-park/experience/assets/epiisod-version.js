@@ -24,27 +24,25 @@
     de.setAttribute('data-ep-ver', v);
     if (v === '1') de.setAttribute('data-ep-tint', 'brown'); else de.removeAttribute('data-ep-tint');   // version 1 keeps the chocolate overlays
   }
-  // The page is fixed to the light look (version 2): there is no switcher any more, and a stored
-  // choice or ?v= is ignored. To bring the dark look back, change LOCKED to '1' (or null to re-enable the switch).
-  var LOCKED = '2';
-  var q = /[?&]v=([12])(?:&|$)/.exec(location.search);
-  if (LOCKED) { apply(LOCKED); }
-  else {
-    if (q) write(q[1]);
-    apply(read() === '2' ? '2' : '1');
-    if (read() === '2' || q) write(read() === '2' ? '2' : '1');          // keep the address in step on first load too
+  // The look follows the site's theme setting (nav settings, src/lib/prototypeSettings.ts):
+  // light is version 2, dark is version 1. It is read here, before anything paints, and the
+  // settings dialog calls __epVer.set() when the theme is changed on this page.
+  function siteVersion() {
+    try { return localStorage.getItem('epiisod-theme') === 'dark' ? '1' : '2'; } catch (e) { return '2'; }
   }
+  var LOCKED = null;
+  apply(siteVersion());
   function set(v, fade) {
     v = v === '2' ? '2' : '1';
     if (de.getAttribute('data-ep-ver') === v) return;
     if (fade !== false) { de.classList.add('ep-ver-fade'); clearTimeout(fadeT); fadeT = setTimeout(function () { de.classList.remove('ep-ver-fade'); }, 700); }
-    write(v); apply(v);
+    apply(v);
     try { document.dispatchEvent(new CustomEvent('ep-ver-change', { detail: v })); } catch (e) {}
   }
   function toggle() { set(de.getAttribute('data-ep-ver') === '2' ? '1' : '2'); }
   window.__epVer = { get: function () { return de.getAttribute('data-ep-ver'); }, set: set, toggle: toggle };
   window.addEventListener('keydown', function (e) {
-    if (LOCKED || !e.shiftKey || e.ctrlKey || e.metaKey || e.altKey || (e.key !== 'B' && e.key !== 'b')) return;
+    if (true) return;
     var t = e.target; if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
     toggle();
   });

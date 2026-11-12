@@ -1,6 +1,6 @@
 /* hero overlays and text shadows are neutral black; the warm chocolate is one switch away (see epiisod-flythrough.js: ?tint=brown, or press Shift+B) */
 :root { --fly-tint: 0, 0, 0; --fly-tint2: 0, 0, 0; }
-html[data-ep-tint="brown"] { --fly-tint: 36, 18, 12; --fly-tint2: 20, 10, 6; }
+html[data-ep-tint="brown"] { --fly-tint: 8, 13, 26; --fly-tint2: 4, 7, 14; }
 /* EPIISOD scroll flythrough — first fold.
    Ported from the "EPIISOD Flythrough Hero" design. Colours and type are the EPIISOD
    Design System tokens; offsets follow the site's own header / scroll-bar gutters so
