@@ -32,7 +32,7 @@ const SORTS = [
 type SortId = (typeof SORTS)[number]['id'];
 
 /** A room as listed: its price for the chosen stay and date. */
-type ListedRoom = Room & { weekly: number };
+type ListedRoom = Room & { weekly?: number | undefined };
 
 /** Closes a popover on a click elsewhere or Escape. */
 function useDismiss(open: boolean, ref: RefObject<HTMLElement>, close: () => void) {
@@ -75,13 +75,17 @@ function RoomCard({ room, currency, index, href }: { room: ListedRoom; currency:
             {room.features ?? ' '}
           </p>
         </div>
-        <p className="room-card__price">
-          <span className="room-card__from">From</span>
-          <span className="room-card__amount">
-            {currency} {room.weekly}
-          </span>
-          <span className="room-card__unit">wk / person</span>
-        </p>
+        {room.weekly !== undefined ? (
+          <p className="room-card__price">
+            <span className="room-card__from">From</span>
+            <span className="room-card__amount">
+              {currency} {room.weekly}
+            </span>
+            <span className="room-card__unit">wk / person</span>
+          </p>
+        ) : (
+          <p className="room-card__price room-card__price--soon">Pricing coming soon</p>
+        )}
       </div>
     </Card>
   );
@@ -107,6 +111,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
   const [availableOnly, setAvailableOnly] = useState(false);
   const [sort, setSort] = useState<SortId>('asc');
   const [menu, setMenu] = useState<'sort' | null>(null);
+  const [view, setView] = useState<'grid' | 'list'>('grid');
   const sectionRef = useRef<HTMLElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -139,13 +144,17 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
   const rooms = useMemo<ListedRoom[]>(
     () =>
       searchRooms(listing, applied, 'list')
-        .map(({ room, weekly }) => {
+        .map(({ room, weekly }): ListedRoom | null => {
           const card = content.rooms.find((r) => r.id === room.roomId);
-          return card && weekly !== undefined ? { ...card, weekly } : null;
+          return card ? { ...card, weekly } : null;
         })
         .filter((r): r is ListedRoom => !!r)
         .filter((r) => !availableOnly || r.available)
-        .sort((a, b) => (sort === 'asc' ? a.weekly - b.weekly : b.weekly - a.weekly)),
+        .sort((a, b) => {
+          // Rooms without a price yet go last
+          if (a.weekly === undefined || b.weekly === undefined) return Number(a.weekly === undefined) - Number(b.weekly === undefined);
+          return sort === 'asc' ? a.weekly - b.weekly : b.weekly - a.weekly;
+        }),
     [content, listing, applied, availableOnly, sort],
   );
 
@@ -176,7 +185,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
     return `${window.location.pathname.replace(/\/$/, '')}/${slug}${query ? `?${query}` : ''}`;
   };
   // Re-keying the grid replays the cards' entrance whenever the list changes
-  const listKey = rooms.map((r) => `${r.id}:${r.weekly}`).join(',');
+  const listKey = rooms.map((r) => `${r.id}:${r.weekly ?? 'x'}`).join(',');
 
   return (
     <section ref={sectionRef} className="rooms exit-parallax" id={id}>
@@ -223,6 +232,33 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
                 <span className="rooms__switch" aria-hidden />
                 Available rooms only
               </label>
+              <div className="rooms__view" role="group" aria-label="Layout">
+                <button
+                  type="button"
+                  className={`rooms__view-button${view === 'grid' ? ' is-on' : ''}`}
+                  aria-pressed={view === 'grid'}
+                  aria-label="Grid view"
+                  onClick={() => setView('grid')}
+                >
+                  <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" aria-hidden>
+                    <rect x="3" y="3" width="5.5" height="5.5" rx="1" />
+                    <rect x="11.5" y="3" width="5.5" height="5.5" rx="1" />
+                    <rect x="3" y="11.5" width="5.5" height="5.5" rx="1" />
+                    <rect x="11.5" y="11.5" width="5.5" height="5.5" rx="1" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className={`rooms__view-button${view === 'list' ? ' is-on' : ''}`}
+                  aria-pressed={view === 'list'}
+                  aria-label="List view"
+                  onClick={() => setView('list')}
+                >
+                  <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" aria-hidden>
+                    <path d="M3.5 5h13M3.5 10h13M3.5 15h13" />
+                  </svg>
+                </button>
+              </div>
               <div ref={sortRef} className="rooms__sort">
                 <button
                   type="button"
@@ -270,7 +306,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
             />
           </div>
 
-          <div key={listKey} className="rooms__grid" aria-live="polite">
+          <div key={`${listKey}:${view}`} className={`rooms__grid${view === 'list' ? ' is-list' : ''}`} aria-live="polite">
             {rooms.map((room, i) => (
               <RoomCard
                 key={room.id}
