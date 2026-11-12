@@ -68,10 +68,14 @@
 }
 
 .hero__subtitle {
-  font-weight: 300;
-  font-size: clamp(16px, 2.5svh, 20px);
+  font-weight: 400;
+  font-size: clamp(17px, 2.9svh, 24px);
   line-height: 1.5;
-  color: var(--royal-chocolate-300);
+  color: #fff;
+  /* Legible over any part of the photo */
+  text-shadow:
+    0 1px 2px rgba(6, 10, 20, 0.55),
+    0 2px 18px rgba(6, 10, 20, 0.6);
 }
 
 /* Darkens as the hero scrolls away — animated by GSAP in Hero.tsx */

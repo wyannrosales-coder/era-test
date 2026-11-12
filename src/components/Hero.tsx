@@ -40,7 +40,12 @@ export default function Hero({
       <em>student living</em>
     </>
   ),
-  subtitle = 'Modern spaces, all-inclusive amenities, and a vibrant student community—all in the cities where you study.',
+  subtitle = (
+    <>
+      Modern spaces, all-inclusive amenities, <br className="hero__br" />
+      and a vibrant student community—all in the cities where you study.
+    </>
+  ),
   lineAfterTitle = false,
   onSearch = (filters) => window.location.assign(findRoomHref(filters)),
 }: HeroProps) {
