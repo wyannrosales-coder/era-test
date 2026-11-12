@@ -52,11 +52,11 @@
 
   // ---- the two faces, drawn once on canvases. The front is drawn in the design's own units (a 408.32 x 647.68 card), the back in its
   // units (357.28 x 566.72) scaled up to match; both end up 408 x 648, drawn at 2x ----
-  var FW = 408, FH = 648, TS = 2, SF = FW / 408.32, SB = FW / 357.28;
+  var FW = 408, FH = 648, TS = 2, SF = FW / 408.32, SB = SF;
   var cvF = document.createElement('canvas'), cvB = document.createElement('canvas');
   cvF.width = cvB.width = FW * TS; cvF.height = cvB.height = FH * TS;
   var stillRefresh = null, stillMode = false;
-  var IM = {}, IMN = ['skyline', 'barcode', 'front-logo-a', 'front-logo-b', 'front-arrow', 'back-logo-a', 'back-logo-b', 'back-arrow', 'icon-location'], imLeft = IMN.length;
+  var IM = {}, IMN = ['skyline', 'barcode', 'front-emblem', 'hand-front', 'hand-back', 'back-logo-a', 'back-logo-b'], imLeft = IMN.length;
   IMN.forEach(function (k) {
     var im = new Image();
     im.onload = im.onerror = function () { if (--imLeft === 0) { drawFaces(); if (typeof upload === 'function') { upload(0); upload(1); } if (stillRefresh) stillRefresh(); } };
@@ -73,74 +73,76 @@
     for (var j = 0; j < text.length; j++) { g.fillText(text[j], cx, y); cx += ws[j] + sp; }
     return w;
   }
-  // the gold clip over the card's slot
-  function clip(g, x, y, w, h, back) {
-    g.fillStyle = back ? 'rgba(4,7,14,.28)' : 'rgba(0,0,0,.5)'; rr(g, x - 5, y + 2, w + 10, h - 4, (h - 4) / 2); g.fill();
-    var m = g.createLinearGradient(0, y, 0, y + h); m.addColorStop(0, '#eadfc6'); m.addColorStop(.45, '#b99f72'); m.addColorStop(1, '#d9c6a2');
-    g.fillStyle = m; rr(g, x, y, w, h, h / 2); g.fill();
-    g.strokeStyle = 'rgba(255,255,255,.4)'; g.lineWidth = .8; rr(g, x + .4, y + .4, w - .8, h - .8, h / 2); g.stroke();
-    var hl = g.createLinearGradient(0, y, 0, y + h * .55); hl.addColorStop(0, 'rgba(255,255,255,.5)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
-    g.fillStyle = hl; rr(g, x + 3, y + 2, w - 6, h * .45, h * .22); g.fill();
+  // the slot the lanyard passes through: a pill cut out of the card, drawn as a recess
+  function slot(g, x, y, w, h, back) {
+    g.save();
+    var hole = g.createLinearGradient(0, y, 0, y + h); hole.addColorStop(0, back ? 'rgba(4,7,14,.5)' : 'rgba(0,0,0,.78)'); hole.addColorStop(1, back ? 'rgba(4,7,14,.2)' : 'rgba(0,0,0,.4)');
+    g.fillStyle = hole; rr(g, x, y, w, h, h / 2); g.fill();
+    g.strokeStyle = back ? 'rgba(117,87,59,.4)' : 'rgba(234,223,206,.16)'; g.lineWidth = .8; rr(g, x + .4, y + .4, w - .8, h - .8, h / 2); g.stroke();
+    g.restore();
   }
-  function bigE(g, x, base, size, alpha) {
-    g.save(); g.globalAlpha = alpha; g.fillStyle = '#8b6e4e'; g.font = 'italic 400 ' + size + 'px "Libre Baskerville", serif'; g.textBaseline = 'alphabetic'; g.textAlign = 'left'; g.fillText('E', x, base); g.restore();
-  }
+  var INK = '#04070e', INK2 = '#121a2a', GOLD = '#8b6e4e', PEARL = '#eadfce', SAND = '#e3d2b2', MUTE = '#776a5d';
+  // the front (Figma "front - small", 408.32 x 647.68): the emblem, the resident's name, the barcode and the skyline
   function drawFront() {
     var g = cvF.getContext('2d'); g.setTransform(TS * SF, 0, 0, TS * SF, 0, 0); g.clearRect(0, 0, 408.32, 647.68);
-    var bg = g.createLinearGradient(424.96, -40.64, 37.12, 647.68); bg.addColorStop(0, '#3A1F15'); bg.addColorStop(.4547, '#04070e'); bg.addColorStop(1, '#170A05');
+    var bg = g.createLinearGradient(394.56, 0, 0, 647.68); bg.addColorStop(0, '#3A1F15'); bg.addColorStop(.5479, INK); bg.addColorStop(1, '#170A05');
     g.fillStyle = bg; g.fillRect(0, 0, 408.32, 647.68);
-    g.save(); g.beginPath(); g.rect(0, 0, 408.32, 647.68); g.clip(); bigE(g, 173.44, 280.3, 358.4, .28); g.restore();
-    img(g, 'skyline', 180.48, 474.88, 213.76, 156.16);
-    clip(g, 164.16, 32.68, 80, 30, false);
-    // logo and label
-    img(g, 'front-logo-a', 29.44 + 156.16 * .1033, 300.16, 120.82, 25.6); img(g, 'front-logo-b', 29.44, 300.16 + 25.6 * .2121, 156.16, 14.78);
-    g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillStyle = '#d4b896'; g.font = '300 9.6px "DM Sans", sans-serif'; g.fillText('MACQUARIE PARK', 291.2, 312.6);
-    g.fillStyle = '#8b6e4e'; g.fillRect(29.44, 338.24, 350.08, .64);
-    g.fillRect(29.44, 351.36, .64, 99);
-    g.font = '300 12.8px "DM Sans", sans-serif'; g.fillText('WELCOME HOME', 37.76, 365.3);
+    g.save(); g.beginPath(); g.rect(0, 0, 408.32, 647.68); g.clip(); img(g, 'front-emblem', 116.48, -37.76, 398.08, 398.08); g.restore();
+    img(g, 'skyline', 186, 478, 214, 156);
+    slot(g, 151.68, 21.12, 104.96, 23.04, false);
+    g.textAlign = 'left'; g.textBaseline = 'middle';
+    // welcome, name, and the line under them
+    g.fillStyle = GOLD; g.fillRect(13, 296, 1, 94);
+    g.fillStyle = SAND; g.font = '700 15px "DM Sans", sans-serif'; g.fillText('WELCOME HOME', 26, 315);
     if (name) {
-      var size = 32; g.font = '400 ' + size + 'px "DM Sans", sans-serif';
-      while (g.measureText(name).width > 336 && size > 14) { size -= 1; g.font = '400 ' + size + 'px "DM Sans", sans-serif'; }
-      g.fillStyle = '#fbf8f1'; g.fillText(name, 36.48, 404.6);
+      var size = 30; g.font = '700 ' + size + 'px "DM Sans", sans-serif';
+      while (g.measureText(name).width > 360 && size > 14) { size -= 1; g.font = '700 ' + size + 'px "DM Sans", sans-serif'; }
+      g.fillStyle = PEARL; g.fillText(name, 24, 362);
     } else {
-      g.font = '400 32px "DM Sans", sans-serif'; g.fillStyle = 'rgba(251,250,247,.34)'; g.fillText('Your name', 36.48, 404.6);
+      g.font = '700 30px "DM Sans", sans-serif'; g.fillStyle = 'rgba(234,223,206,.34)'; g.fillText('Your name', 24, 362);
     }
-    g.font = '400 11.52px "DM Sans", sans-serif'; g.fillStyle = '#a39a8e'; g.fillText('Resident Since 2027', 36.48, 437);
-    if (!stillMode) { spaced(g, 'TAP TO FLIP', 22.4, 592.6, 2.15, 'left', '500 7.68px "DM Sans", sans-serif', '#eadfce'); img(g, 'front-arrow', 95.8, 586.88, 11.52, 11.52); }
-    img(g, 'barcode', 22.4, 602.24, 108.8, 34.56);
+    g.fillStyle = SAND; g.font = '300 12.5px "DM Sans", sans-serif'; g.fillText('MACQUARIE PARK RESIDENT SINCE 2027', 23, 407.5);
+    g.fillStyle = GOLD; g.fillRect(13, 424.6, 387, 1);
+    // flip cue and barcode
+    if (!stillMode) { img(g, 'hand-front', 8, 596.4, 10.24, 10.24); spaced(g, 'TAP TO FLIP', 24.64, 601.5, 2.51, 'left', '500 8.96px "DM Sans", sans-serif', PEARL); }
+    img(g, 'barcode', 8, 607, 108.8, 34.56);
   }
-  // the back's buttons, in canvas units as drawn (hit-testing mirrors them, because the back is seen flipped)
-  var BTN = { book: [25.76 * SB, 428.96 * SB, 306.32 * SB, 32 * SB], rooms: [25.76 * SB, 464.8 * SB, 306.32 * SB, 34 * SB] };
+  // the back's buttons, in the card's units (hit-testing mirrors them, because the back is seen flipped)
+  var BTN = { book: [51 * SB, 421 * SB, 306 * SB, 40 * SB], rooms: [51 * SB, 465 * SB, 306 * SB, 40 * SB] };
+  // the back (Figma "back - small"): the wordmark, "Your room is waiting.", the two buttons, the address
   function drawBack() {
-    var g = cvB.getContext('2d'); g.setTransform(TS * SB, 0, 0, TS * SB, 0, 0); g.clearRect(0, 0, 357.28, 566.72);
-    var bg = g.createLinearGradient(371.84, -35.56, 32.48, 566.72); bg.addColorStop(0, '#fbf8f1'); bg.addColorStop(.4547, '#eadfce'); bg.addColorStop(1, '#d4b896');
-    g.fillStyle = bg; g.fillRect(0, 0, 357.28, 566.72);
-    g.save(); g.beginPath(); g.rect(0, 0, 357.28, 566.72); g.clip(); bigE(g, 14, 232.9, 313.6, .22); g.restore();
-    clip(g, 142.64, 26.72, 72, 30, true);
-    img(g, 'back-logo-a', 25.76 + 136.64 * .1033, 252, 105.72, 22.4); img(g, 'back-logo-b', 25.76, 252 + 22.4 * .2121, 136.64, 12.93);
-    g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillStyle = '#121a2a'; g.font = '300 8.4px "DM Sans", sans-serif'; g.fillText('MACQUARIE PARK', 254.8, 262.6);
-    g.fillStyle = '#8b6e4e'; g.fillRect(25.76, 285.32, 306.32, .56);
-    g.fillRect(25.76, 297.92, .56, 110.88);
-    g.font = '300 11.2px "DM Sans", sans-serif'; g.fillText('BOOK YOUR STAY', 32.48, 307.8);
-    g.fillStyle = '#04070e'; g.font = '400 24.64px "DM Sans", sans-serif'; g.fillText('Your room', 32.48, 335.4); g.fillText('is waiting.', 32.48, 363.4);
-    g.fillStyle = '#776a5d'; g.font = '400 10.08px "DM Sans", sans-serif'; g.fillText('Studios, ensuites and shared apartments, minutes from', 32.48, 390.2); g.fillText('Macquarie University.', 32.48, 402.6);
+    var g = cvB.getContext('2d'); g.setTransform(TS * SB, 0, 0, TS * SB, 0, 0); g.clearRect(0, 0, 408.32, 647.68);
+    var bg = g.createLinearGradient(425.9, -40.7, 37.2, 647.68); bg.addColorStop(0, '#fbf8f1'); bg.addColorStop(.4547, '#eadfce'); bg.addColorStop(1, '#d4b896');
+    g.fillStyle = bg; g.fillRect(0, 0, 408.32, 647.68);
+    slot(g, 151, 20, 110, 23, true);
+    // wordmark, the place, and the line under them
+    img(g, 'back-logo-a', 51 + 136.64 * .1033, 196, 105.72, 22.4); img(g, 'back-logo-b', 51, 196 + 22.4 * .2121, 136.64, 12.93);
+    g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.fillStyle = INK2; g.font = '300 8.4px "DM Sans", sans-serif'; g.fillText('MACQUARIE PARK', 280, 206.6);
+    g.fillStyle = GOLD; g.fillRect(51, 229.3, 306.32, .56);
+    // headline block
+    g.fillStyle = GOLD; g.font = '500 11.2px "DM Sans", sans-serif'; g.fillText('BOOK YOUR STAY', 59, 261.5);
+    g.fillStyle = INK; g.font = '600 24.64px "DM Sans", sans-serif'; g.fillText('Your room', 59, 292); g.fillText('is waiting.', 59, 320);
+    g.fillStyle = MUTE; g.font = '400 10.08px "DM Sans", sans-serif'; g.fillText('Studios, ensuites and shared apartments, minutes from', 59, 350); g.fillText('Macquarie University.', 59, 362.6);
     // buttons
-    g.fillStyle = '#121a2a'; rr(g, 25.76, 428.96, 306.32, 32, 16); g.fill();
-    spaced(g, 'BOOK A TOUR', 25.76 + 153.16, 444.96, 1.0, 'center', '500 8.4px "DM Sans", sans-serif', '#fbf8f1');
-    g.strokeStyle = '#8b6e4e'; g.lineWidth = .56; rr(g, 26.04, 465.08, 305.76, 33.44, 16.7); g.stroke();
-    spaced(g, 'VIEW ROOMS', 25.76 + 153.16, 481.8, 1.0, 'center', '500 8.4px "DM Sans", sans-serif', '#04070e');
-    img(g, 'icon-location', 19.6, 511.84, 13.44, 13.44);
-    g.textAlign = 'left'; g.fillStyle = '#04070e'; g.font = '400 8.96px "DM Sans", sans-serif'; g.fillText('17 Lachlan Ave, Macquarie Park NSW 2113', 36.96, 519);
+    g.fillStyle = INK2; rr(g, 51, 421, 306, 40, 20); g.fill();
+    spaced(g, 'BOOK A TOUR', 51 + 153, 441, 1.008, 'center', '500 8.4px "DM Sans", sans-serif', '#fbfaf7');
+    g.strokeStyle = GOLD; g.lineWidth = .56; rr(g, 51.28, 465.28, 305.44, 39.44, 19.7); g.stroke();
+    spaced(g, 'VIEW ROOMS', 51 + 153, 485, 1.008, 'center', '500 8.4px "DM Sans", sans-serif', INK);
+    // address and flip cue
+    g.textAlign = 'left'; g.fillStyle = GOLD; g.font = '400 15.36px "DM Sans", sans-serif'; g.fillText('17 Lachlan Ave', 35.84, 568.2); g.fillText('Macquarie Park NSW 2113', 35.84, 589.7);
     if (!stillMode) {
-      spaced(g, 'TAP TO FLIP', 263.76, 518.6, 1.88, 'left', '500 6.72px "DM Sans", sans-serif', '#121a2a');
-      var im = IM['back-arrow']; if (im && im.complete && im.naturalWidth) { g.save(); g.translate(263.76 + 73.68 + 10.08, 513.52); g.scale(-1, 1); try { g.drawImage(im, 0, 0, 10.08, 10.08); } catch (e) {} g.restore(); }
+      g.font = '500 8.96px "DM Sans", sans-serif';
+      var tw = 0, t = 'TAP TO FLIP'; for (var i = 0; i < t.length; i++) tw += g.measureText(t[i]).width + (i < t.length - 1 ? 2.51 : 0);
+      var x0 = 372.48 - tw - 6.4 - 10.24;
+      img(g, 'hand-back', x0, 579.7, 10.24, 10.24); spaced(g, t, x0 + 10.24 + 6.4, 584.8, 2.51, 'left', '500 8.96px "DM Sans", sans-serif', INK2);
     }
   }
   function drawFaces() { drawFront(); drawBack(); }
   var fontsReady = false;
   function whenFonts(cb) {
     if (!document.fonts || !document.fonts.load) { cb(); return; }
-    Promise.all([document.fonts.load('italic 400 40px "Libre Baskerville"'), document.fonts.load('300 12px "DM Sans"'), document.fonts.load('400 12px "DM Sans"'), document.fonts.load('500 12px "DM Sans"')]).then(cb, cb);
+    Promise.all([document.fonts.load('italic 400 40px "Libre Baskerville"'), document.fonts.load('300 12px "DM Sans"'), document.fonts.load('400 12px "DM Sans"'), document.fonts.load('500 12px "DM Sans"'), document.fonts.load('600 12px "DM Sans"'), document.fonts.load('700 12px "DM Sans"')]).then(cb, cb);
   }
 
   // ---- a still card when motion is reduced or WebGL is missing ----

@@ -79,3 +79,6 @@ html[data-ep-ver="1"] .bd_prog { background: rgba(244, 240, 230, .12); }
 /* hand-written notes and doodles on the collage desk: white ink on dark (they multiply dark ink on paper in light) */
 html[data-ep-ver="1"] .sc_ink { mix-blend-mode: normal; filter: brightness(0) invert(1); }
 html[data-ep-ver="1"] .sc_ink.is-on { opacity: .85; }
+
+/* the resident pass section: dark grey in the dark theme */
+html[data-ep-ver="1"] section.ep-footer { background: #1c1c1c; }
