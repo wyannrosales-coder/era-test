@@ -2,6 +2,7 @@ import Nav from '../components/Nav';
 import PageHero from '../components/PageHero';
 import { LOGOS, LogoSlot } from '../components/Partners';
 import ExperienceMosaic from '../components/experience/ExperienceMosaic';
+import ExperienceEnter from '../components/experience/ExperienceEnter';
 import ExperienceCafe from '../components/experience/ExperienceCafe';
 import InstagramStrip from '../components/contact/InstagramStrip';
 import AboutClosing from '../components/about/AboutClosing';
@@ -45,6 +46,7 @@ export default function ExperiencePage() {
           }
         />
         <ExperienceMosaic id="spaces" />
+        <ExperienceEnter id="enter" />
         <ExperienceCafe />
         <InstagramStrip />
         <AboutClosing />

@@ -1,0 +1,172 @@
+/* Enter the EPIISOD experience: ink band, a pair of photo cards (440 × 320 on desktop) */
+.xp-enter {
+  position: relative;
+  z-index: 1;
+  padding: 120px var(--page-gutter) 140px;
+  background:
+    linear-gradient(rgba(10, 16, 28, 0.86), rgba(10, 16, 28, 0.92)),
+    url('../../assets/experience/mosaic-lobby-tree.jpg') center / cover;
+  color: #fff;
+}
+
+.xp-enter__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 72px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.xp-enter__heading {
+  align-items: center;
+  text-align: center;
+}
+
+.xp-enter__heading .eyebrow,
+.xp-enter__heading h2 {
+  color: #fff;
+}
+
+.xp-enter__lede {
+  margin: 16px 0 0;
+  color: var(--menu-text, #eadfce);
+}
+
+.xp-enter__cards {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The second card sits a little lower, as in the live layout */
+.xp-enter__item:nth-child(2) {
+  margin-top: 28px;
+}
+
+.xp-enter__card {
+  position: relative;
+  display: block;
+  width: min(440px, calc((100vw - 2 * var(--page-gutter) - 40px) / 2));
+  aspect-ratio: 440 / 320;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 24px;
+  color: #fff;
+  text-decoration: none;
+  transition:
+    transform 500ms var(--ease-lux),
+    box-shadow 500ms var(--ease-lux),
+    border-color 300ms var(--ease-lux);
+}
+
+a.xp-enter__card:hover {
+  transform: translateY(-6px);
+  border-color: var(--gold, #c9a46a);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+}
+
+a.xp-enter__card:focus-visible {
+  outline: 2px solid var(--gold, #c9a46a);
+  outline-offset: 4px;
+}
+
+.xp-enter__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-lux);
+}
+
+a.xp-enter__card:hover .xp-enter__img {
+  transform: scale(1.05);
+}
+
+.xp-enter__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(8, 12, 22, 0.82) 0%, rgba(8, 12, 22, 0.1) 55%, rgba(8, 12, 22, 0.2) 100%);
+}
+
+/* The round label in the middle of the photo */
+.xp-enter__badge {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: rgba(14, 22, 38, 0.32);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translate(-50%, -50%);
+  transition:
+    background-color 300ms var(--ease-lux),
+    color 300ms var(--ease-lux),
+    border-color 300ms var(--ease-lux);
+}
+
+a.xp-enter__card:hover .xp-enter__badge {
+  border-color: var(--gold, #c9a46a);
+  background: var(--gold, #c9a46a);
+  color: var(--royal-chocolate-700);
+}
+
+.xp-enter__card.is-soon .xp-enter__img {
+  filter: grayscale(0.5);
+}
+
+.xp-enter__caption {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  font-family: var(--font-display);
+  font-size: clamp(16px, 1.55vw, 21px);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.xp-enter__caption em {
+  font-style: italic;
+}
+
+@media (max-width: 800px) {
+  .xp-enter {
+    padding: 88px var(--page-gutter) 96px;
+  }
+
+  .xp-enter__inner {
+    gap: 48px;
+  }
+
+  .xp-enter__cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .xp-enter__item:nth-child(2) {
+    margin-top: 0;
+  }
+
+  .xp-enter__card {
+    width: min(440px, calc(100vw - 2 * var(--page-gutter)));
+  }
+}
