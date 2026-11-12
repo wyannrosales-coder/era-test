@@ -27,7 +27,7 @@ type Props = {
   /** The model's parts to light up: any node whose name contains one of these ('' = all). */
   parts: string[];
   /** A card with a leader line to a spot on the building (model units); null for none. */
-  callout?: { title: string; image: string; anchor: [number, number, number] } | null;
+  callout?: { title: string; text: string; image: string; anchor: [number, number, number] } | null;
   onLoaded?: () => void;
   /** Whether the section is on screen (the render loop sleeps when it isn't). */
   active?: boolean;
@@ -284,7 +284,8 @@ export default function BuildingViewer({ src, view, parts, callout = null, onLoa
         {callout && (
           <div key={callout.title} className="a3d__card-in">
             <img src={callout.image} alt="" />
-            <span>{callout.title}</span>
+            <span className="a3d__card-title">{callout.title}</span>
+            <span className="a3d__card-text">{callout.text}</span>
           </div>
         )}
       </div>

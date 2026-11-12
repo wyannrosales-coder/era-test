@@ -145,29 +145,6 @@
   font-style: italic;
 }
 
-/* The chosen amenity's description, under the list */
-.a3d__detail {
-  margin-top: clamp(10px, 2svh, 22px);
-  padding-top: clamp(10px, 1.8svh, 18px);
-  border-top: 1px solid var(--line-in-white);
-}
-
-.a3d__detail-title {
-  margin: 0 0 4px;
-  font-family: var(--font-display);
-  font-size: clamp(20px, 3svh, 26px);
-  font-style: italic;
-  letter-spacing: -0.02em;
-  color: var(--text-strong);
-}
-
-.a3d__detail-text {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--text-mid);
-}
-
 .a3d__button {
   margin-top: 28px;
   border-color: var(--text-strong);
@@ -187,10 +164,6 @@ html[data-theme='dark'] .a3d__button img {
   position: relative;
   aspect-ratio: 4 / 3.4;
   min-height: 320px;
-  border-radius: var(--r-media);
-  overflow: hidden;
-  background: radial-gradient(120% 90% at 50% 38%, var(--surface-white), var(--surface-1));
-  border: 1px solid var(--line-in-white);
 }
 
 .a3d__canvas {
@@ -213,13 +186,13 @@ html[data-theme='dark'] .a3d__button img {
 }
 
 .a3d__lead polyline {
-  stroke: var(--text-strong);
+  stroke: var(--accent-text);
   stroke-width: 1.5;
 }
 
 .a3d__lead circle {
-  fill: var(--text-strong);
-  stroke: var(--surface-1);
+  fill: var(--accent-text);
+  stroke: var(--surface-white);
   stroke-width: 2;
 }
 
@@ -232,32 +205,43 @@ html[data-theme='dark'] .a3d__button img {
   transition: opacity 300ms var(--ease-in-out);
 }
 
+/* The page's card: surface, hairline, display title, soft subline */
 .a3d__card-in {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 176px;
-  padding: 6px 6px 10px;
+  gap: 4px;
+  width: 200px;
+  padding: 8px 8px 14px;
+  border: 1px solid var(--line-in-white);
   border-radius: var(--r-card);
-  background: var(--text-strong);
-  color: var(--surface-1);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+  background: var(--surface-white);
+  color: var(--text-strong);
+  box-shadow: 0 18px 40px rgba(var(--ink-soft-rgb), 0.14);
   animation: a3d-card 450ms var(--ease-lux) both;
 }
 
 .a3d__card-in img {
   width: 100%;
-  height: 104px;
-  border-radius: calc(var(--r-card) * 0.7);
+  height: 108px;
+  margin-bottom: 6px;
+  border-radius: var(--r-media);
   object-fit: cover;
 }
 
-.a3d__card-in span {
-  padding: 0 8px;
+.a3d__card-title {
+  padding: 0 6px;
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: 18px;
   letter-spacing: -0.02em;
   line-height: 1.2;
+  color: var(--text-strong);
+}
+
+.a3d__card-text {
+  padding: 0 6px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-soft);
 }
 
 @keyframes a3d-card {
@@ -372,7 +356,7 @@ html[data-theme='dark'] .a3d__button img {
   }
 
   .a3d.is-animated .a3d__right {
-    height: min(calc(100svh - 150px), 720px);
+    height: min(calc(100svh - 120px), 760px);
     aspect-ratio: auto;
   }
 

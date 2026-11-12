@@ -182,10 +182,6 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
                   </div>
                 ))}
               </div>
-              <div className="a3d__detail" aria-live="polite">
-                <p className="a3d__detail-title">{current?.title}</p>
-                <p className="a3d__detail-text">{current?.text}</p>
-              </div>
               <a href={EXPERIENCE_URL} className="amenities__button a3d__button">
                 <img src={play} width={24} height={24} alt="" />
                 <span>Enter the EPIISOD experience</span>
@@ -199,7 +195,7 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
                     src={MODEL}
                     view={current.view}
                     parts={current.parts}
-                    callout={current.anchor ? { title: current.title, image: current.image, anchor: current.anchor } : null}
+                    callout={current.anchor ? { title: current.title, text: current.text, image: current.image, anchor: current.anchor } : null}
                     active={onScreen}
                     onLoaded={() => setLoaded(true)}
                   />

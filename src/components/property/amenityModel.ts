@@ -1,13 +1,11 @@
 import exterior from '../../assets/about/wide-macquarie.jpg';
 import lobby from '../../assets/property/amenity-lobby.jpg';
-import study from '../../assets/property/amenity-wifi.jpg';
 import secure from '../../assets/property/amenity-secure.jpg';
 import social from '../../assets/property/amenity-social.jpg';
 import coffee from '../../assets/experience/coffee.jpg';
 import pool from '../../assets/experience/mosaic-pool.jpg';
 import courtyard from '../../assets/experience/mosaic-courtyard.jpg';
 import lounge from '../../assets/experience/mosaic-lounge.jpg';
-import terrace from '../../assets/experience/mosaic-terrace.jpg';
 
 /**
  * The 3D amenities section (Amenities3D.tsx): the amenities grouped under headings, each
@@ -91,20 +89,12 @@ export const MACQUARIE_AMENITY_GROUPS: AmenityGroup[] = [
         anchor: [0, 25.8, 5.4],
       },
       {
-        title: 'Courtyard Gardens',
+        title: 'Zen Gardens',
         text: 'Planted courtyards on both sides of the building to slow down in.',
         parts: ['courtyard gardens'],
         view: { target: [0, 2, 0], azimuth: 8, elevation: 42, distance: 0.7 },
         image: courtyard,
         anchor: [0, 2.8, -12],
-      },
-      {
-        title: 'Rooftop Pavilions',
-        text: 'Two rooftop pavilions with open views across Macquarie Park.',
-        parts: ['rooftop pavilion'],
-        view: { target: [0, 31, 0], azimuth: 20, elevation: 24, distance: 0.95 },
-        image: terrace,
-        anchor: [17.4, 33.6, 7.4],
       },
     ],
   },
@@ -120,20 +110,12 @@ export const MACQUARIE_AMENITY_GROUPS: AmenityGroup[] = [
         anchor: [0, 3, 0],
       },
       {
-        title: 'Big Social Calendar',
-        text: 'Dinners, events and trips that make it easy to meet people.',
-        parts: ['courtyard gardens', 'Pool terrace'],
+        title: 'Courtyard Gardens',
+        text: 'Open courtyard space for dinners, events and meeting people.',
+        parts: ['courtyard gardens'],
         view: { target: [0, 12, 0], azimuth: 48, elevation: 30, distance: 0.84 },
         image: social,
         anchor: [0, 2.8, 12],
-      },
-      {
-        title: 'Unlimited WiFi',
-        text: 'Fast, reliable internet in every room and shared space.',
-        parts: ['North wing', 'South wing'],
-        view: { target: [0, 17, 0], azimuth: 60, elevation: 16, distance: 0.9 },
-        image: study,
-        anchor: [17.4, 20, 15],
       },
     ],
   },
