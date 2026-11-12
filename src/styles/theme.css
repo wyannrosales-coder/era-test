@@ -119,6 +119,21 @@ html[data-theme='dark'] {
   --ink-soft-rgb: 12, 12, 12;
 }
 
+/* The lobby veil multiplies near-black over the photo, which in dark leaves nothing to see
+   through; a plain black veil keeps the photo faintly visible behind the Enter section */
+html[data-theme='dark'] body .xp-mosaic__veil {
+  mix-blend-mode: normal;
+  background: #000;
+  opacity: calc(0.8 * var(--shade));
+}
+
+html[data-theme='dark'] body .xp-mosaic__content {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    url('../assets/experience/mosaic-lobby-tree.jpg') center / cover;
+  background-blend-mode: normal;
+}
+
 /* Rhythm: alternate sections lift a step, with a fine gold rule between */
 html[data-theme='dark'] body :is(
     .life,
