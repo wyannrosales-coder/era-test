@@ -27,7 +27,7 @@ function LocationsMenuB({ id, open, onNavigate }: LocationsMenuProps) {
   return (
     <MegaMenuPanel id={id} open={open} heading="Our locations">
       <div className="locations-menu-b">
-        <div className="locations-menu-b__open">
+        <div className={`locations-menu-b__open${soon.length ? '' : ' is-wide'}`}>
           {REGIONS.map((region) => {
             const properties = opened.filter((p) => regionOf(p) === region);
             if (!properties.length) return null;
