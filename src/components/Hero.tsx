@@ -14,10 +14,6 @@ export const findRoomHref = (f: Filters) => {
   return `/find-a-room${q.size ? `?${q}` : ''}`;
 };
 
-/** The Locations page, showing one country's city. */
-export const locationsHref = (country: string, city: string) =>
-  `/locations?${new URLSearchParams({ country, city })}`;
-
 type HeroProps = {
   image?: string;
   title?: ReactNode;

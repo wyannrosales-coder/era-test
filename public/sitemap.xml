@@ -2,7 +2,6 @@
 <!-- Pages of the site. Blog posts are not listed yet. Update the domain here and in robots.txt if it is not www.epiisod.com. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.epiisod.com</loc></url>
-  <url><loc>https://www.epiisod.com/locations</loc></url>
   <url><loc>https://www.epiisod.com/locations/macquarie-park</loc></url>
   <url><loc>https://www.epiisod.com/locations/macquarie-park/experience</loc></url>
   <url><loc>https://www.epiisod.com/locations/macquarie-park/quad-4-bedroom-ensuite</loc></url>

@@ -492,9 +492,7 @@ export default function RoomPage({
   }, []);
   const crumbs = [
     { label: 'Home', href: '/' },
-    { label: 'Locations', href: '/locations' },
-    { label: 'en-au', href: '/locations?country=Australia' },
-    { label: 'Sydney', href: '/locations?country=Australia&city=Sydney' },
+    { label: content.city, href: `/find-a-room?city=${content.city.toLowerCase()}` },
     { label: content.place, href: propertyHref },
   ];
 

@@ -154,16 +154,22 @@ export default function HamburgerMenu({ open, onClose }: HamburgerMenuProps) {
             <nav aria-label="Menu">
               <ul className="menu-panel__items">
                 <Group label="Life @ EPIISOD" links={GROUPS.life} onNavigate={onClose} />
-                {/* The word opens the Locations page; the arrow, every property by country and city */}
+                {/* Every property by country and city */}
                 <li className="menu-panel__split">
-                  <a href="/locations" className="menu-panel__item" onClick={onClose}>
-                    <span>Locations</span>
-                  </a>
                   <button
                     ref={locationsButtonRef}
                     type="button"
-                    className="menu-panel__split-caret"
+                    className="menu-panel__item menu-panel__item--button"
                     aria-label="Locations menu"
+                    onClick={() => showLocations(true)}
+                  >
+                    <span>Locations</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="menu-panel__split-caret"
+                    aria-hidden
+                    tabIndex={-1}
                     onClick={() => showLocations(true)}
                   >
                     <img src={caretRight} width={16} height={16} alt="" />

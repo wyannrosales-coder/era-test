@@ -28,7 +28,7 @@ const PRIMARY_LINKS: { label: string; menu?: MenuKey; href?: string; caret?: boo
   // Option B: About leads the bar (option A keeps it in the hamburger menu)
   ...(NAV_VARIANT === 'b' ? [{ label: 'About', href: '/about' }] : []),
   { label: 'Life @ epiisod', menu: 'life' },
-  { label: 'Locations', menu: 'locations', href: '/locations' },
+  { label: 'Locations', menu: 'locations' },
   { label: 'Contact us', menu: 'contact', href: '/contact' },
 ];
 const menuId = (menu: MenuKey) => `nav-${menu}-menu`;
