@@ -175,3 +175,12 @@
 .property-hero__cta--experience:hover img {
   transform: none;
 }
+
+.property-hero__address {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+  text-align: center;
+  text-wrap: balance;
+  color: rgba(255, 255, 255, 0.85);
+}

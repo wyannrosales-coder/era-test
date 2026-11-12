@@ -66,7 +66,9 @@ function Card({ result, term, index }: { result: Result; term: string; index: nu
         </span>
         <span className="find-card__name">{room.name}</span>
         {room.size && <span className="find-card__size">{room.size}</span>}
-        {weekly !== undefined ? (
+        {room.opening ? (
+          <span className="find-card__enquire">{room.opening} · Register interest</span>
+        ) : weekly !== undefined ? (
           <span className="find-card__price">
             <span className="find-card__from">From</span>
             <span className="find-card__amount">

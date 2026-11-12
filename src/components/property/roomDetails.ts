@@ -40,7 +40,7 @@ export const VIEWS: Record<RoomView, { title: string; hint: string; image: strin
 };
 
 /** "What's included", in the Figma's groups (1195:29679); a room lists the ones it has. */
-const AMENITY_GROUPS: { name: string; items: string[] }[] = [
+export const AMENITY_GROUPS: { name: string; items: string[] }[] = [
   { name: 'Bedroom', items: ['Double Bed', 'King Single', 'Storage', 'Study Desk & Chair'] },
   { name: 'Kitchen & Dining', items: ['Microwave', 'Fridge', 'Cooktop', 'Range hood', 'Kettle', 'Rice Cooker or Toaster', 'Dishwasher'] },
   { name: 'Internet and Workspace', items: ['WiFi', 'Study Desk & Chair'] },
@@ -70,12 +70,12 @@ export type RoomDetails = {
   dualOccupancy?: number;
 };
 
-const SHARED = 'Private ensuite bedroom within a shared apartment';
-const STUDIO = 'Private studio apartment with its own kitchenette and bathroom';
+export const SHARED = 'Private ensuite bedroom within a shared apartment';
+export const STUDIO = 'Private studio apartment with its own kitchenette and bathroom';
 const STUDIO_FEATURES = ['Double Bed', 'Air Con', 'WiFi', 'Storage', 'Microwave', 'Study Desk & Chair', 'Fridge', 'Cooktop', 'Range hood', 'Television', 'Kettle', 'Rice Cooker or Toaster', 'Smart Door Access'];
 const SHARED_FEATURES = ['King Single', 'Air Con', 'WiFi', 'Storage', 'Microwave', 'Study Desk & Chair', 'Fridge', 'Cooktop', 'Range hood', 'Television', 'Kettle', 'Rice Cooker or Toaster', 'Smart Door Access', 'Dishwasher'];
 
-const grouped = (features: string[]) =>
+export const grouped = (features: string[]) =>
   AMENITY_GROUPS.map((g) => ({ name: g.name, items: g.items.filter((i) => features.includes(i)) })).filter(
     (g) => g.items.length,
   );

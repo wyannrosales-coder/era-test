@@ -112,6 +112,14 @@ const stayLabel = (s: Stay) => (s.group === 'Short Stay' ? `Short Stay · ${s.la
 const liveBookingHref = (slug: string, stay: Stay, date: string) =>
   `https://epiisod.com/en-au/sydney/epiisod-macquarie-park/${slug}?term_id=${stay.id}&check_in_date=${date.replace(/-/g, '_')}`;
 
+/** Before opening: the live site's enquiry form for the property, term and date. */
+const registerHref = (liveUrl: string, property: string, stay: Stay | null, date: string) => {
+  const params = new URLSearchParams({ property_inquiring_for: property });
+  if (stay) params.set('term_id', stay.id);
+  if (date) params.set('check_in_date', date.replace(/-/g, '_'));
+  return `${new URL(liveUrl).origin}/en-au/contact?${params}`;
+};
+
 /** Every photo, full screen: arrows, keyboard or thumbnails to move; Escape to close. */
 function Lightbox({ photos, start, name, onClose }: { photos: string[]; start: number; name: string; onClose: () => void }) {
   const [index, setIndex] = useState(start);
@@ -238,6 +246,8 @@ function BookingCard({
   setStayId,
   date,
   setDate,
+  opening,
+  registerLink,
 }: {
   room: Room;
   details: RoomDetails;
@@ -247,6 +257,9 @@ function BookingCard({
   setStayId: (id: string) => void;
   date: string;
   setDate: (date: string) => void;
+  /** Before bookings open: shown in place of the price, with Register interest instead of Book. */
+  opening?: string;
+  registerLink?: (stay: Stay | null, date: string) => string;
 }) {
   const [view, setView] = useState('');
   const [tried, setTried] = useState(false);
@@ -255,14 +268,17 @@ function BookingCard({
   const min = stay ? latest(today(), stay.checkIn.from) : today();
   const max = stay?.checkIn.to;
   const groups = [...new Set(stays.map((s) => s.group))];
-  const missing = { term: !stay, date: !date, view: !view };
+  const hasViews = details.views.length > 0;
+  const missing = { term: !stay, date: !date, view: hasViews && !view };
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     setTried(true);
-    if (!stay || !date || !view || !room.available) return;
-    // TODO: this site's own booking flow; until then, the live booking for these choices
-    window.open(liveBookingHref(details.slug, stay, date), '_blank', 'noopener');
+    if (!stay || !date || missing.view || !room.available) return;
+    // TODO: this site's own booking flow; until then, the live booking (or, before opening,
+    // its enquiry form) for these choices
+    const href = opening && registerLink ? registerLink(stay, date) : liveBookingHref(details.slug, stay, date);
+    window.open(href, '_blank', 'noopener');
   };
 
   return (
@@ -332,6 +348,7 @@ function BookingCard({
         {tried && missing.date && <span className="room-book__error">Please choose your check in date</span>}
       </label>
 
+      {hasViews && (
       <label className={`room-book__field${tried && missing.view ? ' has-error' : ''}`}>
         <span className="room-book__label">
           Preferred room view <span>*</span>
@@ -352,6 +369,7 @@ function BookingCard({
         {view && <span className="room-book__hint">{VIEWS[view as keyof typeof VIEWS].hint}</span>}
         {tried && missing.view && <span className="room-book__error">Please select a room view</span>}
       </label>
+      )}
 
       {details.dualOccupancy && (
         <div className="room-book__note">
@@ -368,17 +386,21 @@ function BookingCard({
       )}
 
       <div className="room-book__summary">
-        <p className="room-book__price">
-          <span className="room-book__from">From</span>
-          <span className="room-book__amount">
-            <strong>
-              {currency} {price}
-            </strong>
-            <span>wk / person</span>
-          </span>
-        </p>
+        {opening ? (
+          <p className="room-book__price room-book__price--opening">{opening}</p>
+        ) : (
+          <p className="room-book__price">
+            <span className="room-book__from">From</span>
+            <span className="room-book__amount">
+              <strong>
+                {currency} {price}
+              </strong>
+              <span>wk / person</span>
+            </span>
+          </p>
+        )}
         <button type="submit" className="room-book__submit" disabled={!room.available}>
-          {room.available ? 'Book' : 'Sold out'}
+          {!room.available ? 'Sold out' : opening ? 'Register interest' : 'Book'}
           {room.available && <img src={arrowWhite} width={24} height={24} alt="" />}
         </button>
       </div>
@@ -421,8 +443,12 @@ export default function RoomPage({
   const [copied, setCopied] = useState(false);
   const amenitiesRef = useRef<HTMLDivElement>(null);
   const [amenitiesHeights, setAmenitiesHeights] = useState({ shown: 0, all: 0 });
-  const tag = TAGS[room.available ? room.tag : 'soldOut'];
-  const offers = ROOM_OFFERS;
+  // Specs are key features, views and the virtual tour; a room with none skips the heading
+  const hasSpecs = details.keyFeatures.length > 0 || details.views.length > 0 || !!details.virtualTour;
+  const tagId = room.available ? room.tag : 'soldOut';
+  const tag = tagId ? TAGS[tagId] : undefined;
+  // Before opening there are no offers to show
+  const offers = content.opening ? [] : ROOM_OFFERS;
 
   // The amenity list's height with the first groups, and with all of them, for the fold
   useLayoutEffect(() => {
@@ -498,7 +524,7 @@ export default function RoomPage({
 
   return (
     <>
-      <Nav tone="cream" subLinks={SUB_LINKS} hideBarAfter={SECTIONS.overview} barHiddenIn={BAR_HIDDEN_IN} />
+      <Nav tone="cream" subLinks={hasSpecs ? SUB_LINKS : SUB_LINKS.filter((l) => l.target !== SECTIONS.specs)} hideBarAfter={SECTIONS.overview} barHiddenIn={BAR_HIDDEN_IN} />
       <main className="room-page">
         <section className="room-top" id={SECTIONS.gallery}>
           <nav className="room-crumbs" aria-label="Breadcrumb">
@@ -526,10 +552,12 @@ export default function RoomPage({
                 <img src={photo} alt="" />
               </button>
             ))}
-            <span className={`room-tag room-tag--${room.available ? room.tag : 'soldOut'} room-gallery__tag`}>
-              <img src={tag.icon} width={16} height={16} alt="" />
-              {tag.label}
-            </span>
+            {tag && (
+              <span className={`room-tag room-tag--${tagId} room-gallery__tag`}>
+                <img src={tag.icon} width={16} height={16} alt="" />
+                {tag.label}
+              </span>
+            )}
             <button type="button" className="room-gallery__all" onClick={() => setLightbox(0)}>
               <img src={photosIcon} width={24} height={24} alt="" />
               See all photos
@@ -557,10 +585,12 @@ export default function RoomPage({
                 <img src={arrowLeft16} width={16} height={16} alt="" />
               </a>
               <div className="room-carousel__actions">
+                {details.virtualTour && (
                 <a href={details.virtualTour} className="room-chip" onClick={openTour}>
                   Virtual tour
                   <img src={arrowRight16} width={16} height={16} alt="" />
                 </a>
+                )}
                 <button
                   type="button"
                   className={`room-chip${copied ? '' : ' room-chip--icon'}`}
@@ -573,10 +603,12 @@ export default function RoomPage({
               </div>
             </div>
             <div className="room-carousel__bottom">
-              <span className={`room-tag room-tag--${room.available ? room.tag : 'soldOut'}`}>
-                <img src={tag.icon} width={16} height={16} alt="" />
-                {tag.label}
-              </span>
+              {tag && (
+                <span className={`room-tag room-tag--${tagId}`}>
+                  <img src={tag.icon} width={16} height={16} alt="" />
+                  {tag.label}
+                </span>
+              )}
               <span className="room-carousel__count" aria-live="polite">
                 {Math.min(slide, details.photos.length - 1) + 1}/{details.photos.length}
               </span>
@@ -594,10 +626,12 @@ export default function RoomPage({
                     {copied ? 'Link copied' : 'Share'}
                     <img src={shareIcon} width={24} height={24} alt="" />
                   </button>
+                  {details.virtualTour && (
                   <a href={details.virtualTour} className="room-link" onClick={openTour}>
                     Virtual tour
                     <img src={arrowRight} width={24} height={24} alt="" />
                   </a>
+                  )}
                 </div>
               </div>
               <div className="room-overview">
@@ -610,6 +644,7 @@ export default function RoomPage({
                   </p>
                 </div>
                 <p className="room-overview__text">{details.description}</p>
+                {offers.length > 0 && (
                 <div className="room-offers">
                   <span className="room-tag room-tag--offer">
                     <img src={tagLightning} width={16} height={16} alt="" />
@@ -627,11 +662,13 @@ export default function RoomPage({
                     ))}
                   </ul>
                 </div>
+                )}
               </div>
             </section>
 
             <section className="room-section" id={SECTIONS.specs}>
-              <p className="room-section__eyebrow">Specs</p>
+              {hasSpecs && <p className="room-section__eyebrow">Specs</p>}
+              {details.keyFeatures.length > 0 && (
               <div className="room-block">
                 <h2 className="room-block__title">Key features</h2>
                 <ul className="room-features">
@@ -643,6 +680,8 @@ export default function RoomPage({
                   ))}
                 </ul>
               </div>
+              )}
+              {details.views.length > 0 && (
               <div className="room-block">
                 <h2 className="room-block__title">Unit orientation &amp; views</h2>
                 <ul className="room-views">
@@ -655,10 +694,13 @@ export default function RoomPage({
                   ))}
                 </ul>
               </div>
+              )}
+              {details.virtualTour && (
               <a href={details.virtualTour} className="room-button" onClick={openTour}>
                 Virtual tour
                 <img src={arrowRight} width={24} height={24} alt="" />
               </a>
+              )}
               <p className="room-disclaimer">
                 <img src={infoIcon} width={24} height={24} alt="" />
                 Disclaimer: Images, videos, and virtual tours are for reference only. Actual room sizes, layouts, and
@@ -750,19 +792,31 @@ export default function RoomPage({
               setStayId={setStayId}
               date={date}
               setDate={setDate}
+              opening={content.opening}
+              registerLink={
+                content.opening && content.liveUrl && content.slug
+                  ? (s, d) => registerHref(content.liveUrl!, content.slug!, s, d)
+                  : undefined
+              }
             />
           </aside>
         </div>
 
         {/* Tablets and phones: the price and Book stay in reach, leading to the card */}
         <div className={`room-bookbar${bookInView ? ' room-bookbar--hidden' : ''}`}>
-          <p className="room-bookbar__price">
-            <span>From</span>
-            <strong>
-              {content.roomCurrency} {stays.find((s) => s.id === stayId)?.prices[room.id] ?? room.price}
-            </strong>
-            <span>wk / person</span>
-          </p>
+          {content.opening ? (
+            <p className="room-bookbar__price">
+              <strong>{content.opening}</strong>
+            </p>
+          ) : (
+            <p className="room-bookbar__price">
+              <span>From</span>
+              <strong>
+                {content.roomCurrency} {stays.find((s) => s.id === stayId)?.prices[room.id] ?? room.price}
+              </strong>
+              <span>wk / person</span>
+            </p>
+          )}
           <button
             type="button"
             className="room-book__submit"
@@ -771,7 +825,7 @@ export default function RoomPage({
               if (card) scrollToY(card.getBoundingClientRect().top + window.scrollY - 80);
             }}
           >
-            Book
+            {content.opening ? 'Register interest' : 'Book'}
             <img src={arrowWhite} width={24} height={24} alt="" />
           </button>
         </div>
@@ -780,7 +834,7 @@ export default function RoomPage({
         <WhyLiving />
         <AboutClosing />
       </main>
-      {tourOpen && <TourModal url={details.virtualTour} title={room.name} onClose={closeTour} />}
+      {tourOpen && details.virtualTour && <TourModal url={details.virtualTour} title={room.name} onClose={closeTour} />}
       <Footer />
       {planOpen && (
         <PlanViewer

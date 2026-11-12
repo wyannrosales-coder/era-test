@@ -73,10 +73,11 @@ const CURRENT_PROPERTIES: Property[] = [
   {
     id: 'bedford',
     name: 'EPIISOD Bedford',
-    address: '2 Ascot Vale Road, Flemington VIC 3031',
+    address: '33 Bedford St, North Melbourne VIC 3051',
     city: 'Melbourne',
     image: bedford,
     listingImage: cardBedford,
+    href: '/locations/bedford',
   },
   {
     id: 'mackenzie',

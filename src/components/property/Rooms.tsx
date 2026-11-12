@@ -57,6 +57,7 @@ function RoomCard({
   index,
   href,
   detail,
+  opening,
 }: {
   room: ListedRoom;
   currency: string;
@@ -64,8 +65,11 @@ function RoomCard({
   href?: string;
   /** The list view's size, views, key features and summary. */
   detail?: RoomDetails;
+  /** Before bookings open: shown in place of the price. */
+  opening?: string;
 }) {
-  const tag = TAGS[room.available ? room.tag : 'soldOut'];
+  const tagId = room.available ? room.tag : 'soldOut';
+  const tag = tagId ? TAGS[tagId] : undefined;
   const Card = href ? 'a' : 'article';
   return (
     <Card
@@ -75,10 +79,12 @@ function RoomCard({
     >
       <div className="room-card__image">
         <img src={room.image} alt="" />
-        <span className={`room-card__tag room-card__tag--${room.available ? room.tag : 'soldOut'}`}>
-          <img src={tag.icon} width={16} height={16} alt="" />
-          {tag.label}
-        </span>
+        {tag && (
+          <span className={`room-card__tag room-card__tag--${tagId}`}>
+            <img src={tag.icon} width={16} height={16} alt="" />
+            {tag.label}
+          </span>
+        )}
       </div>
       <div className="room-card__body">
         <div className="room-card__heading">
@@ -105,7 +111,12 @@ function RoomCard({
             </div>
           )}
         </div>
-        {room.weekly !== undefined ? (
+        {opening ? (
+          <p className="room-card__price room-card__price--opening">
+            <span className="room-card__from">{opening}</span>
+            <span className="room-card__register">Register interest</span>
+          </p>
+        ) : room.weekly !== undefined ? (
           <p className="room-card__price">
             <span className="room-card__from">From</span>
             <span className="room-card__amount">
@@ -173,7 +184,8 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
   // The rooms for the filters, at the property's list price when no term is chosen
   const rooms = useMemo<ListedRoom[]>(
     () =>
-      searchRooms(listing, applied, 'list')
+      // Before opening there are no prices, so a term or price range would match nothing
+      searchRooms(listing, content.opening ? { ...applied, term: '', price: '' } : applied, 'list')
         .map(({ room, weekly }): ListedRoom | null => {
           const card = content.rooms.find((r) => r.id === room.roomId);
           return card ? { ...card, weekly } : null;
@@ -289,6 +301,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
                   </svg>
                 </button>
               </div>
+              {!content.opening && (
               <div ref={sortRef} className="rooms__sort">
                 <button
                   type="button"
@@ -319,6 +332,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
                   </div>
                 )}
               </div>
+              )}
             </div>
 
             <FilterTabs
@@ -344,6 +358,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
                 currency={content.roomCurrency}
                 index={i}
                 href={roomHref(room.id)}
+                opening={content.opening}
                 detail={view === 'list' ? content.roomDetails.find((d) => d.roomId === room.id) : undefined}
               />
             ))}

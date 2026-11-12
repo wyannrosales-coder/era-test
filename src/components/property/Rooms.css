@@ -773,3 +773,26 @@ a.room-card:focus-visible {
   outline: 2px solid var(--bronze-700);
   outline-offset: 3px;
 }
+
+/* Before bookings open: the opening line, and Register interest in place of a price */
+.room-card__price--opening {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 12px;
+  white-space: normal;
+}
+
+.room-card__register {
+  border-bottom: 1px solid var(--bronze-700);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-strong);
+}
+
+.rooms__grid.is-list .room-card__price--opening {
+  flex-direction: column;
+  align-items: flex-end;
+}

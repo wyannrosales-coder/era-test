@@ -12,11 +12,7 @@ import type { PropertyContent, RoomType } from '../property/propertyContent';
 import { PROPERTIES } from '../locationData';
 import { PROPERTY_PAGES } from '../property/propertyPages';
 import { ALL_READY } from '../../lib/prototypeMode';
-import roomSignature from '../../assets/property/rooms/signature-studio.jpg';
-import roomQuad from '../../assets/property/rooms/quad-ensuite.jpg';
-import roomAspect from '../../assets/property/rooms/aspect-studio.jpg';
-import roomEmpowered from '../../assets/property/rooms/empowered-studio.jpg';
-import roomPremier from '../../assets/property/rooms/premier-empowered-studio.jpg';
+import { BEDFORD } from '../property/bedfordContent';
 
 export type CityId = 'melbourne' | 'sydney' | 'perth' | 'london';
 
@@ -141,6 +137,8 @@ export type SearchRoom = {
   currency: string;
   /** Weekly price with no term chosen (the property page's own list price). */
   basePrice?: number;
+  /** Before bookings open (e.g. "Opening Semester 2, 2027"): shown in place of a price. */
+  opening?: string;
   /** Weekly price per stay id. */
   prices: Record<string, number>;
 };
@@ -151,7 +149,8 @@ export function roomsOf(content: PropertyContent, propertyId: string): SearchRoo
   return content.rooms.map((room) => {
     const details = content.roomDetails.find((d) => d.roomId === room.id);
     const prices: Record<string, number> = {};
-    for (const stay of content.stays) if (stay.prices[room.id] !== undefined) prices[stay.id] = stay.prices[room.id];
+    // Before opening a stay lists the room without a price
+    if (!content.opening) for (const stay of content.stays) if (stay.prices[room.id] !== undefined) prices[stay.id] = stay.prices[room.id];
     return {
       key: `${propertyId}:${room.id}`,
       propertyId,
@@ -168,58 +167,22 @@ export function roomsOf(content: PropertyContent, propertyId: string): SearchRoo
       available: room.available,
       href: details && property?.href ? `${property.href}/${details.slug}` : undefined,
       currency: content.roomCurrency,
-      basePrice: room.price,
+      basePrice: content.opening ? undefined : room.price,
+      opening: content.opening,
       prices,
     };
   });
 }
 
 /**
- * EPIISOD Bedford's rooms (live site, November 2026): the property has no page or prices
- * yet, so each card leads to the enquiry form. TODO: real photos, sizes and prices.
- */
-const bedfordRoom = (
-  roomId: string,
-  type: RoomType,
-  name: string,
-  image: string,
-): SearchRoom => ({
-  key: `bedford:${roomId}`,
-  propertyId: 'bedford',
-  property: 'EPIISOD Bedford',
-  city: 'Melbourne',
-  cityId: 'melbourne',
-  roomId,
-  type,
-  typeLabel: type === 'Shared' ? 'Shared Apartment' : 'Studio',
-  name,
-  image,
-  available: true,
-  currency: 'AU$',
-  prices: {},
-});
-
-export const BEDFORD_ROOMS: SearchRoom[] = [
-  bedfordRoom('empowered', 'Studio', 'Empowered Studio', roomEmpowered),
-  bedfordRoom('quad', 'Shared', 'Quad 4 Bedroom Ensuite', roomQuad),
-  bedfordRoom('premier-quad', 'Shared', 'Premier Quad 4 Bedroom Ensuite', roomQuad),
-  bedfordRoom('premier-aspect', 'Studio', 'Premier Aspect Studio', roomAspect),
-  bedfordRoom('premier-empowered', 'Studio', 'Premier Empowered Studio', roomPremier),
-  bedfordRoom('signature', 'Studio', 'Signature Studio', roomSignature),
-  bedfordRoom('premier-signature', 'Studio', 'Premier Signature Studio', roomSignature),
-  bedfordRoom('executive', 'Studio', 'Executive Studio', roomPremier),
-  bedfordRoom('aspect', 'Studio', 'Aspect Studio', roomAspect),
-];
-
-/**
  * Every room across every property. With every property ready (prototype switch), each
- * Australian one lists its own rooms with prices, instead of Bedford's enquiry-only ones.
+ * Australian one lists its own rooms with prices (Bedford's have none yet).
  */
 export const ALL_ROOMS: SearchRoom[] = ALL_READY
   ? PROPERTIES.filter((p) => PROPERTY_PAGES[p.id] && p.city !== 'London').flatMap((p) =>
       roomsOf(PROPERTY_PAGES[p.id], p.id),
     )
-  : [...roomsOf(MACQUARIE_PARK, 'macquarie-park'), ...BEDFORD_ROOMS];
+  : [...roomsOf(MACQUARIE_PARK, 'macquarie-park'), ...roomsOf(BEDFORD, 'bedford')];
 
 /**
  * A room's weekly price: for a chosen term, that term's; otherwise the lowest the room

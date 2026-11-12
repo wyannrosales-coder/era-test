@@ -41,7 +41,12 @@ export default function PropertyHero({ content, onSeeRooms }: PropertyHeroProps)
 
   return (
     <section ref={sectionRef} className="property-hero">
-      <img className="property-hero__image" src={content.hero} alt="" />
+      <img
+        className="property-hero__image"
+        src={content.hero}
+        style={content.heroPosition ? { objectPosition: content.heroPosition } : undefined}
+        alt=""
+      />
       <div className="property-hero__overlay" aria-hidden />
       <div className="property-hero__shade" aria-hidden />
 
@@ -49,6 +54,7 @@ export default function PropertyHero({ content, onSeeRooms }: PropertyHeroProps)
         <h1 className="type-h1 property-hero__title">
           {content.brand} <em>{content.place}</em>
         </h1>
+        {content.streetAddress && <p className="property-hero__address">{content.streetAddress}</p>}
 
         <VLine src={heroLine} length={50} />
 

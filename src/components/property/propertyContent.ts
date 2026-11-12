@@ -33,11 +33,12 @@ export type Room = {
   typeLabel: string;
   name: string;
   image: string;
-  tag: RoomTag;
+  /** Status tag; none for rooms that have no offer or sold-out state to flag. */
+  tag?: RoomTag;
   /** Views, e.g. "Garden/Urban/Pool/City", where known. */
   features?: string;
-  /** Weekly price with no length of stay chosen. */
-  price: number;
+  /** Weekly price with no length of stay chosen; none while a property has no pricing yet. */
+  price?: number;
   available: boolean;
 };
 
@@ -77,6 +78,20 @@ export type MapPlace = { name: string; address: string; lat: number; lng: number
 export type MapCategory = { name: string; places: MapPlace[] };
 
 export type PropertyContent = {
+  /** The property's id, and its page on the live site, where booking (or registering interest) happens for now. */
+  slug?: string;
+  liveUrl?: string;
+  /**
+   * Before bookings open (e.g. "Opening Semester 2, 2027"): rooms show this in place of a
+   * price, and "Register interest" (the live site's enquiry form) takes the place of Book.
+   */
+  opening?: string;
+  /** The street address shown under the name in the hero. */
+  streetAddress?: string;
+  /** Keep the name on one line in the hero (long names otherwise break after the brand). */
+  heroTitleOneLine?: boolean;
+  /** Where the hero photo is anchored (object-position). */
+  heroPosition?: string;
   /** The property's experience page, when it has one (lib/links.ts). */
   experienceHref?: string;
   /** Shown before the italic part of the name, e.g. "EPIISOD" + "Macquarie Park". */
