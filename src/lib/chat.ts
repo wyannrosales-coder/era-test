@@ -297,3 +297,24 @@ function autoResolve() {
 
 // A page load can land with a lookup still unanswered (it was sent as the page changed)
 if (state.messages.length) window.setTimeout(autoResolve, 0);
+
+// ---- Quick replies and room cards: a reply can end with <rooms> and <options> blocks, which the panel shows
+export type Reply = { body: string; options: string[]; rooms: string[] };
+const BLOCK = /<(options|rooms)>([\s\S]*?)<\/\1>\s*$/i;
+
+export function parseReply(text: string): Reply {
+  let body = text;
+  let options: string[] = [];
+  let rooms: string[] = [];
+  for (let m = body.match(BLOCK); m; m = body.match(BLOCK)) {
+    const lines = m[2]
+      .split(/[\n,]/)
+      .map((l) => l.replace(/^\s*(?:[-•*]|\d+[.)])\s*/, '').trim())
+      .filter(Boolean);
+    if (m[1].toLowerCase() === 'rooms') rooms = lines.slice(0, 4);
+    else options = lines.filter((l) => l.length <= 80).slice(0, 6);
+    body = body.slice(0, m.index).trimEnd();
+  }
+  // A block still being written (streaming) is not shown
+  return { body: body.replace(/<(?:options|rooms)>[\s\S]*$/i, '').trimEnd(), options, rooms };
+}

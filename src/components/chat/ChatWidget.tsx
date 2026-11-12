@@ -4,6 +4,7 @@ import { PROPERTIES } from '../locationData';
 import { getSession, knownAccount, saveDraft, saveProfile, signIn, submitApplication, getProfile } from '../../lib/auth';
 import {
   isContext,
+  parseReply,
   pendingTools,
   planBooking,
   resetChat,
@@ -17,13 +18,15 @@ import {
   type Outcome,
   type ToolUse,
 } from '../../lib/chat';
-import { findRoom } from '../../lib/chatCatalog';
+import { findRoom, type CatalogRoom } from '../../lib/chatCatalog';
 import '../EnquiryPill.css';
 import './ChatWidget.css';
 
 const DISMISSED_KEY = 'epiisod-enquiry-dismissed';
 const ENQUIRIES_KEY = 'epiisod-enquiries';
 const EMAIL_OK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+/** Shown under an answer when the assistant gave no choices of its own */
+const FALLBACK = ['Help me find a room', 'Current offers', 'Talk to the team'];
 const STARTERS = ['Help me find a room', 'I’d like to book a room', 'What’s included in the rent?', 'Tell me about current offers'];
 
 const money = (currency: string, n: number) => `${currency}${n.toLocaleString('en-AU', { maximumFractionDigits: 0 })}`;
@@ -133,9 +136,10 @@ function Options({ tool, disabled }: ElementProps) {
   );
 }
 
-function Rooms({ tool, disabled }: ElementProps) {
-  const rooms = (Array.isArray(tool.input.rooms) ? tool.input.rooms : []).map((id) => findRoom(String(id))).filter((r) => !!r);
-  const stayId = typeof tool.input.stay_id === 'string' ? tool.input.stay_id : '';
+/** Room cards, from the show_rooms tool or from a <rooms> marker in a reply */
+function RoomCards({ ids, stayId = '', disabled, onChoose }: { ids: string[]; stayId?: string; disabled: boolean; onChoose: (r: CatalogRoom) => void }) {
+  const rooms = ids.map((id) => findRoom(id)).filter((r): r is CatalogRoom => !!r);
+  if (!rooms.length) return null;
   return (
     <div className="chat-rooms" data-lenis-prevent>
       {rooms.map((r) => {
@@ -171,7 +175,7 @@ function Rooms({ tool, disabled }: ElementProps) {
                   type="button"
                   className="chat-button chat-button--small"
                   disabled={disabled || !r.room.available}
-                  onClick={() => resolveTool(tool.id, { chosen_room: r.id, name: r.room.name, property: r.propertyName }, { text: `${r.room.name}, ${r.content.place}` })}
+                  onClick={() => onChoose(r)}
                 >
                   {r.content.opening ? 'I’m interested' : 'Choose'}
                 </button>
@@ -184,6 +188,18 @@ function Rooms({ tool, disabled }: ElementProps) {
         );
       })}
     </div>
+  );
+}
+
+function Rooms({ tool, disabled }: ElementProps) {
+  const ids = (Array.isArray(tool.input.rooms) ? tool.input.rooms : []).map(String);
+  return (
+    <RoomCards
+      ids={ids}
+      stayId={typeof tool.input.stay_id === 'string' ? tool.input.stay_id : ''}
+      disabled={disabled}
+      onChoose={(r) => resolveTool(tool.id, { chosen_room: r.id, name: r.room.name, property: r.propertyName }, { text: `${r.room.name}, ${r.content.place}` })}
+    />
   );
 }
 
@@ -625,6 +641,15 @@ export default function ChatWidget() {
     setDraft('');
   };
 
+  const lastMessage = chat.messages[chat.messages.length - 1];
+  const lastTextKey =
+    lastMessage?.role === 'assistant'
+      ? (() => {
+          const j = lastMessage.content.map((b) => b.type === 'text' && typeof b.text === 'string' && !!b.text.trim()).lastIndexOf(true);
+          return j >= 0 ? `${chat.messages.length - 1}-${j}` : '';
+        })()
+      : '';
+
   const renderBlock = (b: Block, role: string, key: string) => {
     if (b.type === 'text' && typeof b.text === 'string' && b.text.trim() && !isContext(b)) {
       return role === 'user' ? (
@@ -632,9 +657,38 @@ export default function ChatWidget() {
           {b.text}
         </div>
       ) : (
-        <div key={key} className="chat-bubble">
-          <Rich text={b.text} />
-        </div>
+        (() => {
+          const reply = parseReply(b.text as string);
+          // Choices stay live only under the newest reply, while nothing else is waiting
+          const live = key === lastTextKey && !chat.busy && waiting.length === 0 && !chat.error;
+          return (
+            <Fragment key={key}>
+              {reply.body && (
+                <div className="chat-bubble">
+                  <Rich text={reply.body} />
+                </div>
+              )}
+              {live && reply.rooms.length > 0 && (
+                <div className="chat-element">
+                  <RoomCards
+                    ids={reply.rooms}
+                    disabled={false}
+                    onChoose={(r) => send(`I’d like the ${r.room.name} at ${r.content.place}`)}
+                  />
+                </div>
+              )}
+              {live && (
+                <div className="chat-options chat-options--reply">
+                  {(reply.options.length || reply.rooms.length ? reply.options : FALLBACK).map((o) => (
+                    <button key={o} type="button" className="chat-chip" onClick={() => send(o)}>
+                      {o}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </Fragment>
+          );
+        })()
       );
     }
     if (b.type === 'tool_use') {
@@ -741,9 +795,11 @@ export default function ChatWidget() {
             {chat.messages.map((m, i) => m.content.map((b, j) => renderBlock(b, m.role, `${i}-${j}`)))}
             {chat.busy &&
               (chat.streaming ? (
-                <div className="chat-bubble">
-                  <Rich text={chat.streaming} />
-                </div>
+                parseReply(chat.streaming).body ? (
+                  <div className="chat-bubble">
+                    <Rich text={parseReply(chat.streaming).body} />
+                  </div>
+                ) : null
               ) : (
                 <div className="chat-bubble chat-typing" aria-label="The assistant is writing">
                   <i />
