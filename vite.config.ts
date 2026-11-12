@@ -31,7 +31,7 @@ function experiencePages(): Plugin {
 
 /**
  * Locally, /api/chat runs the same function Vercel serves (api/chat.ts), with the key read
- * from .env.local (ANTHROPIC_API_KEY=…). Other /api routes are left to Vercel.
+ * from .env.local (GEMINI_API_KEY=…). Other /api routes are left to Vercel.
  *
  * Dev only: /api/dev/catalog rewrites knowledge/rooms.md (the rooms, terms and prices the
  * assistant is told about) from this site's own room data and rebundles the knowledge base.
@@ -42,7 +42,7 @@ function chatApi(): Plugin {
   return {
     name: 'chat-api',
     configureServer(server) {
-      Object.assign(process.env, loadEnv(server.config.mode, server.config.root, ['ANTHROPIC_', 'CHAT_']));
+      Object.assign(process.env, loadEnv(server.config.mode, server.config.root, ['GEMINI_', 'CHAT_']));
       server.middlewares.use('/api/dev/catalog', async (req, res) => {
         const chunks: Buffer[] = [];
         for await (const chunk of req) chunks.push(chunk as Buffer);

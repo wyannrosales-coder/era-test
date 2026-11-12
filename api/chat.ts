@@ -3,22 +3,25 @@
  *
  * The browser sends the conversation so far; this adds the instructions, the knowledge base
  * copied from epiisod.com (knowledge/*.md, bundled into api/_knowledge.ts by
- * `npm run knowledge`) and the tools, asks Claude, and streams the reply back as
+ * `npm run knowledge`) and the tools, asks Gemini, and streams the reply back as
  * server-sent events:
  *   data: {"type":"text","delta":"…"}            the reply as it is written
  *   data: {"type":"done","message":{…},"stop":…}  the whole assistant turn, to keep and send back
  *   data: {"type":"error","code":…,"message":…}
  *
  * The tools are things the chat panel shows the customer (options, room cards, forms, the
- * sign-in, the booking and enquiry confirmations): when Claude calls one the turn ends, the
+ * sign-in, the booking and enquiry confirmations): when the model calls one the turn ends, the
  * browser shows it, and what the customer did comes back as the tool's result.
  *
- * Set ANTHROPIC_API_KEY in the Vercel project's environment variables (and in .env.local for
+ * Set GEMINI_API_KEY in the Vercel project's environment variables (and in .env.local for
  * `npm run dev`). The key is only read here, on the server. Without it this answers 503 and
  * the chat panel points people to the contact page instead.
- * Optional: CHAT_MODEL (default claude-opus-5-5), CHAT_EFFORT (default low).
+ * Optional: CHAT_MODEL (default gemini-3.6-flash), CHAT_EFFORT (low | medium | high, default low).
+ *
+ * Talks to the Gemini API's generateContent REST endpoint directly (no SDK). The assistant's
+ * turns go back to the browser with Gemini's own parts attached (`gemini`), which come back
+ * unchanged on the next request: Gemini 3 models need their thought signatures replayed.
  */
-import Anthropic from '@anthropic-ai/sdk';
 import { KNOWLEDGE } from './_knowledge.js';
 
 export const maxDuration = 60;
@@ -27,7 +30,7 @@ export const maxDuration = 60;
  * Rate limits, so one visitor (or a script) can't run up the bill. Kept in memory, so they hold
  * per server instance: Vercel may run several, and a cold start resets the counts. That makes
  * them a good brake, not a hard cap: for a hard one, add a Vercel Firewall rate-limit rule on
- * /api/chat and set a monthly spend limit on the API key in the Anthropic Console.
+ * /api/chat and set a monthly spend limit on the API key in Google AI Studio / Google Cloud.
  * Override with CHAT_LIMIT_PER_IP (requests per 10 minutes) and CHAT_LIMIT_PER_HOUR (all visitors).
  */
 const WINDOW_MS = 10 * 60_000;
@@ -100,7 +103,8 @@ The sections below are the content of epiisod.com, followed by the booking catal
 
 const str = { type: 'string' } as const;
 
-const TOOLS: Anthropic.Beta.BetaTool[] = [
+type ToolDef = { name: string; description: string; input_schema: Record<string, unknown> };
+const TOOLS: ToolDef[] = [
   {
     name: 'show_options',
     description:
@@ -237,13 +241,89 @@ const TOOLS: Anthropic.Beta.BetaTool[] = [
   },
 ];
 
+type Part = {
+  text?: string;
+  thought?: boolean;
+  thoughtSignature?: string;
+  functionCall?: { name: string; args?: Record<string, unknown>; id?: string };
+  functionResponse?: { name: string; response: Record<string, unknown>; id?: string };
+};
+type Content = { role: 'user' | 'model'; parts: Part[] };
+type Block = { type: string; [key: string]: unknown };
+type ClientMessage = { role: 'user' | 'assistant'; content: Block[] | string; gemini?: unknown };
+
 const sse = (data: unknown) => `data: ${JSON.stringify(data)}\n\n`;
 const json = (status: number, code: string, message: string) => Response.json({ error: { code, message } }, { status });
+const isObject = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
+
+/** Gemini parts that came back from the browser: keep only the kinds this function produces. */
+function cleanParts(raw: unknown): Part[] | null {
+  if (!Array.isArray(raw)) return null;
+  const parts: Part[] = [];
+  for (const p of raw) {
+    if (!isObject(p)) return null;
+    const part: Part = {};
+    if (typeof p.text === 'string') part.text = p.text;
+    if (p.thought === true) part.thought = true;
+    if (typeof p.thoughtSignature === 'string') part.thoughtSignature = p.thoughtSignature;
+    if (isObject(p.functionCall) && typeof p.functionCall.name === 'string') {
+      part.functionCall = { name: p.functionCall.name, args: isObject(p.functionCall.args) ? p.functionCall.args : {} };
+      if (typeof p.functionCall.id === 'string') part.functionCall.id = p.functionCall.id;
+    }
+    if (!Object.keys(part).length) return null;
+    parts.push(part);
+  }
+  return parts;
+}
+
+const blocksOf = (m: ClientMessage): Block[] => (typeof m.content === 'string' ? [{ type: 'text', text: m.content }] : Array.isArray(m.content) ? m.content : []);
+
+/** The conversation in the browser's form (text, tool_use and tool_result blocks) as Gemini contents. */
+function toContents(messages: ClientMessage[]): Content[] | null {
+  const contents: Content[] = [];
+  // The function calls of the last model turn, in order: what the next tool results answer
+  let calls: { id: string; name: string; geminiId?: string }[] = [];
+  for (const m of messages) {
+    const blocks = blocksOf(m);
+    if (m.role === 'assistant') {
+      const raw = cleanParts(m.gemini);
+      const toolUses = blocks.filter((b) => b.type === 'tool_use');
+      const parts: Part[] = raw ?? [
+        ...blocks.filter((b) => b.type === 'text' && typeof b.text === 'string' && (b.text as string).trim()).map((b) => ({ text: b.text as string })),
+        ...toolUses.map((b) => ({ functionCall: { name: String(b.name), args: isObject(b.input) ? b.input : {} } })),
+      ];
+      const fcs = parts.filter((p) => p.functionCall);
+      calls = fcs.map((p, i) => ({ id: String(toolUses[i]?.id ?? ''), name: p.functionCall!.name, geminiId: p.functionCall!.id }));
+      if (parts.length) contents.push({ role: 'model', parts });
+    } else {
+      const parts: Part[] = [];
+      const results = blocks.filter((b) => b.type === 'tool_result');
+      // Every call in the last model turn needs an answer, in the same order
+      for (const call of calls) {
+        const result = results.find((b) => b.tool_use_id === call.id);
+        let value: unknown = result?.content ?? 'Not used.';
+        if (typeof value === 'string') {
+          try {
+            value = JSON.parse(value);
+          } catch {
+            // plain text
+          }
+        }
+        const body = isObject(value) ? value : { result: value };
+        parts.push({ functionResponse: { name: call.name, response: result?.is_error ? { error: body } : body, ...(call.geminiId ? { id: call.geminiId } : {}) } });
+      }
+      calls = [];
+      for (const b of blocks) if (b.type === 'text' && typeof b.text === 'string' && b.text.trim()) parts.push({ text: b.text });
+      if (parts.length) contents.push({ role: 'user', parts });
+    }
+  }
+  return contents.length && contents[0].role === 'user' && contents[contents.length - 1].role === 'user' ? contents : null;
+}
 
 export async function POST(request: Request) {
   // Read through globalThis so this compiles with or without Node's type definitions
   const { env } = (globalThis as unknown as { process: { env: Record<string, string | undefined> } }).process;
-  if (!env.ANTHROPIC_API_KEY) return json(503, 'not_configured', 'The assistant is not connected yet.');
+  if (!env.GEMINI_API_KEY) return json(503, 'not_configured', 'The assistant is not connected yet.');
 
   // Each tool answer is a request too, so a full booking takes around twenty
   const ip = request.headers.get('x-real-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'local';
@@ -257,61 +337,106 @@ export async function POST(request: Request) {
 
   const raw = await request.text();
   if (raw.length > MAX_BODY) return json(413, 'too_long', 'This conversation is too long. Please start a new chat.');
-  let messages: Anthropic.Beta.BetaMessageParam[];
+  let contents: Content[] | null;
   try {
-    messages = (JSON.parse(raw) as { messages: Anthropic.Beta.BetaMessageParam[] }).messages;
-    if (!Array.isArray(messages) || !messages.length || messages[0].role !== 'user') throw new Error('shape');
-    if (messages.some((m) => m.role !== 'user' && m.role !== 'assistant')) throw new Error('role');
+    const { messages } = JSON.parse(raw) as { messages: ClientMessage[] };
+    if (!Array.isArray(messages) || messages.length > MAX_TURNS || messages.some((m) => m?.role !== 'user' && m?.role !== 'assistant')) throw new Error('shape');
+    contents = toContents(messages);
+    if (!contents) throw new Error('shape');
   } catch {
     return json(400, 'bad_request', 'The conversation could not be read.');
   }
-  if (messages.length > MAX_TURNS) return json(413, 'too_long', 'This conversation is too long. Please start a new chat.');
 
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  const model = env.CHAT_MODEL || 'gemini-3.6-flash';
+  const level = { low: 'LOW', medium: 'MEDIUM', high: 'HIGH' }[env.CHAT_EFFORT ?? 'low'] ?? 'LOW';
   const encoder = new TextEncoder();
 
   const body = new ReadableStream<Uint8Array>({
     async start(controller) {
       const send = (data: unknown) => controller.enqueue(encoder.encode(sse(data)));
       try {
-        const stream = client.beta.messages.stream({
-          model: env.CHAT_MODEL || 'claude-opus-5-5',
-          max_tokens: 8000,
-          output_config: { effort: (env.CHAT_EFFORT as 'low' | 'medium' | 'high' | undefined) || 'low' },
-          // If a safety check declines a turn, the API retries it on its default fallback model
-          betas: ['server-side-fallback-2026-07-01'],
-          fallbacks: 'default',
-          // The instructions and knowledge base never change between requests, so they are
-          // cached; the second breakpoint (top level) caches the conversation so far
-          system: [{ type: 'text', text: INSTRUCTIONS + KNOWLEDGE, cache_control: { type: 'ephemeral', ttl: '1h' } }],
-          cache_control: { type: 'ephemeral' },
-          tools: TOOLS,
-          tool_choice: { type: 'auto', disable_parallel_tool_use: true },
-          messages,
+        const res = await fetch(`${env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com'}/v1beta/models/${encodeURIComponent(model)}:streamGenerateContent?alt=sse`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY! },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: INSTRUCTIONS + KNOWLEDGE }] },
+            contents,
+            tools: [{ functionDeclarations: TOOLS.map((t) => ({ name: t.name, description: t.description, parametersJsonSchema: t.input_schema })) }],
+            toolConfig: { functionCallingConfig: { mode: 'AUTO' } },
+            generationConfig: { maxOutputTokens: 4000, thinkingConfig: { thinkingLevel: level } },
+          }),
         });
-        stream.on('text', (delta) => send({ type: 'text', delta }));
-        const message = await stream.finalMessage();
-        if (message.stop_reason === 'refusal') {
+        if (!res.ok || !res.body) {
+          const detail = (await res.json().catch(() => null)) as { error?: { message?: string; status?: string } } | null;
+          console.error('chat: Gemini error', res.status, detail?.error?.message);
+          if (res.status === 429) send({ type: 'error', code: 'busy', message: 'We’re a little busy right now. Please try again in a moment.' });
+          else if (res.status === 401 || res.status === 403 || /api key/i.test(detail?.error?.message ?? ''))
+            send({ type: 'error', code: 'not_configured', message: 'The assistant is not connected yet.' });
+          else send({ type: 'error', code: 'upstream', message: 'Something went wrong on our side. Please try again.' });
+          return;
+        }
+
+        const parts: Part[] = [];
+        let finish = '';
+        let blocked = '';
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        for (;;) {
+          const { done, value } = await reader.read();
+          buffer += decoder.decode(value, { stream: !done });
+          const events = buffer.split(/\r?\n\r?\n/);
+          buffer = events.pop() ?? '';
+          if (done && buffer.trim()) events.push(buffer);
+          for (const event of events) {
+            const line = event.split(/\r?\n/).find((l) => l.startsWith('data:'));
+            if (!line) continue;
+            const chunk = JSON.parse(line.slice(5).trim()) as {
+              candidates?: { content?: { parts?: Part[] }; finishReason?: string }[];
+              promptFeedback?: { blockReason?: string };
+            };
+            if (chunk.promptFeedback?.blockReason) blocked = chunk.promptFeedback.blockReason;
+            const candidate = chunk.candidates?.[0];
+            if (candidate?.finishReason) finish = candidate.finishReason;
+            for (const part of candidate?.content?.parts ?? []) {
+              const last = parts[parts.length - 1];
+              if (typeof part.text === 'string' && !part.functionCall && !part.thought) {
+                if (part.text) send({ type: 'text', delta: part.text });
+                // Streamed text arrives in pieces: join them, keeping the signature that closes them
+                if (last && typeof last.text === 'string' && !last.thought && !last.functionCall && !last.thoughtSignature) {
+                  last.text += part.text;
+                  if (part.thoughtSignature) last.thoughtSignature = part.thoughtSignature;
+                  continue;
+                }
+              }
+              parts.push(part);
+            }
+          }
+          if (done) break;
+        }
+
+        const calls = parts.filter((p) => p.functionCall);
+        if (blocked || (!parts.length && finish !== 'STOP')) {
           send({ type: 'error', code: 'refusal', message: 'Sorry, I can’t help with that here.' });
-        } else if (message.stop_reason === 'max_tokens' && message.content.some((b) => b.type === 'tool_use')) {
+        } else if (finish === 'MAX_TOKENS' && calls.length) {
           send({ type: 'error', code: 'truncated', message: 'That reply was cut short. Please try again.' });
+        } else if (finish && !['STOP', 'MAX_TOKENS'].includes(finish) && !parts.some((p) => p.text?.trim() || p.functionCall)) {
+          send({ type: 'error', code: 'refusal', message: 'Sorry, I can’t help with that here.' });
         } else {
-          // The whole turn (including reasoning blocks) goes back to the browser, which
-          // returns it unchanged on the next request
-          send({ type: 'done', message: { role: 'assistant', content: message.content }, stop: message.stop_reason });
+          // The turn goes back to the browser in its own form (text and tool_use blocks), with
+          // Gemini's parts alongside, returned unchanged on the next request
+          const nonce = Date.now().toString(36);
+          let n = 0;
+          const content: Block[] = [];
+          for (const part of parts) {
+            if (part.functionCall) content.push({ type: 'tool_use', id: `call_${nonce}_${n++}`, name: part.functionCall.name, input: part.functionCall.args ?? {} });
+            else if (part.text?.trim() && !part.thought) content.push({ type: 'text', text: part.text });
+          }
+          send({ type: 'done', message: { role: 'assistant', content, gemini: parts }, stop: calls.length ? 'tool_use' : 'end_turn' });
         }
       } catch (error) {
-        if (error instanceof Anthropic.AuthenticationError) {
-          send({ type: 'error', code: 'not_configured', message: 'The assistant is not connected yet.' });
-        } else if (error instanceof Anthropic.RateLimitError) {
-          send({ type: 'error', code: 'busy', message: 'We’re a little busy right now. Please try again in a moment.' });
-        } else if (error instanceof Anthropic.APIError) {
-          console.error('chat: API error', error.status, error.message);
-          send({ type: 'error', code: 'upstream', message: 'Something went wrong on our side. Please try again.' });
-        } else {
-          console.error('chat: error', error);
-          send({ type: 'error', code: 'upstream', message: 'Something went wrong on our side. Please try again.' });
-        }
+        console.error('chat: error', error);
+        send({ type: 'error', code: 'upstream', message: 'Something went wrong on our side. Please try again.' });
       } finally {
         controller.close();
       }
