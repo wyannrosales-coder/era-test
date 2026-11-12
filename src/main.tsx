@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import type { ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
 import { initSmoothScroll } from './lib/smoothScroll';
-import EnquiryPill from './components/EnquiryPill';
+import ChatWidget from './components/chat/ChatWidget';
 import AuthHost from './components/auth/AuthHost';
 import './styles/global.css';
 import './styles/lux.css';
@@ -27,12 +27,12 @@ if (path === '/v2' || path.startsWith('/v2/')) {
 
 initSmoothScroll();
 
-// The floating enquiry pill lives outside the page so every page (v1 and v2) gets it
+// The floating chat pill (the assistant) lives outside the page so every page (v1 and v2) gets it
 const pillRoot = document.createElement('div');
 document.body.appendChild(pillRoot);
 createRoot(pillRoot).render(
   <>
-    <EnquiryPill />
+    <ChatWidget />
     <AuthHost />
   </>,
 );

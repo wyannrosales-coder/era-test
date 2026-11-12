@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import Nav from '../components/Nav';
-import EnquiryPill from '../components/EnquiryPill';
+import ChatWidget from '../components/chat/ChatWidget';
 import AuthHost from '../components/auth/AuthHost';
 import '../styles/tokens.css';
 import '../styles/type.css';
@@ -31,7 +31,7 @@ if (mount) {
   document.body.appendChild(pillRoot);
   createRoot(pillRoot).render(
     <>
-      <EnquiryPill />
+      <ChatWidget />
       <AuthHost />
     </>,
   );
