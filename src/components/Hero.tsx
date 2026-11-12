@@ -1,17 +1,18 @@
 import { useRef, useState } from 'react';
-import type { FormEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import VLine from './VLine';
 import { gsap, useGSAP } from '../lib/smoothScroll';
 import heroImage from '../assets/hero.jpg';
 import heroLine from '../assets/hero-line.svg';
-import dropdown from '../assets/dropdown.svg';
-import arrowRight from '../assets/arrow-right-white.svg';
-import { REGIONS } from './locationData';
+import RoomSearchBar from './rooms/RoomSearchBar';
+import { NO_FILTERS, type Filters } from './rooms/roomSearch';
 import './Hero.css';
-import Select from './ui/Select';
 
-/** Cities per country, in the order of the Locations page. */
-const CITIES: Record<string, string[]> = Object.fromEntries(REGIONS.map((r) => [r.name, r.cities]));
+/** Find a room, with the filters in its address. */
+export const findRoomHref = (f: Filters) => {
+  const q = new URLSearchParams(Object.entries(f).filter(([, v]) => v));
+  return `/find-a-room${q.size ? `?${q}` : ''}`;
+};
 
 /** The Locations page, showing one country's city. */
 export const locationsHref = (country: string, city: string) =>
@@ -23,8 +24,8 @@ type HeroProps = {
   subtitle?: ReactNode;
   /** The line between the title and the subtitle (Locations, Figma 1182:17842) rather than above the search. */
   lineAfterTitle?: boolean;
-  /** What the search does; by default it opens the Locations page for the chosen city. */
-  onSearch?: (country: string, city: string) => void;
+  /** What the search does; by default it opens Find a room with the chosen filters. */
+  onSearch?: (filters: Filters) => void;
 };
 
 /**
@@ -40,21 +41,10 @@ export default function Hero({
   ),
   subtitle = 'Modern spaces, all-inclusive amenities, and a vibrant student community—all in the cities where you study.',
   lineAfterTitle = false,
-  onSearch = (country, city) => window.location.assign(locationsHref(country, city)),
+  onSearch = (filters) => window.location.assign(findRoomHref(filters)),
 }: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [country, setCountry] = useState(REGIONS[0].name);
-  const [city, setCity] = useState(REGIONS[0].cities[0]);
-
-  const onCountryChange = (next: string) => {
-    setCountry(next);
-    setCity(CITIES[next][0]);
-  };
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    onSearch(country, city);
-  };
+  const [filters, setFilters] = useState<Filters>(NO_FILTERS);
 
   // Exit parallax: as the hero scrolls away the photo drifts at half speed (so the next
   // section slides over it), the copy lags further and fades, and the scene darkens.
@@ -98,45 +88,13 @@ export default function Hero({
           </>
         )}
 
-        <form className="hero-search" onSubmit={onSubmit}>
-          <div className="hero-search__cell">
-            <div className="hero-search__field hero-search__field--intro">Start your story</div>
-          </div>
-
-          <label className="hero-search__cell hero-search__cell--action">
-            <div className="hero-search__field">
-              <span className="hero-search__label">Country</span>
-              <span className="hero-search__select">
-                <Select value={country} onChange={(e) => onCountryChange(e.target.value)}>
-                  {Object.keys(CITIES).map((c) => (
-                    <option key={c}>{c}</option>
-                  ))}
-                </Select>
-                <img src={dropdown} width={16} height={16} alt="" />
-              </span>
-            </div>
-          </label>
-
-          <label className="hero-search__cell hero-search__cell--action">
-            <div className="hero-search__field">
-              <span className="hero-search__label">City</span>
-              <span className="hero-search__select">
-                <Select value={city} onChange={(e) => setCity(e.target.value)}>
-                  {CITIES[country].map((c) => (
-                    <option key={c}>{c}</option>
-                  ))}
-                </Select>
-                <img src={dropdown} width={16} height={16} alt="" />
-              </span>
-            </div>
-          </label>
-
-          <div className="hero-search__cell hero-search__cell--action">
-            <button type="submit" className="hero-search__submit" aria-label="Search">
-              <img src={arrowRight} width={24} height={24} alt="" />
-            </button>
-          </div>
-        </form>
+        <RoomSearchBar
+          className="room-search--hero"
+          value={filters}
+          onChange={setFilters}
+          onSearch={() => onSearch(filters)}
+          onClear={() => setFilters(NO_FILTERS)}
+        />
       </div>
     </section>
   );

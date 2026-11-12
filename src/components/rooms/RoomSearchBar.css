@@ -204,3 +204,102 @@
     flex: 1;
   }
 }
+
+/*
+ * On the homepage hero: glass over the photo, as the hero search always was — a blurred,
+ * lightly tinted pill panel, cream labels, white values.
+ */
+.room-search--hero {
+  padding: 18px 24px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 28px;
+  background: rgba(14, 22, 38, 0.34);
+  box-shadow: none;
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+}
+
+.room-search--hero .room-search__label {
+  color: var(--menu-text, #eadfce);
+}
+
+.room-search--hero .ui-select {
+  border-color: rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  padding: 0 18px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.room-search--hero .ui-select:hover,
+.room-search--hero .ui-select.is-open {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: none;
+}
+
+.room-search--hero .ui-select__button,
+.room-search--hero .ui-select__button.is-empty {
+  color: #fff;
+}
+
+.room-search--hero .ui-select::after {
+  border-color: #fff;
+}
+
+.room-search--hero .ui-select:has(.ui-select__button:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.room-search--hero .room-search__submit {
+  border-color: var(--gold, #c9a46a);
+  background: var(--gold, #c9a46a);
+  color: var(--royal-chocolate-700);
+}
+
+.room-search--hero .room-search__submit:hover {
+  border-color: #fff;
+  background: #fff;
+}
+
+.room-search--hero .room-search__clear {
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+.room-search--hero .room-search__clear:hover {
+  background: #fff;
+  color: var(--royal-chocolate-700);
+}
+
+/* Phones: a compact two-column grid so the hero's copy still fits above it */
+@media (max-width: 700px) {
+  .room-search--hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .room-search--hero .room-search__field,
+  .room-search--hero .room-search__field--city,
+  .room-search--hero .room-search__field--wide {
+    min-width: 0;
+  }
+
+  .room-search--hero .room-search__field--wide,
+  .room-search--hero .room-search__field--city,
+  .room-search--hero .room-search__actions {
+    grid-column: 1 / -1;
+  }
+
+  .room-search--hero .room-search__field {
+    gap: 5px;
+  }
+
+  .room-search--hero .ui-select,
+  .room-search--hero .room-search__submit,
+  .room-search--hero .room-search__clear {
+    height: 40px;
+  }
+}
