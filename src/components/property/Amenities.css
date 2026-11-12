@@ -471,3 +471,17 @@
     width: 100%;
   }
 }
+
+/* Amenities are chosen by clicking */
+.amenities__item {
+  cursor: pointer;
+}
+
+.amenities__item:focus-visible {
+  outline: 2px solid var(--gold, #b8966e);
+  outline-offset: 6px;
+}
+
+.amenities__item:not(.is-active):hover .amenities__title {
+  color: var(--white);
+}
