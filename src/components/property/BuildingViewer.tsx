@@ -197,6 +197,11 @@ export default function BuildingViewer({ src, view, parts, callout = null, onLoa
     // half of the view, below it in the upper half), the line runs out of the card's side
     // and turns down or up to the dot, as in a labelled diagram.
     const spot = new Vector3();
+    // Which side and half the card sits on is decided with some slack, so a spot near the
+    // middle of the view doesn't make the card jump from side to side as the camera moves
+    let side: 'left' | 'right' | null = null;
+    let half: 'above' | 'below' | null = null;
+    let shownFor = '';
     const placeCallout = () => {
       const c = card.current;
       const svg = lead.current;
@@ -215,12 +220,19 @@ export default function BuildingViewer({ src, view, parts, callout = null, onLoa
       const cw = c.offsetWidth;
       const ch = c.offsetHeight;
       const gap = 44;
-      const left = ax < w / 2;
+      if (shownFor !== co.title) {
+        shownFor = co.title;
+        side = null;
+        half = null;
+      }
+      if (!side || (side === 'right' && ax > w * 0.58) || (side === 'left' && ax < w * 0.42)) side = ax < w / 2 ? 'right' : 'left';
+      if (!half || (half === 'below' && ay > h * 0.58) || (half === 'above' && ay < h * 0.42)) half = ay > h / 2 ? 'above' : 'below';
+      const left = side === 'right';
       const cx = Math.min(Math.max(left ? ax + gap : ax - gap - cw, 12), w - cw - 12);
-      const above = ay > h * 0.5;
+      const above = half === 'above';
       const cy = Math.min(Math.max(above ? ay - 70 - ch : ay + 70, 12), h - ch - 12);
       c.style.transform = `translate(${cx}px, ${cy}px)`;
-      const sx = ax < cx ? cx : cx + cw;
+      const sx = left ? cx : cx + cw;
       const sy = cy + ch / 2;
       svg.setAttribute('width', String(w));
       svg.setAttribute('height', String(h));
