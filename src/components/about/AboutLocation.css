@@ -101,7 +101,7 @@
 }
 
 .about-location__button:hover {
-  border-color: var(--line-in-white);
+  border-color: var(--line-edge);
   background: rgba(215, 197, 169, 0.1);
 }
 

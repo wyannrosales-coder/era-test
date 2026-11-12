@@ -106,7 +106,7 @@ html[data-theme='dark'] {
   /* The grey of the lightest section band: above the page, under the cards */
   --surface-4: #222222;
   /* Hairlines are quiet in the dark: a whisper of gold, not the bright sand of the light theme */
-  --line-in-white: rgba(212, 184, 150, 0.18);
+  --line-edge: rgba(212, 184, 150, 0.18);
   --hairline: rgba(212, 184, 150, 0.16);
   --text-strong: #f5f2ec;
   --text-mid: #ebe8e1;
@@ -206,6 +206,44 @@ html[data-theme='dark'] body .room-book__control:focus-within {
   border-color: rgba(212, 184, 150, 0.5);
 }
 
+/* Outlined buttons whose frame was the ink: on black the frame would vanish, so they take the type colour */
+html[data-theme='dark'] body :is(.faqs__cta, .room-search__clear) {
+  border-color: rgba(245, 242, 236, 0.55);
+}
+
+html[data-theme='dark'] body :is(.faqs__cta, .room-search__clear):hover {
+  border-color: var(--text-strong);
+}
+
+html[data-theme='dark'] body :is(.locations__arrow, .ui-cal__nav, .carousel-arrow):hover:not(:disabled) {
+  border-color: var(--text-strong);
+}
+
+html[data-theme='dark'] body .locations-menu__experience:is(:hover, :focus-visible) {
+  border-bottom-color: var(--text-strong);
+}
+
+html[data-theme='dark'] body .contact-check input:checked {
+  border-color: var(--gold);
+}
+
+/* Small icons drawn dark for a light page (carets, arrows, the nav's dark set) read as light */
+html[data-theme='dark'] :is(
+    img[src*='caret-down-dark'],
+    img[src*='dropdown-dark'],
+    img[src*='caret-down.svg'],
+    img[src*='caret-right.svg'],
+    img[src*='caret-field'],
+    .room-gallery__all img,
+    .room-link img,
+    .room-button img,
+    .menu-panel__item img,
+    .menu-panel__split-caret img,
+    .locations__region-header img
+  ) {
+  filter: brightness(0) invert(0.88) sepia(0.2);
+}
+
 /* Fields, dropdowns and the calendar are the most raised step, above the cards they sit on */
 html[data-theme='dark'] body :is(
     .ui-select,
@@ -268,6 +306,6 @@ html[data-theme='dark'] .partner-logo img {
 }
 
 html[data-theme='dark'] .contact-check input {
-  border: 1px solid var(--line-in-white);
+  border: 1px solid var(--line-edge);
   background: var(--surface-white);
 }

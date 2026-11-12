@@ -16,7 +16,7 @@
 .life-menu__link:first-child {
   flex-shrink: 0;
   width: 440px;
-  border-right: 1px solid var(--line-in-white);
+  border-right: 1px solid var(--line-edge);
 }
 
 .life-menu__link:not(:first-child) {
@@ -98,7 +98,7 @@
 
 .nav-menu-b__pages .nav-menu-b__link {
   flex: 1 0 auto;
-  border-left: 1px solid var(--line-in-white);
+  border-left: 1px solid var(--line-edge);
 }
 
 .nav-menu-b__blog {
@@ -107,7 +107,7 @@
   flex: 2 1 0;
   min-width: 0;
   padding: 16px 0;
-  border-left: 1px solid var(--line-in-white);
+  border-left: 1px solid var(--line-edge);
 }
 
 .nav-menu-b__label {
@@ -140,8 +140,8 @@
 .nav-menu-b__row--contact .nav-menu-b__link:first-child {
   flex-shrink: 0;
   width: 440px;
-  border-left: 1px solid var(--line-in-white);
-  border-right: 1px solid var(--line-in-white);
+  border-left: 1px solid var(--line-edge);
+  border-right: 1px solid var(--line-edge);
 }
 
 .nav-menu-b__row--contact .nav-menu-b__link:not(:first-child) {
@@ -150,7 +150,7 @@
 }
 
 .nav-menu-b__row--contact .nav-menu-b__link:nth-child(2) {
-  border-right: 1px solid var(--line-in-white);
+  border-right: 1px solid var(--line-edge);
 }
 
 .nav-menu-b__row--contact {

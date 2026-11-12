@@ -19,6 +19,8 @@
   --deep-olive-700: #202a0f;
   --deep-sapphire-700: #0b2237;
   --line-in-white: #d4b896;
+  /* The same sand as a frame or rule: the dark theme quietens it */
+  --line-edge: var(--line-in-white);
   --menu-text: #eadfce;
   --grey-200: #e9ecef;
   --grey-400: #a9afb5;

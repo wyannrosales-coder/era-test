@@ -75,7 +75,7 @@
   width: 100%;
   height: 44px;
   padding: 0 16px;
-  border: 1px solid var(--line-in-white);
+  border: 1px solid var(--line-edge);
   background: var(--surface-1);
   box-shadow: var(--finder-shadow);
   font: inherit;
@@ -106,7 +106,7 @@
   min-height: 0;
   margin: 0;
   padding: 16px;
-  border: 1px solid var(--line-in-white);
+  border: 1px solid var(--line-edge);
   background: var(--surface-1);
   box-shadow: var(--finder-shadow);
   list-style: none;

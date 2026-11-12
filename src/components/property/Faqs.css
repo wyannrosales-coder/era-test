@@ -48,7 +48,7 @@
 }
 
 .faqs__item {
-  border-bottom: 1px solid var(--line-in-white);
+  border-bottom: 1px solid var(--line-edge);
 }
 
 .faqs__question {

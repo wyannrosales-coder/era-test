@@ -12,7 +12,7 @@
   align-self: stretch;
   width: 233px;
   padding-right: 32px;
-  border-right: 1px solid var(--line-in-white);
+  border-right: 1px solid var(--line-edge);
 }
 
 .locations-menu__region-name {
@@ -136,7 +136,7 @@
 
 .locations-menu-b__row + .locations-menu-b__row {
   margin-top: 16px;
-  border-top: 1px solid var(--line-in-white);
+  border-top: 1px solid var(--line-edge);
 }
 
 /* With nothing coming soon the open properties take the whole width */
@@ -157,7 +157,7 @@
   gap: 12px;
   min-width: 0;
   padding: 16px 48px;
-  border-left: 1px solid var(--line-in-white);
+  border-left: 1px solid var(--line-edge);
 }
 
 .locations-menu-b__soon-title {

@@ -60,7 +60,7 @@
 }
 
 .about-signup__form.is-submitted .contact-field__box {
-  border-color: var(--line-in-white);
+  border-color: var(--line-edge);
   background: var(--surface-1);
 }
 

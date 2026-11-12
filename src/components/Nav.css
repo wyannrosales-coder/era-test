@@ -227,7 +227,7 @@ button.nav__link.nav__caret {
 .nav.is-scrolled .nav__cta,
 .nav.is-open .nav__cta {
   padding: 11px 24px;
-  border-color: var(--line-in-white);
+  border-color: var(--line-edge);
   background: var(--line-in-white);
   color: var(--on-gold);
 }
@@ -261,7 +261,7 @@ button.nav__link.nav__caret {
 }
 
 .nav--sub.is-scrolled .nav__inner {
-  border-bottom-color: var(--line-in-white);
+  border-bottom-color: var(--line-edge);
 }
 
 /* An open mega menu brings its own divider */
@@ -334,7 +334,7 @@ button.nav__link.nav__caret {
 
 .nav--dark .nav__cta {
   padding: 11px 24px;
-  border-color: var(--line-in-white);
+  border-color: var(--line-edge);
   background: var(--line-in-white);
   color: var(--on-gold);
 }
@@ -370,7 +370,7 @@ button.nav__link.nav__caret {
 
 .nav--cream .nav__cta {
   padding: 11px 24px;
-  border-color: var(--line-in-white);
+  border-color: var(--line-edge);
   background: var(--line-in-white);
   color: var(--on-gold);
 }

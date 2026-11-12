@@ -37,7 +37,7 @@
   width: 100%;
   height: 46px;
   padding: 0 16px;
-  border: 1px solid var(--line-in-white);
+  border: 1px solid var(--line-edge);
   background: var(--surface-1);
   font-size: 16px;
   line-height: 24px;
@@ -64,7 +64,7 @@
 
 /* Submitted: fields keep their values in the resting style */
 .stay-connected__form.is-submitted input {
-  border-color: var(--line-in-white);
+  border-color: var(--line-edge);
   background: var(--surface-1);
   cursor: default;
 }

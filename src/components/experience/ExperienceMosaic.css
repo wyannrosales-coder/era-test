@@ -126,7 +126,7 @@
 }
 
 .xp-mosaic__button:hover {
-  border-color: var(--line-in-white);
+  border-color: var(--line-edge);
   background: rgba(255, 255, 255, 0.06);
 }
 

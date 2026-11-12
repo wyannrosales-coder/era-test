@@ -104,7 +104,7 @@
 }
 
 .instagram__strip:focus-visible {
-  outline: 1px solid var(--line-in-white);
+  outline: 1px solid var(--line-edge);
   outline-offset: 4px;
 }
 
@@ -206,7 +206,7 @@
 .instagram__view {
   align-self: flex-start;
   padding-bottom: 2px;
-  border-bottom: 1px solid var(--line-in-white);
+  border-bottom: 1px solid var(--line-edge);
   font-weight: 600;
   font-size: 12px;
   line-height: 16px;
@@ -215,7 +215,7 @@
 }
 
 .instagram__track a:focus-visible {
-  outline: 1px solid var(--line-in-white);
+  outline: 1px solid var(--line-edge);
   outline-offset: -1px;
 }
 
