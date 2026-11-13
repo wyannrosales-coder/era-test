@@ -3,7 +3,7 @@ import type { CSSProperties, RefObject } from 'react';
 import VLine from '../VLine';
 import FilterTabs from './FilterTabs';
 import RoomSearchBar from '../rooms/RoomSearchBar';
-import FilterSheet, { FilterTrigger, useIsPhone } from '../ui/FilterSheet';
+import FilterSheet, { FilterIcon, useIsPhone } from '../ui/FilterSheet';
 import { NO_FILTERS, TERMS, roomsOf, searchRooms, type CityId, type Filters } from '../rooms/roomSearch';
 import { PROPERTIES } from '../locationData';
 import { useExitParallax } from '../../lib/useExitParallax';
@@ -163,6 +163,8 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
   // Phones: the filters live in a bottom sheet opened from a button
   const phone = useIsPhone();
   const [sheet, setSheet] = useState(false);
+  // The sheet's copy of the availability switch: applied with the rest when Search rooms is pressed
+  const [draftAvail, setDraftAvail] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -176,9 +178,10 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
   const closeSheet = () => {
     setSheet(false);
     setDraft(applied);
+    setDraftAvail(availableOnly);
   };
   // How many of the filters are on (the property's own city doesn't count)
-  const filtersOn = [applied.institution, applied.type, applied.price, applied.term].filter(Boolean).length;
+  const filtersOn = [applied.institution, applied.type, applied.price, applied.term, availableOnly].filter(Boolean).length;
   useDismiss(menu === 'sort', sortRef, closeMenu);
 
   const type = applied.type || ALL;
@@ -259,35 +262,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
           </div>
 
           {/* TODO: connect to the booking engine */}
-          {phone ? (
-            <>
-              <FilterTrigger
-                count={filtersOn}
-                expanded={sheet}
-                onOpen={() => setSheet(true)}
-                onClear={() =>
-                  changeFilter(() => {
-                    setDraft(base);
-                    setApplied(base);
-                  })
-                }
-              />
-              <FilterSheet open={sheet} onClose={closeSheet} title="Filters">
-                <RoomSearchBar
-                  value={draft}
-                  lockedCity={cityId}
-                  onChange={setDraft}
-                  onSearch={() => {
-                    changeFilter(() => setApplied(draft));
-                    setSheet(false);
-                  }}
-                  onClear={() => {
-                    setDraft(base);
-                  }}
-                />
-              </FilterSheet>
-            </>
-          ) : (
+          {!phone ? (
             <div ref={searchRef} className="rooms__search">
               <RoomSearchBar
                 value={draft}
@@ -302,12 +277,33 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
                 }
               />
             </div>
-          )}
+          ) : null}
         </div>
 
         <div ref={resultsRef} className="rooms__results">
           <div className="rooms__toolbar">
             <div className="rooms__controls">
+              {phone ? (
+                <button
+                  type="button"
+                  className="rooms__sort-button rooms__filter-button"
+                  aria-haspopup="dialog"
+                  aria-expanded={sheet}
+                  onClick={() => {
+                    setDraft(applied);
+                    setDraftAvail(availableOnly);
+                    setSheet(true);
+                  }}
+                >
+                  <FilterIcon />
+                  Filters
+                  {filtersOn > 0 && (
+                    <span className="fsheet-trigger__count" aria-label={`${filtersOn} applied`}>
+                      {filtersOn}
+                    </span>
+                  )}
+                </button>
+              ) : (
               <label className="rooms__available">
                 <input
                   type="checkbox"
@@ -321,6 +317,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
                 <span className="rooms__switch" aria-hidden />
                 Available rooms only
               </label>
+              )}
               <div className="rooms__view" role="group" aria-label="Layout">
                 <button
                   type="button"
@@ -381,6 +378,35 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
               </div>
               )}
             </div>
+
+            {phone && (
+              <FilterSheet open={sheet} onClose={closeSheet} title="Filters">
+                <RoomSearchBar
+                  value={draft}
+                  lockedCity={cityId}
+                  onChange={setDraft}
+                  extra={
+                    <label className="rooms__available rooms__available--sheet">
+                      <input type="checkbox" role="switch" checked={draftAvail} onChange={(e) => setDraftAvail(e.target.checked)} />
+                      <span className="rooms__switch" aria-hidden />
+                      Available rooms only
+                    </label>
+                  }
+                  extraDirty={draftAvail}
+                  onSearch={() => {
+                    changeFilter(() => {
+                      setApplied(draft);
+                      setAvailableOnly(draftAvail);
+                    });
+                    setSheet(false);
+                  }}
+                  onClear={() => {
+                    setDraft(base);
+                    setDraftAvail(false);
+                  }}
+                />
+              </FilterSheet>
+            )}
 
             <FilterTabs
               className="rooms__types"

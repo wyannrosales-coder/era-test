@@ -873,3 +873,37 @@ a.room-card:focus-visible {
     height: auto;
   }
 }
+
+/* Phones: Filters on the left, the layout switch in the middle, Sort on the right: the same
+   plain look for Filters and Sort, the switch equidistant from both */
+@media (max-width: 700px) {
+  /* Three items with the same space between each: Filters at the left edge, Sort at the right */
+  .rooms__controls {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .rooms__filter-button svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .rooms__filter-button {
+    gap: 6px;
+  }
+
+  /* Sort's list opens from the right-hand edge, so it stays on screen */
+  .rooms__sorts {
+    left: auto;
+    right: 0;
+  }
+}
+
+/* The availability switch inside the filter sheet */
+.rooms__available--sheet {
+  padding: 4px 0;
+  font-size: 16px;
+}

@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react';
+import type { FormEvent, ReactNode } from 'react';
 import Select from '../ui/Select';
 import {
   CITIES,
@@ -21,6 +21,10 @@ type Props = {
   /** A property's own page: its city is fixed, so the City field only shows it. */
   lockedCity?: CityId;
   className?: string;
+  /** Extra controls (a switch, say), shown after the fields and before the buttons. */
+  extra?: ReactNode;
+  /** Whether the extra controls differ from their defaults (so Clear shows). */
+  extraDirty?: boolean;
 };
 
 /**
@@ -28,14 +32,14 @@ type Props = {
  * Institution, Room types, Price range and Term, then Clear and Search rooms. City narrows
  * Institution and Term (roomSearch.ts). Nothing is applied until Search rooms is pressed.
  */
-export default function RoomSearchBar({ value, onChange, onSearch, onClear, lockedCity, className }: Props) {
+export default function RoomSearchBar({ value, onChange, onSearch, onClear, lockedCity, className, extra, extraDirty }: Props) {
   const city = lockedCity ?? value.city;
   const set = (patch: Partial<Filters>) => onChange(changeFilters(value, patch));
   const submit = (e: FormEvent) => {
     e.preventDefault();
     onSearch();
   };
-  const dirty = Object.entries(value).some(([k, v]) => v && !(lockedCity && k === 'city'));
+  const dirty = Object.entries(value).some(([k, v]) => v && !(lockedCity && k === 'city')) || !!extraDirty;
 
   return (
     <form className={`room-search${className ? ` ${className}` : ''}`} onSubmit={submit} role="search" aria-label="Find a room">
@@ -119,6 +123,8 @@ export default function RoomSearchBar({ value, onChange, onSearch, onClear, lock
           ))}
         </Select>
       </div>
+
+      {extra}
 
       <div className="room-search__actions">
         {dirty && (
