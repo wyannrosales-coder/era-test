@@ -340,7 +340,9 @@ function toContents(messages: ClientMessage[]): Content[] | null {
 export async function POST(request: Request) {
   // Read through globalThis so this compiles with or without Node's type definitions
   const { env } = (globalThis as unknown as { process: { env: Record<string, string | undefined> } }).process;
-  if (!env.GEMINI_API_KEY) return json(503, 'not_configured', 'The assistant is not connected yet.');
+  // Tolerate a pasted key with stray spaces, a line break, quotes or the variable's own name
+  const apiKey = (env.GEMINI_API_KEY ?? '').trim().replace(/^GEMINI_API_KEY\s*=\s*/, '').replace(/^["']+|["']+$/g, '').trim();
+  if (!apiKey) return json(503, 'not_configured', 'The assistant is not connected yet.');
 
   // Each tool answer is a request too, so a full booking takes around twenty
   const ip = request.headers.get('x-real-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'local';
@@ -375,7 +377,7 @@ export async function POST(request: Request) {
         const call = () =>
           fetch(`${env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com'}/v1beta/models/${encodeURIComponent(model)}:streamGenerateContent?alt=sse`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY! },
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: INSTRUCTIONS + KNOWLEDGE }] },
             contents,
