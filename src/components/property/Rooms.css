@@ -907,3 +907,203 @@ a.room-card:focus-visible {
   padding: 4px 0;
   font-size: 16px;
 }
+
+/* ---- Phones: two cards across in the grid; rows in the list with the photo at the left ---- */
+@media (max-width: 700px) {
+  /* Grid: two columns, the card's type and spacing scaled to fit */
+  .rooms__grid:not(.is-list) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 12px;
+  }
+
+  .rooms__grid:not(.is-list) .room-card {
+    border-radius: var(--r-card);
+  }
+
+  .rooms__grid:not(.is-list) .room-card__image {
+    height: 128px;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__tag {
+    gap: 4px;
+    padding: 4px 8px;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__tag img {
+    width: 12px;
+    height: 12px;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__body {
+    flex: 1;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px 12px;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__heading {
+    gap: 2px;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__type {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__name {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__features {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  /* The price wraps onto two short lines instead of running off the card */
+  .rooms__grid:not(.is-list) .room-card__price {
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 4px;
+    white-space: normal;
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__amount {
+    font-size: 16px;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__price--opening {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .rooms__grid:not(.is-list) .room-card__register {
+    font-size: 11px;
+  }
+
+  /* List: photo at the left with the name laid over its foot, the rest at the right; rows stack */
+  .rooms__grid.is-list {
+    gap: 12px;
+  }
+
+  .rooms__grid.is-list .room-card {
+    position: relative;
+    flex-direction: row;
+    height: 152px;
+    border-radius: var(--r-card);
+  }
+
+  .rooms__grid.is-list .room-card__image {
+    flex: none;
+    width: 42%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .rooms__grid.is-list .room-card__tag {
+    gap: 4px;
+    padding: 4px 8px;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .rooms__grid.is-list .room-card__tag img {
+    width: 12px;
+    height: 12px;
+  }
+
+  /* The name sits on the photo's foot, over a soft shade, whatever the picture is */
+  .rooms__grid.is-list .room-card__name {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    width: 42%;
+    margin: 0;
+    padding: 30px 10px 10px;
+    background: linear-gradient(to top, rgba(var(--ink-deep-rgb), 0.82), rgba(var(--ink-deep-rgb), 0));
+    font-size: 15px;
+    line-height: 1.2;
+    color: #fff;
+    pointer-events: none;
+  }
+
+  .rooms__grid.is-list .room-card__body {
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+    height: 100%;
+    padding: 12px 14px;
+  }
+
+  .rooms__grid.is-list .room-card__heading {
+    flex: none;
+    gap: 6px;
+  }
+
+  .rooms__grid.is-list .room-card__type {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  /* Views already show in the details line; the summary, chips and plan are for larger screens */
+  .rooms__grid.is-list .room-card__features,
+  .rooms__grid.is-list .room-card__summary,
+  .rooms__grid.is-list .room-card__chips,
+  .rooms__grid.is-list .room-card__plan {
+    display: none;
+  }
+
+  .rooms__grid.is-list .room-card__more {
+    margin-top: 0;
+    gap: 4px;
+  }
+
+  .rooms__grid.is-list .room-card__meta {
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12px;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+  }
+
+  .rooms__grid.is-list .room-card__meta span + span::before {
+    display: none;
+  }
+
+  .rooms__grid.is-list .room-card__price {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 4px;
+    white-space: normal;
+    text-align: left;
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .rooms__grid.is-list .room-card__amount {
+    font-size: 18px;
+  }
+
+  .rooms__grid.is-list .room-card__price--opening {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+/* Very narrow screens: one card across, so nothing is squeezed */
+@media (max-width: 339px) {
+  .rooms__grid:not(.is-list) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
