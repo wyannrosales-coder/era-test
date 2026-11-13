@@ -3,6 +3,7 @@ import type { CSSProperties, RefObject } from 'react';
 import VLine from '../VLine';
 import FilterTabs from './FilterTabs';
 import RoomSearchBar from '../rooms/RoomSearchBar';
+import FilterSheet, { FilterTrigger, useIsPhone } from '../ui/FilterSheet';
 import { NO_FILTERS, TERMS, roomsOf, searchRooms, type CityId, type Filters } from '../rooms/roomSearch';
 import { PROPERTIES } from '../locationData';
 import { useExitParallax } from '../../lib/useExitParallax';
@@ -159,6 +160,9 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
   const [sort, setSort] = useState<SortId>('asc');
   const [menu, setMenu] = useState<'sort' | null>(null);
   const [view, setView] = useState<'grid' | 'list'>('grid');
+  // Phones: the filters live in a bottom sheet opened from a button
+  const phone = useIsPhone();
+  const [sheet, setSheet] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -168,6 +172,13 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
   useExitParallax(sectionRef, { drift: false });
 
   const closeMenu = useRef(() => setMenu(null)).current;
+  // Closing the sheet without searching drops what was changed in it
+  const closeSheet = () => {
+    setSheet(false);
+    setDraft(applied);
+  };
+  // How many of the filters are on (the property's own city doesn't count)
+  const filtersOn = [applied.institution, applied.type, applied.price, applied.term].filter(Boolean).length;
   useDismiss(menu === 'sort', sortRef, closeMenu);
 
   const type = applied.type || ALL;
@@ -248,20 +259,50 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
           </div>
 
           {/* TODO: connect to the booking engine */}
-          <div ref={searchRef} className="rooms__search">
-            <RoomSearchBar
-              value={draft}
-              lockedCity={cityId}
-              onChange={setDraft}
-              onSearch={() => changeFilter(() => setApplied(draft))}
-              onClear={() =>
-                changeFilter(() => {
-                  setDraft(base);
-                  setApplied(base);
-                })
-              }
-            />
-          </div>
+          {phone ? (
+            <>
+              <FilterTrigger
+                count={filtersOn}
+                expanded={sheet}
+                onOpen={() => setSheet(true)}
+                onClear={() =>
+                  changeFilter(() => {
+                    setDraft(base);
+                    setApplied(base);
+                  })
+                }
+              />
+              <FilterSheet open={sheet} onClose={closeSheet} title="Filters">
+                <RoomSearchBar
+                  value={draft}
+                  lockedCity={cityId}
+                  onChange={setDraft}
+                  onSearch={() => {
+                    changeFilter(() => setApplied(draft));
+                    setSheet(false);
+                  }}
+                  onClear={() => {
+                    setDraft(base);
+                  }}
+                />
+              </FilterSheet>
+            </>
+          ) : (
+            <div ref={searchRef} className="rooms__search">
+              <RoomSearchBar
+                value={draft}
+                lockedCity={cityId}
+                onChange={setDraft}
+                onSearch={() => changeFilter(() => setApplied(draft))}
+                onClear={() =>
+                  changeFilter(() => {
+                    setDraft(base);
+                    setApplied(base);
+                  })
+                }
+              />
+            </div>
+          )}
         </div>
 
         <div ref={resultsRef} className="rooms__results">

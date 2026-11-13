@@ -1,0 +1,231 @@
+/* The filter trigger button and the bottom sheet it opens (phones) */
+.fsheet-trigger {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.fsheet-trigger__button {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 1px solid var(--line-edge);
+  border-radius: var(--r-ctl);
+  background: var(--surface-white);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  transition: border-color 250ms var(--ease-in-out);
+}
+
+.fsheet-trigger__button:hover,
+.fsheet-trigger__button[aria-expanded='true'] {
+  border-color: var(--gold, #b8966e);
+}
+
+.fsheet-trigger__button:focus-visible,
+.fsheet-trigger__clear:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: 2px;
+}
+
+.fsheet-trigger__label {
+  letter-spacing: 0.14em;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.fsheet-trigger__count {
+  display: grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--bronze-300);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+html[data-theme='dark'] .fsheet-trigger__count {
+  background: var(--gold);
+  color: var(--on-gold);
+}
+
+.fsheet-trigger__clear {
+  flex: none;
+  padding: 12px 4px;
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* Over a photo */
+.fsheet-trigger--hero .fsheet-trigger__button {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(var(--ink-deep-rgb), 0.45);
+  color: #fff;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.fsheet-trigger--hero .fsheet-trigger__count {
+  background: var(--bronze-400);
+  color: var(--on-gold);
+}
+
+.fsheet-trigger--hero .fsheet-trigger__clear {
+  color: #fff;
+}
+
+/* ---- The sheet ---- */
+.fsheet {
+  position: fixed;
+  inset: 0;
+  /* Above the navigation and the chat button, below the dropdown lists (3000) */
+  z-index: 2500;
+  display: flex;
+  align-items: flex-end;
+}
+
+.fsheet__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--ink-deep-rgb), 0.55);
+  animation: fsheet-fade 250ms var(--ease-lux) both;
+}
+
+.fsheet__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: min(88svh, 720px);
+  border: 1px solid var(--line-edge);
+  border-bottom: 0;
+  border-radius: var(--r-panel) var(--r-panel) 0 0;
+  background: var(--surface-1);
+  color: var(--text-strong);
+  box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.28);
+  animation: fsheet-rise 340ms var(--ease-lux) both;
+  outline: none;
+}
+
+.fsheet__panel.is-dragging {
+  animation: none;
+  transition: none;
+}
+
+.fsheet__top {
+  flex: none;
+  padding: 10px 20px 0;
+  touch-action: none;
+  cursor: grab;
+}
+
+.fsheet__grab {
+  display: block;
+  width: 40px;
+  height: 4px;
+  margin: 0 auto 6px;
+  border-radius: 2px;
+  background: var(--line-edge);
+}
+
+.fsheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0 14px;
+}
+
+.fsheet__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.fsheet__close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--line-edge);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-strong);
+  cursor: pointer;
+}
+
+.fsheet__body {
+  flex: 1;
+  min-height: 0;
+  padding: 0 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* The form inside the sheet: no panel of its own, one field to a row, the buttons held at the foot */
+.fsheet .room-search {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+  padding: 4px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.fsheet .room-search__field,
+.fsheet .room-search__field--city,
+.fsheet .room-search__field--wide {
+  flex: none;
+  min-width: 0;
+}
+
+.fsheet .room-search__actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  margin: 6px -20px 0;
+  padding: 14px 20px max(18px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line-edge);
+  background: var(--surface-1);
+}
+
+@keyframes fsheet-rise {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fsheet-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fsheet__backdrop,
+  .fsheet__panel {
+    animation: none;
+  }
+}

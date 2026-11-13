@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import RoomSearchBar from '../components/rooms/RoomSearchBar';
+import FilterSheet, { FilterTrigger, useIsPhone } from '../components/ui/FilterSheet';
 import {
   ALL_ROOMS,
   CITIES,
@@ -94,6 +95,10 @@ export default function FindRoomPage() {
   const initial = useMemo(filtersFromUrl, []);
   const [draft, setDraft] = useState<Filters>(initial);
   const [applied, setApplied] = useState<Filters>(initial);
+  // Phones: the filters live in a bottom sheet opened from a button
+  const phone = useIsPhone();
+  const [sheet, setSheet] = useState(false);
+  const filtersOn = Object.values(applied).filter(Boolean).length;
   const results = useMemo(() => searchRooms(ALL_ROOMS, applied), [applied]);
   const lowest = results.reduce<number | undefined>(
     (min, { weekly }) => (weekly === undefined ? min : min === undefined ? weekly : Math.min(min, weekly)),
@@ -117,16 +122,49 @@ export default function FindRoomPage() {
             <h1 className="type-h1 find-page__title">
               Every room, across every <em>EPIISOD.</em>
             </h1>
-            <RoomSearchBar
-              className="room-search--hero find-page__search"
-              value={draft}
-              onChange={setDraft}
-              onSearch={() => run(draft)}
-              onClear={() => {
-                setDraft(NO_FILTERS);
-                run(NO_FILTERS);
-              }}
-            />
+            {phone ? (
+              <>
+                <FilterTrigger
+                  tone="hero"
+                  count={filtersOn}
+                  expanded={sheet}
+                  onOpen={() => setSheet(true)}
+                  onClear={() => {
+                    setDraft(NO_FILTERS);
+                    run(NO_FILTERS);
+                  }}
+                />
+                <FilterSheet
+                  open={sheet}
+                  onClose={() => {
+                    setSheet(false);
+                    setDraft(applied);
+                  }}
+                  title="Filters"
+                >
+                  <RoomSearchBar
+                    value={draft}
+                    onChange={setDraft}
+                    onSearch={() => {
+                      run(draft);
+                      setSheet(false);
+                    }}
+                    onClear={() => setDraft(NO_FILTERS)}
+                  />
+                </FilterSheet>
+              </>
+            ) : (
+              <RoomSearchBar
+                className="room-search--hero find-page__search"
+                value={draft}
+                onChange={setDraft}
+                onSearch={() => run(draft)}
+                onClear={() => {
+                  setDraft(NO_FILTERS);
+                  run(NO_FILTERS);
+                }}
+              />
+            )}
           </div>
         </header>
 
