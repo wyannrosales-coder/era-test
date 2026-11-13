@@ -52,9 +52,10 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
     };
   }, []);
 
-  // Tablets and phones pin the model while the list scrolls under it, so the section only dims as
-  // it leaves: the exit drift would slide the pinned model against the list
-  useExitParallax(sectionRef, { drift: !window.matchMedia('(max-width: 900px)').matches });
+  // Tablets and phones pin the model while the list scrolls under it, so there the exit drift
+  // would slide the pinned model against the list. The section never dims as it leaves: it's
+  // an interactive model and list, and should stay at full brightness while it's in view.
+  useExitParallax(sectionRef, { shade: false, drift: !window.matchMedia('(max-width: 900px)').matches });
 
   let n = 0;
   return (
