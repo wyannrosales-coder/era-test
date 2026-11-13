@@ -46,6 +46,35 @@
   overflow: hidden;
 }
 
+/* The map fades into the page at its top and bottom. Above the map's own layers but under
+   the chips, list and map controls. */
+.property-location__map::before,
+.property-location__map::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 450;
+  height: clamp(96px, 16vh, 160px);
+  pointer-events: none;
+}
+
+.property-location__map::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--loc-bg, var(--surface-1)) 0%, transparent 100%);
+}
+
+.property-location__map::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--loc-bg, var(--surface-1)) 0%, transparent 100%);
+}
+
+/* Full screen on a phone: the map is the whole screen */
+.property-location__map.is-full::before,
+.property-location__map.is-full::after {
+  display: none;
+}
+
 /* ---- Place finder: kind chips over the map, the list beside it ---- */
 
 .place-icon {

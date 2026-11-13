@@ -171,6 +171,15 @@ html[data-theme='dark'] body :is(.faqs, .amenities + .rooms + .property-location
   background-color: var(--surface-2);
 }
 
+/* The location map fades into its section's background */
+html[data-theme='dark'] body .property-location {
+  --loc-bg: var(--surface-4);
+}
+
+html[data-theme='dark'] body .amenities + .rooms + .property-location {
+  --loc-bg: var(--surface-2);
+}
+
 html[data-theme='dark'] body :is(.partners, .promotions, .promotions-vip, .why-experience) {
   background-color: var(--surface-0);
 }
