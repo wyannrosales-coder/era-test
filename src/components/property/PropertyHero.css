@@ -184,3 +184,83 @@
   text-wrap: balance;
   color: rgba(255, 255, 255, 0.85);
 }
+
+/* Tablets and phones: smaller type and icons for the hero's buttons and media links */
+@media (max-width: 900px) {
+  .property-hero__cta {
+    gap: 6px;
+    height: 40px;
+    padding: 0 18px;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.12em;
+  }
+
+  .property-hero__cta img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .property-hero__media {
+    gap: 4px 28px;
+  }
+
+  .property-hero__media-link {
+    gap: 6px;
+    padding: 10px 0;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.12em;
+  }
+
+  .property-hero__media-link > img {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* The 360° mark, scaled with them */
+  .property-hero__icon-360 {
+    width: 29px;
+    height: 18px;
+  }
+
+  .property-hero__icon-360 img {
+    top: 1px;
+    width: 21.6px;
+    height: auto;
+  }
+}
+
+/* Phones: the three links side by side as small tiles, icon above its label */
+@media (max-width: 520px) {
+  .property-hero__media {
+    flex-wrap: nowrap;
+    gap: 0 20px;
+    width: 100%;
+    justify-content: space-between;
+    max-width: 340px;
+  }
+
+  .property-hero__media-link {
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+    min-width: 0;
+    padding: 8px 0 10px;
+    text-align: center;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+  }
+
+  .property-hero__media-link > span:last-child {
+    white-space: nowrap;
+  }
+}
+
+/* Tablets and phones: the hero's last row sits above the floating chat button instead of under it */
+@media (max-width: 900px) {
+  .property-hero__content {
+    padding-bottom: 92px;
+  }
+}
