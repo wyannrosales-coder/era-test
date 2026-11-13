@@ -17,6 +17,11 @@
   body:has(.room-bookbar:not(.room-bookbar--hidden)) .enquiry-pill {
     bottom: calc(var(--bookbar-h, 74px) + 12px);
   }
+
+  /* …and the back-to-top button rides above both */
+  html body:has(.room-bookbar:not(.room-bookbar--hidden)) .to-top {
+    bottom: calc(var(--bookbar-h, 74px) + 12px + 64px);
+  }
 }
 
 .enquiry-pill.is-shown {
@@ -81,4 +86,42 @@
   .enquiry-pill__tag {
     display: none;
   }
+}
+
+/* Phones: just the chat icon in a round button (the nav has a chat icon too), so the pill
+   covers as little of the page as possible; the label stays for screen readers */
+@media (max-width: 600px) {
+  .enquiry-pill__link {
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .enquiry-pill__link > span {
+    display: none;
+  }
+
+  .enquiry-pill__icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .enquiry-pill__close {
+    top: -10px;
+    right: -10px;
+  }
+
+  /* Pages with forms: the pill would sit on the fields, so it steps aside (the nav icon remains) */
+  .enquiry-pill--forms {
+    display: none;
+  }
+}
+
+/* A bigger touch area for the small close button, without changing how it looks */
+.enquiry-pill__close::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
 }

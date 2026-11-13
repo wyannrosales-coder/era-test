@@ -52,7 +52,9 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
     };
   }, []);
 
-  useExitParallax(sectionRef);
+  // Tablets and phones pin the model while the list scrolls under it, so the section only dims as
+  // it leaves: the exit drift would slide the pinned model against the list
+  useExitParallax(sectionRef, { drift: !window.matchMedia('(max-width: 900px)').matches });
 
   let n = 0;
   return (

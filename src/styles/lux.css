@@ -191,3 +191,34 @@ html body .rooms__field-button {
     box-shadow: none;
   }
 }
+
+/* ---------- Touch: small controls keep their look but get a 44px-class touch area ---------- */
+@media (pointer: coarse), (max-width: 900px) {
+  :is(
+    .locations__filter,
+    .filter-tabs__option,
+    .rooms__sort-button,
+    .rooms__view-button,
+    .location-card__link,
+    .book__back,
+    .book__skip,
+    .book__link
+  ) {
+    position: relative;
+  }
+
+  :is(
+    .locations__filter,
+    .filter-tabs__option,
+    .rooms__sort-button,
+    .rooms__view-button,
+    .location-card__link,
+    .book__back,
+    .book__skip,
+    .book__link
+  )::before {
+    content: '';
+    position: absolute;
+    inset: -10px -8px;
+  }
+}

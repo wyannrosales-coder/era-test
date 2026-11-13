@@ -16,3 +16,23 @@ html.ep-ld-hide .ep-vt { opacity: 0; pointer-events: none; }
 
 /* Student Luxe type: display headings sit tighter, like the rest of the site */
 h1, h2, h3 { letter-spacing: -0.035em; }
+
+/* Phones: no headline wider than the screen, and labels no smaller than 11px */
+@media (max-width: 480px) {
+  h2.h1 {
+    font-size: min(10.5vw, 44px);
+  }
+
+  .ep-fly_skip,
+  .bd_eb,
+  .ep-loc_label,
+  .ep-ap_eye,
+  .ep-ap_note,
+  .ep-badge_eb,
+  .ep-badge_hint,
+  .ep-carousel_count,
+  .ep-rnav_pct,
+  .cvx-open {
+    font-size: 11px;
+  }
+}

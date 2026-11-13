@@ -23,6 +23,8 @@ import '../EnquiryPill.css';
 import './ChatWidget.css';
 
 const DISMISSED_KEY = 'epiisod-enquiry-dismissed';
+/** Pages made of forms: on a phone the floating button steps aside there */
+const FORM_PAGES = ['/booking', '/contact', '/join-the-waitlist', '/account'];
 const ENQUIRIES_KEY = 'epiisod-enquiries';
 const EMAIL_OK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /** Shown under an answer when the assistant gave no choices of its own */
@@ -709,8 +711,8 @@ export default function ChatWidget() {
   return (
     <>
       {!dismissed && !chat.open && (
-        <div className={`enquiry-pill${shown ? ' is-shown' : ''}`}>
-          <button type="button" className="enquiry-pill__link" onClick={() => setChatOpen(true)} aria-haspopup="dialog">
+        <div className={`enquiry-pill${shown ? ' is-shown' : ''}${FORM_PAGES.includes(path) ? ' enquiry-pill--forms' : ''}`}>
+          <button type="button" className="enquiry-pill__link" onClick={() => setChatOpen(true)} aria-haspopup="dialog" aria-label="Chat with us">
             <svg className="enquiry-pill__icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.2">
               <path d="M2 3.2h12v7.6H8.4L5 13.6v-2.8H2z" strokeLinejoin="round" />
             </svg>
