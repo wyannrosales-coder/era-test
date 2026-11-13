@@ -1,21 +1,22 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import '@maplibre/maplibre-gl-leaflet';
 import marker from '../../assets/property/location/epiisod-marker.svg';
 import pointer from '../../assets/property/location/card-pointer.svg';
 import type { MapPlace } from './propertyContent';
 import './PropertyMap.css';
 
 /**
- * Map tiles: OpenStreetMap's standard tiles, in their usual colours, which need no API
- * key. OSM's tile servers are for light use only — for
- * production traffic, swap this for a tile provider with a key (e.g. MapTiler or
- * Stadia Maps) or Google Maps with EPIISOD's own key, as on the live site.
+ * Basemap: OpenFreeMap's vector styles (OpenStreetMap data, drawn with MapLibre), which need
+ * no API key. Liberty on light; Positron, darkened with CSS, on dark. For heavy production
+ * traffic, self-host the tiles or use a provider with a key (MapTiler, Stadia Maps, Google Maps).
  */
-const TILES = {
-  url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-};
+const STYLES = { light: 'https://tiles.openfreemap.org/styles/liberty', dark: 'https://tiles.openfreemap.org/styles/positron' };
+const ATTRIBUTION =
+  '<a href="https://openfreemap.org" target="_blank" rel="noopener noreferrer">OpenFreeMap</a> &copy; <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener noreferrer">OpenMapTiles</a> data from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>';
+const isDark = () => document.documentElement.dataset.theme === 'dark';
 /** Zoom before any place is framed: the property among its neighbouring suburbs. */
 const HOME_ZOOM = 14;
 /** Below this zoom, places close together on screen gather into one numbered cluster. */
@@ -110,7 +111,22 @@ export default function PropertyMap({
       dragging: !L.Browser.mobile,
     });
     L.control.zoom({ position: 'bottomright' }).addTo(map);
-    L.tileLayer(TILES.url, { attribution: TILES.attribution, maxZoom: 19 }).addTo(map);
+    // The basemap follows the site's light/dark theme
+    let dark = isDark();
+    const addBase = () => {
+      container.classList.toggle('is-dark-base', dark);
+      return L.maplibreGL({ style: dark ? STYLES.dark : STYLES.light, attribution: ATTRIBUTION } as L.LeafletMaplibreGLOptions & {
+        attribution: string;
+      }).addTo(map);
+    };
+    let base = addBase();
+    const theme = new MutationObserver(() => {
+      if (isDark() === dark) return;
+      dark = isDark();
+      base.remove();
+      base = addBase();
+    });
+    theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
     // The EPIISOD marker with the property's card above it, always shown. The icon is a
     // point at the marker's centre; the card and marker are placed around it in CSS.
@@ -142,6 +158,7 @@ export default function PropertyMap({
     ro.observe(container);
     return () => {
       ro.disconnect();
+      theme.disconnect();
       map.remove();
       mapRef.current = null;
       layerRef.current = null;

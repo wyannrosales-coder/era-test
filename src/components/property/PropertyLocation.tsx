@@ -204,7 +204,7 @@ export default function PropertyLocation({ id, content }: { id: string; content:
         ? { left: 0, top: 112, bottom: window.innerHeight * 0.44 + 16 }
         : phone
           ? { left: 0, top: 64, bottom: 72 }
-          : { left: listOpen ? panelWidth + 32 : 0, top: 72 },
+          : { left: listOpen ? panelWidth + 48 : 0, top: 120 },
     [phone, isFull, listOpen, panelWidth],
   );
 
