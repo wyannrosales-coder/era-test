@@ -97,7 +97,7 @@
   position: absolute;
   top: 88px; /* clear of the nav */
   left: 24px;
-  right: 24px;
+  right: 76px; /* the map controls */
   z-index: 500; /* above the map's panes and markers */
   display: flex;
   gap: 8px;
@@ -540,9 +540,17 @@ body.map-is-full .enquiry-pill {
     min-height: 560px;
   }
 
-  /* Pinch to zoom; no buttons */
-  .property-location__map .leaflet-control-zoom {
+  /* Pinch to zoom: just the reset button, under the chips */
+  .property-location__map .map-controls__zoom {
     display: none;
+  }
+
+  .property-location__map .leaflet-top.leaflet-right {
+    top: 132px;
+  }
+
+  .property-location__map.is-full .leaflet-top.leaflet-right {
+    top: 64px;
   }
 
   .place-chips {

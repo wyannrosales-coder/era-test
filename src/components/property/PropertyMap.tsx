@@ -96,6 +96,10 @@ export default function PropertyMap({
   const pendingRef = useRef<string | null>(null);
   const drawRef = useRef<() => void>(() => {});
   const framedRef = useRef(false);
+  const framePointsRef = useRef(framePoints);
+  framePointsRef.current = framePoints;
+  /** Frames the places shown with the property (also what the reset button does). */
+  const fitRef = useRef<(animate: boolean) => void>(() => {});
 
   // The map and the property's marker, once
   useEffect(() => {
@@ -110,7 +114,34 @@ export default function PropertyMap({
       // On touch screens one finger scrolls the page; two fingers move the map
       dragging: !L.Browser.mobile,
     });
-    L.control.zoom({ position: 'bottomright' }).addTo(map);
+    // Zoom and reset, top right
+    const Controls = L.Control.extend({
+      onAdd() {
+        const bar = L.DomUtil.create('div', 'leaflet-bar map-controls');
+        const button = (cls: string, label: string, html: string, onClick: () => void) => {
+          const a = L.DomUtil.create('button', cls, bar);
+          a.type = 'button';
+          a.title = label;
+          a.setAttribute('aria-label', label);
+          a.innerHTML = html;
+          L.DomEvent.on(a, 'click', (e) => {
+            L.DomEvent.stop(e);
+            onClick();
+          });
+        };
+        button('map-controls__zoom', 'Zoom in', '+', () => map.zoomIn());
+        button('map-controls__zoom', 'Zoom out', '&minus;', () => map.zoomOut());
+        button(
+          'map-controls__reset',
+          'Back to the property',
+          '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="3.5"/><path d="M9 1.5v3M9 13.5v3M1.5 9h3M13.5 9h3"/></svg>',
+          () => fitRef.current(true),
+        );
+        L.DomEvent.disableClickPropagation(bar);
+        return bar;
+      },
+    });
+    new Controls({ position: 'topright' }).addTo(map);
     // The basemap follows the site's light/dark theme
     let dark = isDark();
     const addBase = () => {
@@ -256,22 +287,27 @@ export default function PropertyMap({
   }, [markers]);
 
   // Frame the places shown (keeping the property in view, and clear of the list and
-  // filters) whenever the filters change. The first framing doesn't animate.
-  useEffect(() => {
+  // filters). Done whenever the filters change, and by the reset button; the first framing
+  // doesn't animate.
+  fitRef.current = (animate: boolean) => {
     const map = mapRef.current;
     if (!map) return;
     map.closePopup();
     // The map may have just changed size (full screen on a phone)
     map.invalidateSize({ animate: false });
-    const points = [L.latLng(center.lat, center.lng), ...framePoints.map((p) => L.latLng(p.lat, p.lng))];
+    const points = [L.latLng(center.lat, center.lng), ...framePointsRef.current.map((p) => L.latLng(p.lat, p.lng))];
     const clear = insetRef.current;
     const options: L.FitBoundsOptions = {
       paddingTopLeft: [clear.left + 32, Math.max(clear.top, 150)],
       paddingBottomRight: [56, Math.max(48, (clear.bottom ?? 0) + 24)],
       maxZoom: 16,
     };
-    if (framedRef.current) map.flyToBounds(L.latLngBounds(points), { ...options, duration: 0.8 });
+    if (animate) map.flyToBounds(L.latLngBounds(points), { ...options, duration: 0.8 });
     else map.fitBounds(L.latLngBounds(points), { ...options, animate: false });
+  };
+  useEffect(() => {
+    if (!mapRef.current) return;
+    fitRef.current(framedRef.current);
     framedRef.current = true;
     // Only when the filters change, not whenever the list is rebuilt with them
     // eslint-disable-next-line react-hooks/exhaustive-deps

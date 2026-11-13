@@ -198,14 +198,64 @@
   color: var(--text-strong);
 }
 
-.property-map .leaflet-control-zoom {
-  border: 1px solid var(--line-edge);
-  border-radius: 0;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+/* Zoom and reset, top right, clear of the nav; themed, so they show on dark too */
+.property-map .leaflet-top.leaflet-right {
+  top: 88px;
+  right: 12px;
 }
 
-.property-map .leaflet-control-zoom a {
-  border-radius: 0 !important;
+.property-map .leaflet-control {
+  margin: 0;
+}
+
+.map-controls {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line-edge) !important;
+  border-radius: var(--r-ctl);
+  background: var(--surface-1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.map-controls button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: var(--surface-1);
+  font: inherit;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--text-strong);
+  cursor: pointer;
+  transition: background-color 200ms var(--ease-in-out);
+}
+
+.map-controls button + button {
+  border-top: 1px solid var(--line-edge);
+}
+
+.map-controls button:hover {
+  background: var(--bronze-300);
+  color: var(--on-gold);
+}
+
+.map-controls button:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: -2px;
+}
+
+/* The credit, themed */
+.property-map .leaflet-control-attribution {
+  background: color-mix(in srgb, var(--surface-1) 82%, transparent);
+  font-size: 11px;
+  color: var(--text-mid);
+}
+
+.property-map .leaflet-control-attribution a {
   color: var(--text-strong);
 }
 
