@@ -10,10 +10,10 @@ import './PropertyMap.css';
 
 /**
  * Basemap: OpenFreeMap's vector styles (OpenStreetMap data, drawn with MapLibre), which need
- * no API key. Liberty on light; Positron, darkened with CSS, on dark. For heavy production
+ * no API key. Positron (muted greys) on light, warmed with CSS to sit with the page; the same style, inverted with CSS, on dark. For heavy production
  * traffic, self-host the tiles or use a provider with a key (MapTiler, Stadia Maps, Google Maps).
  */
-const STYLES = { light: 'https://tiles.openfreemap.org/styles/liberty', dark: 'https://tiles.openfreemap.org/styles/positron' };
+const STYLES = { light: 'https://tiles.openfreemap.org/styles/positron', dark: 'https://tiles.openfreemap.org/styles/positron' };
 const ATTRIBUTION =
   '<a href="https://openfreemap.org" target="_blank" rel="noopener noreferrer">OpenFreeMap</a> &copy; <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener noreferrer">OpenMapTiles</a> data from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>';
 const isDark = () => document.documentElement.dataset.theme === 'dark';

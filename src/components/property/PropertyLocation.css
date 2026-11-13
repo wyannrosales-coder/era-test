@@ -108,6 +108,11 @@
   transition: left 300ms var(--ease-in-out);
 }
 
+/* Light: Positron's greys, warmed a touch towards the page's cream */
+.property-map:not(.is-dark-base) .leaflet-tile-pane {
+  filter: sepia(0.22) saturate(0.9);
+}
+
 /* Dark: the light Positron style, inverted */
 .property-map.is-dark-base .leaflet-tile-pane {
   filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9);
