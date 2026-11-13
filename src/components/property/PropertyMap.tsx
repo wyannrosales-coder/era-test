@@ -16,11 +16,17 @@ const TILES = {
   url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 };
-/** Zoom with no area chosen: the property among its neighbouring suburbs (Figma 1080:5903). */
+/** Zoom before any place is framed: the property among its neighbouring suburbs. */
 const HOME_ZOOM = 14;
+/** Below this zoom, places close together on screen gather into one numbered cluster. */
+const CLUSTER_BELOW = 16;
+/** Clusters gather places within this many pixels (a grid cell) of each other. */
+const CLUSTER_CELL = 48;
 
-/** A numbered place on the map. */
-export type MapMarker = { id: string; label: string; place: MapPlace };
+/** A place on the map, with its category (name and icon) and its distance from the property. */
+export type MapMarker = { id: string; place: MapPlace; category: string; icon: string; distance: string };
+
+type Inset = { left: number; top: number; bottom?: number };
 
 type PropertyMapProps = {
   /** The property's name, before and after the italic part ("EPIISOD" + "Macquarie Park"). */
@@ -28,38 +34,38 @@ type PropertyMapProps = {
   place: string;
   address: string;
   center: { lat: number; lng: number };
-  /** The places to show, numbered. */
+  /** The places to show. */
   markers: MapMarker[];
-  /** Changing this re-frames the map around the markers (or back on the property). */
-  frame: string | null;
-  /** Room (px) the finder takes over the map's top-left corner (or its foot, `bottom`, on
-   *  the full-screen phone map), kept clear when framing. */
+  /** Changing this re-frames the map around `framePoints` (with the property). */
+  frameKey: string;
+  framePoints: { lat: number; lng: number }[];
+  /** Room (px) the list and filters take over the map (top-left corner, or foot on the
+   *  full-screen phone map), kept clear when framing. */
   inset: Inset;
-  /** The same while a photo is open, when the panel can be taller. */
-  spotlightInset: Inset;
   /** Full screen on a phone: one finger moves the map (there's no page to scroll). */
   full?: boolean;
-  /** The place under the pointer in the list, lit on the map. */
+  /** The place under the pointer in the list (or the chosen one), lit on the map. */
   highlight: string | null;
-  /** The place picked in the list: the map moves to it and opens its card. */
-  focus: { id: string } | null;
-  /** The place whose photo is open in the finder: lit, and framed a little closer with the property. */
-  spotlight: string | null;
+  /** A place picked in the list: the map moves to it and opens its card. `n` repeats a pick. */
+  focus: { id: string; n: number } | null;
   onMarkerClick: (id: string) => void;
 };
-
-type Inset = { left: number; top: number; bottom?: number };
 
 const escape = (text: string) =>
   text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
-const popupHtml = (title: string, address: string) =>
-  `<p class="map-popup__title">${escape(title)}</p><p class="map-popup__address">${escape(address)}</p>`;
+const popupHtml = (m: MapMarker) => `
+  ${m.place.image ? `<img class="map-popup__photo" src="${escape(m.place.image)}" alt="" />` : ''}
+  <p class="map-popup__kind">${escape(m.category)} · ${escape(m.distance)}</p>
+  <p class="map-popup__title">${escape(m.place.name)}</p>
+  <p class="map-popup__address">${escape(m.place.address)}</p>
+  <a class="map-popup__link" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/dir/?api=1&destination=${m.place.lat},${m.place.lng}">Directions</a>`;
 
 /**
  * Neighbourhood map (Figma 1080:5903 / 1182:8433): the EPIISOD marker under the property's
- * card, and numbered markers for the places in the chosen area. Drag to move; zoom with
- * the buttons, pinch or double-click (the wheel scrolls the page).
+ * card, and a marker for each place in the finder, with the category's icon on it. Places
+ * close together gather into numbered clusters until zoomed in. Drag to move; zoom with the
+ * buttons, pinch or double-click (the wheel scrolls the page).
  */
 export default function PropertyMap({
   brand,
@@ -67,12 +73,11 @@ export default function PropertyMap({
   address,
   center,
   markers,
-  frame,
+  frameKey,
+  framePoints,
   inset,
-  spotlightInset,
   highlight,
   focus,
-  spotlight,
   full = false,
   onMarkerClick,
 }: PropertyMapProps) {
@@ -82,6 +87,14 @@ export default function PropertyMap({
   const markersRef = useRef<Map<string, L.Marker>>(new Map());
   const clickRef = useRef(onMarkerClick);
   clickRef.current = onMarkerClick;
+  const highlightRef = useRef(highlight);
+  highlightRef.current = highlight;
+  const insetRef = useRef(inset);
+  insetRef.current = inset;
+  /** A place whose card opens once the map has moved to it and drawn its marker. */
+  const pendingRef = useRef<string | null>(null);
+  const drawRef = useRef<() => void>(() => {});
+  const framedRef = useRef(false);
 
   // The map and the property's marker, once
   useEffect(() => {
@@ -104,7 +117,7 @@ export default function PropertyMap({
     L.marker([center.lat, center.lng], {
       title: `${brand} ${place}`,
       keyboard: false,
-      // Under the numbered markers, so places right next door stay visible
+      // Under the places' markers, so places right next door stay visible
       zIndexOffset: -1000,
       icon: L.divIcon({
         className: 'map-home',
@@ -132,74 +145,122 @@ export default function PropertyMap({
       map.remove();
       mapRef.current = null;
       layerRef.current = null;
+      framedRef.current = false;
       markersRef.current.clear();
     };
   }, [brand, place, address, center]);
 
-  // The chosen area's numbered markers
+  // The places' markers, gathered into clusters when zoomed out and redrawn on zoom
   useEffect(() => {
+    const map = mapRef.current;
     const layer = layerRef.current;
-    if (!layer) return;
-    layer.clearLayers();
-    markersRef.current.clear();
-    markers.forEach(({ id, label, place: p }) => {
-      const m = L.marker([p.lat, p.lng], {
-        title: p.name,
-        icon: L.divIcon({
-          className: 'map-marker',
-          html: `<span>${label}</span>`,
-          iconSize: [28, 28],
-          iconAnchor: [14, 14],
-          popupAnchor: [0, -16],
-        }),
-      })
-        .bindPopup(popupHtml(p.name, p.address), { className: 'map-popup', autoPanPaddingTopLeft: [inset.left, inset.top] })
-        .on('click', () => clickRef.current(id))
-        .addTo(layer);
-      markersRef.current.set(id, m);
-    });
-  }, [markers, inset]);
+    if (!map || !layer) return;
 
-  // Frame the area (keeping the property in view, and clear of the finder panel), or
-  // go back to the property when the area is cleared. A spotlit place is framed on its
-  // own with the property: closer in, both still in view.
+    const draw = () => {
+      layer.clearLayers();
+      markersRef.current.clear();
+      const zoom = map.getZoom();
+      const groups = new Map<string, MapMarker[]>();
+      markers.forEach((m) => {
+        const cell =
+          zoom >= CLUSTER_BELOW
+            ? m.id
+            : (() => {
+                const p = map.project([m.place.lat, m.place.lng], zoom);
+                return `${Math.floor(p.x / CLUSTER_CELL)}:${Math.floor(p.y / CLUSTER_CELL)}`;
+              })();
+        groups.set(cell, [...(groups.get(cell) ?? []), m]);
+      });
+
+      groups.forEach((group) => {
+        if (group.length === 1) {
+          const m = group[0];
+          const lit = m.id === highlightRef.current;
+          const mk = L.marker([m.place.lat, m.place.lng], {
+            title: m.place.name,
+            zIndexOffset: lit ? 900 : 0,
+            icon: L.divIcon({
+              className: `map-marker${lit ? ' is-lit' : ''}`,
+              html: `<i style="--icon:url('${m.icon}')"></i>`,
+              iconSize: [32, 32],
+              iconAnchor: [16, 16],
+              popupAnchor: [0, -18],
+            }),
+          })
+            .bindPopup(popupHtml(m), {
+              className: 'map-popup',
+              maxWidth: 240,
+              autoPanPaddingTopLeft: [insetRef.current.left + 16, insetRef.current.top + 16],
+              autoPanPaddingBottomRight: [16, (insetRef.current.bottom ?? 0) + 16],
+            })
+            .on('click', () => clickRef.current(m.id))
+            .addTo(layer);
+          markersRef.current.set(m.id, mk);
+          return;
+        }
+        // Several places: one marker at their middle, with the count; it zooms in on them
+        const lat = group.reduce((s, m) => s + m.place.lat, 0) / group.length;
+        const lng = group.reduce((s, m) => s + m.place.lng, 0) / group.length;
+        L.marker([lat, lng], {
+          title: `${group.length} places`,
+          icon: L.divIcon({
+            className: 'map-cluster',
+            html: `<span>${group.length}</span>`,
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+          }),
+        })
+          .on('click', () => {
+            const inset = insetRef.current;
+            map.flyToBounds(L.latLngBounds(group.map((m) => [m.place.lat, m.place.lng] as [number, number])), {
+              paddingTopLeft: [inset.left + 48, inset.top + 48],
+              paddingBottomRight: [48, (inset.bottom ?? 0) + 48],
+              maxZoom: CLUSTER_BELOW,
+              duration: 0.6,
+            });
+          })
+          .addTo(layer);
+      });
+
+      // A place picked from the list opens its card once its marker is drawn
+      const pending = pendingRef.current && markersRef.current.get(pendingRef.current);
+      if (pending) {
+        pendingRef.current = null;
+        pending.openPopup();
+      }
+    };
+
+    drawRef.current = draw;
+    draw();
+    map.on('zoomend', draw);
+    return () => {
+      map.off('zoomend', draw);
+    };
+  }, [markers]);
+
+  // Frame the places shown (keeping the property in view, and clear of the list and
+  // filters) whenever the filters change. The first framing doesn't animate.
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
     map.closePopup();
-    if (frame === null) {
-      map.flyTo([center.lat, center.lng], HOME_ZOOM, { duration: 0.8 });
-      return;
-    }
-    const lit = spotlight ? markers.filter((m) => m.id === spotlight) : [];
-    const shown = lit.length ? lit : markers;
-    const points = [L.latLng(center.lat, center.lng), ...shown.map((m) => L.latLng(m.place.lat, m.place.lng))];
-    const clear = lit.length ? spotlightInset : inset;
-    map.flyToBounds(L.latLngBounds(points), {
+    // The map may have just changed size (full screen on a phone)
+    map.invalidateSize({ animate: false });
+    const points = [L.latLng(center.lat, center.lng), ...framePoints.map((p) => L.latLng(p.lat, p.lng))];
+    const clear = insetRef.current;
+    const options: L.FitBoundsOptions = {
       paddingTopLeft: [clear.left + 32, Math.max(clear.top, 150)],
       paddingBottomRight: [56, Math.max(48, (clear.bottom ?? 0) + 24)],
       maxZoom: 16,
-      duration: 0.8,
-    });
-    // A spotlit place shows its details once the map settles, where it was framed
-    const m = lit.length ? markersRef.current.get(lit[0].id) : undefined;
-    if (!m) return;
-    const show = () => {
-      const popup = m.getPopup();
-      if (!popup) return;
-      popup.options.autoPan = false;
-      m.openPopup();
-      popup.options.autoPan = true;
     };
-    map.once('moveend', show);
-    return () => {
-      map.off('moveend', show);
-    };
-    // Only when the area or spotlight changes, not when the marker list is rebuilt with it
+    if (framedRef.current) map.flyToBounds(L.latLngBounds(points), { ...options, duration: 0.8 });
+    else map.fitBounds(L.latLngBounds(points), { ...options, animate: false });
+    framedRef.current = true;
+    // Only when the filters change, not whenever the list is rebuilt with them
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [frame, spotlight, center]);
+  }, [frameKey, center]);
 
-  // Light the place under the pointer in the list
+  // Light the place under the pointer in the list (or the chosen one)
   useEffect(() => {
     markersRef.current.forEach((m, id) => {
       m.getElement()?.classList.toggle('is-lit', id === highlight);
@@ -207,17 +268,32 @@ export default function PropertyMap({
     });
   }, [highlight, markers]);
 
-  // Move to the place picked in the list and open its card
+  // Move to the place picked in the list and open its card, zoomed in far enough that
+  // its marker has left any cluster
   useEffect(() => {
     const map = mapRef.current;
-    const m = focus && markersRef.current.get(focus.id);
-    if (!map || !m) return;
-    map.panInside(m.getLatLng(), {
-      paddingTopLeft: [inset.left + 40, 160],
-      paddingBottomRight: [60, Math.max(60, (inset.bottom ?? 0) + 40)],
+    const target = focus && markers.find((m) => m.id === focus.id);
+    if (!map || !target) return;
+    pendingRef.current = target.id;
+    const open = () => {
+      // A zoom has already drawn the markers (and opened the card); otherwise draw now
+      if (pendingRef.current) drawRef.current();
+      pendingRef.current = null;
+    };
+    map.once('moveend', open);
+    const inset = insetRef.current;
+    map.flyToBounds(L.latLngBounds([[target.place.lat, target.place.lng]]), {
+      paddingTopLeft: [inset.left + 40, inset.top + 190],
+      paddingBottomRight: [40, (inset.bottom ?? 0) + 40],
+      maxZoom: Math.max(map.getZoom(), CLUSTER_BELOW),
+      duration: 0.6,
     });
-    m.openPopup();
-  }, [focus, inset]);
+    return () => {
+      map.off('moveend', open);
+    };
+    // A new pick, not a changed list
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focus]);
 
   // Touch screens: one finger moves the map only while it fills the screen
   useEffect(() => {

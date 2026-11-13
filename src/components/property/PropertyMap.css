@@ -5,23 +5,27 @@
   font-family: var(--font-body);
 }
 
-/* Numbered places (Figma 1182:8723): dark circles, white numbers, white edge */
+/* Places: a dark circle with the category's icon, white edge */
 .map-marker {
   display: grid;
   place-items: center;
-  border: 1px solid var(--white);
+  border: 1.5px solid var(--white);
   border-radius: 50%;
   background: var(--royal-chocolate-700);
   box-shadow:
-    0 5px 5px rgba(0, 0, 0, 0.15),
-    0 19px 9.5px rgba(0, 0, 0, 0.13);
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1;
-  color: var(--white);
+    0 3px 5px rgba(0, 0, 0, 0.18),
+    0 10px 9px rgba(0, 0, 0, 0.12);
   transition:
     transform 250ms var(--ease-in-out),
     background-color 250ms var(--ease-in-out);
+}
+
+.map-marker i {
+  width: 16px;
+  height: 16px;
+  background: var(--white);
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
 }
 
 /* Lit from the list, or pointed at */
@@ -29,6 +33,28 @@
 .map-marker.is-lit {
   background: var(--bronze-700);
   transform: scale(1.2);
+}
+
+/* Several places close together: a bronze disc with their number */
+.map-cluster {
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--white);
+  border-radius: 50%;
+  background: var(--bronze-600);
+  box-shadow:
+    0 0 0 6px rgba(184, 150, 110, 0.35),
+    0 8px 12px rgba(0, 0, 0, 0.18);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--on-gold);
+  cursor: pointer;
+  transition: transform 250ms var(--ease-in-out);
+}
+
+.map-cluster:hover {
+  transform: scale(1.1);
 }
 
 /* The property (Figma 1182:7901): a point at the EPIISOD marker's centre, with the
@@ -99,16 +125,45 @@
 /* Place cards: white, serif name, small address */
 .map-popup .leaflet-popup-content-wrapper {
   border: 1px solid var(--bronze-400);
-  border-radius: 0;
+  overflow: hidden;
+  border-radius: var(--r-card);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
 }
 
 .map-popup .leaflet-popup-content {
-  margin: 12px 36px 12px 16px;
+  margin: 0;
+  width: 240px !important;
+}
+
+.map-popup__photo {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.map-popup__kind {
+  margin: 12px 16px 0 !important;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.map-popup__link {
+  display: inline-block;
+  margin: 8px 16px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-strong) !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .map-popup__title {
-  margin: 0 !important;
+  margin: 2px 16px 0 !important;
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 16px;
@@ -117,7 +172,7 @@
 }
 
 .map-popup__address {
-  margin: 4px 0 0 !important;
+  margin: 4px 16px 0 !important;
   font-size: 13px;
   line-height: 1.4;
   color: var(--grey-600);
@@ -126,9 +181,14 @@
 .map-popup .leaflet-popup-close-button {
   top: 8px;
   right: 8px;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: grid;
+  place-items: center;
   font-size: 20px;
+  line-height: 1;
+  background: var(--surface-1);
   color: var(--text-strong);
 }
 
@@ -159,7 +219,10 @@
   }
 
   .map-popup .leaflet-popup-content {
-    margin: 10px 32px 10px 12px;
-    max-width: 220px;
+    width: 210px !important;
+  }
+
+  .map-popup__photo {
+    height: 96px;
   }
 }

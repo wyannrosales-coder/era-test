@@ -47,7 +47,8 @@ html body :is(
     .about-story__photo,
     .faqs__photo,
     .xp-cafe__photo,
-    .location-finder__photo,
+    .place-row__thumb,
+    .map-popup__photo,
     .amenities__photo,
     .wellness-reveal__big-img
   ) {
@@ -310,7 +311,7 @@ html[data-theme='dark'] body :is(.room-card, .find-card, .blog-card, .promo-card
 }
 
 /* Dark icons drawn for a light page */
-html[data-theme='dark'] :is(.footer__socials img, .rooms__sort-button > img, .location-finder__icon img) {
+html[data-theme='dark'] :is(.footer__socials img, .rooms__sort-button > img, .place-panel__fold img, .place-search img, .property-location__close img) {
   filter: brightness(0) invert(0.9) sepia(0.25);
 }
 

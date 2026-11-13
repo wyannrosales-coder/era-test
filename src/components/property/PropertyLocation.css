@@ -38,156 +38,202 @@
   z-index: 0; /* keeps Leaflet's own stacking below the nav and pinned controls */
   width: 100%;
   max-width: var(--content-max);
-  height: 583px;
+  height: 640px;
   border: 0.615px solid var(--bronze-600);
   overflow: hidden;
 }
 
-/* ---- "Find nearby areas" (Figma 1182:16838) ---- */
+/* ---- Place finder: kind chips over the map, the list beside it ---- */
 
-/* The map's top-left corner: the field, then the area list or the chosen area's places */
-.location-finder {
-  --finder-shadow: 0 5px 10px rgba(0, 0, 0, 0.15), 0 19px 19px rgba(0, 0, 0, 0.13), 0 43px 26px rgba(0, 0, 0, 0.07),
-    0 76px 30px rgba(0, 0, 0, 0.02);
+.place-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+.place-icon--small {
+  width: 14px;
+  height: 14px;
+}
+
+/* One row of chips across the map's top, clear of the list; sideways scroll when it's full */
+.place-chips {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 16px;
+  left: 16px;
+  right: 16px;
   z-index: 500; /* above the map's panes and markers */
   display: flex;
-  flex-direction: column;
   gap: 8px;
-  width: 440px;
-  max-height: 100%;
-  padding: 24px;
-  /* The empty corner around the panel lets the map be dragged */
-  pointer-events: none;
+  padding: 2px 2px 12px; /* room for the chips' shadow */
+  overflow-x: auto;
+  scrollbar-width: none;
+  pointer-events: none; /* the gaps around the chips still drag the map */
+  transition: left 300ms var(--ease-in-out);
 }
 
-.location-finder > * {
-  pointer-events: auto;
+.place-chips::-webkit-scrollbar {
+  display: none;
 }
 
-.location-finder__field {
+.property-location__map.has-panel .place-chips {
+  left: calc(var(--panel-w) + 32px);
+}
+
+.place-chip,
+.place-fold {
   flex-shrink: 0;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
-  height: 44px;
-  padding: 0 16px;
+  min-height: 40px;
+  padding: 0 14px;
   border: 1px solid var(--line-edge);
+  border-radius: var(--r-pill);
   background: var(--surface-1);
-  box-shadow: var(--finder-shadow);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
   font: inherit;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: left;
-  color: var(--text-mid);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text-strong);
   cursor: pointer;
-  transition: border-color 200ms var(--ease-in-out);
+  pointer-events: auto;
+  transition:
+    background-color 200ms var(--ease-in-out),
+    color 200ms var(--ease-in-out),
+    border-color 200ms var(--ease-in-out);
 }
 
-.location-finder__field:hover,
-.location-finder__field[aria-expanded='true'] {
+.place-chip:hover,
+.place-fold:hover {
   border-color: var(--bronze-600);
 }
 
-.location-finder__field:focus-visible {
+.place-chip:focus-visible,
+.place-fold:focus-visible,
+.place-row:focus-visible,
+.place-distance__option:focus-visible,
+.place-panel__fold:focus-visible,
+.place-panel__clear:focus-visible {
   outline: 2px solid var(--bronze-700);
   outline-offset: 2px;
 }
 
-.location-finder__placeholder {
-  flex: 1 0 0;
+.place-chip.is-on {
+  border-color: var(--royal-chocolate-700);
+  background: var(--royal-chocolate-700);
+  color: var(--white);
 }
 
-/* White card below the field, fading down into place as it opens */
-.location-finder__panel {
-  min-height: 0;
-  margin: 0;
-  padding: 16px;
+/* A kind with nothing under the distance and name chosen */
+.place-chip.is-empty {
+  opacity: 0.55;
+}
+
+.place-chip__count {
+  min-width: 20px;
+  padding: 3px 6px;
+  border-radius: var(--r-pill);
+  background: var(--bronze-300);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1;
+  text-align: center;
+  color: var(--on-gold);
+}
+
+.place-chip.is-on .place-chip__count {
+  background: var(--bronze-600);
+}
+
+/* The list folded away: a button to bring it back */
+.place-fold--show {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 501;
+}
+
+.place-fold--phone {
+  display: none;
+}
+
+/* The panel beside the map */
+.place-panel {
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 16px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: var(--panel-w);
+  padding: 20px 8px 8px 20px;
   border: 1px solid var(--line-edge);
+  border-radius: var(--r-card);
   background: var(--surface-1);
-  box-shadow: var(--finder-shadow);
-  list-style: none;
-  animation: finder-in 280ms var(--ease-in-out);
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.15),
+    0 19px 19px rgba(0, 0, 0, 0.13);
+  animation: place-panel-in 300ms var(--ease-in-out);
 }
 
-@keyframes finder-in {
+@keyframes place-panel-in {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateX(-12px);
   }
 }
 
-/* Areas: icon in a sand circle, the name beside it; dark when pointed at or chosen */
-.location-finder__areas {
+.place-panel__head {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 12px;
+  padding-right: 12px;
 }
 
-.location-finder__area {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  min-height: 44px;
-  padding: 0;
+.place-panel__head > div {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+.place-panel__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--text-strong);
+}
+
+.place-panel__sub {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-soft);
+}
+
+.place-panel__clear {
+  padding: 4px 0;
   border: 0;
   background: none;
   font: inherit;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: left;
-  color: var(--text-mid);
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--accent-text);
   cursor: pointer;
 }
 
-.location-finder__icon {
-  flex-shrink: 0;
-  display: flex;
-  padding: 8px;
-  border-radius: 24px;
-  background: var(--bronze-500);
-  transition: background-color 250ms var(--ease-in-out);
-}
-
-.location-finder__icon.is-current,
-.location-finder__area:hover .location-finder__icon,
-.location-finder__area:focus-visible .location-finder__icon,
-.location-finder__area.is-current .location-finder__icon {
-  background: var(--royal-chocolate-700);
-}
-
-.location-finder__area:focus-visible {
-  outline: none;
-}
-
-/* The chosen area's places (Figma 1182:8459): fills the rest of the map's height */
-.location-finder__results {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding-right: 8px;
-}
-
-.location-finder__chosen {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--text-mid);
-}
-
-.location-finder__chosen-name {
-  flex: 1 0 0;
-}
-
-.location-finder__clear {
+.place-panel__fold {
   display: flex;
   padding: 0;
   border: 0;
@@ -196,18 +242,96 @@
   transition: opacity 200ms ease;
 }
 
-.location-finder__clear:hover {
+.place-panel__fold:hover {
   opacity: 0.6;
 }
 
-.location-finder__places {
+.place-search {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  height: 44px;
+  margin-right: 12px;
+  padding: 0 12px;
+  border: 1px solid var(--line-edge);
+  border-radius: var(--r-ctl);
+  background: var(--surface-white, #fff);
+  transition: border-color 200ms var(--ease-in-out);
+}
+
+.place-search:hover,
+.place-search:focus-within {
+  border-color: var(--bronze-600);
+}
+
+.place-search img {
+  opacity: 0.7;
+}
+
+.place-search input {
+  flex: 1 0 0;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  font-size: 16px; /* no zoom on focus on phones */
+  color: var(--text-strong);
+}
+
+.place-search input::placeholder {
+  color: var(--text-soft);
+}
+
+.place-distance {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding-right: 12px;
+}
+
+.place-distance__label {
+  margin-right: 2px;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.place-distance__option {
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--line-edge);
+  border-radius: var(--r-pill);
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition:
+    background-color 200ms var(--ease-in-out),
+    border-color 200ms var(--ease-in-out);
+}
+
+.place-distance__option:hover {
+  border-color: var(--bronze-600);
+}
+
+.place-distance__option.is-on {
+  border-color: var(--bronze-600);
+  background: var(--bronze-600);
+  font-weight: 600;
+  color: var(--on-gold);
+}
+
+/* The places: a photo (or the kind's icon), name, and kind · distance · walk */
+.place-list {
+  flex: 1 1 0;
   min-height: 0;
   margin: 0;
-  /* Room for the scroll bar, clear of the distances */
-  padding: 0 12px 0 0;
+  padding: 0 8px 0 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   list-style: none;
@@ -215,228 +339,154 @@
   scrollbar-color: var(--line-in-white) transparent;
 }
 
-.location-finder__place {
+.place-list li + li {
+  border-top: 1px solid var(--line-edge);
+}
+
+.place-row {
   display: flex;
   align-items: center;
   gap: 12px;
   width: 100%;
-  min-height: 44px;
-  padding: 4px;
+  min-height: 72px;
+  padding: 8px 8px 8px 4px;
   border: 0;
+  border-left: 3px solid transparent;
   background: none;
   font: inherit;
   text-align: left;
   color: var(--text-mid);
   cursor: pointer;
+  transition:
+    background-color 200ms var(--ease-in-out),
+    border-color 200ms var(--ease-in-out);
 }
 
-.location-finder__place:focus-visible {
-  outline: 2px solid var(--bronze-700);
-  outline-offset: -2px;
+.place-row.is-lit {
+  background: var(--bronze-200);
 }
 
-.location-finder__number {
+.place-row.is-selected {
+  border-left-color: var(--bronze-700);
+  background: var(--bronze-200);
+}
+
+.place-row__thumb {
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: var(--r-ctl);
   background: var(--bronze-300);
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1;
   color: var(--on-gold);
-  transition:
-    background-color 250ms var(--ease-in-out),
-    color 250ms var(--ease-in-out);
 }
 
-/* The place lit here and on the map */
-.location-finder__place.is-lit .location-finder__number {
-  background: var(--royal-chocolate-700);
-  color: var(--white);
+.place-row__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.location-finder__place-name {
+.place-row__thumb .place-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.place-row__body {
   flex: 1 0 0;
-  font-size: 16px;
-  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
-.location-finder__distance {
-  flex-shrink: 0;
-  font-size: 14px;
-  line-height: 24px;
-  white-space: nowrap;
-  color: var(--royal-chocolate-400);
+.place-row__name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.25;
+  color: var(--text-strong);
+}
+
+.place-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-soft);
+}
+
+.place-row__meta .place-icon {
+  margin-right: -2px;
+}
+
+.place-row__dot {
+  opacity: 0.6;
+}
+
+.place-empty {
+  padding: 24px 12px 24px 0;
+  text-align: center;
+  color: var(--text-mid);
+}
+
+.place-empty p {
+  margin: 0 0 8px;
+}
+
+.place-empty button {
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--accent-text);
+  cursor: pointer;
+}
+
+/* The chat button steps aside while the phone map is full screen */
+body.map-is-full .enquiry-pill {
+  display: none;
+}
+
+/* Only on the full-screen phone map */
+.property-location__close {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .location-finder__panel {
+  .place-panel {
     animation: none;
+  }
+
+  .place-chips {
+    transition: none;
   }
 }
 
-/* Phones: a taller map with the finder across its top */
+/* Tablets: a narrower list */
+@media (max-width: 1000px) {
+  .property-location__map {
+    height: 600px;
+  }
+}
+
+/* ---- Phones ---- */
 @media (max-width: 700px) {
   .property-location {
     padding: 80px var(--page-gutter);
   }
 
-  .property-location__header {
-    padding-bottom: 24px;
-  }
-
-  .property-location__map {
-    height: 560px;
-  }
-
-  .location-finder {
-    width: 100%;
-    padding: 12px;
-  }
-
-  .location-finder__panel {
-    padding: 12px;
-  }
-
-  /* Leave the map's lower half in view under the list */
-  .location-finder__results {
-    max-height: 248px;
-  }
-}
-
-/* A place's photo (Figma 1182:8433): a 64px thumbnail before its number, which enlarges */
-.location-finder__row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.location-finder__row .location-finder__place {
-  flex: 1 0 0;
-  min-width: 0;
-}
-
-.location-finder__thumb {
-  flex-shrink: 0;
-  display: block;
-  width: 64px;
-  height: 64px;
-  padding: 0;
-  overflow: hidden;
-  border: 0;
-  background: var(--surface-2);
-  cursor: zoom-in;
-}
-
-.location-finder__thumb img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 400ms var(--ease-in-out);
-}
-
-.location-finder__thumb:hover img {
-  transform: scale(1.06);
-}
-
-.location-finder__thumb:focus-visible {
-  outline: 2px solid var(--bronze-700);
-  outline-offset: 2px;
-}
-
-/* Enlarged (Figma 1227:12135): the photo across the panel, its name and distance below.
-   The list stays where it was, hidden, for the way back. */
-.location-finder__results.is-enlarged .location-finder__places {
-  display: none;
-}
-
-.location-finder__photo {
-  display: flex;
-  flex-direction: column;
-  margin: 8px 8px 0 0;
-  animation: location-finder-photo 450ms var(--ease-in-out) both;
-}
-
-.location-finder__photo img {
-  display: block;
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-}
-
-.location-finder__photo figcaption {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 12px;
-  text-align: center;
-}
-
-.location-finder__photo-name {
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 1.2;
-  color: var(--text-mid);
-}
-
-@keyframes location-finder-photo {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .location-finder__photo {
-    animation: none;
-  }
-}
-
-@media (max-width: 700px) {
-  .location-finder__thumb {
-    width: 48px;
-    height: 48px;
-  }
-
-  .location-finder__results.is-enlarged {
-    max-height: none;
-  }
-
-  .location-finder__photo img {
-    height: 120px;
-  }
-
-  .location-finder__photo figcaption {
-    padding-top: 8px;
-  }
-}
-
-/* A place with no photo yet: a sand square with a pin (Figma 1227:12217) */
-.location-finder__thumb--empty {
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--bronze-300);
-  background: var(--surface-2);
-  cursor: default;
-}
-
-.location-finder__thumb--empty img {
-  width: 24px;
-  height: 24px;
-}
-
-/* Only on the full-screen phone map */
-.property-location__close,
-.location-finder__photo-close {
-  display: none;
-}
-
-/* ---- Phones (Figma 1275:10498) ---- */
-@media (max-width: 700px) {
   /* "Location" centred over the address */
   .property-location__header {
     flex-direction: column;
@@ -449,7 +499,7 @@
   }
 
   .property-location__map {
-    height: 500px;
+    height: 520px;
   }
 
   /* Pinch to zoom; no buttons */
@@ -457,11 +507,34 @@
     display: none;
   }
 
-  /* The field at the map's foot */
-  .location-finder {
-    top: auto;
-    bottom: 0;
-    padding: 24px;
+  .place-chips {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  /* A button at the map's foot opens the list full screen */
+  .place-fold--phone {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    z-index: 501;
+    display: inline-flex;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 20px;
+    border-color: var(--royal-chocolate-700);
+    background: var(--royal-chocolate-700);
+    color: var(--white);
+    transform: translateX(-50%);
+  }
+
+  .place-fold--phone img {
+    filter: brightness(0) invert(1);
+  }
+
+  .place-fold--phone .place-chip__count {
+    background: var(--bronze-600);
   }
 
   /* Full screen: over the whole page, nav included. The section's drift (a transform)
@@ -481,78 +554,13 @@
     border: 0;
   }
 
-  .property-location__map.is-full .location-finder {
-    left: 0;
-    right: 0;
-    width: 100%;
-    padding: 0;
-    gap: 8px;
-  }
-
-  .property-location__map.is-full .location-finder__field {
-    width: auto;
-    margin: 0 24px;
-  }
-
-  /* No panel open: the field rests 24px above the foot */
-  .property-location__map.is-full .location-finder:not(:has(.location-finder__panel)) .location-finder__field {
-    margin-bottom: 24px;
-  }
-
-  /* Panels run edge to edge along the foot, rising in */
-  .property-location__map.is-full .location-finder__panel {
-    padding: 24px 32px;
-    border: 0;
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
-    animation: finder-rise 380ms var(--ease-in-out);
-  }
-
-  .property-location__map.is-full .location-finder__results {
-    max-height: 40svh;
-    padding-right: 24px;
-  }
-
-  /* A photo open: the field steps aside; the photo, its name and distance (Figma 1275:10499) */
-  .property-location__map.is-full .location-finder:has(.is-enlarged) .location-finder__field,
-  .property-location__map.is-full .location-finder__results.is-enlarged .location-finder__chosen {
-    display: none;
-  }
-
-  .property-location__map.is-full .location-finder__results.is-enlarged {
-    max-height: none;
-    padding: 16px;
-  }
-
-  .property-location__map.is-full .location-finder__photo {
-    position: relative;
-    margin: 0;
-  }
-
-  .property-location__map.is-full .location-finder__photo img {
-    height: 150px;
-  }
-
-  .property-location__map.is-full .location-finder__photo-close {
-    position: absolute;
+  /* Chips along the top, leaving the corner for the cross */
+  .property-location__map.is-full .place-chips {
     top: 8px;
-    right: 8px;
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: 0;
-    background: rgba(var(--ink-deep-rgb), 0.5);
-    cursor: pointer;
+    left: 12px;
+    right: 60px;
   }
 
-  .property-location__map.is-full .location-finder__photo-close img {
-    width: 24px;
-    height: 24px;
-    filter: brightness(0) invert(1);
-  }
-
-  /* The cross in the corner closes the full-screen map */
   .property-location__map.is-full .property-location__close {
     position: absolute;
     top: 8px;
@@ -560,17 +568,66 @@
     z-index: 600;
     display: grid;
     place-items: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 0;
+    border-radius: 50%;
     background: var(--surface-1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     cursor: pointer;
   }
+
+  /* The list rises from the foot, 44% of the screen */
+  .property-location__map.is-full .place-panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 44svh;
+    gap: 10px;
+    padding: 16px 8px 8px 16px;
+    border: 0;
+    border-radius: var(--r-panel) var(--r-panel) 0 0;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.12);
+    animation: place-sheet-rise 380ms var(--ease-in-out);
+  }
+
+  .property-location__map.is-full .place-panel__sub {
+    display: none;
+  }
+
+  .property-location__map.is-full .place-panel__title {
+    font-size: 18px;
+  }
+
+  /* The distances in one row that scrolls sideways */
+  .place-distance {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .place-distance::-webkit-scrollbar {
+    display: none;
+  }
+
+  .place-distance > * {
+    flex-shrink: 0;
+  }
+
+  .place-row {
+    min-height: 64px;
+  }
+
+  .place-row__thumb {
+    width: 48px;
+    height: 48px;
+  }
 }
 
-@keyframes finder-rise {
+@keyframes place-sheet-rise {
   from {
     opacity: 0;
     transform: translateY(24px);
