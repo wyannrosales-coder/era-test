@@ -4,6 +4,10 @@
  *  - grain: fine paper noise, for the closing sections and footer;
  *  - linen: a faint gold weave, for the dark-ink bands that set off the page.
  * Put `tx-grain` or `tx-linen` on any section to give it the same.
+ *
+ * The texture is part of the section's background: it sits above the section's own colour but
+ * behind everything in it (z-index -1 inside an isolated stacking context), so text, photos and
+ * controls are never dusted by it.
  */
 :root {
   /* Fine noise: dark specks on light, light specks on dark */
@@ -22,13 +26,15 @@ html[data-theme='dark'] {
 
 html:not([data-texture='off']) body :is(.tx-grain, .tx-linen, .footer, .stay-connected, .promotions-vip, .why-experience) {
   position: relative;
+  /* Its own stacking context, so the texture's z-index -1 stays inside the section */
+  isolation: isolate;
 }
 
 html:not([data-texture='off']) body :is(.tx-grain, .tx-linen, .footer, .stay-connected, .promotions-vip, .why-experience)::after {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: -1;
   pointer-events: none;
 }
 
