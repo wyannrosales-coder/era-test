@@ -145,8 +145,8 @@ export default function WellnessReveal({ offset, stepScroll }: WellnessRevealPro
       const axis = phone ? 'scaleX' : 'scaleY';
 
       const splits = boxes.map((box) => ({
-        title: SplitText.create(box.querySelector('h3'), { type: 'lines', mask: 'lines' }),
-        body: SplitText.create(box.querySelector('p'), { type: 'lines', mask: 'lines' }),
+        title: SplitText.create(box.querySelector('h3'), { type: 'lines', mask: 'lines', aria: 'none' }),
+        body: SplitText.create(box.querySelector('p'), { type: 'lines', mask: 'lines', aria: 'none' }),
       }));
 
       // Every photo after the first starts with all its slats empty

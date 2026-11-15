@@ -19,6 +19,7 @@ import {
 } from '../components/rooms/roomSearch';
 import bannerImage from '../assets/property/hero.jpg';
 import './FindRoomPage.css';
+import { HIGH_PRIORITY } from '../lib/img';
 
 const PARAMS = ['city', 'institution', 'type', 'price', 'term'] as const;
 
@@ -115,7 +116,7 @@ export default function FindRoomPage() {
       <Nav />
       <main className="find-page">
         <header className="find-page__hero">
-          <img loading="lazy" decoding="async" className="find-page__hero-image" src={bannerImage} alt="" />
+          <img {...HIGH_PRIORITY} className="find-page__hero-image" src={bannerImage} alt="" />
           <div className="find-page__hero-overlay" aria-hidden />
           <div className="find-page__hero-inner">
             <p className="eyebrow find-page__eyebrow">Find a room</p>

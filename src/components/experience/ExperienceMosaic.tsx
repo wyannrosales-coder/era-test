@@ -63,7 +63,7 @@ function Column({ photos, side }: { photos: Photo[]; side: 'left' | 'right' }) {
     <div className={`xp-mosaic__column xp-mosaic__column--${side}`}>
       {photos.map((photo, i) => (
         <div key={i} className={`xp-mosaic__photo xp-mosaic__photo--${photo.size}`}>
-          <img loading="lazy" decoding="async" src={photo.image} alt="" />
+          <img decoding="async" src={photo.image} alt="" />
         </div>
       ))}
     </div>
@@ -180,14 +180,14 @@ export default function ExperienceMosaic({ id }: { id?: string }) {
             <Column photos={LEFT} side="left" />
             <div className="xp-mosaic__column xp-mosaic__column--middle">
               <div className="xp-mosaic__photo xp-mosaic__photo--short">
-                <img loading="lazy" decoding="async" src={pool} alt="" />
+                <img decoding="async" src={pool} alt="" />
               </div>
               <div className="xp-mosaic__photo xp-mosaic__photo--feature">
-                <img loading="lazy" decoding="async" src={lobbyTree} alt="" />
+                <img decoding="async" src={lobbyTree} alt="" />
                 <div className="xp-mosaic__veil" />
               </div>
               <div className="xp-mosaic__photo xp-mosaic__photo--short">
-                <img loading="lazy" decoding="async" src={dining} alt="" />
+                <img decoding="async" src={dining} alt="" />
               </div>
             </div>
             <Column photos={RIGHT} side="right" />
@@ -209,7 +209,7 @@ export default function ExperienceMosaic({ id }: { id?: string }) {
             <ul className="xp-mosaic__cards">
               {CARDS.map(({ title, image, text }) => (
                 <li key={title} className="xp-mosaic__card">
-                  <img loading="lazy" decoding="async" className="xp-mosaic__card-img" src={image} alt="" />
+                  <img decoding="async" className="xp-mosaic__card-img" src={image} alt="" />
                   <div className="xp-mosaic__card-body">
                     <h3 className="xp-mosaic__card-title">{title}</h3>
                     <p className="xp-mosaic__card-text">{text}</p>

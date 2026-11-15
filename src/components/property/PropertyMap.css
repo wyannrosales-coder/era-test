@@ -102,7 +102,7 @@
   margin: 4px 0 0;
   font-size: 14px;
   line-height: 1.5;
-  color: var(--grey-600);
+  color: var(--text-soft);
 }
 
 .map-home__card {
@@ -181,7 +181,7 @@
   margin: 4px 16px 0 !important;
   font-size: 13px;
   line-height: 1.4;
-  color: var(--grey-600);
+  color: var(--text-soft);
 }
 
 .map-popup .leaflet-popup-close-button {

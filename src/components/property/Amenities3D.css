@@ -370,7 +370,7 @@ html[data-theme='dark'] .a3d__button img {
   .a3d__hint {
     left: var(--page-gutter);
     bottom: 10px;
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: 0.12em;
   }
 

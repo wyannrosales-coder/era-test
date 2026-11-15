@@ -107,6 +107,16 @@ function Icon({ light, dark, size }: { light: string; dark: string; size: number
  * `tone="dark"` starts as a solid chocolate bar (Figma 539:24148) for pages without a hero;
  * `tone="cream"` as a cream bar with chocolate type (Figma 735:13845, About us).
  */
+/** Moves keyboard focus (and the view) to the page's main content. */
+function skipToMain(e: { preventDefault(): void }) {
+  const main = document.querySelector('main');
+  if (!main) return;
+  e.preventDefault();
+  if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+  main.focus({ preventScroll: true });
+  scrollToY(main.getBoundingClientRect().top + window.scrollY - 80);
+}
+
 export default function Nav({
   subLinks,
   hideBarAfter,
@@ -344,8 +354,18 @@ export default function Nav({
     };
   }, [openMenu]);
 
+  // The skip link's target: the page's main content
+  useEffect(() => {
+    const main = document.querySelector('main');
+    if (main && !main.id) main.id = 'main';
+  });
+
   return (
     <>
+      {/* First stop for keyboard users: past the menus to the page itself */}
+      <a className="skip-link" href="#main" onClick={skipToMain}>
+        Skip to content
+      </a>
       <header
         ref={headerRef}
         className={`nav${tone !== 'light' ? ` nav--${tone}` : ''}${subLinks ? ' nav--sub' : ''}${scrolled ? ' is-scrolled' : ''}${openMenu ? ' is-open' : ''}${condensed && !openMenu ? ' is-condensed' : ''}${hidden && !openMenu ? ' is-hidden' : ''}`}

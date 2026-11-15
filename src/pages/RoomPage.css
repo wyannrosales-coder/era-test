@@ -147,7 +147,7 @@
 
 .room-tag--soldOut {
   background: var(--grey-200);
-  color: var(--grey-600);
+  color: var(--text-soft);
 }
 
 .room-tag--value {
@@ -698,7 +698,7 @@ a.room-button:hover img {
 .room-plan__caption {
   font-size: 14px;
   line-height: 1.5;
-  color: var(--royal-chocolate-400);
+  color: var(--text-soft);
 }
 
 /* ---- Booking card (Figma 1195:27652), pinned while the details scroll ---- */

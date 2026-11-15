@@ -11,6 +11,7 @@ import { POSTS, categoryTone, postHref, postMeta } from '../components/blog/blog
 import line from '../assets/cta-line.svg';
 import type { Audience } from '../components/blog/blogData';
 import '../components/blog/Blog.css';
+import { HIGH_PRIORITY } from '../lib/img';
 
 const ALL = 'All';
 /** Posts shown at first, and added by each "Load more". */
@@ -76,7 +77,7 @@ export default function BlogListPage({ audience }: { audience: Audience }) {
           {featured && (
             <a href={postHref(featured)} className="blog-featured">
               <span className="blog-featured__media">
-                <img loading="lazy" decoding="async"
+                <img {...HIGH_PRIORITY}
                   className="blog-featured__image"
                   src={featured.image}
                   style={{ objectPosition: featured.imagePosition }}

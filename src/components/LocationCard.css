@@ -73,7 +73,7 @@
 .location-card__city {
   font-size: 16px;
   text-transform: uppercase;
-  color: var(--grey-600);
+  color: var(--text-soft);
 }
 
 .location-card__link,
@@ -105,7 +105,7 @@
 .location-card__soon {
   padding: 4px 0;
   text-transform: uppercase;
-  color: var(--grey-600);
+  color: var(--text-soft);
 }
 
 /* View Property + the property's experience page */

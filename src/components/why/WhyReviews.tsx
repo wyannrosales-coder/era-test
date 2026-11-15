@@ -300,6 +300,9 @@ export default function WhyReviews() {
         ref={trackRef}
         className="why-reviews__track"
         role="list"
+        aria-label="Resident reviews"
+        // Scrolls sideways: focusable so the arrow keys can scroll it
+        tabIndex={0}
         onPointerLeave={() => hoverSoon(null)}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}

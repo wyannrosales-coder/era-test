@@ -81,7 +81,7 @@ export default function WhyHero() {
             className={`why-hero__slide${i === slide ? ' is-active' : ''}`}
             src={s.image}
             alt=""
-            aria-hidden={i !== slide}
+            aria-hidden={i !== slide || undefined}
           />
         ))}
         <div className="why-hero__fade" aria-hidden />

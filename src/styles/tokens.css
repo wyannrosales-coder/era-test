@@ -61,7 +61,9 @@
   --ink-deep-rgb: 4, 7, 14;
   --ink-soft-rgb: 14, 22, 38;
   /* Gold used as text (eyebrows, links): darker on light, lighter on dark */
-  --accent-text: var(--bronze-700);
+  /* Bronze for text: a shade deeper than --bronze-700 so small text passes WCAG AA (4.5:1)
+     on every cream background. Bronze borders, fills and buttons keep --bronze-700. */
+  --accent-text: #826749;
 
   /* Corners: what the corners setting changes (curved here; sharp zeroes them) */
   --r-media: 16px;

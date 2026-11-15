@@ -143,7 +143,7 @@ export default function AboutLocation() {
               className={`about-location__slide${i === slide ? ' is-active' : ''}`}
               src={p.image}
               alt=""
-              aria-hidden={i !== slide}
+              aria-hidden={i !== slide || undefined}
             />
           ))}
           <div className="about-location__fade" aria-hidden />
