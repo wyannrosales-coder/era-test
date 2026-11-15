@@ -14,16 +14,25 @@
     });
   }
 
+  if (!('IntersectionObserver' in window)) [].forEach.call(document.querySelectorAll('img[data-ep-src]'), function (im) { im.src = im.getAttribute('data-ep-src'); });
   // below-the-fold photos are lazy; warm the ones in slider/tab panels (hidden panels never load lazily) as they approach
   if ('IntersectionObserver' in window) {
     var warm = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting) return;
         [].forEach.call(e.target.querySelectorAll('img[loading="lazy"]'), function (im) { im.loading = 'eager'; });
+        // photos whose address waits in data-ep-src (the rooms magazine, the residents' photos): this page's first layout
+        // stacks every section near the top, so the browser's own lazy loading would fetch them all at once
+        [].forEach.call(e.target.querySelectorAll('img[data-ep-src]'), function (im) { im.src = im.getAttribute('data-ep-src'); im.removeAttribute('data-ep-src'); });
         warm.unobserve(e.target);
       });
     }, { rootMargin: '150% 0px 150% 0px' });
-    [].forEach.call(document.querySelectorAll('.amen-w, [data-ep-zoom]'), function (el) { warm.observe(el.closest('section') || el); });
+    // (the rooms magazine and the residents' photos are built or pinned out of view: warm them the same way, once the
+    // page has laid out, so a collapsed first layout doesn't make far sections look near)
+    var warmAll = function () {
+      [].forEach.call(document.querySelectorAll('.amen-w, [data-ep-zoom], #rooms, img[data-ep-src]'), function (el) { warm.observe(el.closest('section') || el); });
+    };
+    if (document.readyState === 'complete') warmAll(); else window.addEventListener('load', warmAll, { once: true });
   }
 
   var vids = [].slice.call(document.querySelectorAll('video[data-lazy-video]'));

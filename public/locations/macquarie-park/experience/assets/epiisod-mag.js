@@ -50,7 +50,7 @@
   });
 
   function pad(n) { return ('0' + n).slice(-2); }
-  function ph(r, n, st, cls) { return '<figure class="mg-ph ' + (cls || '') + '" style="' + st + '"><img src="' + IMG + r.img + '-' + n + '.webp?v=4" alt="' + r.full + '" draggable="false"></figure>'; }
+  function ph(r, n, st, cls) { return '<figure class="mg-ph ' + (cls || '') + '" style="' + st + '"><img decoding="async" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-ep-src="' + IMG + r.img + '-' + n + '.webp?v=4" alt="' + r.full + '" draggable="false"></figure>'; }
   function pq(t, sz) { return '<blockquote class="mg-pq hd" style="font-size:' + (sz || 5) + 'cqw">' + t + '</blockquote>'; }
   function fo(no, side, cls) { return '<div class="mg-fo ' + side + ' ' + (cls || '') + '"><span>' + pad(no) + '</span><span>EPIISOD · Rooms</span></div>'; }
   function lk(r) { return '<a class="mg-lk" href="' + r.url + '" draggable="false">Explore room <i>→</i></a>'; }
@@ -130,7 +130,7 @@
     function (r, pl, pr_) {
       return {
         L: ['t-pearl', ph(r, 1, 'left:14cqw;top:10cqw;width:72cqw;height:84cqw;border-radius:36cqw 36cqw 0 0', 'f-arch') +
-          '<div class="mg-spill" aria-hidden="true"><img src="' + IMG + r.img + '-1.webp?v=4" alt="" draggable="false" style="clip-path:polygon(89.00% 58.98%,89.45% 56.64%,90.23% 54.98%,91.54% 53.37%,93.16% 52.05%,95.12% 51.17%,97.40% 51.17%,100.00% 52.25%,100.00% 100.00%,88.93% 100.00%,88.93% 70.70%,88.61% 66.80%,88.87% 62.89%)"></div>' +
+          '<div class="mg-spill" aria-hidden="true"><img decoding="async" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-ep-src="' + IMG + r.img + '-1.webp?v=4" alt="" draggable="false" style="clip-path:polygon(89.00% 58.98%,89.45% 56.64%,90.23% 54.98%,91.54% 53.37%,93.16% 52.05%,95.12% 51.17%,97.40% 51.17%,100.00% 52.25%,100.00% 100.00%,88.93% 100.00%,88.93% 70.70%,88.61% 66.80%,88.87% 62.89%)"></div>' +
           '<div class="mg-row mg-end" style="position:absolute;left:14cqw;right:14cqw;top:99cqw"><span class="hd" style="font-size:9cqw;line-height:1">' + r.no + '</span><span class="eb" style="text-align:right;line-height:1.7">' + r.views + '<br>' + r.sqm + ' sqm</span></div>' + fo(pl, 'l')],
         R: ['t-choc', '<div class="mg-col"><span class="eb" style="color:#b8966e">' + r.kind + '</span>' + pq(r.quote, 6.6) + '' +
           '<p class="tx" style="margin:5cqw 0 0;font-size:2.05cqw">' + r.desc + '</p>' + '<div class="mg-row" style="gap:2cqw;margin-top:4cqw;flex:none">' + ph(r, 2, 'position:relative;flex:1;height:17cqw') + ph(r, 3, 'position:relative;flex:1;height:17cqw') + ph(r, 4, 'position:relative;flex:1;height:17cqw') + '</div>' +
@@ -156,7 +156,7 @@
   // the cover: a classic interiors-magazine front (full-bleed photograph, big serif masthead, a few large cover lines),
   // every word sized and shaded so it reads over the picture
   function cover() {
-    return ['t-choc cvx', '<figure class="mg-ph cvx-ph" style="inset:0"><img src="' + IMG + 'cover.webp?v=4" alt="A warm oak desk nook with a vase of dried flowers" draggable="false"></figure>' +
+    return ['t-choc cvx', '<figure class="mg-ph cvx-ph" style="inset:0"><img decoding="async" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-ep-src="' + IMG + 'cover.webp?v=4" alt="A warm oak desk nook with a vase of dried flowers" draggable="false"></figure>' +
       '<div class="cvx-shade"></div>' +
       '<div class="cvx-top cv-rv" style="--i:0"><span>EPIISOD · Macquarie Park</span><span>Vol. 01 · 2026</span></div>' +
       '<h2 class="hd cvx-mast cv-rv" style="--i:1">Rooms</h2>' +
@@ -404,7 +404,7 @@
   mobCover.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fbOpen(1); } });
   pin.appendChild(mobCover);
 
-  function mph(r, n, cls, st) { return '<figure class="mp-ph ' + (cls || '') + '"' + (st ? ' style="' + st + '"' : '') + '><img src="' + IMG + r.img + '-' + n + '.webp?v=4" alt="' + r.full + '" draggable="false"></figure>'; }
+  function mph(r, n, cls, st) { return '<figure class="mp-ph ' + (cls || '') + '"' + (st ? ' style="' + st + '"' : '') + '><img decoding="async" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-ep-src="' + IMG + r.img + '-' + n + '.webp?v=4" alt="' + r.full + '" draggable="false"></figure>'; }
   function mlk(r) { return '<a class="mp-lk" href="' + r.url + '" draggable="false">Explore room <i>→</i></a>'; }
   function mpr(r) { return '<div class="mp-pr"><small>From</small><b class="hd">AU$' + r.price + '</b><small>' + r.unit + '</small></div>'; }
   function msp(a, b) { return '<div class="mp-sp"><b class="hd">' + a + '</b><small>' + b + '</small></div>'; }

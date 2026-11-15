@@ -106,7 +106,7 @@
     sub.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: quick ? 500 : 800, delay: quick ? 220 : 380, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' });
   }
   function ready() {                                                  // the page loaded and the hero's first frame is decoded
-    var poster = (document.querySelector('link[rel="preload"][as="image"][href*="poster1"]') || {}).href || '/locations/macquarie-park/experience/assets/flythrough/poster1.jpg?v=1792820100';
+    var poster = (document.querySelector('link[rel="preload"][as="image"][href*="poster1"]') || {}).href || '/locations/macquarie-park/experience/assets/flythrough/poster1.webp?v=1796200000';
     var img = new Image(); img.src = poster;
     var imgReady = img.decode ? img.decode().catch(function () {}) : new Promise(function (r) { img.onload = img.onerror = r; });
     // ...and the hero's own first frame, if it can be ready in time (otherwise the poster, which is the same picture, stands in)
