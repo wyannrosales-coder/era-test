@@ -27,11 +27,11 @@ export function LogoSlot({ logo }: { logo: Logo }) {
   return (
     <div className="partner-logo">
       {logo.kind === 'single' ? (
-        <img src={logo.src} width={logo.width} height={logo.height} alt="Partner logo" />
+        <img loading="lazy" decoding="async" src={logo.src} width={logo.width} height={logo.height} alt="Partner logo" />
       ) : (
         <div className="partner-logo__split" role="img" aria-label="Partner logo">
-          <img className="partner-logo__mark" src={logo.mark} alt="" />
-          <img className="partner-logo__word" src={logo.word} alt="" />
+          <img loading="lazy" decoding="async" className="partner-logo__mark" src={logo.mark} alt="" />
+          <img loading="lazy" decoding="async" className="partner-logo__word" src={logo.word} alt="" />
         </div>
       )}
     </div>
@@ -123,15 +123,15 @@ export default function Partners() {
           ))}
         </div>
         <div className="partners__single">
-          <img src={partnersRight} alt="" />
+          <img loading="lazy" decoding="async" src={partnersRight} alt="" />
         </div>
       </div>
 
       <div className="partners__photo partners__photo--left" data-parallax>
-        <img src={partnersLeft} alt="" />
+        <img loading="lazy" decoding="async" src={partnersLeft} alt="" />
       </div>
       <div className="partners__photo partners__photo--right" data-parallax>
-        <img src={partnersRight} alt="" />
+        <img loading="lazy" decoding="async" src={partnersRight} alt="" />
       </div>
     </section>
   );

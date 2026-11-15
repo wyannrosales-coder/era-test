@@ -26,7 +26,7 @@ export default function ToTop() {
       tabIndex={shown ? 0 : -1}
       onClick={() => scrollToY(0)}
     >
-      <img src={arrowUp} width={36} height={36} alt="" />
+      <img loading="lazy" decoding="async" src={arrowUp} width={36} height={36} alt="" />
     </button>
   );
 }

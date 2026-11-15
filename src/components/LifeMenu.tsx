@@ -105,7 +105,7 @@ function ExperienceCarousel({ onNavigate }: { onNavigate: () => void }) {
                 <span className="life-menu__experience-name">{name}</span>
                 <span className="life-menu__experience-cta">
                   {href ? 'Enter the experience' : 'Coming soon'}
-                  {href && <img src={arrowRight} width={14} height={14} alt="" />}
+                  {href && <img loading="lazy" decoding="async" src={arrowRight} width={14} height={14} alt="" />}
                 </span>
               </>
             );
@@ -156,7 +156,7 @@ export default function LifeMenu({ id, open, onNavigate, variant = 'a' }: LifeMe
               <a key={title} href={href} className="nav-menu-b__link nav-menu-b__link--article" onClick={onNavigate}>
                 <span className="nav-menu-b__article">
                   {title}
-                  <img src={arrowRight} width={16} height={16} alt="" />
+                  <img loading="lazy" decoding="async" src={arrowRight} width={16} height={16} alt="" />
                 </span>
                 <span className="type-body-s nav-menu-b__article-description">{description}</span>
               </a>

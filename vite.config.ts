@@ -1,8 +1,62 @@
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
-import { resolve } from 'node:path';
-import { writeFileSync } from 'node:fs';
+import { basename, join, resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
+
+/**
+ * Photos, smaller (build only): every JPG and PNG imported from src/assets ships as WebP,
+ * at most 2400px wide (photos at quality 78; PNGs near-lossless, keeping transparency and
+ * crisp line art), unless that wouldn't save at least 5%. The source files are untouched.
+ * Results are cached in node_modules/.cache, so only new or changed images are re-encoded.
+ */
+function optimizeImages(): Plugin {
+  const MAX_WIDTH = 2400;
+  const cacheDir = resolve(__dirname, 'node_modules/.cache/optimized-images');
+  let saved = 0;
+  let count = 0;
+  return {
+    name: 'optimize-images',
+    apply: 'build',
+    enforce: 'pre',
+    async load(id) {
+      const [file, query] = id.split('?');
+      if (query || !/\/src\/assets\/.+\.(jpe?g|png)$/i.test(file)) return null;
+      const source = readFileSync(file);
+      const isPng = /\.png$/i.test(file);
+      const key = createHash('sha1').update(source).update(`webp-v1-${MAX_WIDTH}`).digest('hex').slice(0, 20);
+      mkdirSync(cacheDir, { recursive: true });
+      const cachedWebp = join(cacheDir, `${key}.webp`);
+      const keepMarker = join(cacheDir, `${key}.keep`);
+      let out: Buffer | null = null;
+      if (existsSync(cachedWebp)) out = readFileSync(cachedWebp);
+      else if (!existsSync(keepMarker)) {
+        const { default: sharp } = await import('sharp');
+        const image = sharp(source, { failOn: 'none' }).rotate();
+        const { width = 0 } = await image.metadata();
+        const sized = width > MAX_WIDTH ? image.resize({ width: MAX_WIDTH }) : image;
+        const webp = await sized
+          .webp(isPng ? { nearLossless: true, quality: 80, effort: 5 } : { quality: 78, effort: 5 })
+          .toBuffer();
+        if (webp.length < source.length * 0.95) {
+          writeFileSync(cachedWebp, webp);
+          out = webp;
+        } else writeFileSync(keepMarker, '');
+      }
+      const name = out ? basename(file).replace(/\.(jpe?g|png)$/i, '.webp') : basename(file);
+      if (out) {
+        saved += source.length - out.length;
+        count += 1;
+      }
+      const ref = this.emitFile({ type: 'asset', name, source: out ?? source });
+      return `export default import.meta.ROLLUP_FILE_URL_${ref};`;
+    },
+    buildEnd() {
+      if (count) this.info(`optimize-images: ${count} images as WebP, ${(saved / 1048576).toFixed(1)} MB saved`);
+    },
+  };
+}
 
 /**
  * Property experience pages: hand-built pages that live beside the React app and are
@@ -76,7 +130,7 @@ function chatApi(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), experiencePages(), chatApi()],
+  plugins: [optimizeImages(), react(), experiencePages(), chatApi()],
   build: {
     rollupOptions: {
       input: {
@@ -84,6 +138,14 @@ export default defineConfig({
         ...Object.fromEntries(
           EXPERIENCE_PAGES.map((id) => [`experience-${id}`, resolve(__dirname, `.${experiencePath(id)}/index.html`)]),
         ),
+      },
+      output: {
+        // Big libraries in chunks of their own, so they load only with the parts that use them
+        manualChunks(id) {
+          if (id.includes('node_modules/maplibre-gl') || id.includes('node_modules/@maplibre')) return 'maplibre';
+          if (id.includes('node_modules/leaflet')) return 'leaflet';
+          if (id.includes('node_modules/three')) return 'three';
+        },
       },
     },
   },

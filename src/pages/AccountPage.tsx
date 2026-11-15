@@ -23,7 +23,7 @@ export default function AccountPage() {
               <ul className="book-apps">
                 {apps.map((a) => (
                   <li key={a.reference} className="book-app">
-                    <img src={a.roomImage} alt="" />
+                    <img loading="lazy" decoding="async" src={a.roomImage} alt="" />
                     <div>
                       <h3>{a.roomName}</h3>
                       <p>{a.propertyName} · {a.stayLabel}</p>

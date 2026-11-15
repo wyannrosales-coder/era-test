@@ -4,6 +4,7 @@ import VLine from './VLine';
 import { gsap, useGSAP } from '../lib/smoothScroll';
 import line from '../assets/partners-line.svg';
 import './PageHero.css';
+import { HIGH_PRIORITY } from '../lib/img';
 
 type PageHeroProps = {
   eyebrow: string;
@@ -44,7 +45,8 @@ export default function PageHero({
 
   useGSAP(
     () => {
-      gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+      // Larger screens only: on phones the photo stays still, which scrolls smoother and saves battery
+      gsap.matchMedia().add('(prefers-reduced-motion: no-preference) and (min-width: 701px)', () => {
         gsap.fromTo(
           '.page-hero__photo img',
           { yPercent: -8 },
@@ -82,13 +84,13 @@ export default function PageHero({
         </div>
 
         <div className="page-hero__photo page-hero__photo--left">
-          <img src={photos.left} alt="" />
+          <img {...HIGH_PRIORITY} src={photos.left} alt="" />
         </div>
         <div className="page-hero__photo page-hero__photo--right">
-          <img src={photos.right} alt="" />
+          <img {...HIGH_PRIORITY} src={photos.right} alt="" />
         </div>
         <div className="page-hero__photo page-hero__photo--single">
-          <img src={photos[phonePhoto]} alt="" />
+          <img {...HIGH_PRIORITY} src={photos[phonePhoto]} alt="" />
         </div>
       </div>
     </section>

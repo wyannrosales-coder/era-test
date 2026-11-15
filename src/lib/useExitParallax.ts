@@ -10,8 +10,8 @@ import { gsap, useGSAP } from './smoothScroll';
  * pinned content, which the drift would carry along). `lateOnPhones` holds the hand-over
  * on phones until the section's bottom is a third of the way down the screen, with a
  * lighter drift, so a form at its foot stays usable (`late` does the same on every
- * screen size); `driftOnPhones: false` only dims on
- * phones, for sections whose content runs to their bottom edge; `onPhones: false` skips it
+ * screen size). Phones only dim by default (smoother with native touch scrolling, and lighter on
+ * battery); `driftOnPhones: true` drifts there too; `onPhones: false` skips it
  * on phones altogether. Skipped for reduced motion.
  */
 export function useExitParallax(
@@ -22,7 +22,7 @@ export function useExitParallax(
     drift = true,
     lateOnPhones = false,
     late: lateEverywhere = false,
-    driftOnPhones = true,
+    driftOnPhones = false,
     onPhones = true,
   }: {
     enabled?: boolean;

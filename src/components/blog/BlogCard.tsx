@@ -10,7 +10,7 @@ import './BlogCard.css';
 export default function BlogCard({ post }: { post: BlogPost }) {
   return (
     <a href={postHref(post)} className="blog-card">
-      <img
+      <img loading="lazy" decoding="async"
         className="blog-card__image"
         src={post.image}
         style={{ objectPosition: post.imagePosition }}
@@ -28,7 +28,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
           <span className="blog-card__meta">{postMeta(post)}</span>
           <span className="blog-card__read">
             Read now
-            <img src={arrowRight} width={24} height={24} alt="" />
+            <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
           </span>
         </span>
       </span>

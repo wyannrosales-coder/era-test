@@ -4,6 +4,7 @@ import comfort from '../../assets/property/rooms/signature-studio-flex.jpg';
 import effortless from '../../assets/why/exp-community.jpg';
 import caret from '../../assets/about/carousel-caret.svg';
 import './WhyHero.css';
+import { HIGH_PRIORITY } from '../../lib/img';
 
 /**
  * Slides. Only the first photo is in Figma (889:10313, "1 / 3"); the other two photos
@@ -75,6 +76,7 @@ export default function WhyHero() {
       >
         {SLIDES.map((s, i) => (
           <img
+            {...(i === 0 ? HIGH_PRIORITY : { loading: 'lazy' })}
             key={s.name}
             className={`why-hero__slide${i === slide ? ' is-active' : ''}`}
             src={s.image}

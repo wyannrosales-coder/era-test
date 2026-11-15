@@ -57,13 +57,13 @@ export default function PromotionsVip() {
         </div>
 
         <div className="promotions-vip__photo promotions-vip__photo--left">
-          <img src={photoLeft} alt="" />
+          <img loading="lazy" decoding="async" src={photoLeft} alt="" />
         </div>
         <div className="promotions-vip__photo promotions-vip__photo--right">
-          <img src={photoRight} alt="" />
+          <img loading="lazy" decoding="async" src={photoRight} alt="" />
         </div>
         <div className="promotions-vip__photo promotions-vip__photo--single">
-          <img src={photoRight} alt="" />
+          <img loading="lazy" decoding="async" src={photoRight} alt="" />
         </div>
       </div>
     </section>

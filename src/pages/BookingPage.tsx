@@ -67,7 +67,7 @@ function Summary({ d }: { d: BookingDraft }) {
           <dd>{fmt(end)}</dd>
         </div>
       </dl>
-      <img className="book-summary__photo" src={d.roomImage} alt="" />
+      <img loading="lazy" decoding="async" className="book-summary__photo" src={d.roomImage} alt="" />
       <div className="book-summary__line">
         <span>Total contract price</span>
         <strong>{total !== undefined ? money(d.currency, total) : 'To be confirmed'}</strong>

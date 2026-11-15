@@ -117,7 +117,7 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
                       <option key={p}>{p}</option>
                     ))}
                   </Select>
-                  <img src={caretDown} width={24} height={24} alt="" />
+                  <img loading="lazy" decoding="async" src={caretDown} width={24} height={24} alt="" />
                 </span>
               </Field>
             </div>
@@ -152,8 +152,8 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
               <Field label="Contact number" required>
                 <span className="contact-field__box contact-field__box--phone">
                   <span className="contact-field__dial">
-                    {dial.flag && <img src={dial.flag} width={33} height={22} alt="" />}
-                    <img src={caretDown} width={24} height={24} alt="" />
+                    {dial.flag && <img loading="lazy" decoding="async" src={dial.flag} width={33} height={22} alt="" />}
+                    <img loading="lazy" decoding="async" src={caretDown} width={24} height={24} alt="" />
                     <Select
                       bare
                       aria-label="Country calling code"
@@ -196,13 +196,13 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
                         <option key={t}>{t}</option>
                       ))}
                     </Select>
-                    <img src={caretDown} width={24} height={24} alt="" />
+                    <img loading="lazy" decoding="async" src={caretDown} width={24} height={24} alt="" />
                   </span>
                 </Field>
                 <Field label="Preferred check in date" required>
                   <span className="contact-field__box">
                     <DateField name="checkIn" placeholder="Check in date" required min={new Date().toISOString().slice(0, 10)} />
-                    <img src={caretDown} width={24} height={24} alt="" />
+                    <img loading="lazy" decoding="async" src={caretDown} width={24} height={24} alt="" />
                   </span>
                 </Field>
               </div>
@@ -215,7 +215,7 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
                         <option key={r}>{r}</option>
                       ))}
                     </Select>
-                    <img src={caretDown} width={24} height={24} alt="" />
+                    <img loading="lazy" decoding="async" src={caretDown} width={24} height={24} alt="" />
                   </span>
                 </Field>
                 <Field label="Enquiry Type" required>
@@ -225,7 +225,7 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
                         <option key={t}>{t}</option>
                       ))}
                     </Select>
-                    <img src={caretDown} width={24} height={24} alt="" />
+                    <img loading="lazy" decoding="async" src={caretDown} width={24} height={24} alt="" />
                   </span>
                 </Field>
               </div>
@@ -284,7 +284,7 @@ export default function ContactForm({ variant = 'contact' }: { variant?: Variant
           ) : (
             <button type="submit" className="contact-form__submit">
               <span>{copy.submit}</span>
-              <img src={arrowRight} width={24} height={24} alt="" />
+              <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
             </button>
           )}
         </form>

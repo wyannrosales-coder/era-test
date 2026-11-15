@@ -31,7 +31,7 @@ export default function FilterTabs({ label, options, value, onChange, className 
           }}
         >
           <span>{option}</span>
-          <img src={activeDot} width={8} height={8} alt="" />
+          <img loading="lazy" decoding="async" src={activeDot} width={8} height={8} alt="" />
         </button>
       ))}
     </div>

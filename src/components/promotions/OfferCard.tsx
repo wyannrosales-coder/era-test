@@ -18,9 +18,9 @@ export default function OfferCard({ offer }: { offer: Offer }) {
   return (
     <article className="offer-card">
       <div className="offer-card__image">
-        <img src={offer.image} alt="" />
+        <img loading="lazy" decoding="async" src={offer.image} alt="" />
         <p className={`offer-card__tag offer-card__tag--${offer.tag}`}>
-          <img src={tag.icon} width={16} height={16} alt="" />
+          <img loading="lazy" decoding="async" src={tag.icon} width={16} height={16} alt="" />
           {tag.label}
         </p>
       </div>
@@ -31,7 +31,7 @@ export default function OfferCard({ offer }: { offer: Offer }) {
         </div>
         <a href={`/promotions/${offer.id}`} className="offer-card__link">
           <span>Learn more</span>
-          <img src={arrowRight} width={24} height={24} alt="" />
+          <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
         </a>
       </div>
     </article>

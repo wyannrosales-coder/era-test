@@ -52,7 +52,8 @@ export default function Hero({
   // section slides over it), the copy lags further and fades, and the scene darkens.
   useGSAP(
     () => {
-      gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+      // Larger screens only: on phones the photo stays still, which scrolls smoother and saves battery
+      gsap.matchMedia().add('(prefers-reduced-motion: no-preference) and (min-width: 701px)', () => {
         gsap
           .timeline({
             defaults: { ease: 'none', duration: 1 },
@@ -69,7 +70,7 @@ export default function Hero({
 
   return (
     <section ref={sectionRef} className="hero">
-      <img className="hero__image" src={image} alt="" />
+      <img loading="lazy" decoding="async" className="hero__image" src={image} alt="" />
       <div className="hero__overlay" aria-hidden />
       <div className="hero__shade" aria-hidden />
 

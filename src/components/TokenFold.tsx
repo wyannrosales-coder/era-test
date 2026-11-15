@@ -92,7 +92,7 @@ function Token() {
         {/* Travels with the token but doesn't spin */}
         <div className="token__shadow" />
         <div className="token__fallback">
-          <img src={mark} width={72} height={72} alt="" />
+          <img loading="lazy" decoding="async" src={mark} width={72} height={72} alt="" />
         </div>
         <div className="token__canvas" />
       </div>

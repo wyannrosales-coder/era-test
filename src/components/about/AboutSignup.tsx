@@ -75,7 +75,7 @@ export default function AboutSignup() {
           ) : (
             <button type="submit" className="contact-form__submit">
               <span>Submit</span>
-              <img src={arrowRight} width={24} height={24} alt="" />
+              <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
             </button>
           )}
         </form>

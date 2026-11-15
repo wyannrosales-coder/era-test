@@ -98,7 +98,7 @@ export default function BlogPostPage({ post, audience }: { post: BlogPost; audie
         </li>
         <li>
           <a href="#" aria-label="TikTok">
-            <img src={tiktok} width={24} height={24} alt="" />
+            <img loading="lazy" decoding="async" src={tiktok} width={24} height={24} alt="" />
           </a>
         </li>
         <li>
@@ -108,12 +108,12 @@ export default function BlogPostPage({ post, audience }: { post: BlogPost; audie
             rel="noopener noreferrer"
             aria-label="Share on Facebook"
           >
-            <img src={facebook} width={24} height={24} alt="" />
+            <img loading="lazy" decoding="async" src={facebook} width={24} height={24} alt="" />
           </a>
         </li>
         <li>
           <a href="#" aria-label="Instagram">
-            <img src={instagram} width={24} height={24} alt="" />
+            <img loading="lazy" decoding="async" src={instagram} width={24} height={24} alt="" />
           </a>
         </li>
       </ul>
@@ -141,10 +141,10 @@ export default function BlogPostPage({ post, audience }: { post: BlogPost; audie
               </option>
             ))}
           </Select>
-          <img src={dropdownIcon} width={24} height={24} alt="" />
+          <img loading="lazy" decoding="async" src={dropdownIcon} width={24} height={24} alt="" />
         </label>
         <button type="button" className="blog-post__bar-share" aria-label="Share" onClick={share}>
-          <img src={shareIcon} width={24} height={24} alt="" />
+          <img loading="lazy" decoding="async" src={shareIcon} width={24} height={24} alt="" />
         </button>
       </div>
       <main>
@@ -165,7 +165,7 @@ export default function BlogPostPage({ post, audience }: { post: BlogPost; audie
                 <h1 className="type-h3 blog-post__title">{post.title}</h1>
                 <p className="blog-meta">{postMeta(post)}</p>
               </header>
-              <img
+              <img loading="lazy" decoding="async"
                 className="blog-post__image"
                 src={post.image}
                 style={{ objectPosition: post.imagePosition }}
@@ -182,7 +182,7 @@ export default function BlogPostPage({ post, audience }: { post: BlogPost; audie
                     ))}
                   </div>
                   {i === 1 && post.inlineImage && (
-                    <img className="blog-post__image" src={post.inlineImage} alt="" />
+                    <img loading="lazy" decoding="async" className="blog-post__image" src={post.inlineImage} alt="" />
                   )}
                 </Fragment>
               ))}

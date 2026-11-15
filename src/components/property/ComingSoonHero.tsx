@@ -5,6 +5,7 @@ import heroLine from '../../assets/hero-line.svg';
 import pin from '../../assets/coming-soon/icon-location-pin-light.svg';
 import type { Property } from '../locationData';
 import './ComingSoonHero.css';
+import { HIGH_PRIORITY } from '../../lib/img';
 
 const BRAND = 'EPIISOD';
 
@@ -19,7 +20,8 @@ export default function ComingSoonHero({ property }: { property: Property }) {
 
   useGSAP(
     () => {
-      gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+      // Larger screens only: on phones the photo stays still, which scrolls smoother and saves battery
+      gsap.matchMedia().add('(prefers-reduced-motion: no-preference) and (min-width: 701px)', () => {
         gsap
           .timeline({
             defaults: { ease: 'none', duration: 1 },
@@ -36,7 +38,7 @@ export default function ComingSoonHero({ property }: { property: Property }) {
 
   return (
     <section ref={sectionRef} className="coming-soon-hero">
-      <img className="coming-soon-hero__image" src={property.heroImage ?? property.image} alt="" />
+      <img {...HIGH_PRIORITY} className="coming-soon-hero__image" src={property.heroImage ?? property.image} alt="" />
       <div className="coming-soon-hero__overlay" aria-hidden />
       <div className="coming-soon-hero__shade" aria-hidden />
 

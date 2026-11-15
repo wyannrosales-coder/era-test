@@ -48,8 +48,8 @@ export default function Faqs({ id, content }: { id: string; content: PropertyCon
 
   return (
     <section ref={sectionRef} className="faqs" id={id}>
-      <img className="faqs__photo faqs__photo--left" src={photoLeft} alt="" data-parallax />
-      <img className="faqs__photo faqs__photo--right" src={photoRight} alt="" data-parallax />
+      <img loading="lazy" decoding="async" className="faqs__photo faqs__photo--left" src={photoLeft} alt="" data-parallax />
+      <img loading="lazy" decoding="async" className="faqs__photo faqs__photo--right" src={photoRight} alt="" data-parallax />
 
       <div className="faqs__heading heading-group">
         <p className="eyebrow">Frequently asked questions</p>
@@ -77,7 +77,7 @@ export default function Faqs({ id, content }: { id: string; content: PropertyCon
                 onClick={() => setOpen(isOpen ? null : i)}
               >
                 <span>{question}</span>
-                <img src={caretDown} width={24} height={24} alt="" />
+                <img loading="lazy" decoding="async" src={caretDown} width={24} height={24} alt="" />
               </button>
               <div id={panelId} className="type-body-m faqs__answer" role="region">
                 <div className="faqs__answer-clip">

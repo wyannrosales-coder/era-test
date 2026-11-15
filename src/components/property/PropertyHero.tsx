@@ -8,6 +8,7 @@ import tour360 from '../../assets/property/icon-360.svg';
 import photos from '../../assets/property/icon-photos.svg';
 import type { PropertyContent } from './propertyContent';
 import './PropertyHero.css';
+import { HIGH_PRIORITY } from '../../lib/img';
 
 type PropertyHeroProps = {
   content: PropertyContent;
@@ -24,7 +25,8 @@ export default function PropertyHero({ content, onSeeRooms }: PropertyHeroProps)
 
   useGSAP(
     () => {
-      gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+      // Larger screens only: on phones the photo stays still, which scrolls smoother and saves battery
+      gsap.matchMedia().add('(prefers-reduced-motion: no-preference) and (min-width: 701px)', () => {
         gsap
           .timeline({
             defaults: { ease: 'none', duration: 1 },
@@ -42,6 +44,7 @@ export default function PropertyHero({ content, onSeeRooms }: PropertyHeroProps)
   return (
     <section ref={sectionRef} className="property-hero">
       <img
+        {...HIGH_PRIORITY}
         className="property-hero__image"
         src={content.hero}
         style={content.heroPosition ? { objectPosition: content.heroPosition } : undefined}

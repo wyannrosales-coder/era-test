@@ -94,7 +94,7 @@ function PropertyItem({ property, onNavigate }: { property: Property; onNavigate
           <span className="locations-menu__soon">Soon</span>
         ) : (
           <span className="locations-menu__arrow">
-            <img src={arrowRight} width={16} height={16} alt="" />
+            <img loading="lazy" decoding="async" src={arrowRight} width={16} height={16} alt="" />
           </span>
         )}
       </span>

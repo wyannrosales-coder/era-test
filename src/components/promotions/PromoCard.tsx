@@ -9,7 +9,7 @@ export default function PromoCard({ promo }: { promo: { id: string; title: strin
   return (
     <article className="promo-card">
       <div className="promo-card__image">
-        <img src={promo.image} alt="" draggable={false} />
+        <img loading="lazy" decoding="async" src={promo.image} alt="" draggable={false} />
       </div>
       <div className="promo-card__body">
         <div className="promo-card__text">
@@ -18,7 +18,7 @@ export default function PromoCard({ promo }: { promo: { id: string; title: strin
         </div>
         <a href={`/promotions/${promo.id}`} className="promo-card__link" draggable={false}>
           <span>Learn more</span>
-          <img src={arrowRight} width={24} height={24} alt="" />
+          <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
         </a>
       </div>
     </article>

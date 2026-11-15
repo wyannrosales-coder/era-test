@@ -115,7 +115,7 @@ export default function FindRoomPage() {
       <Nav />
       <main className="find-page">
         <header className="find-page__hero">
-          <img className="find-page__hero-image" src={bannerImage} alt="" />
+          <img loading="lazy" decoding="async" className="find-page__hero-image" src={bannerImage} alt="" />
           <div className="find-page__hero-overlay" aria-hidden />
           <div className="find-page__hero-inner">
             <p className="eyebrow find-page__eyebrow">Find a room</p>

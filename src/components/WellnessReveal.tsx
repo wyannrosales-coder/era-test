@@ -303,14 +303,14 @@ export default function WellnessReveal({ offset, stepScroll }: WellnessRevealPro
           <div className="wellness-reveal__big">
             {STORIES.map((s, i) => (
               <div key={s.label} className={`wellness-reveal__big-img wellness-reveal__big-img--${i + 1}`}>
-                <img src={s.image} alt="" draggable={false} />
+                <img loading="lazy" decoding="async" src={s.image} alt="" draggable={false} />
               </div>
             ))}
           </div>
           <div className="wellness-reveal__small">
             {STORIES.map((s) => (
               <div key={s.label} className="wellness-reveal__small-img">
-                <img src={s.detail} alt="" draggable={false} />
+                <img loading="lazy" decoding="async" src={s.detail} alt="" draggable={false} />
               </div>
             ))}
           </div>

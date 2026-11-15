@@ -203,7 +203,7 @@ export default function InstagramStrip() {
 
   return (
     <section ref={sectionRef} className="instagram exit-parallax">
-      <img className="instagram__backdrop" src={background} alt="" />
+      <img loading="lazy" decoding="async" className="instagram__backdrop" src={background} alt="" />
       <div className="instagram__tint" aria-hidden />
 
       <div className="instagram__content" data-exit-content>
@@ -222,7 +222,7 @@ export default function InstagramStrip() {
               {SOCIALS.map(({ name, icon }) => (
                 <li key={name}>
                   <a href="#" aria-label={name}>
-                    <img src={icon} width={34} height={34} alt="" />
+                    <img loading="lazy" decoding="async" src={icon} width={34} height={34} alt="" />
                   </a>
                 </li>
               ))}
@@ -259,7 +259,7 @@ export default function InstagramStrip() {
                   aria-label={`Instagram post: ${post.caption || 'view on Instagram'} (opens in a new tab)`}
                   draggable={false}
                 >
-                  <img src={post.image} alt="" draggable={false} />
+                  <img loading="lazy" decoding="async" src={post.image} alt="" draggable={false} />
                   <PostDetails post={post} />
                 </a>
               </li>

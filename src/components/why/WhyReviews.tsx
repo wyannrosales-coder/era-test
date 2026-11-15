@@ -311,7 +311,7 @@ export default function WhyReviews() {
           const isOpen = phone || open === i;
           const content = (
             <>
-              <img
+              <img loading="lazy" decoding="async"
                 className="why-review__image"
                 src={review.image}
                 alt=""
@@ -336,7 +336,7 @@ export default function WhyReviews() {
                 <span className="why-review__body">
                   <span className="why-review__quote-row">
                     <span className="why-review__quote">“{review.quote}”</span>
-                    <img src={quotes} width={48} height={48} alt="" />
+                    <img loading="lazy" decoding="async" src={quotes} width={48} height={48} alt="" />
                   </span>
                   <span className="why-review__author">
                     <span className="why-review__person">

@@ -152,11 +152,11 @@ function Lightbox({ photos, start, name, onClose }: { photos: string[]; start: n
       </div>
       <div className="room-lightbox__stage">
         <button type="button" className="room-lightbox__arrow" aria-label="Previous photo" onClick={() => step(-1)}>
-          <img src={arrowWhite} width={24} height={24} alt="" style={{ transform: 'scaleX(-1)' }} />
+          <img loading="lazy" decoding="async" src={arrowWhite} width={24} height={24} alt="" style={{ transform: 'scaleX(-1)' }} />
         </button>
-        <img key={index} className="room-lightbox__image" src={photos[index]} alt={`${name}, photo ${index + 1}`} />
+        <img loading="lazy" decoding="async" key={index} className="room-lightbox__image" src={photos[index]} alt={`${name}, photo ${index + 1}`} />
         <button type="button" className="room-lightbox__arrow" aria-label="Next photo" onClick={() => step(1)}>
-          <img src={arrowWhite} width={24} height={24} alt="" />
+          <img loading="lazy" decoding="async" src={arrowWhite} width={24} height={24} alt="" />
         </button>
       </div>
       <div className="room-lightbox__thumbs">
@@ -169,7 +169,7 @@ function Lightbox({ photos, start, name, onClose }: { photos: string[]; start: n
             aria-current={i === index}
             onClick={() => setIndex(i)}
           >
-            <img src={p} alt="" />
+            <img loading="lazy" decoding="async" src={p} alt="" />
           </button>
         ))}
       </div>
@@ -213,7 +213,7 @@ function PlanViewer({ src, name, download, onClose }: { src: string; name: strin
             Download PDF
           </a>
           <button ref={closeRef} type="button" className="room-lightbox__close" aria-label="Close floor plan" onClick={onClose}>
-            <img src={closeIcon} width={24} height={24} alt="" />
+            <img loading="lazy" decoding="async" src={closeIcon} width={24} height={24} alt="" />
           </button>
         </div>
       </div>
@@ -227,7 +227,7 @@ function PlanViewer({ src, name, download, onClose }: { src: string; name: strin
         }}
         onPointerMove={(e) => zoomed && aim(e)}
       >
-        <img
+        <img loading="lazy" decoding="async"
           src={src}
           alt={`Floor plan of the ${name}`}
           style={{ transformOrigin: origin, transform: zoomed ? `scale(${PLAN_ZOOM})` : undefined }}
@@ -327,7 +327,7 @@ function BookingCard({
               </optgroup>
             ))}
           </Select>
-          <img src={dropdownIcon} width={24} height={24} alt="" />
+          <img loading="lazy" decoding="async" src={dropdownIcon} width={24} height={24} alt="" />
         </span>
         {tried && missing.term && <span className="room-book__error">Please choose a term</span>}
       </label>
@@ -345,7 +345,7 @@ function BookingCard({
             className={date ? '' : 'is-empty'}
             onChange={setDate}
           />
-          <img src={calendarIcon} width={24} height={24} alt="" />
+          <img loading="lazy" decoding="async" src={calendarIcon} width={24} height={24} alt="" />
         </span>
         {stay && (
           <span className="room-book__hint">
@@ -372,7 +372,7 @@ function BookingCard({
               </option>
             ))}
           </Select>
-          <img src={dropdownIcon} width={24} height={24} alt="" />
+          <img loading="lazy" decoding="async" src={dropdownIcon} width={24} height={24} alt="" />
         </span>
         {view && <span className="room-book__hint">{VIEWS[view as keyof typeof VIEWS].hint}</span>}
         {tried && missing.view && <span className="room-book__error">Please select a room view</span>}
@@ -382,7 +382,7 @@ function BookingCard({
       {details.dualOccupancy && (
         <div className="room-book__note">
           <p className="room-book__note-title">
-            <img src={infoIcon} width={24} height={24} alt="" />
+            <img loading="lazy" decoding="async" src={infoIcon} width={24} height={24} alt="" />
             Dual occupancy is available on this room type
           </p>
           <p className="room-book__note-text">
@@ -409,7 +409,7 @@ function BookingCard({
         )}
         <button type="submit" className="room-book__submit" disabled={!room.available}>
           {!room.available ? 'Sold out' : opening ? 'Register interest' : 'Book'}
-          {room.available && <img src={arrowWhite} width={24} height={24} alt="" />}
+          {room.available && <img loading="lazy" decoding="async" src={arrowWhite} width={24} height={24} alt="" />}
         </button>
       </div>
     </form>
@@ -577,17 +577,17 @@ export default function RoomPage({
                 aria-label={`Open photo ${i + 1} of ${details.photos.length}`}
                 onClick={() => setLightbox(i)}
               >
-                <img src={photo} alt="" />
+                <img loading="lazy" decoding="async" src={photo} alt="" />
               </button>
             ))}
             {tag && (
               <span className={`room-tag room-tag--${tagId} room-gallery__tag`}>
-                <img src={tag.icon} width={16} height={16} alt="" />
+                <img loading="lazy" decoding="async" src={tag.icon} width={16} height={16} alt="" />
                 {tag.label}
               </span>
             )}
             <button type="button" className="room-gallery__all" onClick={() => setLightbox(0)}>
-              <img src={photosIcon} width={24} height={24} alt="" />
+              <img loading="lazy" decoding="async" src={photosIcon} width={24} height={24} alt="" />
               See all photos
             </button>
           </div>
@@ -610,13 +610,13 @@ export default function RoomPage({
             </div>
             <div className="room-carousel__top">
               <a href={`${propertyHref}#rooms`} className="room-chip room-chip--icon" aria-label={`Back to ${content.brand} ${content.place} rooms`}>
-                <img src={arrowLeft16} width={16} height={16} alt="" />
+                <img loading="lazy" decoding="async" src={arrowLeft16} width={16} height={16} alt="" />
               </a>
               <div className="room-carousel__actions">
                 {details.virtualTour && (
                 <a href={details.virtualTour} className="room-chip" onClick={openTour}>
                   Virtual tour
-                  <img src={arrowRight16} width={16} height={16} alt="" />
+                  <img loading="lazy" decoding="async" src={arrowRight16} width={16} height={16} alt="" />
                 </a>
                 )}
                 <button
@@ -626,14 +626,14 @@ export default function RoomPage({
                   onClick={share}
                 >
                   {copied && 'Link copied'}
-                  <img src={share16} width={16} height={16} alt="" />
+                  <img loading="lazy" decoding="async" src={share16} width={16} height={16} alt="" />
                 </button>
               </div>
             </div>
             <div className="room-carousel__bottom">
               {tag && (
                 <span className={`room-tag room-tag--${tagId}`}>
-                  <img src={tag.icon} width={16} height={16} alt="" />
+                  <img loading="lazy" decoding="async" src={tag.icon} width={16} height={16} alt="" />
                   {tag.label}
                 </span>
               )}
@@ -652,12 +652,12 @@ export default function RoomPage({
                 <div className="room-actions">
                   <button type="button" className="room-link" onClick={share}>
                     {copied ? 'Link copied' : 'Share'}
-                    <img src={shareIcon} width={24} height={24} alt="" />
+                    <img loading="lazy" decoding="async" src={shareIcon} width={24} height={24} alt="" />
                   </button>
                   {details.virtualTour && (
                   <a href={details.virtualTour} className="room-link" onClick={openTour}>
                     Virtual tour
-                    <img src={arrowRight} width={24} height={24} alt="" />
+                    <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
                   </a>
                   )}
                 </div>
@@ -667,7 +667,7 @@ export default function RoomPage({
                   <h1 className="room-overview__name">{room.name}</h1>
                   <p className="room-overview__subtitle">{details.subtitle}</p>
                   <p className="room-overview__size">
-                    <img src={sizeIcon} width={24} height={24} alt="" />
+                    <img loading="lazy" decoding="async" src={sizeIcon} width={24} height={24} alt="" />
                     {details.size}
                   </p>
                 </div>
@@ -675,13 +675,13 @@ export default function RoomPage({
                 {offers.length > 0 && (
                 <div className="room-offers">
                   <span className="room-tag room-tag--offer">
-                    <img src={tagLightning} width={16} height={16} alt="" />
+                    <img loading="lazy" decoding="async" src={tagLightning} width={16} height={16} alt="" />
                     Exclusive Offer
                   </span>
                   <ul className="room-offers__list">
                     {offers.map((o) => (
                       <li key={o.title} className="room-check">
-                        <img src={checkIcon} width={24} height={24} alt="" />
+                        <img loading="lazy" decoding="async" src={checkIcon} width={24} height={24} alt="" />
                         <span>
                           <strong>{o.title}</strong>
                           <span>{o.text}</span>
@@ -702,7 +702,7 @@ export default function RoomPage({
                 <ul className="room-features">
                   {details.keyFeatures.map((f) => (
                     <li key={f}>
-                      <img src={dotIcon} width={6} height={6} alt="" />
+                      <img loading="lazy" decoding="async" src={dotIcon} width={6} height={6} alt="" />
                       {f}
                     </li>
                   ))}
@@ -715,7 +715,7 @@ export default function RoomPage({
                 <ul className="room-views">
                   {details.views.map((v) => (
                     <li key={v} className="room-view">
-                      <img src={VIEWS[v].image} alt="" />
+                      <img loading="lazy" decoding="async" src={VIEWS[v].image} alt="" />
                       <span className="room-view__shade" aria-hidden />
                       <span className="room-view__title">{VIEWS[v].title}</span>
                     </li>
@@ -726,11 +726,11 @@ export default function RoomPage({
               {details.virtualTour && (
               <a href={details.virtualTour} className="room-button" onClick={openTour}>
                 Virtual tour
-                <img src={arrowRight} width={24} height={24} alt="" />
+                <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
               </a>
               )}
               <p className="room-disclaimer">
-                <img src={infoIcon} width={24} height={24} alt="" />
+                <img loading="lazy" decoding="async" src={infoIcon} width={24} height={24} alt="" />
                 Disclaimer: Images, videos, and virtual tours are for reference only. Actual room sizes, layouts, and
                 furnishings may vary.
               </p>
@@ -755,7 +755,7 @@ export default function RoomPage({
                     <ul className="room-amenities__list">
                       {g.items.map((item) => (
                         <li key={item} className="room-amenity">
-                          <img src={amenityIcon(item)} width={18} height={18} alt="" />
+                          <img loading="lazy" decoding="async" src={amenityIcon(item)} width={18} height={18} alt="" />
                           {item}
                         </li>
                       ))}
@@ -766,7 +766,7 @@ export default function RoomPage({
               {foldable && (
                 <button type="button" className="room-button" aria-expanded={amenitiesOpen} onClick={toggleAmenities}>
                   {amenitiesOpen ? 'Show less amenities' : 'Show all amenities'}
-                  <img className={`room-button__caret${amenitiesOpen ? ' is-up' : ''}`} src={caretDown} width={24} height={24} alt="" />
+                  <img loading="lazy" decoding="async" className={`room-button__caret${amenitiesOpen ? ' is-up' : ''}`} src={caretDown} width={24} height={24} alt="" />
                 </button>
               )}
             </section>
@@ -781,10 +781,10 @@ export default function RoomPage({
                   aria-label={`Magnify the floor plan of the ${room.name}`}
                   onClick={() => setPlanOpen(true)}
                 >
-                  <img src={details.floorPlan} alt="" />
+                  <img loading="lazy" decoding="async" src={details.floorPlan} alt="" />
                   {/* Figma 1221:8677: the expand icon on a cream square, top right */}
                   <span className="room-plan__magnify" aria-hidden>
-                    <img src={sizeIcon} width={24} height={24} alt="" />
+                    <img loading="lazy" decoding="async" src={sizeIcon} width={24} height={24} alt="" />
                   </span>
                 </button>
                 <div className="room-plan__details">
@@ -792,7 +792,7 @@ export default function RoomPage({
                   {/* The room, then the whole apartment where it's shared (Figma 1195:29106) */}
                   {details.size.split(' / ').map((size, i) => (
                     <p key={size} className="room-plan__size">
-                      <img src={i === 0 ? roomSizeIcon : sizeIcon} width={24} height={24} alt="" />
+                      <img loading="lazy" decoding="async" src={i === 0 ? roomSizeIcon : sizeIcon} width={24} height={24} alt="" />
                       {size}
                     </p>
                   ))}
@@ -803,7 +803,7 @@ export default function RoomPage({
                 </div>
                 <a href={details.floorPlanPdf} download={`${details.slug}-floor-plan.pdf`} className="room-button">
                   Download floor plan
-                  <img src={downloadIcon} width={24} height={24} alt="" />
+                  <img loading="lazy" decoding="async" src={downloadIcon} width={24} height={24} alt="" />
                 </a>
                 </div>
               </div>
@@ -855,7 +855,7 @@ export default function RoomPage({
             }}
           >
             {content.opening ? 'Register interest' : 'Book'}
-            <img src={arrowWhite} width={24} height={24} alt="" />
+            <img loading="lazy" decoding="async" src={arrowWhite} width={24} height={24} alt="" />
           </button>
         </div>
 

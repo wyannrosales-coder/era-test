@@ -44,15 +44,15 @@ export default function WhyLiving({
   return (
     <section ref={sectionRef} className="why-living">
       <div className="why-living__bg" aria-hidden>
-        <img className="why-living__backdrop" src={backdrop} alt="" />
+        <img loading="lazy" decoding="async" className="why-living__backdrop" src={backdrop} alt="" />
         <div className="why-living__tint" />
       </div>
 
       <div className="why-living__photo why-living__photo--left">
-        <img src={photoLeft} alt="" />
+        <img loading="lazy" decoding="async" src={photoLeft} alt="" />
       </div>
       <div className="why-living__photo why-living__photo--right">
-        <img src={photoRight} alt="" />
+        <img loading="lazy" decoding="async" src={photoRight} alt="" />
       </div>
 
       <div className="why-living__content">

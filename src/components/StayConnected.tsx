@@ -93,8 +93,8 @@ export default function StayConnected({
             <button type="submit" className={`stay-connected__submit${ready ? ' is-ready' : ''}`}>
               <span>Submit</span>
               <span className="stay-connected__arrow">
-                <img className="stay-connected__arrow-default" src={arrowRight} width={24} height={24} alt="" />
-                <img className="stay-connected__arrow-ready" src={arrowRightWhite} width={24} height={24} alt="" />
+                <img loading="lazy" decoding="async" className="stay-connected__arrow-default" src={arrowRight} width={24} height={24} alt="" />
+                <img loading="lazy" decoding="async" className="stay-connected__arrow-ready" src={arrowRightWhite} width={24} height={24} alt="" />
               </span>
             </button>
           )}

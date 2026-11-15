@@ -1,51 +1,27 @@
-import { useEffect } from 'react';
-import Nav from './components/Nav';
-import Hero from './components/Hero';
-import Locations from './components/Locations';
-import BrandVideo from './components/BrandVideo';
-import LifeSection from './components/LifeSection';
-import Partners from './components/Partners';
-import TokenFold from './components/TokenFold';
-import StayConnected from './components/StayConnected';
-import Footer from './components/Footer';
-import PropertyPage from './pages/PropertyPage';
-import ComingSoonPage from './pages/ComingSoonPage';
-import ContactPage from './pages/ContactPage';
-import BookingPage from './pages/BookingPage';
-import AccountPage from './pages/AccountPage';
-import AboutPage from './pages/AboutPage';
-import PromotionsPage from './pages/PromotionsPage';
-import PromoDetailPage from './pages/PromoDetailPage';
-import { OFFERS } from './components/promotions/promotionsData';
-import WhyPage from './pages/WhyPage';
-import ExperiencePage from './pages/ExperiencePage';
-import WaitlistPage from './pages/WaitlistPage';
-import FaqPage from './pages/FaqPage';
-import RoomPage from './pages/RoomPage';
-import FindRoomPage from './pages/FindRoomPage';
-import BlogListPage from './pages/BlogListPage';
-import BlogPostPage from './pages/BlogPostPage';
-import { AUDIENCES, POSTS } from './components/blog/blogData';
-import { PROPERTIES } from './components/locationData';
-import { PROPERTY_PAGES } from './components/property/propertyPages';
+import { lazy, Suspense, useEffect } from "react";
+import { OFFERS } from "./components/promotions/promotionsData";
+import { AUDIENCES, POSTS } from "./components/blog/blogData";
+import { PROPERTIES } from "./components/locationData";
+import { PROPERTY_PAGES } from "./components/property/propertyPages";
 
-function HomePage() {
-  return (
-    <>
-      <Nav />
-      <main>
-        <Hero />
-        <Locations />
-        <BrandVideo />
-        <LifeSection />
-        <Partners />
-        <StayConnected exitParallax fromWhite />
-        <TokenFold />
-      </main>
-      <Footer />
-    </>
-  );
-}
+// Each page loads on its own, so a visitor only downloads the code for the page they open
+const HomePage = lazy(() => import("./pages/HomePage"));
+const PropertyPage = lazy(() => import("./pages/PropertyPage"));
+const ComingSoonPage = lazy(() => import("./pages/ComingSoonPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const BookingPage = lazy(() => import("./pages/BookingPage"));
+const AccountPage = lazy(() => import("./pages/AccountPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const PromotionsPage = lazy(() => import("./pages/PromotionsPage"));
+const PromoDetailPage = lazy(() => import("./pages/PromoDetailPage"));
+const WhyPage = lazy(() => import("./pages/WhyPage"));
+const ExperiencePage = lazy(() => import("./pages/ExperiencePage"));
+const WaitlistPage = lazy(() => import("./pages/WaitlistPage"));
+const FaqPage = lazy(() => import("./pages/FaqPage"));
+const RoomPage = lazy(() => import("./pages/RoomPage"));
+const FindRoomPage = lazy(() => import("./pages/FindRoomPage"));
+const BlogListPage = lazy(() => import("./pages/BlogListPage"));
+const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
 
 /**
  * Pages are picked by URL path: a property's full page when it has content, its
@@ -59,38 +35,53 @@ function Redirect({ to }: { to: string }) {
   return null;
 }
 
-export default function App() {
-  const path = window.location.pathname.replace(/\/+$/, '');
-  if (path === '/contact') return <ContactPage />;
-  if (path === '/booking') return <BookingPage />;
-  if (path === '/account') return <AccountPage />;
-  if (path === '/about') return <AboutPage />;
-  if (path === '/promotions') return <PromotionsPage />;
+function Route() {
+  const path = window.location.pathname.replace(/\/+$/, "");
+  if (path === "/contact") return <ContactPage />;
+  if (path === "/booking") return <BookingPage />;
+  if (path === "/account") return <AccountPage />;
+  if (path === "/about") return <AboutPage />;
+  if (path === "/promotions") return <PromotionsPage />;
   // An offer's page: /promotions/<offer>
   const offer = OFFERS.find((o) => path === `/promotions/${o.id}`);
   if (offer) return <PromoDetailPage key={path} offer={offer} />;
-  if (path === '/why-epiisod') return <WhyPage />;
-  if (path === '/experience') return <ExperiencePage />;
-  if (path === '/join-the-waitlist') return <WaitlistPage />;
+  if (path === "/why-epiisod") return <WhyPage />;
+  if (path === "/experience") return <ExperiencePage />;
+  if (path === "/join-the-waitlist") return <WaitlistPage />;
   // The Locations listing page is gone: every way to a property starts from the menu or Find a room
-  if (path === '/locations') return <Redirect to="/find-a-room" />;
-  if (path === '/faqs') return <FaqPage />;
-  if (path === '/find-a-room') return <FindRoomPage />;
+  if (path === "/locations") return <Redirect to="/find-a-room" />;
+  if (path === "/faqs") return <FaqPage />;
+  if (path === "/find-a-room") return <FindRoomPage />;
   // Blogs: /blog/<audience> lists a blog; /blog/<audience>/<post> is a post
   const blog = path.match(/^\/blog(?:\/([^/]+))?(?:\/([^/]+))?$/);
   if (blog) {
     const audience = AUDIENCES.find((a) => a.id === blog[1]) ?? AUDIENCES[0];
-    const post = blog[2] && POSTS.find((p) => p.audience === audience.id && p.slug === blog[2]);
-    return post ? <BlogPostPage key={path} post={post} audience={audience} /> : <BlogListPage key={path} audience={audience} />;
+    const post =
+      blog[2] &&
+      POSTS.find((p) => p.audience === audience.id && p.slug === blog[2]);
+    return post ? (
+      <BlogPostPage key={path} post={post} audience={audience} />
+    ) : (
+      <BlogListPage key={path} audience={audience} />
+    );
   }
   // A room's page: /locations/<property>/<room>
   const roomMatch = path.match(/^(\/locations\/[^/]+)\/([^/]+)$/);
   if (roomMatch) {
     const owner = PROPERTIES.find((p) => p.href === roomMatch[1]);
     const ownerContent = owner && PROPERTY_PAGES[owner.id];
-    const details = ownerContent?.roomDetails.find((d) => d.slug === roomMatch[2]);
+    const details = ownerContent?.roomDetails.find(
+      (d) => d.slug === roomMatch[2],
+    );
     if (ownerContent && details)
-      return <RoomPage key={path} content={ownerContent} details={details} propertyHref={roomMatch[1]} />;
+      return (
+        <RoomPage
+          key={path}
+          content={ownerContent}
+          details={details}
+          propertyHref={roomMatch[1]}
+        />
+      );
   }
   const property = PROPERTIES.find((p) => p.href === path);
   if (!property) return <HomePage />;
@@ -98,4 +89,13 @@ export default function App() {
   if (content) return <PropertyPage content={content} />;
   if (property.comingSoon) return <ComingSoonPage property={property} />;
   return <HomePage />;
+}
+
+export default function App() {
+  // Nothing shows for the moment a page's code is loading: the page paints in one go
+  return (
+    <Suspense fallback={null}>
+      <Route />
+    </Suspense>
+  );
 }

@@ -7,7 +7,7 @@ type VLineProps = {
 export default function VLine({ src, length }: VLineProps) {
   return (
     <div className="vline" style={{ height: length }} aria-hidden>
-      <img src={src} width={length} height={1} alt="" />
+      <img loading="lazy" decoding="async" src={src} width={length} height={1} alt="" />
     </div>
   );
 }

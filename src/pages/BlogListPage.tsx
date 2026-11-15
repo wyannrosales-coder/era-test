@@ -76,7 +76,7 @@ export default function BlogListPage({ audience }: { audience: Audience }) {
           {featured && (
             <a href={postHref(featured)} className="blog-featured">
               <span className="blog-featured__media">
-                <img
+                <img loading="lazy" decoding="async"
                   className="blog-featured__image"
                   src={featured.image}
                   style={{ objectPosition: featured.imagePosition }}

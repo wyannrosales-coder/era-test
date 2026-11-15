@@ -11,7 +11,7 @@ export default function LocationCard({ property }: LocationCardProps) {
   return (
     <article className={`location-card${comingSoon ? ' location-card--soon' : ''}`}>
       <div className="location-card__image">
-        <img src={image} alt="" draggable={false} />
+        <img loading="lazy" decoding="async" src={image} alt="" draggable={false} />
         {comingSoon && <span className="location-card__badge">Stay tuned</span>}
       </div>
 
@@ -28,7 +28,7 @@ export default function LocationCard({ property }: LocationCardProps) {
           <div className="location-card__links">
             <a href={href} className="location-card__link">
               <span>View Property</span>
-              <img src={arrowRight} width={24} height={24} alt="" />
+              <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
             </a>
             {experienceHref && (
               <a href={experienceHref} className="location-card__link location-card__link--experience">

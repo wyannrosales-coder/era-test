@@ -191,7 +191,7 @@ export default function Amenities({ id, content }: { id: string; content: Proper
         <div className="amenities__inner" data-exit-content>
           <div className="amenities__media" aria-hidden>
             {items.map((a, i) => (
-              <img
+              <img loading="lazy" decoding="async"
                 key={a.lead + a.rest}
                 className={`amenities__photo${i === active ? ' is-active' : ''}`}
                 src={a.image}
@@ -208,7 +208,7 @@ export default function Amenities({ id, content }: { id: string; content: Proper
               <div className="amenities__track">
                 {items.map((a) => (
                   <div key={a.lead + a.rest} className="amenities__card">
-                    <img src={a.image} alt="" />
+                    <img loading="lazy" decoding="async" src={a.image} alt="" />
                   </div>
                 ))}
               </div>
@@ -259,7 +259,7 @@ export default function Amenities({ id, content }: { id: string; content: Proper
               href={EXPERIENCE_URL}
               className="amenities__button"
             >
-              <img src={play} width={24} height={24} alt="" />
+              <img loading="lazy" decoding="async" src={play} width={24} height={24} alt="" />
               <span>Enter the EPIISOD experience</span>
             </a>
           </div>

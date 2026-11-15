@@ -26,16 +26,16 @@ export default function LifeIntro({ onNext }: LifeIntroProps) {
       </div>
 
       <div className="life-intro__photo life-intro__photo--1" data-parallax>
-        <img src={life1} alt="" draggable={false} />
+        <img loading="lazy" decoding="async" src={life1} alt="" draggable={false} />
       </div>
       <div className="life-intro__photo life-intro__photo--2" data-parallax>
-        <img src={life2} alt="" draggable={false} />
+        <img loading="lazy" decoding="async" src={life2} alt="" draggable={false} />
       </div>
       <div className="life-intro__photo life-intro__photo--3" data-parallax>
-        <img src={life3} alt="" draggable={false} />
+        <img loading="lazy" decoding="async" src={life3} alt="" draggable={false} />
       </div>
       <div className="life-intro__photo life-intro__photo--4" data-parallax>
-        <img src={life4} alt="" draggable={false} />
+        <img loading="lazy" decoding="async" src={life4} alt="" draggable={false} />
       </div>
     </div>
   );

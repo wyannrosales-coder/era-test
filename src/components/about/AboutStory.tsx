@@ -138,7 +138,7 @@ export default function AboutStory() {
 
         <div className="about-story__photo">
           <div className="about-story__frame">
-            <img src={wide} alt="EPIISOD Macquarie Park among the trees" />
+            <img loading="lazy" decoding="async" src={wide} alt="EPIISOD Macquarie Park among the trees" />
           </div>
         </div>
 
@@ -207,7 +207,7 @@ export default function AboutStory() {
           <VLine src={line} length={100} />
           <a href="/locations/macquarie-park" className="about-button">
             <span>Discover the place</span>
-            <img src={arrowRight} width={24} height={24} alt="" />
+            <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
           </a>
         </div>
       </div>

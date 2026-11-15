@@ -107,7 +107,7 @@ export default function Amenities3D({ id, content }: { id: string; content: Prop
                 ))}
               </div>
               <a href={EXPERIENCE_URL} className="amenities__button a3d__button">
-                <img src={play} width={24} height={24} alt="" />
+                <img loading="lazy" decoding="async" src={play} width={24} height={24} alt="" />
                 <span>Enter the EPIISOD experience</span>
               </a>
               </div>

@@ -58,7 +58,7 @@ export default function PromotionsOffers() {
               </a>
             </div>
           </div>
-          <img className="promo-banner__image" src={promotion.image} alt="" />
+          <img loading="lazy" decoding="async" className="promo-banner__image" src={promotion.image} alt="" />
         </div>
 
         <div className="promotions-offers__grid">

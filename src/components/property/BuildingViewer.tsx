@@ -23,6 +23,8 @@ import {
 } from 'three';
 import type { Material, Object3D } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+// The model is meshopt-compressed (tools/source-models has the original): about a quarter of the size
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import type { ModelView } from './amenityModel';
 
@@ -321,7 +323,7 @@ export default function BuildingViewer({ src, view, parts, callout = null, onLoa
     };
 
     let disposed = false;
-    new GLTFLoader().load(src, (gltf) => {
+    new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(src, (gltf) => {
       if (disposed) return;
       const model = gltf.scene;
       model.traverse((o: Object3D) => {
@@ -372,7 +374,7 @@ export default function BuildingViewer({ src, view, parts, callout = null, onLoa
       <div ref={card} className="a3d__card" aria-hidden>
         {callout && (
           <div key={callout.title} className="a3d__card-in">
-            <img src={callout.image} alt="" />
+            <img loading="lazy" decoding="async" src={callout.image} alt="" />
             <span className="a3d__card-title">{callout.title}</span>
             <span className="a3d__card-text">{callout.text}</span>
           </div>

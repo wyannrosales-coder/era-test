@@ -164,7 +164,7 @@ export default function Wellness({ offset, stepScroll }: WellnessProps) {
             <p className="type-body-l wellness__body">{story.body}</p>
           </div>
           <div className="wellness__dots">
-            <img src={story.dots} width={8} height={56} alt="" />
+            <img loading="lazy" decoding="async" src={story.dots} width={8} height={56} alt="" />
             {STORIES.map((s, i) => (
               <button
                 key={s.label}
@@ -192,7 +192,7 @@ export default function Wellness({ offset, stepScroll }: WellnessProps) {
                 onClick={() => i !== current && goTo(i)}
               >
                 <div className="wellness__frame">
-                  <img src={s.image} alt="" draggable={false} />
+                  <img loading="lazy" decoding="async" src={s.image} alt="" draggable={false} />
                 </div>
               </div>
             ))}

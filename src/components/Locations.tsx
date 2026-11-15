@@ -362,7 +362,7 @@ export default function Locations() {
                 >
                   <span className="locations__region-header">
                     <span className="locations__region-name">{r.name}</span>
-                    <img src={caretRight} width={16} height={16} alt="" />
+                    <img loading="lazy" decoding="async" src={caretRight} width={16} height={16} alt="" />
                   </span>
                   <span className="locations__region-summary">{r.summary}</span>
                 </button>
@@ -401,7 +401,7 @@ export default function Locations() {
                   <span>{f}</span>
                 </button>
               ))}
-              {dot && <img className="locations__filter-dot" src={activeDot} width={8} height={8} alt="" style={{ transform: `translateX(${dot.x}px)` }} />}
+              {dot && <img loading="lazy" decoding="async" className="locations__filter-dot" src={activeDot} width={8} height={8} alt="" style={{ transform: `translateX(${dot.x}px)` }} />}
             </div>
           </div>
 

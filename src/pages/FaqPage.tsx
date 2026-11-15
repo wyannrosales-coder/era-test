@@ -79,7 +79,7 @@ export default function FaqPage() {
                     </option>
                   ))}
                 </Select>
-                <img src={dropdownIcon} width={24} height={24} alt="" />
+                <img loading="lazy" decoding="async" src={dropdownIcon} width={24} height={24} alt="" />
               </label>
             </div>
 
@@ -103,7 +103,7 @@ export default function FaqPage() {
                       onClick={() => setOpen(isOpen ? null : i)}
                     >
                       <span>{question}</span>
-                      <img src={caretDown} width={24} height={24} alt="" />
+                      <img loading="lazy" decoding="async" src={caretDown} width={24} height={24} alt="" />
                     </button>
                     <div id={panelId} className="type-body-m faqs__answer" role="region">
                       <div className="faqs__answer-clip">

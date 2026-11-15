@@ -42,7 +42,7 @@ export default function Promotions({ id, content }: { id: string; content: Prope
             </a>
           </div>
         </div>
-        <img className="promo-banner__image" src={promotion.image} alt="" />
+        <img loading="lazy" decoding="async" className="promo-banner__image" src={promotion.image} alt="" />
       </div>
 
       <div className="promotions__latest">

@@ -79,10 +79,10 @@ function RoomCard({
       style={{ '--i': Math.min(index, 7) } as CSSProperties}
     >
       <div className="room-card__image">
-        <img src={room.image} alt="" />
+        <img loading="lazy" decoding="async" src={room.image} alt="" />
         {tag && (
           <span className={`room-card__tag room-card__tag--${tagId}`}>
-            <img src={tag.icon} width={16} height={16} alt="" />
+            <img loading="lazy" decoding="async" src={tag.icon} width={16} height={16} alt="" />
             {tag.label}
           </span>
         )}
@@ -353,7 +353,7 @@ export default function Rooms({ id, content }: { id: string; content: PropertyCo
                   aria-expanded={menu === 'sort'}
                   onClick={() => setMenu((m) => (m === 'sort' ? null : 'sort'))}
                 >
-                  <img src={sortIcon} width={24} height={24} alt="" />
+                  <img loading="lazy" decoding="async" src={sortIcon} width={24} height={24} alt="" />
                   Sort
                 </button>
                 {menu === 'sort' && (

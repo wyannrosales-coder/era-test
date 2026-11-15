@@ -237,7 +237,7 @@ export default function WhyExperience({ id }: { id: string }) {
                     className={`why-feature${isOpen ? ' is-open' : ''}`}
                     onPointerEnter={(e) => e.pointerType === 'mouse' && hoverSoon(key)}
                   >
-                    <img
+                    <img loading="lazy" decoding="async"
                       className="why-feature__image"
                       src={feature.image}
                       alt=""

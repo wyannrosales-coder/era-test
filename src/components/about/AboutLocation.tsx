@@ -39,7 +39,7 @@ export default function AboutLocation() {
   const [paused, setPaused] = useState(false);
   const [inView, setInView] = useState(false);
   // On phones the carousel runs to the section's foot, where a drift would clip it
-  useExitParallax(sectionRef, { driftOnPhones: false });
+  useExitParallax(sectionRef);
 
   const step = (dir: 1 | -1) => setSlide((s) => (s + dir + PLACES.length) % PLACES.length);
 
@@ -89,7 +89,7 @@ export default function AboutLocation() {
   return (
     <section ref={sectionRef} className="about-location exit-parallax">
       <div className="about-location__bg" aria-hidden>
-        <img className="about-location__backdrop" src={backdrop} alt="" />
+        <img loading="lazy" decoding="async" className="about-location__backdrop" src={backdrop} alt="" />
         <div className="about-location__tint" />
       </div>
 
@@ -122,7 +122,7 @@ export default function AboutLocation() {
           </div>
           <a href="/locations/macquarie-park" className="about-location__button">
             <span>Discover the place</span>
-            <img src={arrowRight} width={24} height={24} alt="" />
+            <img loading="lazy" decoding="async" src={arrowRight} width={24} height={24} alt="" />
           </a>
         </div>
 
@@ -138,7 +138,7 @@ export default function AboutLocation() {
           onBlur={() => setPaused(false)}
         >
           {PLACES.map((p, i) => (
-            <img
+            <img loading="lazy" decoding="async"
               key={p.name}
               className={`about-location__slide${i === slide ? ' is-active' : ''}`}
               src={p.image}
@@ -162,7 +162,7 @@ export default function AboutLocation() {
                 aria-label="Previous place"
                 onClick={() => step(-1)}
               >
-                <img
+                <img loading="lazy" decoding="async"
                   className="about-location__arrow--prev"
                   src={caret}
                   width={24}
@@ -176,7 +176,7 @@ export default function AboutLocation() {
                 aria-label="Next place"
                 onClick={() => step(1)}
               >
-                <img
+                <img loading="lazy" decoding="async"
                   className="about-location__arrow--next"
                   src={caret}
                   width={24}

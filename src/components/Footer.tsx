@@ -430,7 +430,7 @@ export default function Footer() {
                 className={`footer__wordmark-part footer__wordmark-part--${part.kind}`}
                 style={{ inset: part.inset }}
               >
-                <img src={part.src} alt="" />
+                <img loading="lazy" decoding="async" src={part.src} alt="" />
               </span>
             ))}
             {FOOTER_VARIANT === 'b' &&
@@ -445,7 +445,7 @@ export default function Footer() {
                     height: pct(lobe.box[3], WM_H),
                   }}
                 >
-                  <img src={lobe.src} alt="" />
+                  <img loading="lazy" decoding="async" src={lobe.src} alt="" />
                 </span>
               ))}
           </div>
@@ -463,7 +463,7 @@ export default function Footer() {
                   {SOCIALS.map((s) => (
                     <li key={s.name}>
                       <a href="#" aria-label={s.name}>
-                        <img src={s.icon} width={34} height={34} alt="" />
+                        <img loading="lazy" decoding="async" src={s.icon} width={34} height={34} alt="" />
                       </a>
                     </li>
                   ))}

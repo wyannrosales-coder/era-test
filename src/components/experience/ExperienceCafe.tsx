@@ -261,7 +261,7 @@ export default function ExperienceCafe() {
           <div className="xp-cafe__track">
             {MOMENTS.map((m) => (
               <div key={m.title} className="xp-cafe__photo">
-                <img src={m.image} alt="" style={cropStyle(m.crop)} />
+                <img loading="lazy" decoding="async" src={m.image} alt="" style={cropStyle(m.crop)} />
               </div>
             ))}
           </div>
@@ -287,7 +287,7 @@ export default function ExperienceCafe() {
         {MOMENTS.map((m) => (
           <article key={m.title} className="xp-cafe__moment">
             <div className="xp-cafe__moment-img">
-              <img src={m.image} alt="" style={cropStyle(m.crop)} />
+              <img loading="lazy" decoding="async" src={m.image} alt="" style={cropStyle(m.crop)} />
             </div>
             <div className="xp-cafe__moment-copy">
               <p className="eyebrow">{m.eyebrow}</p>

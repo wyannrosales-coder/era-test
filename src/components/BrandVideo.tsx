@@ -166,7 +166,7 @@ export default function BrandVideo() {
 
           <div ref={stageRef} className="brand-video__stage">
             <div className="brand-video__frame">
-              <img className="brand-video__thumb" src={thumbnail} alt="" />
+              <img loading="lazy" decoding="async" className="brand-video__thumb" src={thumbnail} alt="" />
               <video
                 ref={videoRef}
                 className="brand-video__video"
@@ -186,7 +186,7 @@ export default function BrandVideo() {
                 onClick={play}
                 aria-label="Play brand film"
               >
-                <img src={playCircle} width={124} height={124} alt="" />
+                <img loading="lazy" decoding="async" src={playCircle} width={124} height={124} alt="" />
               </button>
             </div>
           </div>
