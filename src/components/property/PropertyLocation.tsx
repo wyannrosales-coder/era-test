@@ -1,13 +1,15 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import type { MapMarker } from "./PropertyMap";
-import { PLACE_CATEGORIES, cssUrl } from './placeCategories';
+import { PLACE_CATEGORIES, cssUrl } from "./placeCategories";
 import { useExitParallax } from "../../lib/useExitParallax";
 import { setScrollLocked } from "../../lib/smoothScroll";
 import pin from "../../assets/property/icon-location-pin.svg";
 import searchIcon from "../../assets/property/location/icon-search.svg";
 import closeIcon from "../../assets/property/location/icon-close.svg";
 import type { PropertyContent } from "./propertyContent";
+import { fetchPlaceExtra } from "../../lib/placePhoto";
+import type { PlaceExtra } from "../../lib/placePhoto";
 import "./PropertyLocation.css";
 
 // The map library is large: it loads only as the section nears the screen
@@ -51,7 +53,8 @@ const FRAME_KM = 2.5;
 
 type ListedPlace = MapMarker & { source: string; km: number; walk: string };
 
-const iconStyle = (icon: string) => ({ '--icon': cssUrl(icon) }) as CSSProperties;
+const iconStyle = (icon: string) =>
+  ({ "--icon": cssUrl(icon) }) as CSSProperties;
 
 /**
  * Location (Figma 1080:5903): the address, then the neighbourhood map. Every notable place
@@ -87,6 +90,8 @@ export default function PropertyLocation({
   const [hover, setHover] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [focus, setFocus] = useState<{ id: string; n: number } | null>(null);
+  /** Google's photo and credit for the places opened so far (by place id). */
+  const [extras, setExtras] = useState<Record<string, PlaceExtra>>({});
   /** Larger screens: the list is shown beside the map (it can be folded away). */
   const [listOpen, setListOpen] = useState(true);
   const [phone, setPhone] = useState(
@@ -197,6 +202,19 @@ export default function PropertyLocation({
   );
   const filtered = kinds.length > 0 || maxKm !== null || needle !== "";
 
+  // The chosen place's own photo from Google (nothing when the server has no Google key)
+  useEffect(() => {
+    const p = selected ? everything.find((e) => e.id === selected) : undefined;
+    if (!p) return;
+    let live = true;
+    fetchPlaceExtra({ name: p.place.name, address: p.place.address, lat: p.place.lat, lng: p.place.lng }).then((x) => {
+      if (live && (x.photo || x.mapsUri)) setExtras((all) => (all[p.id] ? all : { ...all, [p.id]: x }));
+    });
+    return () => {
+      live = false;
+    };
+  }, [selected, everything]);
+
   // A chosen place that a filter has taken away is no longer chosen
   useEffect(() => {
     if (selected && !visible.some((p) => p.id === selected)) setSelected(null);
@@ -280,7 +298,14 @@ export default function PropertyLocation({
         <div className="property-location__header">
           <h2 className="type-h2 property-location__title">Location</h2>
           <p className="type-body-l property-location__address">
-            <img loading="lazy" decoding="async" src={pin} width={24} height={24} alt="" />
+            <img
+              loading="lazy"
+              decoding="async"
+              src={pin}
+              width={24}
+              height={24}
+              alt=""
+            />
             {content.address}
           </p>
         </div>
@@ -304,6 +329,7 @@ export default function PropertyLocation({
                 highlight={highlight}
                 focus={focus}
                 full={isFull}
+                extras={extras}
                 onMarkerClick={onMarkerClick}
               />
             )}
@@ -316,7 +342,14 @@ export default function PropertyLocation({
               aria-label="Close map"
               onClick={closeFull}
             >
-              <img loading="lazy" decoding="async" src={closeIcon} width={24} height={24} alt="" />
+              <img
+                loading="lazy"
+                decoding="async"
+                src={closeIcon}
+                width={24}
+                height={24}
+                alt=""
+              />
             </button>
           )}
 
@@ -379,7 +412,14 @@ export default function PropertyLocation({
               className="place-fold place-fold--phone"
               onClick={() => setFull(true)}
             >
-              <img loading="lazy" decoding="async" src={searchIcon} width={20} height={20} alt="" />
+              <img
+                loading="lazy"
+                decoding="async"
+                src={searchIcon}
+                width={20}
+                height={20}
+                alt=""
+              />
               View list
               <span className="place-chip__count">{visible.length}</span>
             </button>
@@ -413,13 +453,27 @@ export default function PropertyLocation({
                     aria-label="Hide the list"
                     onClick={() => setListOpen(false)}
                   >
-                    <img loading="lazy" decoding="async" src={closeIcon} width={24} height={24} alt="" />
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src={closeIcon}
+                      width={24}
+                      height={24}
+                      alt=""
+                    />
                   </button>
                 )}
               </header>
 
               <label className="place-search">
-                <img loading="lazy" decoding="async" src={searchIcon} width={20} height={20} alt="" />
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={searchIcon}
+                  width={20}
+                  height={20}
+                  alt=""
+                />
                 <input
                   type="search"
                   placeholder="Search places"
@@ -467,9 +521,9 @@ export default function PropertyLocation({
                       onClick={() => choose(p.id)}
                     >
                       <span className="place-row__thumb">
-                        {p.place.image ? (
+                        {(extras[p.id]?.photo ?? p.place.image) ? (
                           <img
-                            src={p.place.image}
+                            src={extras[p.id]?.photo ?? p.place.image}
                             width={64}
                             height={64}
                             alt=""

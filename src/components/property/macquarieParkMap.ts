@@ -1,31 +1,10 @@
 /**
  * Places around EPIISOD Macquarie Park, by category — copied from the live site's
  * location map (epiisod.com/en-au, Sydney › EPIISOD Macquarie Park). The schools' photos
- * are from the design (Figma 1182:8433).
+ * are from the design (Figma 1182:8433). No other place has a photo here: the finder shows a
+ * place's own photo from Google (api/place.ts) when that's set up, and its category's icon until then.
  */
 import type { MapCategory } from './propertyContent';
-import standAboutLocationBg from '../../assets/about/location-bg.jpg';
-import standAboutPlaceMacquarieUniversity from '../../assets/about/place-macquarie-university.jpg';
-import standAboutWideMacquarie from '../../assets/about/wide-macquarie.jpg';
-import standBlogArrivalSteps from '../../assets/blog/arrival-steps.jpg';
-import standBlogCampusShadows from '../../assets/blog/campus-shadows.jpg';
-import standBlogStudyCoffee from '../../assets/blog/study-coffee.jpg';
-import standExperienceCardPrivileges from '../../assets/experience/card-privileges.jpg';
-import standExperienceCoffee from '../../assets/experience/coffee.jpg';
-import standExperienceMosaicCourtyard from '../../assets/experience/mosaic-courtyard.jpg';
-import standExperienceMosaicDining from '../../assets/experience/mosaic-dining.jpg';
-import standExperienceMosaicHall from '../../assets/experience/mosaic-hall.jpg';
-import standExperienceMosaicLobbyTree from '../../assets/experience/mosaic-lobby-tree.jpg';
-import standExperienceMosaicLounge from '../../assets/experience/mosaic-lounge.jpg';
-import standExperienceMosaicTerrace from '../../assets/experience/mosaic-terrace.jpg';
-import standPromotionsCommute from '../../assets/promotions/commute.jpg';
-import standWellness1 from '../../assets/wellness-1.jpg';
-import standWhyExpApp from '../../assets/why/exp-app.jpg';
-import standWhyExpCafe from '../../assets/why/exp-cafe.jpg';
-import standWhyExpCommunity from '../../assets/why/exp-community.jpg';
-import standWhyExpConvenience from '../../assets/why/exp-convenience.jpg';
-import standWhyExpSmart from '../../assets/why/exp-smart.jpg';
-import standWhyExpWellness from '../../assets/why/exp-wellness.jpg';
 import school1 from '../../assets/property/places/school-1.jpg';
 import school2 from '../../assets/property/places/school-2.jpg';
 import school3 from '../../assets/property/places/school-3.jpg';
@@ -152,31 +131,4 @@ const PLACES: MapCategory[] = [
   },
 ];
 
-/**
- * Stand-in photos until each place has its own: the site's own photos, loosely matched to
- * the area. Every fourth place without a photo is left without one, so the finder shows
- * its placeholder (Figma 1227:12217).
- */
-const STAND_INS: Record<string, string[]> = {
-  "Education": [standAboutPlaceMacquarieUniversity, standBlogCampusShadows, standAboutWideMacquarie],
-  "Transport": [standPromotionsCommute, standBlogArrivalSteps, standWhyExpConvenience],
-  "Food": [standExperienceMosaicDining, standWhyExpCafe, standExperienceCoffee, standBlogStudyCoffee],
-  "Shopping & Entertainment": [standWhyExpCommunity, standExperienceMosaicLounge, standExperienceMosaicHall],
-  "Medical": [standWhyExpWellness, standWellness1],
-  "Banks": [standExperienceMosaicLobbyTree, standWhyExpSmart],
-  "Telcos & Post Offices": [standWhyExpApp, standExperienceCardPrivileges],
-  "Other Landmarks": [standExperienceMosaicCourtyard, standExperienceMosaicTerrace, standAboutLocationBg],
-};
-
-export const MACQUARIE_PARK_PLACES: MapCategory[] = PLACES.map((category) => {
-  const pool = STAND_INS[category.name] ?? [];
-  let missing = 0;
-  return {
-    ...category,
-    places: category.places.map((place) => {
-      if (place.image || !pool.length) return place;
-      const n = missing++;
-      return n % 4 === 3 ? place : { ...place, image: pool[n % pool.length] };
-    }),
-  };
-});
+export const MACQUARIE_PARK_PLACES: MapCategory[] = PLACES;

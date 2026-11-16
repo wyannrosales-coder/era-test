@@ -6,6 +6,7 @@ import '@maplibre/maplibre-gl-leaflet';
 import marker from '../../assets/property/location/epiisod-marker.svg';
 import pointer from '../../assets/property/location/card-pointer.svg';
 import type { MapPlace } from './propertyContent';
+import type { PlaceExtra } from '../../lib/placePhoto';
 import { cssUrl } from './placeCategories';
 import './PropertyMap.css';
 
@@ -50,18 +51,27 @@ type PropertyMapProps = {
   highlight: string | null;
   /** A place picked in the list: the map moves to it and opens its card. `n` repeats a pick. */
   focus: { id: string; n: number } | null;
+  /** Each place's Google photo and credit, once looked up (by marker id). */
+  extras: Record<string, PlaceExtra>;
   onMarkerClick: (id: string) => void;
 };
 
 const escape = (text: string) =>
   text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
-const popupHtml = (m: MapMarker) => `
-  ${m.place.image ? `<img class="map-popup__photo" src="${escape(m.place.image)}" alt="" />` : ''}
+const popupHtml = (m: MapMarker, extra?: PlaceExtra) => {
+  // Google's photo of the place when there is one, else the design's photo (the schools)
+  const photo = extra?.photo ?? m.place.image;
+  const credit = extra?.photo ? `Photo: ${extra.credit ? escape(extra.credit) + ' · ' : ''}Google` : '';
+  const directions = extra?.mapsUri ?? `https://www.google.com/maps/dir/?api=1&destination=${m.place.lat},${m.place.lng}`;
+  return `
+  ${photo ? `<img class="map-popup__photo" src="${escape(photo)}" alt="" />` : ''}
+  ${credit ? `<p class="map-popup__credit">${credit}</p>` : ''}
   <p class="map-popup__kind">${escape(m.category)} · ${escape(m.distance)}</p>
   <p class="map-popup__title">${escape(m.place.name)}</p>
   <p class="map-popup__address">${escape(m.place.address)}</p>
-  <a class="map-popup__link" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/dir/?api=1&destination=${m.place.lat},${m.place.lng}">Directions</a>`;
+  <a class="map-popup__link" target="_blank" rel="noopener noreferrer" href="${escape(directions)}">${extra?.mapsUri ? 'View on Google Maps' : 'Directions'}</a>`;
+};
 
 /**
  * Neighbourhood map (Figma 1080:5903 / 1182:8433): the EPIISOD marker under the property's
@@ -81,6 +91,7 @@ export default function PropertyMap({
   highlight,
   focus,
   full = false,
+  extras,
   onMarkerClick,
 }: PropertyMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -91,6 +102,8 @@ export default function PropertyMap({
   clickRef.current = onMarkerClick;
   const highlightRef = useRef(highlight);
   highlightRef.current = highlight;
+  const extrasRef = useRef(extras);
+  extrasRef.current = extras;
   const insetRef = useRef(inset);
   insetRef.current = inset;
   /** A place whose card opens once the map has moved to it and drawn its marker. */
@@ -236,7 +249,7 @@ export default function PropertyMap({
               popupAnchor: [0, -18],
             }),
           })
-            .bindPopup(popupHtml(m), {
+            .bindPopup(() => popupHtml(m, extrasRef.current[m.id]), {
               className: 'map-popup',
               maxWidth: 240,
               autoPanPaddingTopLeft: [insetRef.current.left + 16, insetRef.current.top + 16],
@@ -313,6 +326,14 @@ export default function PropertyMap({
     // Only when the filters change, not whenever the list is rebuilt with them
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frameKey, center]);
+
+  // A photo arrives after its card opened: refresh the card in place
+  useEffect(() => {
+    markersRef.current.forEach((m) => {
+      const popup = m.getPopup();
+      if (popup?.isOpen()) popup.update();
+    });
+  }, [extras]);
 
   // Light the place under the pointer in the list (or the chosen one)
   useEffect(() => {

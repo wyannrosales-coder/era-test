@@ -96,7 +96,7 @@ function chatApi(): Plugin {
   return {
     name: 'chat-api',
     configureServer(server) {
-      Object.assign(process.env, loadEnv(server.config.mode, server.config.root, ['GEMINI_', 'CHAT_']));
+      Object.assign(process.env, loadEnv(server.config.mode, server.config.root, ['GEMINI_', 'CHAT_', 'GOOGLE_MAPS_']));
       server.middlewares.use('/api/dev/catalog', async (req, res) => {
         const chunks: Buffer[] = [];
         for await (const chunk of req) chunks.push(chunk as Buffer);
@@ -106,6 +106,23 @@ function chatApi(): Plugin {
         execFileSync(process.execPath, [resolve(__dirname, 'tools/build-knowledge.mjs')]);
         res.end('ok');
       });
+      // The place photos (api/place.ts, api/place-photo.ts), served the way Vercel serves them
+      for (const route of ['place-photo', 'place']) {
+        server.middlewares.use(`/api/${route}`, async (req, res) => {
+          try {
+            const { GET } = (await server.ssrLoadModule(`/api/${route}.ts`)) as { GET: (r: Request) => Promise<Response> };
+            const response = await GET(new Request(`http://localhost/api/${route}${req.url ?? ''}`));
+            res.statusCode = response.status;
+            response.headers.forEach((value, key) => res.setHeader(key, value));
+            if (response.body) for await (const chunk of response.body as unknown as AsyncIterable<Uint8Array>) res.write(chunk);
+            res.end();
+          } catch (error) {
+            console.error(error);
+            res.statusCode = 500;
+            res.end();
+          }
+        });
+      }
       server.middlewares.use('/api/chat', async (req, res) => {
         try {
           const chunks: Buffer[] = [];
