@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import type { MapMarker } from "./PropertyMap";
-import { PLACE_CATEGORIES } from "./placeCategories";
+import { PLACE_CATEGORIES, cssUrl } from './placeCategories';
 import { useExitParallax } from "../../lib/useExitParallax";
 import { setScrollLocked } from "../../lib/smoothScroll";
 import pin from "../../assets/property/icon-location-pin.svg";
@@ -51,8 +51,7 @@ const FRAME_KM = 2.5;
 
 type ListedPlace = MapMarker & { source: string; km: number; walk: string };
 
-const iconStyle = (icon: string) =>
-  ({ "--icon": `url('${icon}')` }) as CSSProperties;
+const iconStyle = (icon: string) => ({ '--icon': cssUrl(icon) }) as CSSProperties;
 
 /**
  * Location (Figma 1080:5903): the address, then the neighbourhood map. Every notable place

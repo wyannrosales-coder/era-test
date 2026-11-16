@@ -6,6 +6,7 @@ import '@maplibre/maplibre-gl-leaflet';
 import marker from '../../assets/property/location/epiisod-marker.svg';
 import pointer from '../../assets/property/location/card-pointer.svg';
 import type { MapPlace } from './propertyContent';
+import { cssUrl } from './placeCategories';
 import './PropertyMap.css';
 
 /**
@@ -229,7 +230,7 @@ export default function PropertyMap({
             zIndexOffset: lit ? 900 : 0,
             icon: L.divIcon({
               className: `map-marker${lit ? ' is-lit' : ''}`,
-              html: `<i style="--icon:url('${m.icon}')"></i>`,
+              html: `<i style="--icon:${cssUrl(m.icon)}"></i>`,
               iconSize: [32, 32],
               iconAnchor: [16, 16],
               popupAnchor: [0, -18],

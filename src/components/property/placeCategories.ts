@@ -30,3 +30,13 @@ export const PLACE_CATEGORIES = [
 ] as const;
 
 export type PlaceCategory = (typeof PLACE_CATEGORIES)[number];
+
+/**
+ * A CSS `url(...)` for an icon, safe to put in an inline style or an HTML attribute. In the
+ * production build Vite inlines small SVGs as data URIs that contain single quotes, which would
+ * end a quoted url('...') early and make the browser drop the whole declaration (the icon mask
+ * then vanishes and the marker shows as a solid square), so quotes, brackets and spaces are
+ * percent-encoded and the URL is left unquoted.
+ */
+export const cssUrl = (u: string) =>
+  `url(${u.replace(/["'()\s]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'))})`;
