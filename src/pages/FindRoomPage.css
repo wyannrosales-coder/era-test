@@ -25,9 +25,8 @@
 }
 
 .find-page__hero-overlay {
-  background: var(--royal-chocolate-700);
-  mix-blend-mode: multiply;
-  opacity: 0.45;
+  background: var(--scrim-nav), linear-gradient(to top, rgba(var(--scrim-ink), 0.7) 0%, rgba(var(--scrim-ink), 0.35) 45%, rgba(var(--scrim-ink), 0.1) 100%),
+    var(--scrim-tone);
 }
 
 .find-page__hero-inner {
@@ -51,7 +50,7 @@
   font-size: clamp(24px, 3.2vw, 40px);
   white-space: nowrap;
   color: #fff;
-  text-shadow: 0 2px 18px rgba(6, 10, 20, 0.5);
+  text-shadow: var(--hero-text-shadow);
 }
 
 .find-page__title em {

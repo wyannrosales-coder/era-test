@@ -18,69 +18,76 @@ const summary = (properties: Property[]) =>
 const regionOf = (p: Property) => REGIONS.find((r) => r.cities.includes(p.city))!;
 
 /**
- * Option B (Figma 1081:16430): the open properties by region and city, linking through;
- * beside them the coming-soon ones, named by region as information only.
+ * Option B: every property as a photo card, grouped by region, each linking to its page (a
+ * coming-soon property to its coming-soon page, marked as such). Regions sit side by side, each
+ * as wide as its cards, so one row of cards runs across the menu.
  */
 function LocationsMenuB({ id, open, onNavigate }: LocationsMenuProps) {
-  const opened = PROPERTIES.filter((p) => !p.comingSoon);
-  const soon = PROPERTIES.filter((p) => p.comingSoon);
+  const groups = REGIONS.map((region) => ({
+    region,
+    // By city in the region's order, the open properties before the coming-soon ones
+    properties: PROPERTIES.filter((p) => regionOf(p) === region).sort(
+      (x, y) =>
+        Number(!!x.comingSoon) - Number(!!y.comingSoon) ||
+        region.cities.indexOf(x.city) - region.cities.indexOf(y.city),
+    ),
+  })).filter((g) => g.properties.length);
   return (
     <MegaMenuPanel id={id} open={open} heading="Our locations">
-      <div className="locations-menu-b">
-        <div className={`locations-menu-b__open${soon.length ? '' : ' is-wide'}`}>
-          {REGIONS.map((region) => {
-            const properties = opened.filter((p) => regionOf(p) === region);
-            if (!properties.length) return null;
-            return (
-              <div key={region.id} className="locations-menu-b__row">
-                <div className="locations-menu__region">
-                  <p className="locations-menu__region-name">{region.name}</p>
-                  <p className="locations-menu__region-summary">{summary(properties)}</p>
-                </div>
-                <div className="locations-menu-b__cities">
-                  {region.cities.map((city) => {
-                    const inCity = properties.filter((p) => p.city === city);
-                    if (!inCity.length) return null;
-                    return (
-                      <div key={city} className="locations-menu__city">
-                        <p className="locations-menu__city-name">{city}</p>
-                        {inCity.map((p) => (
-                          <PropertyItem key={p.id} property={p} onNavigate={onNavigate} />
-                        ))}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {soon.length > 0 && (
-          <div className="locations-menu-b__soon">
-            <p className="locations-menu-b__soon-title">{plural(soon.length, 'property', 'properties')} coming soon!</p>
-            {REGIONS.map((region) => {
-              const properties = soon.filter((p) => regionOf(p) === region);
-              if (!properties.length) return null;
-              return (
-                <div key={region.id} className="locations-menu-b__soon-region">
-                  <p className="locations-menu-b__soon-summary">
-                    <strong>{region.name}</strong> • {summary(properties)}
-                  </p>
-                  <ul className="locations-menu-b__soon-list">
-                    {properties.map((p) => (
-                      <li key={p.id}>
-                        <span className="locations-menu-b__soon-name">{p.name}</span>, {p.city}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-        )}
+      <div className="locations-cards" style={{ ['--cards' as string]: PROPERTIES.length }}>
+        {groups.map(({ region, properties }) => (
+          <section
+            key={region.id}
+            className="locations-cards__region"
+            style={{ gridColumn: `span ${properties.length}` }}
+            aria-label={region.name}
+          >
+            <div className="locations-cards__head">
+              <p className="locations-menu__region-name">{region.name}</p>
+              <p className="locations-menu__region-summary">{summary(properties)}</p>
+            </div>
+            <ul className="locations-cards__grid" style={{ ['--n' as string]: properties.length }}>
+              {properties.map((p) => (
+                <li key={p.id}>
+                  <PropertyCard property={p} onNavigate={onNavigate} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </div>
     </MegaMenuPanel>
+  );
+}
+
+/** A property's photo with its city and name over it, linking to its page. */
+function PropertyCard({ property, onNavigate }: { property: Property; onNavigate: () => void }) {
+  const { name, city, comingSoon, href, openingYear } = property;
+  const shortName = name.replace(/^EPIISOD\s+/, '');
+  const body = (
+    <>
+      <img src={property.listingImage ?? property.image} alt="" loading="lazy" decoding="async" />
+      <span className="locations-card__shade" aria-hidden />
+      {comingSoon && <span className="locations-card__tag">Coming soon{openingYear ? ` ${openingYear}` : ''}</span>}
+      <span className="locations-card__text">
+        <span className="locations-card__city">{city}</span>
+        <span className="locations-card__name">{shortName}</span>
+        {!comingSoon && (
+          <span className="locations-card__cta">
+            View property
+            <img src={arrowRight} width={14} height={14} alt="" />
+          </span>
+        )}
+      </span>
+    </>
+  );
+  const cls = `locations-card${comingSoon ? ' is-soon' : ''}`;
+  return href ? (
+    <a href={href} className={cls} onClick={onNavigate}>
+      {body}
+    </a>
+  ) : (
+    <div className={cls}>{body}</div>
   );
 }
 

@@ -7,6 +7,7 @@ import heroLine from '../assets/hero-line.svg';
 import RoomSearchBar from './rooms/RoomSearchBar';
 import { NO_FILTERS, type Filters } from './rooms/roomSearch';
 import './Hero.css';
+import { HIGH_PRIORITY } from '../lib/img';
 
 /** Find a room, with the filters in its address. */
 export const findRoomHref = (f: Filters) => {
@@ -70,7 +71,7 @@ export default function Hero({
 
   return (
     <section ref={sectionRef} className="hero">
-      <img loading="lazy" decoding="async" className="hero__image" src={image} alt="" />
+      <img {...HIGH_PRIORITY} className="hero__image" src={image} alt="" />
       <div className="hero__overlay" aria-hidden />
       <div className="hero__shade" aria-hidden />
 

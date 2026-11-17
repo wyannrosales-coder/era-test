@@ -3,6 +3,9 @@
   width: 100%;
   max-width: var(--content-max);
   overflow: hidden;
+  /* Lets a panel size itself to the menu's real width (100cqw), not the window's, which a
+     scroll bar makes wider than the room the menu has */
+  container-type: inline-size;
   transition: height 400ms var(--ease-in-out);
 }
 

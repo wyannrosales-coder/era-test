@@ -102,100 +102,18 @@
   color: var(--text-soft);
 }
 
-/* Option B (Figma 1081:16430): open properties (787px) · coming soon, ruled left */
-.locations-menu-b {
-  display: flex;
-  align-items: stretch;
-  gap: 24px;
-  width: min(var(--content-max), 100%);
-}
 
-.locations-menu-b__open {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  width: 787px;
-}
 
-.locations-menu-b__row {
-  display: flex;
-  align-items: stretch;
-  padding-top: 16px;
-}
 
-/* One column per city, side by side; each country is its own row */
-.locations-menu-b__cities {
-  flex: 1 0 0;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  align-items: start;
-  gap: 0 8px;
-  min-width: 0;
-}
 
-.locations-menu-b__row + .locations-menu-b__row {
-  margin-top: 16px;
-  border-top: 1px solid var(--line-edge);
-}
 
-/* With nothing coming soon the open properties take the whole width */
-.locations-menu-b__open.is-wide {
-  flex: 1 1 0;
-  width: auto;
-}
 
-.locations-menu-b__cities .locations-menu__city-name,
-.locations-menu-b__cities .locations-menu__property {
-  padding-inline: 24px;
-}
 
-.locations-menu-b__soon {
-  flex: 1 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 0;
-  padding: 16px 48px;
-  border-left: 1px solid var(--line-edge);
-}
 
-.locations-menu-b__soon-title {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
-  text-transform: uppercase;
-  color: var(--accent-text);
-}
 
-.locations-menu-b__soon-summary {
-  padding: 16px 0;
-  font-size: 14px;
-  line-height: 1;
-  text-transform: uppercase;
-  color: var(--text-mid);
-}
 
-.locations-menu-b__soon-summary strong {
-  font-weight: 700;
-}
 
-.locations-menu-b__soon-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-weight: 300;
-  font-size: 18px;
-  line-height: 1.5;
-  color: var(--text-soft);
-}
 
-.locations-menu-b__soon-name {
-  font-weight: 500;
-}
 
 /* A property's experience page, linked under its entry */
 .locations-menu__experience {
@@ -229,6 +147,156 @@
   color: var(--text-strong);
 }
 
-.locations-menu-b__cities .locations-menu__experience {
-  margin-inline: 24px;
+/* Option B: every property as a photo card, grouped by region (regions side by side, each as wide
+   as its cards) */
+.locations-cards {
+  display: grid;
+  grid-template-columns: repeat(var(--cards, 6), minmax(0, 1fr));
+  gap: 0 20px;
+  /* The menu's own width: a panel can be wider than a narrow window (all panels share one cell) */
+  width: min(var(--content-max), 100cqw);
+  padding: 16px 0 8px;
+}
+
+.locations-cards__region {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.locations-cards__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  align-content: flex-end;
+  gap: 0 12px;
+  /* The same height for every region, so the cards line up when a name wraps */
+  min-height: 72px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line-edge);
+}
+
+.locations-cards__head .locations-menu__region-name {
+  font-size: 18px;
+  line-height: 1.4;
+  /* "United Kingdom" sits over a single card: let it wrap rather than run off the menu */
+  white-space: normal;
+}
+
+.locations-cards__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 1), minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.locations-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  background: var(--royal-chocolate-700);
+  color: var(--white);
+  isolation: isolate;
+  transition:
+    transform 300ms var(--ease-lux, ease),
+    box-shadow 300ms var(--ease-lux, ease);
+}
+
+a.locations-card:hover,
+a.locations-card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+}
+
+.locations-card > img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms var(--ease-lux, ease);
+}
+
+a.locations-card:hover > img,
+a.locations-card:focus-visible > img {
+  transform: scale(1.05);
+}
+
+/* The name needs a dark ground whatever the photo */
+.locations-card__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(8, 6, 4, 0.82) 0%, rgba(8, 6, 4, 0.5) 38%, rgba(8, 6, 4, 0) 68%);
+}
+
+.locations-card__text {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px;
+}
+
+.locations-card__city {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.locations-card__name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--white);
+}
+
+.locations-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.locations-card__cta img {
+  filter: brightness(0) invert(1);
+}
+
+.locations-card__tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: #121a2a;
+}
+
+.locations-card.is-soon > img {
+  filter: grayscale(0.55) brightness(0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .locations-card,
+  .locations-card > img {
+    transition: none;
+  }
 }

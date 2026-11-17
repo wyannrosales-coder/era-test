@@ -20,9 +20,8 @@
 }
 
 .property-hero__overlay {
-  background: var(--royal-chocolate-700);
-  mix-blend-mode: multiply;
-  opacity: 0.38;
+  /* The menu bar over the top; the title, buttons and media links over the foot */
+  background: var(--scrim-nav), var(--scrim-bottom), var(--scrim-tone);
 }
 
 /* Darkens as the hero scrolls away — animated by GSAP */
@@ -52,6 +51,7 @@
   font-size: clamp(32px, 8svh, 64px);
   text-align: center;
   color: var(--white);
+  text-shadow: var(--hero-text-shadow);
 }
 
 .property-hero__actions {
@@ -255,6 +255,13 @@
 
   .property-hero__media-link > span:last-child {
     white-space: nowrap;
+  }
+}
+
+/* Up to laptop widths the floating chat button reaches under the centred media links: lift them above it */
+@media (max-width: 1400px) {
+  .property-hero__content {
+    padding-bottom: 80px;
   }
 }
 

@@ -1,12 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { MegaMenuPanel } from './MegaMenu';
-import CarouselArrows from './ui/CarouselArrows';
 import type { NavVariant } from '../lib/navVariant';
 import arrowRight from '../assets/menu-arrow-right.svg';
 import { PROPERTIES } from './locationData';
 import { experienceHref } from '../lib/links';
-import { ALL_READY } from '../lib/prototypeMode';
-import loungePhoto from '../assets/experience/mosaic-lounge.jpg';
 import './LifeMenu.css';
 
 type LifeMenuProps = {
@@ -15,23 +11,6 @@ type LifeMenuProps = {
   onNavigate: () => void;
   variant?: NavVariant;
 };
-
-/**
- * The properties with an experience to enter (or one on its way), each with its photo:
- * Macquarie Park and Bedford, or — with every property ready (prototype switch) — all of them.
- */
-const EXPERIENCE_ENTRIES = (ALL_READY ? PROPERTIES.map((p) => p.id) : ['macquarie-park', 'bedford']).flatMap((id) => {
-  const property = PROPERTIES.find((p) => p.id === id);
-  return property
-    ? [
-        {
-          name: property.name.replace(/^EPIISOD\s+/, ''),
-          image: id === 'macquarie-park' ? loungePhoto : property.image,
-          href: experienceHref(id),
-        },
-      ]
-    : [];
-});
 
 /** Option B's Blog column (Figma 1080:8880). */
 const BLOG_LINKS = [
@@ -54,75 +33,41 @@ const LINKS = [
 ];
 
 /**
- * The property experiences as a horizontal carousel under "Experience": a photo card per
- * property, each entering its experience page (or marked coming soon), with chevrons.
+ * The property experiences as a list under "Experience": every property, each entering its
+ * experience page, or marked "Coming soon" while it has none.
  */
-function ExperienceCarousel({ onNavigate }: { onNavigate: () => void }) {
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const [edges, setEdges] = useState({ prev: false, next: false });
-
-  const measure = useCallback(() => {
-    const el = viewportRef.current;
-    if (!el) return;
-    setEdges({ prev: el.scrollLeft > 4, next: el.scrollLeft + el.clientWidth < el.scrollWidth - 4 });
-  }, []);
-
-  useEffect(() => {
-    measure();
-    const el = viewportRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [measure]);
-
-  const step = (dir: 1 | -1) => {
-    const el = viewportRef.current;
-    const card = el?.querySelector<HTMLElement>('.life-menu__experience');
-    if (!el || !card) return;
-    el.scrollBy({ left: dir * (card.offsetWidth + 16), behavior: 'smooth' });
-  };
-
+function ExperienceList({ onNavigate }: { onNavigate: () => void }) {
   return (
-    <div className="life-menu__carousel">
-      <div className="life-menu__carousel-head">
-        <p className="life-menu__carousel-label">Enter an experience</p>
-        <CarouselArrows
-          className="life-menu__arrows"
-          label="Browse the property experiences"
-          canPrev={edges.prev}
-          canNext={edges.next}
-          onPrev={() => step(-1)}
-          onNext={() => step(1)}
-        />
-      </div>
-      <div ref={viewportRef} className="life-menu__viewport" onScroll={measure} data-lenis-prevent>
-        <ul className="life-menu__experiences">
-          {EXPERIENCE_ENTRIES.map(({ name, image, href }) => {
-            const body = (
-              <>
-                <img src={image} alt="" loading="lazy" />
-                <span className="life-menu__experience-name">{name}</span>
-                <span className="life-menu__experience-cta">
-                  {href ? 'Enter the experience' : 'Coming soon'}
-                  {href && <img loading="lazy" decoding="async" src={arrowRight} width={14} height={14} alt="" />}
-                </span>
-              </>
-            );
-            return (
-              <li key={name}>
-                {href ? (
-                  <a href={href} className="life-menu__experience" onClick={onNavigate}>
-                    {body}
-                  </a>
-                ) : (
-                  <span className="life-menu__experience is-soon">{body}</span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+    <div className="life-menu__experience-list">
+      <p className="life-menu__list-label">Enter an experience</p>
+      <ul className="life-menu__properties">
+        {PROPERTIES.map((property) => {
+          const href = experienceHref(property.id);
+          const body = (
+            <>
+              <span className="life-menu__property-text">
+                <span className="life-menu__property-name">{property.name.replace(/^EPIISOD\s+/, '')}</span>
+                <span className="life-menu__property-city">{property.city}</span>
+              </span>
+              <span className="life-menu__property-cta">
+                {href ? 'Enter' : 'Coming soon'}
+                {href && <img loading="lazy" decoding="async" src={arrowRight} width={14} height={14} alt="" />}
+              </span>
+            </>
+          );
+          return (
+            <li key={property.id}>
+              {href ? (
+                <a href={href} className="life-menu__property" onClick={onNavigate}>
+                  {body}
+                </a>
+              ) : (
+                <span className="life-menu__property is-soon">{body}</span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
@@ -148,7 +93,7 @@ export default function LifeMenu({ id, open, onNavigate, variant = 'a' }: LifeMe
                 The EPIISOD Experience that goes beyond accommodation
               </span>
             </a>
-            <ExperienceCarousel onNavigate={onNavigate} />
+            <ExperienceList onNavigate={onNavigate} />
           </div>
           <div className="nav-menu-b__blog">
             <p className="nav-menu-b__label life-menu__title">Blog</p>
