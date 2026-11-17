@@ -101,6 +101,19 @@
   border-left: 1px solid var(--line-edge);
 }
 
+/* Experience and its property pills share one ruled block, the rule running to the bottom */
+.nav-menu-b__experience {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  border-left: 1px solid var(--line-edge);
+}
+
+.nav-menu-b__pages .nav-menu-b__experience .nav-menu-b__link {
+  flex: 0 0 auto;
+  border-left: 0;
+}
+
 .nav-menu-b__blog {
   display: flex;
   flex-direction: column;
@@ -163,7 +176,7 @@
   flex-wrap: wrap;
   gap: 6px 8px;
   margin: 0;
-  padding: 0 0 4px 32px;
+  padding: 0 32px 20px;
   list-style: none;
 }
 
@@ -186,18 +199,6 @@ a.life-menu__property:hover,
 a.life-menu__property:focus-visible {
   background: var(--surface-2);
   border-color: var(--bronze-700);
-}
-
-.life-menu__property.is-soon {
-  border-color: var(--line-edge);
-  color: var(--text-mid);
-}
-
-.life-menu__property-soon {
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-soft);
 }
 
 /*

@@ -22,7 +22,7 @@ function LocationsMenuB({ id, open, onNavigate }: LocationsMenuProps) {
   const groups = REGIONS.map((region) => ({
     region,
     // By city in the region's order, the open properties before the coming-soon ones
-    properties: PROPERTIES.filter((p) => regionOf(p) === region).sort(
+    properties: PROPERTIES.filter((p) => !p.comingSoon && p.href && regionOf(p) === region).sort(
       (x, y) =>
         Number(!!x.comingSoon) - Number(!!y.comingSoon) ||
         region.cities.indexOf(x.city) - region.cities.indexOf(y.city),

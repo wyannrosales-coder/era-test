@@ -19,11 +19,19 @@ const BLOG_LINKS = [
     href: '/blog/for-international-students',
     description: 'An elevated student living',
   },
-  { title: 'For Parents', href: '/blog/for-parents', description: 'Choosing the right place for your child' },
+  {
+    title: 'For Parents',
+    href: '/blog/for-parents',
+    description: 'Choosing the right place for your child',
+  },
 ];
 
 const LINKS = [
-  { title: 'Why EPIISOD', href: '/why-epiisod', description: 'Where Your Story Finds Its Place' },
+  {
+    title: 'Why EPIISOD',
+    href: '/why-epiisod',
+    description: 'Where Your Story Finds Its Place',
+  },
   {
     title: 'Experience',
     href: '/experience',
@@ -39,22 +47,15 @@ const LINKS = [
 function ExperienceList({ onNavigate }: { onNavigate: () => void }) {
   return (
     <ul className="life-menu__properties" aria-label="Enter an experience">
-      {PROPERTIES.map((property) => {
+      {PROPERTIES.filter((property) => experienceHref(property.id)).map((property) => {
         const href = experienceHref(property.id);
         const label = property.name.replace(/^EPIISOD\s+/, '');
         return (
           <li key={property.id}>
-            {href ? (
-              <a href={href} className="life-menu__property" onClick={onNavigate}>
-                {label}
-                <img loading="lazy" decoding="async" src={arrowRight} width={12} height={12} alt="" />
-              </a>
-            ) : (
-              <span className="life-menu__property is-soon">
-                {label}
-                <span className="life-menu__property-soon">Soon</span>
-              </span>
-            )}
+            <a href={href} className="life-menu__property" onClick={onNavigate}>
+              {label}
+              <img loading="lazy" decoding="async" src={arrowRight} width={12} height={12} alt="" />
+            </a>
           </li>
         );
       })}
@@ -77,13 +78,15 @@ export default function LifeMenu({ id, open, onNavigate, variant = 'a' }: LifeMe
               <span className="life-menu__title">Why EPIISOD</span>
               <span className="life-menu__description">Where Your Story Finds Its Place</span>
             </a>
-            <a href="/experience" className="nav-menu-b__link" onClick={onNavigate}>
-              <span className="life-menu__title">Experience</span>
-              <span className="life-menu__description nav-menu-b__small">
-                The EPIISOD Experience that goes beyond accommodation
-              </span>
-            </a>
-            <ExperienceList onNavigate={onNavigate} />
+            <div className="nav-menu-b__experience">
+              <a href="/experience" className="nav-menu-b__link" onClick={onNavigate}>
+                <span className="life-menu__title">Experience</span>
+                <span className="life-menu__description nav-menu-b__small">
+                  The EPIISOD Experience that goes beyond accommodation
+                </span>
+              </a>
+              <ExperienceList onNavigate={onNavigate} />
+            </div>
           </div>
           <div className="nav-menu-b__blog">
             <p className="nav-menu-b__label life-menu__title">Blog</p>
