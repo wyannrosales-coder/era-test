@@ -38,37 +38,27 @@ const LINKS = [
  */
 function ExperienceList({ onNavigate }: { onNavigate: () => void }) {
   return (
-    <div className="life-menu__experience-list">
-      <p className="life-menu__list-label">Enter an experience</p>
-      <ul className="life-menu__properties">
-        {PROPERTIES.map((property) => {
-          const href = experienceHref(property.id);
-          const body = (
-            <>
-              <span className="life-menu__property-text">
-                <span className="life-menu__property-name">{property.name.replace(/^EPIISOD\s+/, '')}</span>
-                <span className="life-menu__property-city">{property.city}</span>
+    <ul className="life-menu__properties" aria-label="Enter an experience">
+      {PROPERTIES.map((property) => {
+        const href = experienceHref(property.id);
+        const label = property.name.replace(/^EPIISOD\s+/, '');
+        return (
+          <li key={property.id}>
+            {href ? (
+              <a href={href} className="life-menu__property" onClick={onNavigate}>
+                {label}
+                <img loading="lazy" decoding="async" src={arrowRight} width={12} height={12} alt="" />
+              </a>
+            ) : (
+              <span className="life-menu__property is-soon">
+                {label}
+                <span className="life-menu__property-soon">Soon</span>
               </span>
-              <span className="life-menu__property-cta">
-                {href ? 'Enter' : 'Coming soon'}
-                {href && <img loading="lazy" decoding="async" src={arrowRight} width={14} height={14} alt="" />}
-              </span>
-            </>
-          );
-          return (
-            <li key={property.id}>
-              {href ? (
-                <a href={href} className="life-menu__property" onClick={onNavigate}>
-                  {body}
-                </a>
-              ) : (
-                <span className="life-menu__property is-soon">{body}</span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

@@ -11,10 +11,6 @@ type LocationsMenuProps = {
   variant?: NavVariant;
 };
 
-const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
-/** "2 cities • 3 properties" for a set of properties. */
-const summary = (properties: Property[]) =>
-  `${plural(new Set(properties.map((p) => p.city)).size, 'city', 'cities')} • ${plural(properties.length, 'property', 'properties')}`;
 const regionOf = (p: Property) => REGIONS.find((r) => r.cities.includes(p.city))!;
 
 /**
@@ -43,39 +39,46 @@ function LocationsMenuB({ id, open, onNavigate }: LocationsMenuProps) {
   );
 }
 
-/** One region on its own row: its name and count, then every property side by side. */
+/** One region on its own row: its name, then a column per city, each city's properties stacked. */
 function RegionRow({ name, properties, onNavigate }: { name: string; properties: Property[]; onNavigate: () => void }) {
+  const cities = [...new Set(properties.map((p) => p.city))].sort((a, b) => a.localeCompare(b));
   return (
     <section className="locations-cards__region" aria-label={name}>
-      <div className="locations-cards__head">
-        <p className="locations-menu__region-name">{name}</p>
-        <p className="locations-menu__region-summary">{summary(properties)}</p>
-      </div>
-      <ul className="locations-cards__grid">
-        {properties.map((p) => (
-          <li key={p.id}>
-            <PropertyCard property={p} onNavigate={onNavigate} />
-          </li>
+      <p className="locations-menu__region-name">{name}</p>
+      <div className="locations-cards__cities">
+        {cities.map((city) => (
+          <div key={city} className="locations-cards__city">
+            <p className="locations-cards__city-name">{city}</p>
+            <ul className="locations-cards__list">
+              {properties
+                .filter((p) => p.city === city)
+                .map((p) => (
+                  <li key={p.id}>
+                    <PropertyCard property={p} onNavigate={onNavigate} />
+                  </li>
+                ))}
+            </ul>
+          </div>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }
 
-/** A property's photo with its city and name over it, linking to its page. */
+/** A property: a small photo with its name beneath-right, linking to its page. */
 function PropertyCard({ property, onNavigate }: { property: Property; onNavigate: () => void }) {
-  const { name, city, comingSoon, href, openingYear } = property;
+  const { name, comingSoon, href, openingYear } = property;
   const shortName = name.replace(/^EPIISOD\s+/, '');
   const body = (
     <>
       <span className="locations-card__photo">
         <img src={property.listingImage ?? property.image} alt="" loading="lazy" decoding="async" />
-        {comingSoon && <span className="locations-card__tag">Coming soon{openingYear ? ` ${openingYear}` : ''}</span>}
       </span>
       <span className="locations-card__text">
-        <span className="locations-card__city">{city}</span>
         <span className="locations-card__name">{shortName}</span>
-        {!comingSoon && (
+        {comingSoon ? (
+          <span className="locations-card__soon">Coming soon{openingYear ? ` ${openingYear}` : ''}</span>
+        ) : (
           <span className="locations-card__cta">
             View property
             <img src={arrowRight} width={14} height={14} alt="" />

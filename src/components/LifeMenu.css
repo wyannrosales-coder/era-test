@@ -157,85 +157,46 @@
   width: min(var(--content-max), 100%);
 }
 
-/* Property experiences: a list under Experience, two columns */
-.life-menu__experience-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 8px;
-  padding-left: 32px;
-}
-
-.life-menu__list-label {
-  margin: 0;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-}
-
+/* Property experiences: compact chips under Experience (the open one links, the rest read "Soon") */
 .life-menu__properties {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
   margin: 0;
-  padding: 0;
+  padding: 0 0 4px 32px;
   list-style: none;
 }
 
 .life-menu__property {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 56px;
-  padding: 8px 12px;
-  margin: 0 -12px;
-  border-bottom: 1px solid var(--line-edge);
-  color: inherit;
-  transition: background-color 200ms ease;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1px solid var(--bronze-500);
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-strong);
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
 }
 
 a.life-menu__property:hover,
 a.life-menu__property:focus-visible {
   background: var(--surface-2);
+  border-color: var(--bronze-700);
 }
 
-.life-menu__property-text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.life-menu__property-name {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.4;
-  color: var(--text-strong);
-}
-
-.life-menu__property-city {
-  font-size: 13px;
-  line-height: 1.4;
-  color: var(--text-soft);
-}
-
-.life-menu__property-cta {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-}
-
-.life-menu__property.is-soon .life-menu__property-name {
+.life-menu__property.is-soon {
+  border-color: var(--line-edge);
   color: var(--text-mid);
 }
 
-.life-menu__property.is-soon .life-menu__property-cta {
+.life-menu__property-soon {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--text-soft);
 }
 
