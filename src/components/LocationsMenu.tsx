@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { PROPERTIES, REGIONS, type Property } from './locationData';
 import { MegaMenuPanel } from './MegaMenu';
 import { LOCATIONS_MENU_VARIANT, type NavVariant } from '../lib/navVariant';
@@ -44,50 +43,15 @@ function LocationsMenuB({ id, open, onNavigate }: LocationsMenuProps) {
   );
 }
 
-/** One region on its own row: its name and count on the left, its cities as a carousel of cards. */
+/** One region on its own row: its name and count, then every property side by side. */
 function RegionRow({ name, properties, onNavigate }: { name: string; properties: Property[]; onNavigate: () => void }) {
-  const track = useRef<HTMLUListElement>(null);
-  const [edge, setEdge] = useState({ start: true, end: true });
-  const update = useCallback(() => {
-    const el = track.current;
-    if (!el) return;
-    setEdge({ start: el.scrollLeft <= 2, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 2 });
-  }, []);
-  useEffect(() => {
-    update();
-    const el = track.current;
-    if (!el || typeof ResizeObserver === 'undefined') return;
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [update]);
-  const step = (dir: 1 | -1) => {
-    const el = track.current;
-    if (!el) return;
-    const card = el.querySelector('li')?.getBoundingClientRect().width ?? el.clientWidth / 4;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    el.scrollBy({ left: dir * (card + 16) * 2, behavior: reduce ? 'auto' : 'smooth' });
-  };
-  const scrolls = !(edge.start && edge.end);
   return (
     <section className="locations-cards__region" aria-label={name}>
       <div className="locations-cards__head">
-        <div className="locations-cards__title">
-          <p className="locations-menu__region-name">{name}</p>
-          <p className="locations-menu__region-summary">{summary(properties)}</p>
-        </div>
-        {scrolls && (
-          <div className="locations-cards__arrows">
-            <button type="button" aria-label={`Previous ${name} locations`} disabled={edge.start} onClick={() => step(-1)}>
-              <img src={arrowRight} width={16} height={16} alt="" style={{ transform: 'scaleX(-1)' }} />
-            </button>
-            <button type="button" aria-label={`Next ${name} locations`} disabled={edge.end} onClick={() => step(1)}>
-              <img src={arrowRight} width={16} height={16} alt="" />
-            </button>
-          </div>
-        )}
+        <p className="locations-menu__region-name">{name}</p>
+        <p className="locations-menu__region-summary">{summary(properties)}</p>
       </div>
-      <ul className="locations-cards__track" ref={track} onScroll={update}>
+      <ul className="locations-cards__grid">
         {properties.map((p) => (
           <li key={p.id}>
             <PropertyCard property={p} onNavigate={onNavigate} />
@@ -104,9 +68,10 @@ function PropertyCard({ property, onNavigate }: { property: Property; onNavigate
   const shortName = name.replace(/^EPIISOD\s+/, '');
   const body = (
     <>
-      <img src={property.listingImage ?? property.image} alt="" loading="lazy" decoding="async" />
-      <span className="locations-card__shade" aria-hidden />
-      {comingSoon && <span className="locations-card__tag">Coming soon{openingYear ? ` ${openingYear}` : ''}</span>}
+      <span className="locations-card__photo">
+        <img src={property.listingImage ?? property.image} alt="" loading="lazy" decoding="async" />
+        {comingSoon && <span className="locations-card__tag">Coming soon{openingYear ? ` ${openingYear}` : ''}</span>}
+      </span>
       <span className="locations-card__text">
         <span className="locations-card__city">{city}</span>
         <span className="locations-card__name">{shortName}</span>
