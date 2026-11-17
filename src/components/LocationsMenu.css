@@ -147,12 +147,12 @@
   color: var(--text-strong);
 }
 
-/* Option B: every property as a photo card, grouped by region (regions side by side, each as wide
-   as its cards) */
+/* Option B: every property as a photo card. Each region sits on its own row, its cities as a
+   carousel (four cards across, the rest a swipe or an arrow away) */
 .locations-cards {
-  display: grid;
-  grid-template-columns: repeat(var(--cards, 6), minmax(0, 1fr));
-  gap: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   /* The menu's own width: a panel can be wider than a narrow window (all panels share one cell) */
   width: min(var(--content-max), 100cqw);
   padding: 16px 0 8px;
@@ -167,36 +167,84 @@
 
 .locations-cards__head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  align-content: flex-end;
-  gap: 0 12px;
-  /* The same height for every region, so the cards line up when a name wraps */
-  min-height: 72px;
-  padding-bottom: 4px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--line-edge);
 }
 
-.locations-cards__head .locations-menu__region-name {
-  font-size: 18px;
-  line-height: 1.4;
-  /* "United Kingdom" sits over a single card: let it wrap rather than run off the menu */
-  white-space: normal;
+.locations-cards__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 14px;
 }
 
-.locations-cards__grid {
+.locations-cards__head .locations-menu__region-name {
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.locations-cards__arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.locations-cards__arrows button {
   display: grid;
-  grid-template-columns: repeat(var(--n, 1), minmax(0, 1fr));
-  gap: 12px;
-  margin: 0;
+  place-items: center;
+  width: 36px;
+  height: 36px;
   padding: 0;
+  border: 1px solid var(--line-edge);
+  border-radius: 50%;
+  background: var(--surface-1);
+  cursor: pointer;
+  transition:
+    background-color 200ms ease,
+    opacity 200ms ease;
+}
+
+.locations-cards__arrows button:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+
+.locations-cards__arrows button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.locations-cards__arrows button:focus-visible {
+  outline: 2px solid var(--bronze-700);
+  outline-offset: 2px;
+}
+
+.locations-cards__track {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  /* Room for the hover lift and shadow inside the scroll area */
+  padding: 4px 0 18px;
   list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.locations-cards__track::-webkit-scrollbar {
+  display: none;
+}
+
+.locations-cards__track > li {
+  flex: 0 0 calc((100% - 3 * 16px) / 4);
+  scroll-snap-align: start;
 }
 
 .locations-card {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   border-radius: var(--r-card);
   background: var(--royal-chocolate-700);
