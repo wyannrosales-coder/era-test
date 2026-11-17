@@ -25,15 +25,15 @@ type MenuKey = 'life' | 'locations' | 'contact';
  * Contact us works the same way, its caret opening the contact menu (Figma 690:4830).
  */
 const PRIMARY_LINKS: { label: string; menu?: MenuKey; href?: string; caret?: boolean }[] = [
-  // Option B (desktop order): Locations, Life @ EPIISOD, About, Contact us, Promotions. Option A keeps
+  // Option B (desktop order): Locations, Life @ EPIISOD, Contact us, Promos, About us. Option A keeps
   // About in the hamburger menu and Promotions elsewhere.
   ...(NAV_VARIANT === 'b'
     ? [
         { label: 'Locations', menu: 'locations' as MenuKey },
         { label: 'Life @ epiisod', menu: 'life' as MenuKey },
-        { label: 'About', href: '/about' },
         { label: 'Contact us', menu: 'contact' as MenuKey, href: '/contact' },
-        { label: 'Promotions', href: '/promotions' },
+        { label: 'Promos', href: '/promotions' },
+        { label: 'About us', href: '/about' },
       ]
     : [
         { label: 'Life @ epiisod', menu: 'life' as MenuKey },
