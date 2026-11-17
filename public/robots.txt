@@ -1,4 +1,3 @@
+# Pre-launch: keep all crawlers out until the site goes live.
 User-agent: *
-Allow: /
-
-Sitemap: https://www.epiisod.com/sitemap.xml
+Disallow: /
