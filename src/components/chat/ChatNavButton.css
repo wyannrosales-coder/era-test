@@ -28,31 +28,37 @@
 }
 
 /* Desktop: in the empty margin at the top right of the screen, so the nav keeps all its room */
-@media (min-width: 1101px) {
+@media (min-width: 1280px) {
   .nav__links--end {
     position: relative;
+  }
+
+  /* Room for the chat icon after Book a tour */
+  .nav__links--end .nav__actions {
+    padding-right: 48px;
   }
 
   .chat-nav {
     position: absolute;
     top: 50%;
-    right: calc(-1 * (var(--page-gutter) - 18px));
+    /* Just inside the settings icon, which takes the margin */
+    right: calc(-1 * (var(--page-gutter) - 18px) + 40px);
     translate: 0 -50%;
   }
 }
 
 /* Mid-size screens: the nav's items sit a little closer, so nothing crowds the logo */
-@media (min-width: 1101px) and (max-width: 1500px) {
+@media (min-width: 1280px) and (max-width: 1500px) {
   .nav .nav__actions {
     gap: 20px;
   }
 
   .nav .nav__links .nav__link {
-    letter-spacing: 1.2px;
-    font-size: 14px;
+    letter-spacing: 0.8px;
+    font-size: 13px;
   }
 
   .nav .nav__links:not(.nav__links--end) {
-    gap: 16px;
+    gap: 12px;
   }
 }

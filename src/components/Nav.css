@@ -461,13 +461,13 @@ button.nav__link.nav__caret {
 }
 
 /* Navigation option B: the hamburger only on tablets and phones */
-@media (min-width: 1101px) {
+@media (min-width: 1280px) {
   .nav__menu--small-screens {
     display: none;
   }
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1279px) {
   .nav__links:not(.nav__links--end),
   .nav__actions .nav__link,
   .language-select,

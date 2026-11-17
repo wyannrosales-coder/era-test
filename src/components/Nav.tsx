@@ -25,11 +25,21 @@ type MenuKey = 'life' | 'locations' | 'contact';
  * Contact us works the same way, its caret opening the contact menu (Figma 690:4830).
  */
 const PRIMARY_LINKS: { label: string; menu?: MenuKey; href?: string; caret?: boolean }[] = [
-  // Option B: About leads the bar (option A keeps it in the hamburger menu)
-  ...(NAV_VARIANT === 'b' ? [{ label: 'About', href: '/about' }] : []),
-  { label: 'Life @ epiisod', menu: 'life' },
-  { label: 'Locations', menu: 'locations' },
-  { label: 'Contact us', menu: 'contact', href: '/contact' },
+  // Option B (desktop order): Locations, Life @ EPIISOD, About, Contact us, Promotions. Option A keeps
+  // About in the hamburger menu and Promotions elsewhere.
+  ...(NAV_VARIANT === 'b'
+    ? [
+        { label: 'Locations', menu: 'locations' as MenuKey },
+        { label: 'Life @ epiisod', menu: 'life' as MenuKey },
+        { label: 'About', href: '/about' },
+        { label: 'Contact us', menu: 'contact' as MenuKey, href: '/contact' },
+        { label: 'Promotions', href: '/promotions' },
+      ]
+    : [
+        { label: 'Life @ epiisod', menu: 'life' as MenuKey },
+        { label: 'Locations', menu: 'locations' as MenuKey },
+        { label: 'Contact us', menu: 'contact' as MenuKey, href: '/contact' },
+      ]),
 ];
 const menuId = (menu: MenuKey) => `nav-${menu}-menu`;
 /** Grace period (ms) before a hovered-open menu closes once the pointer leaves the nav,
@@ -412,7 +422,6 @@ export default function Nav({
                 </a>
               ),
             )}
-            <SettingsButton />
           </div>
 
           <a href="/" className="nav__logo" aria-label="EPIISOD home">
@@ -421,11 +430,6 @@ export default function Nav({
 
           <div className="nav__links nav__links--end">
             <div className="nav__actions">
-              {NAV_VARIANT === 'b' && (
-                <a href="/promotions" className="nav__link">
-                  <span>Promotions</span>
-                </a>
-              )}
               {NAV_VARIANT === 'b' && <LanguageSelect onOpen={() => setOpenMenu(null)} />}
               <a href="/find-a-room" className="nav__link">
                 <span>Find a room</span>
@@ -451,6 +455,7 @@ export default function Nav({
                 Book a tour
               </a>
               <ChatNavButton />
+              <SettingsButton />
             </div>
             {/* Option B has no hamburger on desktop; it remains the navigation on tablets and phones */}
             <button
