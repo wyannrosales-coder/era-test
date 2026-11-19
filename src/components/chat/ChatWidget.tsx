@@ -12,6 +12,7 @@ import {
   retry,
   sendText,
   setChatOpen,
+  warmChat,
   useChat,
   type Block,
   type BookingInput,
@@ -712,7 +713,7 @@ export default function ChatWidget() {
     <>
       {!dismissed && !chat.open && (
         <div className={`enquiry-pill${shown ? ' is-shown' : ''}${FORM_PAGES.includes(path) ? ' enquiry-pill--forms' : ''}`}>
-          <button type="button" className="enquiry-pill__link" onClick={() => setChatOpen(true)} aria-haspopup="dialog" aria-label="Chat with us">
+          <button type="button" className="enquiry-pill__link" onPointerEnter={warmChat} onClick={() => setChatOpen(true)} aria-haspopup="dialog" aria-label="Chat with us">
             <svg className="enquiry-pill__icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.2">
               <path d="M2 3.2h12v7.6H8.4L5 13.6v-2.8H2z" strokeLinejoin="round" />
             </svg>

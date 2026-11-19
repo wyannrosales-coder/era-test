@@ -1,4 +1,4 @@
-import { setChatOpen, useChat } from '../../lib/chat';
+import { setChatOpen, useChat, warmChat } from '../../lib/chat';
 import './ChatNavButton.css';
 
 /**
@@ -15,6 +15,8 @@ export default function ChatNavButton() {
       aria-haspopup="dialog"
       aria-expanded={open}
       title={open ? 'Close chat' : 'Chat with us'}
+      onPointerEnter={warmChat}
+      onFocus={warmChat}
       onClick={() => setChatOpen(!open)}
     >
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

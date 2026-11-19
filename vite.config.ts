@@ -124,6 +124,12 @@ function chatApi(): Plugin {
         });
       }
       server.middlewares.use('/api/chat', async (req, res) => {
+        // The warm-up ping the chat panel sends ahead of the first message
+        if (req.method === 'GET') {
+          res.statusCode = 204;
+          res.end();
+          return;
+        }
         try {
           const chunks: Buffer[] = [];
           for await (const chunk of req) chunks.push(chunk as Buffer);

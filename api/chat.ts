@@ -16,7 +16,8 @@
  * Set GEMINI_API_KEY in the Vercel project's environment variables (and in .env.local for
  * `npm run dev`). The key is only read here, on the server. Without it this answers 503 and
  * the chat panel points people to the contact page instead.
- * Optional: CHAT_MODEL (default gemini-4-hydrogen), CHAT_EFFORT (low | medium | high, default low).
+ * Optional: CHAT_MODEL (default gemini-4-hydrogen), CHAT_EFFORT (low | medium | high, default low),
+ * CHAT_HEDGE_MS (default 5000: ask a second time if no answer by then; 0 turns it off).
  *
  * Talks to the Gemini API's generateContent REST endpoint directly (no SDK). The assistant's
  * turns go back to the browser with Gemini's own parts attached (`gemini`), which come back
@@ -337,6 +338,14 @@ function toContents(messages: ClientMessage[]): Content[] | null {
   return contents.length && contents[0].role === 'user' && contents[contents.length - 1].role === 'user' ? contents : null;
 }
 
+/**
+ * A cheap GET the chat panel sends the moment someone reaches for the chat icon, so the function
+ * is awake (no cold start) by the time they send their first message.
+ */
+export function GET() {
+  return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+}
+
 export async function POST(request: Request) {
   // Read through globalThis so this compiles with or without Node's type definitions
   const { env } = (globalThis as unknown as { process: { env: Record<string, string | undefined> } }).process;
@@ -374,9 +383,10 @@ export async function POST(request: Request) {
     async start(controller) {
       const send = (data: unknown) => controller.enqueue(encoder.encode(sse(data)));
       try {
-        const call = () =>
+        const probe = (signal?: AbortSignal) =>
           fetch(`${env.GEMINI_BASE_URL || 'https://generativelanguage.googleapis.com'}/v1beta/models/${encodeURIComponent(model)}:streamGenerateContent?alt=sse`, {
           method: 'POST',
+          signal,
           headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: INSTRUCTIONS + KNOWLEDGE }] },
@@ -386,10 +396,33 @@ export async function POST(request: Request) {
             generationConfig: { maxOutputTokens: 4000, thinkingConfig: { thinkingLevel: level } },
           }),
         });
+        // Google's answer time is usually 2-4 s but now and then stalls for ten or more. If nothing has
+        // come back after HEDGE_MS, ask a second time in parallel and use whichever answers first
+        // (the slower one is dropped), so a stall costs the customer a few seconds, not a dozen.
+        const hedgeMs = env.CHAT_HEDGE_MS === undefined || env.CHAT_HEDGE_MS === '' ? 5000 : Number(env.CHAT_HEDGE_MS);
+        const call = async (): Promise<Response> => {
+          const first = new AbortController();
+          const a = probe(first.signal);
+          if (!(hedgeMs > 0)) return a;
+          const early = await Promise.race([a, new Promise<null>((r) => setTimeout(() => r(null), hedgeMs))]);
+          if (early) return early;
+          const second = new AbortController();
+          const b = probe(second.signal);
+          const ranked = [a.then((r) => ({ r, other: second, rest: b })), b.then((r) => ({ r, other: first, rest: a }))];
+          ranked.forEach((p) => p.catch(() => undefined));
+          const done = await Promise.race(ranked);
+          if (done.r.ok) {
+            done.other.abort();
+            return done.r;
+          }
+          // The first back was an error: give the other one its chance
+          const rest = await done.rest.catch(() => null);
+          return rest?.ok ? rest : done.r;
+        };
         // Google sometimes answers "high demand" (503) for a moment: one quiet retry
         let res = await call();
         if (res.status === 503) {
-          await new Promise((r) => setTimeout(r, 1500));
+          await new Promise((r) => setTimeout(r, 600));
           res = await call();
         }
         if (!res.ok || !res.body) {

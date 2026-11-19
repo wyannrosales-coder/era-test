@@ -65,7 +65,10 @@ export const useChat = () =>
     () => state,
   );
 
-export const setChatOpen = (open: boolean) => set({ open });
+export const setChatOpen = (open: boolean) => {
+  if (open) warmChat();
+  set({ open });
+};
 export function resetChat() {
   abort?.abort();
   set({ messages: [], outcomes: {}, streaming: null, busy: false, error: null });
@@ -123,6 +126,16 @@ export function retry() {
 function post(message: Message) {
   set({ messages: [...state.messages, message], error: null });
   void request();
+}
+
+let warmed = false;
+/** Wake the chat function ahead of the first message (once per page load). */
+export function warmChat() {
+  if (warmed) return;
+  warmed = true;
+  void fetch('/api/chat', { method: 'GET', cache: 'no-store', keepalive: true }).catch(() => {
+    warmed = false;
+  });
 }
 
 let abort: AbortController | null = null;
