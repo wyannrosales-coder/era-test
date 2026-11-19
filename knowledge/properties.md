@@ -115,7 +115,7 @@ The room pages open by default on the "AY 2027 52 Weeks Lease" term with a check
 
 Holding deposit and bond (as stated on the site): a 1-week holding deposit reserves the room and goes towards the first rental payment; a bond equivalent to 4 weeks' rent is paid within 1 week of the deposit and is lodged with NSW Fair Trading. Rent is charged every 2 weeks. See faqs.md, policies.md and company.md for the booking process, payment methods and bond refund details.
 
-Second occupant: at EPIISOD Macquarie Park another occupant can stay for an additional $60 per week in the Empowered Studio and Premier Empowered Studio. The booking form states: "An additional charge of $60 per week applies for a second occupant. The second occupant must also be a student and able to provide a valid student ID." and "Displayed rates do not include the $60 fee for a second occupant. An updated total will be issued to the main applicant after the application has been processed."
+Second occupant: no room currently offers a second occupant as standard. Requests to share are considered case by case by the property team (empsydney@epiisod.com); do not promise it or quote a price.
 
 Room selection: residents can select their desired room type, room facing and room level (FAQ). Friends in shared apartments can be requested but this is subject to availability and cannot be guaranteed. Final room allocations are subject to EPIISOD's discretion and may be adjusted if necessary; a similar room will be assigned whenever possible (booking form acknowledgement).
 
@@ -190,10 +190,10 @@ View options (Signature Studio and Aspect Studio / Aspect Studio E): Garden - "L
 - Size: approx. 25.60 sqm
 - Description: The Empowered Studio offers one of the widest floor plans with generous living space, enabled accessibility, and refined comfort to meet your every need. Framed by inward garden views, you can settle into a holistic balance of openness and quietude. An irresistible choice for those seeking an exclusive residence to live independently without limitation, while enjoying a sophisticated, inspirational outlook.
 - Room features: Air Con, Wi-Fi, Storage, Microwave, Study Desk & Chair, Fridge, Cooktop, Range hood, 32-inch Smart Television, Kettle, Rice Cooker, Smart Door Access, King Single Bed, Dishwasher
-- Second occupant allowed: Yes
+- Second occupant allowed: No (case by case on request)
 - Bed: King single bed. Virtual tour available.
 - Accessibility: described as offering "enabled accessibility"; the page does not state DDA compliance for this room (the Premier Empowered Studio page does).
-- Price (default term, includes 3% Direct Debit discount): AU$873.00/wk (standard AU$900.00); 0 available. A second occupant is an additional $60 per week.
+- Price (default term, includes 3% Direct Debit discount): AU$873.00/wk (standard AU$900.00); 0 available.
 
 ### Premier Empowered Studio
 
@@ -201,10 +201,10 @@ View options (Signature Studio and Aspect Studio / Aspect Studio E): Garden - "L
 - Size: approx. 31.10 sqm
 - Description: Reserved for the discerning few who value privacy, spaciousness, and understated comfort in every detail, the Premier Empowered Studio is a class of its own. Tastefully designed with exceptional finishes, bespoke furnishings, an expansive layout for movement and mobility needs, and a larger bathroom with accessibility aids, this exclusive residence is a statement of ambition and achievement. This room is Disability Discrimination Act (DDA) compliant.
 - Room features: Air Con, Wi-Fi, Storage, Microwave, Study Desk & Chair, Fridge, Cooktop, Range hood, 32-inch Smart Television, Kettle, Rice Cooker, Smart Door Access, King Single Bed, Dishwasher
-- Second occupant allowed: Yes
+- Second occupant allowed: No (case by case on request)
 - Bed: King single bed.
 - Accessibility: "This room is Disability Discrimination Act (DDA) compliant." The description mentions a larger bathroom with accessibility aids.
-- Price (default term, includes 3% Direct Debit discount): AU$893.00/wk (standard AU$920.62); 0 available. A second occupant is an additional $60 per week.
+- Price (default term, includes 3% Direct Debit discount): AU$893.00/wk (standard AU$920.62); 0 available.
 
 ### Quad 4 Bedroom Ensuite
 

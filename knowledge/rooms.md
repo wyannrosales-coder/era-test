@@ -17,6 +17,7 @@ Property id: macquarie-park. Page: /locations/macquarie-park. Address: EPIISOD M
 - stay_id short-stay-term: Short Stay, Min 12 weeks, move out by 12 Feb 2027. Check-in between 2026-01-01 and 2026-11-20.
 
 ### Rooms
+Second occupants: no room currently offers a second occupant as standard. A request to share a studio is handled case by case by the Macquarie Park team (empsydney@epiisod.com or +61 (0) 417 977 706); do not promise it or quote a price. Offer to send an enquiry with submit_enquiry.
 - id macquarie-park/quad: **Quad 4 Bedroom Ensuite** (Shared Apartment). Page: /locations/macquarie-park/quad-4-bedroom-ensuite.
   Private ensuite bedroom within a shared apartment. Size: 11.8 sqm (Room) / 84.5 sqm (Whole apartment). Views: Urban, Garden, Pool.
   Weekly price by term: 4175 (Academic Year 2027, 52 weeks) AU$615; 4174 (Academic Year 2027, 48 weeks) AU$615; 4173 (Academic Year 2027, 44 weeks) AU$615; 4172 (Academic Year 2027, 24 weeks) AU$655; 4165 (Academic Year 2026, 52 weeks) AU$599; 4164 (Academic Year 2026, 48 weeks) AU$599; 4170 (Academic Year 2026, 44 weeks) AU$599; 4163 (Academic Year 2026, 24 weeks) AU$639.
@@ -24,22 +25,22 @@ Property id: macquarie-park. Page: /locations/macquarie-park. Address: EPIISOD M
   Private ensuite bedroom within a shared apartment. Size: 11.8 sqm (Room) / 100.9 sqm (Whole apartment). Views: Urban, Garden, Pool.
   Weekly price by term: 4175 (Academic Year 2027, 52 weeks) AU$615; 4174 (Academic Year 2027, 48 weeks) AU$615; 4173 (Academic Year 2027, 44 weeks) AU$615; 4172 (Academic Year 2027, 24 weeks) AU$655; 4165 (Academic Year 2026, 52 weeks) AU$599; 4164 (Academic Year 2026, 48 weeks) AU$599; 4170 (Academic Year 2026, 44 weeks) AU$599; 4163 (Academic Year 2026, 24 weeks) AU$639.
 - id macquarie-park/signature: **Signature Studio** (Studio). Page: /locations/macquarie-park/signature-studio.
-  Private studio apartment with its own kitchenette and bathroom. Size: 15.8 sqm. Views: Garden, Urban, Pool, City. Dual occupancy: a second person may share for AU$60 more per week.
+  Private studio apartment with its own kitchenette and bathroom. Size: 15.8 sqm. Views: Garden, Urban, Pool, City.
   Weekly price by term: 4175 (Academic Year 2027, 52 weeks) AU$725; 4174 (Academic Year 2027, 48 weeks) AU$725; 4173 (Academic Year 2027, 44 weeks) AU$725; 4172 (Academic Year 2027, 24 weeks) AU$765; 4165 (Academic Year 2026, 52 weeks) AU$699; 4164 (Academic Year 2026, 48 weeks) AU$699; 4170 (Academic Year 2026, 44 weeks) AU$699; 4163 (Academic Year 2026, 24 weeks) AU$816; short-stay-term (Short Stay, Min 12 weeks, move out by 12 Feb 2027) AU$816.
 - id macquarie-park/signature-flex: **Signature Studio Flex** (Studio). Page: /locations/macquarie-park/signature-studio-flex.
-  Private studio apartment with its own kitchenette and bathroom. Size: 15.5 sqm. Views: Urban, Garden. Dual occupancy: a second person may share for AU$60 more per week.
+  Private studio apartment with its own kitchenette and bathroom. Size: 15.5 sqm. Views: Urban, Garden.
   Weekly price by term: 4175 (Academic Year 2027, 52 weeks) AU$727; 4174 (Academic Year 2027, 48 weeks) AU$727; 4173 (Academic Year 2027, 44 weeks) AU$727; 4172 (Academic Year 2027, 24 weeks) AU$767; 4165 (Academic Year 2026, 52 weeks) AU$786; 4164 (Academic Year 2026, 48 weeks) AU$786; 4170 (Academic Year 2026, 44 weeks) AU$786; 4163 (Academic Year 2026, 24 weeks) AU$826.
 - id macquarie-park/aspect: **Aspect Studio** (Studio). Page: /locations/macquarie-park/aspect-studio.
-  Private studio apartment with its own kitchenette and bathroom. Size: 18.0 sqm. Views: Garden, Urban, Pool, City. Dual occupancy: a second person may share for AU$60 more per week.
+  Private studio apartment with its own kitchenette and bathroom. Size: 18.0 sqm. Views: Garden, Urban, Pool, City.
   Weekly price by term: 4175 (Academic Year 2027, 52 weeks) AU$745; 4174 (Academic Year 2027, 48 weeks) AU$745; 4173 (Academic Year 2027, 44 weeks) AU$745; 4172 (Academic Year 2027, 24 weeks) AU$785; 4165 (Academic Year 2026, 52 weeks) AU$786; 4164 (Academic Year 2026, 48 weeks) AU$786; 4170 (Academic Year 2026, 44 weeks) AU$786; 4163 (Academic Year 2026, 24 weeks) AU$826; short-stay-term (Short Stay, Min 12 weeks, move out by 12 Feb 2027) AU$826.
 - id macquarie-park/aspect-e: **Aspect Studio E** (Studio). Page: /locations/macquarie-park/aspect-studio-e.
-  Private studio apartment with its own kitchenette and bathroom. Size: 20.5 sqm. Views: Garden, Pool. Dual occupancy: a second person may share for AU$60 more per week.
+  Private studio apartment with its own kitchenette and bathroom. Size: 20.5 sqm. Views: Garden, Pool.
   Weekly price by term: 4175 (Academic Year 2027, 52 weeks) AU$840; 4174 (Academic Year 2027, 48 weeks) AU$840; 4173 (Academic Year 2027, 44 weeks) AU$840; 4172 (Academic Year 2027, 24 weeks) AU$880; 4165 (Academic Year 2026, 52 weeks) AU$832; 4164 (Academic Year 2026, 48 weeks) AU$832; 4170 (Academic Year 2026, 44 weeks) AU$832; 4163 (Academic Year 2026, 24 weeks) AU$872.
 - id macquarie-park/empowered: **Empowered Studio** (Studio) — SOLD OUT, cannot be booked. Page: /locations/macquarie-park/empowered-studio.
-  Private studio apartment with its own kitchenette and bathroom. Size: 25.6 sqm. Views: Garden. Dual occupancy: a second person may share for AU$60 more per week.
+  Private studio apartment with its own kitchenette and bathroom. Size: 25.6 sqm. Views: Garden.
   Weekly price by term: 4175 (Academic Year 2027, 52 weeks) AU$873; 4174 (Academic Year 2027, 48 weeks) AU$873; 4173 (Academic Year 2027, 44 weeks) AU$873; 4172 (Academic Year 2027, 24 weeks) AU$913; 4165 (Academic Year 2026, 52 weeks) AU$865; 4164 (Academic Year 2026, 48 weeks) AU$865; 4170 (Academic Year 2026, 44 weeks) AU$865; 4163 (Academic Year 2026, 24 weeks) AU$905.
 - id macquarie-park/premier-empowered: **Premier Empowered Studio** (Studio). Page: /locations/macquarie-park/premier-empowered-studio.
-  Private studio apartment with its own kitchenette and bathroom. Size: 31.1 sqm. Views: Garden, Urban. Dual occupancy: a second person may share for AU$60 more per week.
+  Private studio apartment with its own kitchenette and bathroom. Size: 31.1 sqm. Views: Garden, Urban.
   Weekly price by term: 4175 (Academic Year 2027, 52 weeks) AU$893; 4174 (Academic Year 2027, 48 weeks) AU$893; 4173 (Academic Year 2027, 44 weeks) AU$893; 4172 (Academic Year 2027, 24 weeks) AU$933; 4165 (Academic Year 2026, 52 weeks) AU$893; 4164 (Academic Year 2026, 48 weeks) AU$893; 4170 (Academic Year 2026, 44 weeks) AU$893; 4163 (Academic Year 2026, 24 weeks) AU$933.
 
 ## EPIISOD Bedford (Melbourne)

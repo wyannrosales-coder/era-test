@@ -291,7 +291,7 @@ From the FAQ "What documents are required to book a room?":
 - Contracts are Residential Tenancy Agreements lodged with the NSW Civil & Administrative Tribunal (NCAT); non-payment is managed through a defined legal process and contracts are not automatically terminated (FAQ).
 - When signing, the applicant acknowledges the Residential Tenancy Agreement, House Rules, Annexures and the EPIISOD Privacy Policy, and that they have access to the Tenant Information Statement published by NSW Fair Trading, and consents to receive notices and documents electronically.
 - Applicants must be old enough: see faqs.md (age rules) - the booking form states "Under 18yo at start of tenancy is not allowed".
-- Second occupant (Empowered Studio and Premier Empowered Studio at Macquarie Park): additional $60 per week; the second occupant must also be a student with a valid student ID.
+- Second occupant: no room currently offers a second occupant as standard. Requests to share are considered case by case by the property team; do not promise or quote a price.
 
 ## Payment methods (holding deposit)
 - Credit card (VISA/MASTER/UNIONPAY) - "Credit card recommended: Instantly secures your booking right away."
