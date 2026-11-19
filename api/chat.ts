@@ -33,19 +33,26 @@ export const maxDuration = 60;
  * them a good brake, not a hard cap: for a hard one, add a Vercel Firewall rate-limit rule on
  * /api/chat and set a monthly spend limit on the API key in Google AI Studio / Google Cloud.
  * Override with CHAT_LIMIT_PER_IP (requests per 10 minutes) and CHAT_LIMIT_PER_HOUR (all visitors).
+ * CHAT_LIMIT_PER_DAY is a daily cap across all visitors (default 2000, resets at midnight UTC);
+ * once it is reached the assistant pauses until the next day. Also per instance.
  */
 const WINDOW_MS = 10 * 60_000;
 const hits = new Map<string, number[]>();
 let hourly: number[] = [];
+let day = { key: '', count: 0 };
 
-function limited(ip: string, perIp: number, perHour: number): number | null {
+function limited(ip: string, perIp: number, perHour: number, perDay: number): number | null {
   const now = Date.now();
+  const today = new Date(now).toISOString().slice(0, 10);
+  if (day.key !== today) day = { key: today, count: 0 };
+  if (day.count >= perDay) return Math.ceil((Date.parse(today) + 86_400_000 - now) / 1000);
   hourly = hourly.filter((t) => now - t < 3_600_000);
   if (hourly.length >= perHour) return 60;
   const mine = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
   if (mine.length >= perIp) return Math.ceil((mine[0] + WINDOW_MS - now) / 1000);
   mine.push(now);
   hourly.push(now);
+  day.count++;
   hits.set(ip, mine);
   // Forget visitors who have gone quiet, so the map can't grow without end
   if (hits.size > 5000) for (const [key, times] of hits) if (!times.some((t) => now - t < WINDOW_MS)) hits.delete(key);
@@ -355,7 +362,7 @@ export async function POST(request: Request) {
 
   // Each tool answer is a request too, so a full booking takes around twenty
   const ip = request.headers.get('x-real-ip') ?? request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'local';
-  const wait = limited(ip, Number(env.CHAT_LIMIT_PER_IP) || 60, Number(env.CHAT_LIMIT_PER_HOUR) || 1500);
+  const wait = limited(ip, Number(env.CHAT_LIMIT_PER_IP) || 60, Number(env.CHAT_LIMIT_PER_HOUR) || 1500, Number(env.CHAT_LIMIT_PER_DAY) || 2000);
   if (wait !== null) {
     return Response.json(
       { error: { code: 'rate_limited', message: 'You’ve sent a lot of messages. Please wait a few minutes and try again, or contact our team.' } },
