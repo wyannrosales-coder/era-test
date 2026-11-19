@@ -379,20 +379,6 @@ function BookingCard({
       </label>
       )}
 
-      {details.dualOccupancy && (
-        <div className="room-book__note">
-          <p className="room-book__note-title">
-            <img loading="lazy" decoding="async" src={infoIcon} width={24} height={24} alt="" />
-            Dual occupancy is available on this room type
-          </p>
-          <p className="room-book__note-text">
-            An additional charge of {currency}
-            {details.dualOccupancy} per week applies. The second occupant must also be a student and provide a valid
-            student ID. You can add an occupant on the application form.
-          </p>
-        </div>
-      )}
-
       <div className="room-book__summary">
         {opening ? (
           <p className="room-book__price room-book__price--opening">{opening}</p>

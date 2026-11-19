@@ -66,8 +66,6 @@ export type RoomDetails = {
   floorPlanPdf: string;
   floorPlanNote: string;
   virtualTour: string;
-  /** Dual occupancy: a second student may share the room, for this much a week. */
-  dualOccupancy?: number;
 };
 
 export const SHARED = 'Private ensuite bedroom within a shared apartment';
@@ -100,7 +98,6 @@ const draft = (
   description: d.description,
   keyFeatures: d.keyFeatures,
   views: d.views,
-  dualOccupancy: d.dualOccupancy,
   amenities: grouped(d.features),
   photos: photosOf(slug, d.photoOrder),
   floorPlan: fileOf(slug, 'floor-plan.png'),
@@ -143,7 +140,6 @@ export const MACQUARIE_PARK_ROOM_DETAILS: RoomDetails[] = [
     keyFeatures: ['Refined finishes and solid timber accents', 'Ample smart under-bed and overhead storage', 'Large double glazed window'],
     views: ['Garden', 'Urban', 'Pool', 'City'],
     features: STUDIO_FEATURES,
-    dualOccupancy: 60,
     layout: 'Layout shows the sleeping zone, study station, kitchenette, storage and ensuite.',
   }),
   draft('signature-flex', 'signature-studio-flex', {
@@ -155,7 +151,6 @@ export const MACQUARIE_PARK_ROOM_DETAILS: RoomDetails[] = [
     keyFeatures: ['A traditional square layout', 'Flexible space to style your own way', 'Large double glazed window'],
     views: ['Urban', 'Garden'],
     features: STUDIO_FEATURES,
-    dualOccupancy: 60,
     layout: 'Layout shows the sleeping zone, study station, kitchenette, storage and ensuite.',
   }),
   draft('aspect', 'aspect-studio', {
@@ -167,7 +162,6 @@ export const MACQUARIE_PARK_ROOM_DETAILS: RoomDetails[] = [
     keyFeatures: ['Corner position with natural light on two sides', 'Cross-ventilation and expanded space', 'Ample smart under-bed and overhead storage'],
     views: ['Garden', 'Urban', 'Pool', 'City'],
     features: STUDIO_FEATURES,
-    dualOccupancy: 60,
     layout: 'Layout shows the corner sleeping zone, study station, kitchenette, storage and ensuite.',
   }),
   draft('aspect-e', 'aspect-studio-e', {
@@ -179,7 +173,6 @@ export const MACQUARIE_PARK_ROOM_DETAILS: RoomDetails[] = [
     keyFeatures: ['Inclusive design with generous circulation space', 'Accessible ensuite', 'Large double glazed window'],
     views: ['Garden', 'Pool'],
     features: STUDIO_FEATURES,
-    dualOccupancy: 60,
     layout: 'Layout shows the sleeping zone, study station, kitchenette, storage and accessible ensuite.',
   }),
   draft('empowered', 'empowered-studio', {
@@ -191,7 +184,6 @@ export const MACQUARIE_PARK_ROOM_DETAILS: RoomDetails[] = [
     keyFeatures: ['One of our widest floor plans', 'Enabled accessibility throughout', 'Inward garden views'],
     views: ['Garden'],
     features: STUDIO_FEATURES,
-    dualOccupancy: 60,
     layout: 'Layout shows the wide living and sleeping zone, study station, kitchenette, storage and accessible ensuite.',
   }),
   draft('premier-empowered', 'premier-empowered-studio', {
@@ -203,7 +195,6 @@ export const MACQUARIE_PARK_ROOM_DETAILS: RoomDetails[] = [
     keyFeatures: ['Our most expansive layout', 'Bespoke furnishings and exceptional finishes', 'A larger bathroom with accessibility aids'],
     views: ['Garden', 'Urban'],
     features: STUDIO_FEATURES,
-    dualOccupancy: 60,
     layout: 'Layout shows the expansive living and sleeping zone, study station, kitchenette, storage and larger accessible bathroom.',
   }),
 ];

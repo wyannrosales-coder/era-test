@@ -74,7 +74,7 @@ export function catalogMarkdown() {
       const lines = [
         `- id ${r.id}: **${r.room.name}** (${r.room.typeLabel})${r.room.available ? '' : ' — SOLD OUT, cannot be booked'}. Page: ${r.href}.`,
       ];
-      if (d) lines.push(`  ${d.subtitle}. Size: ${d.size}.${d.views.length ? ` Views: ${d.views.join(', ')}.` : ''}${d.dualOccupancy ? ` Dual occupancy: a second person may share for ${content.roomCurrency}${d.dualOccupancy} more per week.` : ''}`);
+      if (d) lines.push(`  ${d.subtitle}. Size: ${d.size}.${d.views.length ? ` Views: ${d.views.join(', ')}.` : ''}`);
       if (r.stays.length) {
         lines.push(`  Weekly price by term: ${r.stays.map((s) => `${s.id} (${s.group}, ${s.label}) ${content.roomCurrency}${s.prices[r.room.id]}`).join('; ')}.`);
       }
